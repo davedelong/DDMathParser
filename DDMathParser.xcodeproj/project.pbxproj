@@ -1,0 +1,480 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		554DA12A12985DAA00433840 /* DDMathFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFE61295A99700F4A9FD /* DDMathFunctionContainer.m */; };
+		554DA12B12985DAE00433840 /* DDExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F7963612934A1400EF2716 /* DDExpression.m */; };
+		554DA12E12985DB500433840 /* _DDFunctionExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */; };
+		554DA12F12985DB500433840 /* _DDNumberExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */; };
+		554DA13012985DB500433840 /* _DDVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */; };
+		5554D58B12944AFD00A62529 /* DDMathEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5554D58A12944AFD00A62529 /* DDMathEvaluator.m */; };
+		5554D58C12944AFD00A62529 /* DDMathEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5554D58A12944AFD00A62529 /* DDMathEvaluator.m */; };
+		55BFA9B0128CDE7600A80228 /* ParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9AF128CDE7600A80228 /* ParserTests.m */; };
+		55BFA9B4128CDED200A80228 /* DDMathParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9B3128CDED200A80228 /* DDMathParser.m */; };
+		55BFA9B7128CDF8200A80228 /* DDMathParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9B3128CDED200A80228 /* DDMathParser.m */; };
+		55BFA9BF128CDFD600A80228 /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9BE128CDFD600A80228 /* DDMathStringTokenizer.m */; };
+		55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2AD4F1295834600BA2905 /* EvaluationTests.m */; };
+		55F795E31293175B00EF2716 /* DDMathStringToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F795E21293175B00EF2716 /* DDMathStringToken.m */; };
+		55F795F21293235A00EF2716 /* TokenizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F795F11293235A00EF2716 /* TokenizerTests.m */; };
+		55F795F3129323B200EF2716 /* DDMathStringToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F795E21293175B00EF2716 /* DDMathStringToken.m */; };
+		55F795F4129323B600EF2716 /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9BE128CDFD600A80228 /* DDMathStringTokenizer.m */; };
+		55F7963712934A1400EF2716 /* DDExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F7963612934A1400EF2716 /* DDExpression.m */; };
+		55F9EFE71295A99700F4A9FD /* DDMathFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFE61295A99700F4A9FD /* DDMathFunctionContainer.m */; };
+		55F9EFEB1295AF3D00F4A9FD /* _DDFunctionExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */; };
+		55F9EFEE1295AF7500F4A9FD /* _DDNumberExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */; };
+		55F9EFF11295AFB500F4A9FD /* _DDVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */; };
+		55F9F0141295C19900F4A9FD /* NSExpression+EasyParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */; };
+		8DD76F9A0486AA7600D96B5E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB779EFE84155DC02AAC07 /* Foundation.framework */; };
+		8DD76F9F0486AA7600D96B5E /* DDMathParser.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859EA3029092ED04C91782 /* DDMathParser.1 */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8DD76F9E0486AA7600D96B5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				8DD76F9F0486AA7600D96B5E /* DDMathParser.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		08FB7796FE84155DC02AAC07 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		08FB779EFE84155DC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32A70AAB03705E1F00C91783 /* DDMathParser_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathParser_Prefix.pch; sourceTree = "<group>"; };
+		5554D58912944AFD00A62529 /* DDMathEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathEvaluator.h; sourceTree = "<group>"; };
+		5554D58A12944AFD00A62529 /* DDMathEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathEvaluator.m; sourceTree = "<group>"; };
+		5554D5EF129478E800A62529 /* DDMathEvaluator+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDMathEvaluator+Private.h"; sourceTree = "<group>"; };
+		55BFA9A6128CDDEB00A80228 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		55BFA9A7128CDDEB00A80228 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
+		55BFA9AE128CDE7600A80228 /* ParserTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParserTests.h; sourceTree = "<group>"; };
+		55BFA9AF128CDE7600A80228 /* ParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParserTests.m; sourceTree = "<group>"; };
+		55BFA9B1128CDEA000A80228 /* DDMathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathParser.h; sourceTree = "<group>"; };
+		55BFA9B3128CDED200A80228 /* DDMathParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathParser.m; sourceTree = "<group>"; };
+		55BFA9BD128CDFD600A80228 /* DDMathStringTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathStringTokenizer.h; sourceTree = "<group>"; };
+		55BFA9BE128CDFD600A80228 /* DDMathStringTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathStringTokenizer.m; sourceTree = "<group>"; };
+		55D2AD4E1295834600BA2905 /* EvaluationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvaluationTests.h; sourceTree = "<group>"; };
+		55D2AD4F1295834600BA2905 /* EvaluationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluationTests.m; sourceTree = "<group>"; };
+		55F795E11293175B00EF2716 /* DDMathStringToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathStringToken.h; sourceTree = "<group>"; };
+		55F795E21293175B00EF2716 /* DDMathStringToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathStringToken.m; sourceTree = "<group>"; };
+		55F795F01293235A00EF2716 /* TokenizerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TokenizerTests.h; sourceTree = "<group>"; };
+		55F795F11293235A00EF2716 /* TokenizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TokenizerTests.m; sourceTree = "<group>"; };
+		55F7963512934A1400EF2716 /* DDExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDExpression.h; sourceTree = "<group>"; };
+		55F7963612934A1400EF2716 /* DDExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDExpression.m; sourceTree = "<group>"; };
+		55F7969C129383B900EF2716 /* MathGrammar.grammar */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MathGrammar.grammar; sourceTree = "<group>"; };
+		55F9EFE51295A99700F4A9FD /* DDMathFunctionContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathFunctionContainer.h; sourceTree = "<group>"; };
+		55F9EFE61295A99700F4A9FD /* DDMathFunctionContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathFunctionContainer.m; sourceTree = "<group>"; };
+		55F9EFE81295A9AB00F4A9FD /* DDTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTypes.h; sourceTree = "<group>"; };
+		55F9EFE91295AF3D00F4A9FD /* _DDFunctionExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDFunctionExpression.h; sourceTree = "<group>"; };
+		55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDFunctionExpression.m; sourceTree = "<group>"; };
+		55F9EFEC1295AF7500F4A9FD /* _DDNumberExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDNumberExpression.h; sourceTree = "<group>"; };
+		55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDNumberExpression.m; sourceTree = "<group>"; };
+		55F9EFEF1295AFB500F4A9FD /* _DDVariableExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDVariableExpression.h; sourceTree = "<group>"; };
+		55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDVariableExpression.m; sourceTree = "<group>"; };
+		55F9F0121295C19900F4A9FD /* NSExpression+EasyParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSExpression+EasyParsing.h"; sourceTree = "<group>"; };
+		55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSExpression+EasyParsing.m"; sourceTree = "<group>"; };
+		8DD76FA10486AA7600D96B5E /* DDMathParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DDMathParser; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6859EA3029092ED04C91782 /* DDMathParser.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = DDMathParser.1; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		55BFA9A3128CDDEB00A80228 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DD76F9B0486AA7600D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* DDMathParser */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6859EA2029092E104C91782 /* Documentation */,
+				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+				55BFA9A7128CDDEB00A80228 /* UnitTests-Info.plist */,
+			);
+			name = DDMathParser;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				32A70AAB03705E1F00C91783 /* DDMathParser_Prefix.pch */,
+				08FB7796FE84155DC02AAC07 /* main.m */,
+				55BFA9B2128CDEA200A80228 /* Parser */,
+				55F7966612934F8900EF2716 /* Evaluator */,
+				55BFA9BA128CDF8F00A80228 /* Unit Tests */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				08FB779EFE84155DC02AAC07 /* Foundation.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76FA10486AA7600D96B5E /* DDMathParser */,
+				55BFA9A6128CDDEB00A80228 /* UnitTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		55BFA9B2128CDEA200A80228 /* Parser */ = {
+			isa = PBXGroup;
+			children = (
+				55BFA9B1128CDEA000A80228 /* DDMathParser.h */,
+				55BFA9B3128CDED200A80228 /* DDMathParser.m */,
+				55BFA9BD128CDFD600A80228 /* DDMathStringTokenizer.h */,
+				55BFA9BE128CDFD600A80228 /* DDMathStringTokenizer.m */,
+				55F795E11293175B00EF2716 /* DDMathStringToken.h */,
+				55F795E21293175B00EF2716 /* DDMathStringToken.m */,
+				55F7969C129383B900EF2716 /* MathGrammar.grammar */,
+			);
+			name = Parser;
+			sourceTree = "<group>";
+		};
+		55BFA9BA128CDF8F00A80228 /* Unit Tests */ = {
+			isa = PBXGroup;
+			children = (
+				55F9F0121295C19900F4A9FD /* NSExpression+EasyParsing.h */,
+				55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */,
+				55BFA9AE128CDE7600A80228 /* ParserTests.h */,
+				55BFA9AF128CDE7600A80228 /* ParserTests.m */,
+				55F795F01293235A00EF2716 /* TokenizerTests.h */,
+				55F795F11293235A00EF2716 /* TokenizerTests.m */,
+				55D2AD4E1295834600BA2905 /* EvaluationTests.h */,
+				55D2AD4F1295834600BA2905 /* EvaluationTests.m */,
+			);
+			name = "Unit Tests";
+			sourceTree = "<group>";
+		};
+		55F7966612934F8900EF2716 /* Evaluator */ = {
+			isa = PBXGroup;
+			children = (
+				55F9EFE81295A9AB00F4A9FD /* DDTypes.h */,
+				5554D58912944AFD00A62529 /* DDMathEvaluator.h */,
+				5554D58A12944AFD00A62529 /* DDMathEvaluator.m */,
+				5554D5EF129478E800A62529 /* DDMathEvaluator+Private.h */,
+				55F9EFE51295A99700F4A9FD /* DDMathFunctionContainer.h */,
+				55F9EFE61295A99700F4A9FD /* DDMathFunctionContainer.m */,
+				55F7963512934A1400EF2716 /* DDExpression.h */,
+				55F7963612934A1400EF2716 /* DDExpression.m */,
+				55F9EFE91295AF3D00F4A9FD /* _DDFunctionExpression.h */,
+				55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */,
+				55F9EFEC1295AF7500F4A9FD /* _DDNumberExpression.h */,
+				55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */,
+				55F9EFEF1295AFB500F4A9FD /* _DDVariableExpression.h */,
+				55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */,
+			);
+			name = Evaluator;
+			sourceTree = "<group>";
+		};
+		C6859EA2029092E104C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				C6859EA3029092ED04C91782 /* DDMathParser.1 */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		55BFA9A5128CDDEB00A80228 /* UnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55BFA9AB128CDDEC00A80228 /* Build configuration list for PBXNativeTarget "UnitTests" */;
+			buildPhases = (
+				55BFA9A1128CDDEB00A80228 /* Resources */,
+				55BFA9A2128CDDEB00A80228 /* Sources */,
+				55BFA9A3128CDDEB00A80228 /* Frameworks */,
+				55BFA9A4128CDDEB00A80228 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UnitTests;
+			productName = UnitTests;
+			productReference = 55BFA9A6128CDDEB00A80228 /* UnitTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		8DD76F960486AA7600D96B5E /* DDMathParser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB927408733DD40010E9CD /* Build configuration list for PBXNativeTarget "DDMathParser" */;
+			buildPhases = (
+				8DD76F990486AA7600D96B5E /* Sources */,
+				8DD76F9B0486AA7600D96B5E /* Frameworks */,
+				8DD76F9E0486AA7600D96B5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DDMathParser;
+			productInstallPath = "$(HOME)/bin";
+			productName = DDMathParser;
+			productReference = 8DD76FA10486AA7600D96B5E /* DDMathParser */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "DDMathParser" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* DDMathParser */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DD76F960486AA7600D96B5E /* DDMathParser */,
+				55BFA9A5128CDDEB00A80228 /* UnitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		55BFA9A1128CDDEB00A80228 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		55BFA9A4128CDDEB00A80228 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		55BFA9A2128CDDEB00A80228 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55BFA9B0128CDE7600A80228 /* ParserTests.m in Sources */,
+				55BFA9B4128CDED200A80228 /* DDMathParser.m in Sources */,
+				55BFA9BF128CDFD600A80228 /* DDMathStringTokenizer.m in Sources */,
+				55F795E31293175B00EF2716 /* DDMathStringToken.m in Sources */,
+				55F795F21293235A00EF2716 /* TokenizerTests.m in Sources */,
+				55F7963712934A1400EF2716 /* DDExpression.m in Sources */,
+				5554D58B12944AFD00A62529 /* DDMathEvaluator.m in Sources */,
+				55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */,
+				55F9EFE71295A99700F4A9FD /* DDMathFunctionContainer.m in Sources */,
+				55F9EFEB1295AF3D00F4A9FD /* _DDFunctionExpression.m in Sources */,
+				55F9EFEE1295AF7500F4A9FD /* _DDNumberExpression.m in Sources */,
+				55F9EFF11295AFB500F4A9FD /* _DDVariableExpression.m in Sources */,
+				55F9F0141295C19900F4A9FD /* NSExpression+EasyParsing.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DD76F990486AA7600D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DD76F9A0486AA7600D96B5E /* main.m in Sources */,
+				55BFA9B7128CDF8200A80228 /* DDMathParser.m in Sources */,
+				55F795F3129323B200EF2716 /* DDMathStringToken.m in Sources */,
+				55F795F4129323B600EF2716 /* DDMathStringTokenizer.m in Sources */,
+				5554D58C12944AFD00A62529 /* DDMathEvaluator.m in Sources */,
+				554DA12A12985DAA00433840 /* DDMathFunctionContainer.m in Sources */,
+				554DA12B12985DAE00433840 /* DDExpression.m in Sources */,
+				554DA12E12985DB500433840 /* _DDFunctionExpression.m in Sources */,
+				554DA12F12985DB500433840 /* _DDNumberExpression.m in Sources */,
+				554DA13012985DB500433840 /* _DDVariableExpression.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB927508733DD40010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DDMathParser_Prefix.pch;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = DDMathParser;
+			};
+			name = Debug;
+		};
+		1DEB927608733DD40010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = DDMathParser_Prefix.pch;
+				INSTALL_PATH = /usr/local/bin;
+				PRODUCT_NAME = DDMathParser;
+			};
+			name = Release;
+		};
+		1DEB927908733DD40010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		1DEB927A08733DD40010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+		55BFA9A9128CDDEC00A80228 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "UnitTests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = UnitTests;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		55BFA9AA128CDDEC00A80228 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "UnitTests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = UnitTests;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB927408733DD40010E9CD /* Build configuration list for PBXNativeTarget "DDMathParser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB927508733DD40010E9CD /* Debug */,
+				1DEB927608733DD40010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "DDMathParser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB927908733DD40010E9CD /* Debug */,
+				1DEB927A08733DD40010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55BFA9AB128CDDEC00A80228 /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55BFA9A9128CDDEC00A80228 /* Debug */,
+				55BFA9AA128CDDEC00A80228 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
