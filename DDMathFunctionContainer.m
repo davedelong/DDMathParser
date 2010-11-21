@@ -54,11 +54,6 @@
 
 + (DDMathFunction) oneArgumentFunctionForMethod:(NSString *)method {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
-		if ([arguments count] != 1) {
-			[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments: %ld", [arguments count]];
-			return nil;
-		}
-		
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
 		
 		NSArray * parameters = [NSArray arrayWithObject:[NSExpression expressionForConstantValue:firstValue]];
@@ -72,11 +67,6 @@
 
 + (DDMathFunction) twoArgumentFunctionForMethod:(NSString *)method {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
-		if ([arguments count] != 2) {
-			[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments: %ld", [arguments count]];
-			return nil;
-		}
-		
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
 		NSNumber * secondValue = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator];
 		
@@ -94,7 +84,6 @@
 
 + (id) nArgumentFunctionForMethod:(NSString *)method {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
-		
 		NSMutableArray * parameters = [NSMutableArray array];
 		for (DDExpression * argument in arguments) {
 			NSNumber * value = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
@@ -129,11 +118,6 @@
 }
 + (id) _negateFunctionContainer {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
-		if ([arguments count] != 1) {
-			[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments: %ld", [arguments count]];
-			return nil;
-		}
-		
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
 		NSNumber * secondValue = [NSNumber numberWithInt:-1];
 		
@@ -179,11 +163,6 @@
 }
 + (id) _notFunctionContainer {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
-		if ([arguments count] != 1) {
-			[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments: %ld", [arguments count]];
-			return nil;
-		}
-		
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
 		NSInteger intValue = [firstValue integerValue];
 		intValue = ~intValue;
@@ -272,27 +251,156 @@
 	return [self mathFunctionWithName:@"onescomplement" function:[self oneArgumentFunctionForMethod:@"onesComplement:"] numberOfArguments:1];
 }
 
+#pragma mark "Constant" functions
+
 + (id) _piFunctionContainer {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
-		if ([arguments count] != 0) {
-			[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments: %ld", [arguments count]];
-			return nil;
-		}
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_PI]];
 	};
 	return [self mathFunctionWithName:@"pi" function:function numberOfArguments:0];
 }
 
++ (id) _pi_2FunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_PI_2]];
+	};
+	return [self mathFunctionWithName:@"pi_2" function:function numberOfArguments:0];
+}
+
++ (id) _pi_4FunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_PI_4]];
+	};
+	return [self mathFunctionWithName:@"pi_4" function:function numberOfArguments:0];
+}
+
++ (id) _sqrt2FunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_SQRT2]];
+	};
+	return [self mathFunctionWithName:@"sqrt2" function:function numberOfArguments:0];
+}
+
 + (id) _eFunctionContainer {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
-		if ([arguments count] != 0) {
-			[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments: %ld", [arguments count]];
-			return nil;
-		}
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_E]];
 	};
 	return [self mathFunctionWithName:@"e" function:function numberOfArguments:0];
 }
+
++ (id) _log2eFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LOG2E]];
+	};
+	return [self mathFunctionWithName:@"log2e" function:function numberOfArguments:0];
+}
+
++ (id) _log10eFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LOG10E]];
+	};
+	return [self mathFunctionWithName:@"log10e" function:function numberOfArguments:0];
+}
+
++ (id) _ln2FunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LN2]];
+	};
+	return [self mathFunctionWithName:@"ln2" function:function numberOfArguments:0];
+}
+
++ (id) _ln10FunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LN10]];
+	};
+	return [self mathFunctionWithName:@"ln10" function:function numberOfArguments:0];
+}
+
+#pragma mark Trig functions
+
++ (id) _sinFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:sin([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"sin" function:function numberOfArguments:1];
+}
+
++ (id) _cosFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:cos([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"cos" function:function numberOfArguments:1];
+}
+
++ (id) _tanFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:tan([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"tan" function:function numberOfArguments:1];
+}
+
++ (id) _asinFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:asin([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"asin" function:function numberOfArguments:1];
+}
+
++ (id) _acosFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:acos([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"acos" function:function numberOfArguments:1];
+}
+
++ (id) _atanFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:atanf([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"atan" function:function numberOfArguments:1];
+}
+
++ (id) _dtorFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		double radians = ([n doubleValue] / 180.0f) * M_PI;
+		NSNumber * r = [NSNumber numberWithDouble:radians];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"dtor" function:function numberOfArguments:1];
+}
+
++ (id) _rtodFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		double degrees = ([n doubleValue] / M_PI) * 180.0f;
+		NSNumber * r = [NSNumber numberWithDouble:degrees];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"rtod" function:function numberOfArguments:1];
+}
+
+#pragma mark Container methods
 
 + (id) mathFunctionWithName:(NSString *)name function:(DDMathFunction)function numberOfArguments:(NSInteger)numberOfArguments {
 	if (name == nil) { return nil; }

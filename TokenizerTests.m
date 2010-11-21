@@ -78,6 +78,13 @@
 	[self evaluate:expected];
 }
 
+- (void) testTokenizer10 {
+	DDMathStringTokenizer * tokenizer = [[DDMathStringTokenizer alloc] initWithString:@"3 x 9"];
+	NSArray * tokens = [[tokenizer tokens] valueForKey:@"token"];
+	NSArray * expected = [NSArray arrayWithObjects:@"3", @"*", @"9", nil];
+	STAssertEqualObjects(tokens, expected, @"unexpected tokens.  expected: %@, given: %@", expected, tokens);
+}
+
 - (void) testInvalidNumber {
 	STAssertThrows([[[DDMathStringTokenizer alloc] initWithString:@"10e2e2"] autorelease], @"expected exception, none thrown");
 }

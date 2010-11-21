@@ -172,9 +172,26 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"floor",
 			@"onescomplement",
 			
+			//trig functions
+			@"sin",
+			@"cos",
+			@"tan",
+			@"asin",
+			@"acos",
+			@"atan",
+			@"dtor",
+			@"rtod",
+			
 			//functions that take 0 parameters
-			@"pi", //yes, this is equivalent to $pi or $e
+			@"pi",
+			@"pi_2",
+			@"pi_4",
+			@"sqrt2",
 			@"e",
+			@"log2e",
+			@"log10e",
+			@"ln2",
+			@"ln10",
 			nil];
 	
 }

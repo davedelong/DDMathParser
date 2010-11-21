@@ -41,11 +41,24 @@
 - (DDExpression *) parsePowerExpression;
 - (DDExpression *) parseUnaryExpression;
 - (DDExpression *) parseTerminalExpression;
+- (DDExpression *) parseFunctionExpression;
 
 @end
 
 
 @implementation DDMathParser
+
+@synthesize bitwiseOrAssociativity;
+@synthesize bitwiseXorAssociativity;
+@synthesize bitwiseAndAssociativity;
+@synthesize bitwiseLeftShiftAssociativity;
+@synthesize bitwiseRightShiftAssociativity;
+@synthesize subtractionAssociativity;
+@synthesize additionAssociativity;
+@synthesize divisionAssociativity;
+@synthesize multiplicationAssociativity;
+@synthesize modAssociativity;
+@synthesize powerAssociativity;
 
 + (id) mathParserWithString:(NSString *)string {
 	return [[[self alloc] initWithString:string] autorelease];
@@ -56,6 +69,20 @@
 	if (self) {
 		tokenizer = [[DDMathStringTokenizer alloc] initWithString:string];
 		currentTokenIndex = 0;
+		
+		bitwiseOrAssociativity = DDMathParserAssociativityLeft;
+		bitwiseXorAssociativity = DDMathParserAssociativityLeft;
+		bitwiseAndAssociativity = DDMathParserAssociativityLeft;
+		bitwiseLeftShiftAssociativity = DDMathParserAssociativityLeft;
+		bitwiseRightShiftAssociativity = DDMathParserAssociativityLeft;
+		subtractionAssociativity = DDMathParserAssociativityLeft;
+		additionAssociativity = DDMathParserAssociativityLeft;
+		divisionAssociativity = DDMathParserAssociativityLeft;
+		multiplicationAssociativity = DDMathParserAssociativityLeft;
+		modAssociativity = DDMathParserAssociativityLeft;
+		
+		powerAssociativity = DDMathParserAssociativityRight;
+		powerAssociativity = DDMathParserAssociativityLeft; //to make it the same as NSExpression
 	}
 	return self;
 }
@@ -63,6 +90,11 @@
 - (void) dealloc {
 	[tokenizer release];
 	[super dealloc];
+}
+
+- (DDMathStringToken *) currentToken {
+	if (currentTokenIndex >= [[tokenizer tokens] count]) { return nil; }
+	return [[tokenizer tokens] objectAtIndex:currentTokenIndex];
 }
 
 - (DDMathStringToken *) nextToken {
@@ -103,155 +135,110 @@
  Ref: http://stackoverflow.com/questions/4007479#4010791
  **/
 
-- (DDExpression *) parseBitwiseOrExpression {
-	LOGMETHOD();
-	DDExpression * left = [self parseBitwiseXorExpression];
-	while ([[[self peekNextToken] token] isEqual:@"|"]) {
-		[self nextToken]; //consume the |
-		DDExpression * right = [self parseBitwiseXorExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary |"];
-			return nil;
+- (DDExpression *) parseBinaryFunction:(NSString *)function token:(NSString *)expectedToken associativity:(DDMathParserAssociativity)associativity nextLevel:(SEL)next {
+	DDExpression * left = [self performSelector:next];
+	if (associativity == DDMathParserAssociativityLeft) {
+		while ([[[self peekNextToken] token] isEqual:expectedToken]) {
+			[self nextToken]; /*consumer the binary operator*/
+			DDExpression * right = [self performSelector:next];
+			if (right == nil) {
+				[NSException raise:NSInvalidArgumentException format:@"no right expression to binary %@", expectedToken];
+				return nil;
+			}
+			left = [DDExpression functionExpressionWithFunction:function arguments:[NSArray arrayWithObjects:left, right, nil]];
 		}
-		
-		left = [DDExpression functionExpressionWithFunction:@"OR" arguments:[NSArray arrayWithObjects:left, right, nil]];
+	} else {
+		if ([[[self peekNextToken] token] isEqual:expectedToken]) {
+			[self nextToken]; /*consumer the binary operator*/
+			DDExpression * right = [self parseBinaryFunction:function token:expectedToken associativity:associativity nextLevel:next];
+			if (right == nil) {
+				[NSException raise:NSInvalidArgumentException format:@"no right expression to binary %@", expectedToken];
+				return nil;
+			}
+			left = [DDExpression functionExpressionWithFunction:function arguments:[NSArray arrayWithObjects:left, right, nil]];
+		}
 	}
 	return left;
+}
+
+- (DDExpression *) parseBitwiseOrExpression {
+	LOGMETHOD();
+	return [self parseBinaryFunction:@"or" 
+							   token:@"|" 
+					   associativity:bitwiseOrAssociativity 
+						   nextLevel:@selector(parseBitwiseXorExpression)];
 }
 
 - (DDExpression *) parseBitwiseXorExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseBitwiseAndExpression];
-	while ([[[self peekNextToken] token] isEqual:@"^"]) {
-		[self nextToken]; //consume the ^
-		DDExpression * right = [self parseBitwiseAndExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression for binary ^"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"XOR" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	
-	return left;
+	return [self parseBinaryFunction:@"xor" 
+							   token:@"^" 
+					   associativity:bitwiseXorAssociativity 
+						   nextLevel:@selector(parseBitwiseAndExpression)];
 }
 
 - (DDExpression *) parseBitwiseAndExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseBitwiseLeftShiftExpression];
-	while ([[[self peekNextToken] token] isEqual:@"&"]) {
-		[self nextToken]; //consume the &
-		DDExpression * right = [self parseBitwiseLeftShiftExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary &"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"AND" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	return [self parseBinaryFunction:@"and" 
+							   token:@"&" 
+					   associativity:bitwiseAndAssociativity 
+						   nextLevel:@selector(parseBitwiseLeftShiftExpression)];
 }
 
 - (DDExpression *) parseBitwiseLeftShiftExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseBitwiseRightShiftExpression];
-	while ([[[self peekNextToken] token] isEqual:@"<<"]) {
-		[self nextToken]; //consume the <<
-		DDExpression * right = [self parseBitwiseRightShiftExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary <<"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"LSHIFT" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	return [self parseBinaryFunction:@"lshift" 
+							   token:@"<<" 
+					   associativity:bitwiseLeftShiftAssociativity 
+						   nextLevel:@selector(parseBitwiseRightShiftExpression)];
 }
 
 - (DDExpression *) parseBitwiseRightShiftExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseSubtractionExpression];
-	while ([[[self peekNextToken] token] isEqual:@">>"]) {
-		[self nextToken]; //consume the >>
-		DDExpression * right = [self parseSubtractionExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary >>"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"RSHIFT" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	return [self parseBinaryFunction:@"rshift" 
+							   token:@">>" 
+					   associativity:bitwiseRightShiftAssociativity 
+						   nextLevel:@selector(parseSubtractionExpression)];
 }
 
 - (DDExpression *) parseSubtractionExpression {
-	DDExpression * left = [self parseAdditionExpression];
-	while ([[[self peekNextToken] token] isEqual:@"-"]) {
-		[self nextToken]; //consume the -
-		DDExpression * right = [self parseAdditionExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary -"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"SUBTRACT" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	LOGMETHOD();
+	return [self parseBinaryFunction:@"subtract" 
+							   token:@"-" 
+					   associativity:subtractionAssociativity 
+						   nextLevel:@selector(parseAdditionExpression)];
 }
 
 - (DDExpression *) parseAdditionExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseDivisionExpression];
-	while ([[[self peekNextToken] token] isEqual:@"+"]) {
-		[self nextToken]; //consume the +
-		DDExpression * right = [self parseDivisionExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary +"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"ADD" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	return [self parseBinaryFunction:@"add" 
+							   token:@"+" 
+					   associativity:additionAssociativity 
+						   nextLevel:@selector(parseDivisionExpression)];
 }
 
 - (DDExpression *) parseDivisionExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseMultiplicationExpression];
-	while ([[[self peekNextToken] token] isEqual:@"/"]) {
-		[self nextToken]; //consume the /
-		DDExpression * right = [self parseMultiplicationExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary /"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"DIVIDE" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	return [self parseBinaryFunction:@"divide" 
+							   token:@"/" 
+					   associativity:divisionAssociativity 
+						   nextLevel:@selector(parseMultiplicationExpression)];
 }
 
 - (DDExpression *) parseMultiplicationExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseModuloExpression];
-	while ([[[self peekNextToken] token] isEqual:@"*"]) {
-		[self nextToken]; //consume the *
-		DDExpression * right = [self parseModuloExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary *"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"MULTIPLY" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	return [self parseBinaryFunction:@"multiply" 
+							   token:@"*" 
+					   associativity:multiplicationAssociativity 
+						   nextLevel:@selector(parseModuloExpression)];
 }
 
 - (DDExpression *) parseModuloExpression {
 	LOGMETHOD();
-	DDExpression * left = [self parseUnaryExpression];
-	while ([[[self peekNextToken] token] isEqual:@"%"]) {
-		[self nextToken]; //consume the %
-		DDExpression * right = [self parseUnaryExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary %"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"MOD" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
+	return [self parseBinaryFunction:@"mod" 
+							   token:@"%" 
+					   associativity:modAssociativity 
+						   nextLevel:@selector(parseUnaryExpression)];
 	
 }
 
@@ -265,7 +252,7 @@
 			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary %@", [next token]];
 			return nil;
 		}
-		NSString * function = ([[next token] isEqual:@"-"] ? @"NEGATE" : @"NOT");
+		NSString * function = ([[next token] isEqual:@"-"] ? @"negate" : @"not");
 		return [DDExpression functionExpressionWithFunction:function arguments:[NSArray arrayWithObject:unary]];
 	}
 	return [self parseFactorialExpression];
@@ -283,32 +270,10 @@
 
 - (DDExpression *) parsePowerExpression {
 	LOGMETHOD();
-	
-#if POWER_IS_RIGHT_ASSOCIATIVE
-	DDExpression * terminal = [self parseTerminalExpression];
-	if ([[[self peekNextToken] token] isEqual:@"**"]) {
-		[self nextToken]; //consume the **
-		DDExpression * power = [self parsePowerExpression];
-		if (power == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary **"];
-			return nil;
-		}
-		return [DDExpression functionExpressionWithFunction:@"POW" arguments:[NSArray arrayWithObjects:terminal, power, nil]];
-	}
-	return terminal;
-#else
-	DDExpression * left = [self parseTerminalExpression];
-	while ([[[self peekNextToken] token] isEqual:@"**"]) {
-		[self nextToken]; //consume the **
-		DDExpression * right = [self parseTerminalExpression];
-		if (right == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"no right expression to binary **"];
-			return nil;
-		}
-		left = [DDExpression functionExpressionWithFunction:@"pow" arguments:[NSArray arrayWithObjects:left, right, nil]];
-	}
-	return left;
-#endif
+	return [self parseBinaryFunction:@"pow" 
+							   token:@"**" 
+					   associativity:powerAssociativity 
+						   nextLevel:@selector(parseTerminalExpression)];
 }
 
 - (DDExpression *) parseTerminalExpression {
@@ -319,42 +284,7 @@
 	} else if ([next tokenType] == DDTokenTypeVariable) {
 		return [DDExpression variableExpressionWithVariable:[next token]];
 	} else if ([next tokenType] == DDTokenTypeFunction) {
-		NSString * function = [next token];
-		NSMutableArray * arguments = [NSMutableArray array];
-		
-		next = [self nextToken];
-		if ([[next token] isEqual:@"("] == NO) {
-			//this should be unreachable, since a Function token is only generated if the following character is (
-			[NSException raise:NSInvalidArgumentException format:@"function not followed by (.  should be unreachable"];
-			return nil;
-		}
-		next = [self peekNextToken];
-		if (next == nil) {
-			[NSException raise:NSInvalidArgumentException format:@"formula must have closing parenthesis"];
-			return nil;
-		}
-		if ([[next token] isEqual:@")"] == NO) {		
-			DDExpression * argument = [self parseBitwiseOrExpression];
-			if (argument != nil) {
-				[arguments addObject:argument];
-			}	
-			do {
-				next = [self nextToken];
-				if ([[next token] isEqual:@","]) {
-					argument = [self parseBitwiseOrExpression];
-					if (argument != nil) {
-						[arguments addObject:argument];
-					}
-				} else if ([[next token] isEqual:@")"]) {
-					break;
-				} else {
-					[NSException raise:NSInvalidArgumentException format:@"unexpected token found in function: %@", [next token]];
-					return nil;
-				}
-			} while (1);
-		}
-		
-		return [DDExpression functionExpressionWithFunction:function arguments:arguments];
+		return [self parseFunctionExpression];
 	} else if ([[next token] isEqual:@"("]) {
 		DDExpression * parenthetical = [self parseBitwiseOrExpression];
 		DDMathStringToken * closing = [self nextToken];
@@ -367,6 +297,46 @@
 	
 	[NSException raise:NSInvalidArgumentException format:@"unexpected token: %@", [next token]];
 	return nil;
+}
+
+- (DDExpression *) parseFunctionExpression {
+	DDMathStringToken * next = [self currentToken];
+	NSString * function = [next token];
+	NSMutableArray * arguments = [NSMutableArray array];
+	
+	next = [self nextToken];
+	if ([[next token] isEqual:@"("] == NO) {
+		//this should be unreachable, since a Function token is only generated if the following character is (
+		[NSException raise:NSInvalidArgumentException format:@"function not followed by (.  should be unreachable"];
+		return nil;
+	}
+	next = [self peekNextToken];
+	if (next == nil) {
+		[NSException raise:NSInvalidArgumentException format:@"formula must have closing parenthesis"];
+		return nil;
+	}
+	if ([[next token] isEqual:@")"] == NO) {		
+		DDExpression * argument = [self parseBitwiseOrExpression];
+		if (argument != nil) {
+			[arguments addObject:argument];
+		}	
+		do {
+			next = [self nextToken];
+			if ([[next token] isEqual:@","]) {
+				argument = [self parseBitwiseOrExpression];
+				if (argument != nil) {
+					[arguments addObject:argument];
+				}
+			} else if ([[next token] isEqual:@")"]) {
+				break;
+			} else {
+				[NSException raise:NSInvalidArgumentException format:@"unexpected token found in function: %@", [next token]];
+				return nil;
+			}
+		} while (1);
+	}
+	
+	return [DDExpression functionExpressionWithFunction:function arguments:arguments];
 }
 
 @end

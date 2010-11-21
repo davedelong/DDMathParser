@@ -79,19 +79,34 @@
 	if (currentCharacterIndex >= [sourceString length]) { return nil; }
 	
 	unichar character = [self nextCharacter];
-	if (character >= '0' && character <= '9') {
-		return [self parsedNumber:character];
-	} else if ((character >= 'a' && character <= 'z') ||
-			   (character >= 'A' && character <= 'Z')) {
-		return [self parsedFunction:character];
-	} else if (character == '$') {
-		return [self parsedVariable:character];
-	} else {
-		return [self parsedOperator:character];
+	
+	NSUInteger currentIndex = currentCharacterIndex;
+	@try {
+		if (character >= '0' && character <= '9') {
+			return [self parsedNumber:character];
+		}
+		if ((character >= 'a' && character <= 'z') ||
+				   (character >= 'A' && character <= 'Z')) {
+			return [self parsedFunction:character];
+		}
+		if (character == '$') {
+			return [self parsedVariable:character];
+		}
 	}
+	@catch (NSException * e) {
+		//failed; reset to where we were before we started
+		currentCharacterIndex = currentIndex;
+	}
+	return [self parsedOperator:character];
 }
 
 - (DDMathStringToken *) parsedNumber:(unichar)firstCharacter {
+	/**
+	 we don't allow commas in numbers, because then "max(3,9)" would be naïvely tokenized as:
+	 "max" "(" "3,9" ")"
+	 instead of the expected
+	 "max" "(" "3" "," "9" ")"
+	 */
 	NSMutableString * n = [NSMutableString stringWithFormat:@"%C", firstCharacter];
 	NSMutableCharacterSet * allowed = [NSMutableCharacterSet decimalDigitCharacterSet];
 	[allowed addCharactersInString:@".eE"];
@@ -99,7 +114,7 @@
 	do {
 		unichar next = [self peekNextCharacter];
 		if (next != 0) {
-			//allowed characters: 0-9, e, ,, .
+			//allowed characters: 0-9, e, .
 			if ([allowed characterIsMember:next]) {
 				[n appendFormat:@"%C", [self nextCharacter]];
 			} else {
@@ -118,6 +133,8 @@
 		parsedNumber = [numberFormatter numberFromString:n];
 		if (parsedNumber != nil) { break; }
 	}
+	
+	NSLog(@"parsed %@ from %@", parsedNumber, n);
 	
 	if (parsedNumber == nil) {
 		[NSException raise:NSInvalidArgumentException format:@"unabled to parse: %@", n];
@@ -170,7 +187,7 @@
 - (DDMathStringToken *) parsedOperator:(unichar)firstCharacter {
 	NSString * token = [NSString stringWithFormat:@"%C", firstCharacter];
 	NSMutableCharacterSet * allowed = [[[NSMutableCharacterSet alloc] init] autorelease];
-	[allowed addCharactersInString:@"+-*/&|!%^~()<>,"];
+	[allowed addCharactersInString:@"+-*/&|!%^~()<>,x"];
 	if ([allowed characterIsMember:firstCharacter]) {
 		if (firstCharacter == '*') {
 			//recognize "**" (pow) as different than "*" (mul)
@@ -185,6 +202,8 @@
 			}
 			token = [token stringByAppendingFormat:@"%C", nextCharacter];
 		}
+		
+		if ([token isEqual:@"x"]) { token = @"*"; }
 		return [DDMathStringToken mathStringTokenWithToken:token type:DDTokenTypeOperator];
 	}
 	
