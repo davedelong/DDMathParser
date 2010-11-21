@@ -2,3 +2,4 @@ build
 **/*.pbxuser
 **/*.perspective*
 **/*.mode*
+.DS_Store

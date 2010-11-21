@@ -94,7 +94,10 @@
 
 - (DDMathStringToken *) currentToken {
 	if (currentTokenIndex >= [[tokenizer tokens] count]) { return nil; }
-	return [[tokenizer tokens] objectAtIndex:currentTokenIndex];
+	if (currentTokenIndex == 0) {
+		return [[tokenizer tokens] objectAtIndex:currentTokenIndex];
+	}
+	return [[tokenizer tokens] objectAtIndex:currentTokenIndex-1];
 }
 
 - (DDMathStringToken *) nextToken {
