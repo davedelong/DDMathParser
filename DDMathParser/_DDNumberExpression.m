@@ -25,6 +25,10 @@
 
 - (DDExpressionType) expressionType { return DDExpressionTypeNumber; }
 
+- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
+	return self;
+}
+
 - (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator { return [self number]; }
 
 - (NSNumber *) number { return number; }

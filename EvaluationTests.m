@@ -250,4 +250,11 @@
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:2], @"invalid evaluation.  given: %@", n);
 }
 
+- (void) testSimplification {
+	DDExpression * d = [[DDExpression expressionFromString:@"1 + 2 + 3"] simplifiedExpression];
+	DDExpression * t = [DDExpression expressionFromString:@"6"];
+	
+	STAssertEqualObjects(d, t, @"simplification failed");
+}
+
 @end

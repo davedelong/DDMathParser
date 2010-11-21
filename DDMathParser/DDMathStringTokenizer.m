@@ -134,8 +134,6 @@
 		if (parsedNumber != nil) { break; }
 	}
 	
-	NSLog(@"parsed %@ from %@", parsedNumber, n);
-	
 	if (parsedNumber == nil) {
 		[NSException raise:NSInvalidArgumentException format:@"unabled to parse: %@", n];
 		return nil;

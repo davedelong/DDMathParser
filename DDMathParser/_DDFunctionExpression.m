@@ -40,6 +40,40 @@
 - (NSString *) function { return [function lowercaseString]; }
 - (NSArray *) arguments { return arguments; }
 
+- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
+	NSLog(@"simplifying!");
+	BOOL canSimplify = YES;
+	for (DDExpression * e in [self arguments]) {
+		DDExpression * a = [e simplifiedExpressionWithEvaluator:evaluator];
+		NSLog(@"simplified: %@", a);
+		if ([a expressionType] != DDExpressionTypeNumber) {
+			canSimplify = NO;
+		}
+	}
+	
+	if (canSimplify) {
+		if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
+		NSInteger numberOfAllowedArguments = [evaluator numberOfArgumentsForFunction:[self function]];
+		if (numberOfAllowedArguments != DDMathFunctionUnlimitedArguments) {
+			if (numberOfAllowedArguments != [[self arguments] count]) {
+				[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments to %@ function.  %ld required", [self function], numberOfAllowedArguments];
+				return nil;
+			}
+		}
+		
+		DDMathFunction mathFunction = [evaluator functionWithName:[self function]];
+		id result = mathFunction([self arguments], nil, evaluator);
+		
+		if ([result isKindOfClass:[_DDNumberExpression class]]) {
+			return result;
+		} else if ([result isKindOfClass:[NSNumber class]]) {
+			return [DDExpression numberExpressionWithNumber:result];
+		}		
+	}
+	
+	return self;
+}
+
 - (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator {
 	if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 	

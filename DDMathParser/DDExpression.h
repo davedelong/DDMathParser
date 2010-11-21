@@ -32,6 +32,9 @@ typedef enum {
 - (NSExpression *) expressionValue;
 - (NSExpression *) expressionValueForEvaluator:(DDMathEvaluator *)evaluator;
 
+- (DDExpression *) simplifiedExpression;
+- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator;
+
 #pragma mark Number methods
 - (NSNumber *) number;
 

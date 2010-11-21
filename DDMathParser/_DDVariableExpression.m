@@ -30,6 +30,10 @@
 
 - (NSString *) variable { return variable; }
 
+- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
+	return self;
+}
+
 - (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator {
 	if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 	
