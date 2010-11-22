@@ -73,6 +73,7 @@ All binary operators can have their associativity changed this way.
 In addition to the functions defined by the operators above, the following functions are built in:
 
 Functions that take > 1 parameter
+
 - `sum()` - returns a sum of the passed parameters
 - `count()` - returns the number of passed parameters
 - `min()` - returns the minimum of the passed parameters
@@ -82,6 +83,7 @@ Functions that take > 1 parameter
 - `stddev()` - returns the standard deviation of the passed parameters
 
 Functiosn that take 1 parameter:
+
 - `sqrt()` - returns the square root of the passed parameter
 - `log()` - returns the base 10 log of the passed parameter
 - `ln()` - returns the base e log of the passed parameter
@@ -100,6 +102,7 @@ Functiosn that take 1 parameter:
 - `rtod()` - converts the passed parameter from radians to degrees
 
 Functions that take no parameters:
+
 - `pi()` - returns the value of π
 - `pi_2()` - returns the value of π/2
 - `pi_4()` - returns the value of π/2
