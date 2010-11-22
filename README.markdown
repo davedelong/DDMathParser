@@ -51,6 +51,23 @@ If you want this operator to be parsed with specific associativity, you can do s
    
 All binary operators can have their associativity changed this way.
 
+### Operators
+
+`DDMathEvaluator` recognizes all common mathematical operators:
+
+- `+` - addition
+- `-` - subtraction (also negation)
+- `*` (or `x`) - multiplication
+- `/` - division
+- `%` - modulus
+- `!` - factorial
+- `&` - bitwise and
+- `|` - bitwise or
+- `^` - bitwise xor
+- `~` - bitwise not
+- `<<` - bitwise left shift
+- `>>` - bitwise right shift
+
 ## Usage
 
 Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParsing.h"`, and you're good to go.
