@@ -68,6 +68,48 @@ All binary operators can have their associativity changed this way.
 - `<<` - bitwise left shift
 - `>>` - bitwise right shift
 
+### Built-in functions
+
+In addition to the functions defined by the operators above, the following functions are built in:
+
+Functions that take > 1 parameter
+- `sum()` - returns a sum of the passed parameters
+- `count()` - returns the number of passed parameters
+- `min()` - returns the minimum of the passed parameters
+- `max()` - returns the maximum of the passed parameters
+- `median()` - returns the median of the passed parameters
+- `mode()` - returns the mode of the passed parameters
+- `stddev()` - returns the standard deviation of the passed parameters
+
+Functiosn that take 1 parameter:
+- `sqrt()` - returns the square root of the passed parameter
+- `log()` - returns the base 10 log of the passed parameter
+- `ln()` - returns the base e log of the passed parameter
+- `exp()` - returns e raised to the power of the passed parameter
+- `ceil()` - returns the passed parameter rounded up
+- `trunc()` - returns the passed parameter rounded up or down
+- `floor()` - returns the passed parameter rounded down
+- `onescomplement()` - returns the ones complement of the passed parameter
+- `sin()` - returns the sine of the passed parameter (in radians)
+- `cos()` - returns the cosine of the passed parameter (in radians)
+- `tan()` - returns the tangent of the passed parameter (in radians)
+- `asin()` - returns (in radians) the arcsine of the passed parameter
+- `acos()` - returns (in radians) the arccosine of the passed parameter
+- `atan()` - returns (in radians) the arctangent of the passed parameter
+- `dtor()` - converts the passed parameter from degrees to radians
+- `rtod()` - converts the passed parameter from radians to degrees
+
+Functions that take no parameters:
+- `pi()` - returns the value of π
+- `pi_2()` - returns the value of π/2
+- `pi_4()` - returns the value of π/2
+- `sqrt2()` - returns the value of the square root of 2
+- `e()` - returns the value of e
+- `log2e()` - returns the value of the log base 2 of e
+- `log10e()` - returns the value of the log base 10 of e
+- `ln2()` - returns the value of the log base e of 2
+- `ln10()` - returns the value of the log base e of 10
+
 ## Usage
 
 Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParsing.h"`, and you're good to go.
