@@ -41,11 +41,9 @@
 - (NSArray *) arguments { return arguments; }
 
 - (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
-	NSLog(@"simplifying!");
 	BOOL canSimplify = YES;
 	for (DDExpression * e in [self arguments]) {
 		DDExpression * a = [e simplifiedExpressionWithEvaluator:evaluator];
-		NSLog(@"simplified: %@", a);
 		if ([a expressionType] != DDExpressionTypeNumber) {
 			canSimplify = NO;
 		}

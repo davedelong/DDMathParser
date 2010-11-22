@@ -81,8 +81,16 @@
 		multiplicationAssociativity = DDMathParserAssociativityLeft;
 		modAssociativity = DDMathParserAssociativityLeft;
 		
-		powerAssociativity = DDMathParserAssociativityRight;
-		powerAssociativity = DDMathParserAssociativityLeft; //to make it the same as NSExpression
+		//determine what associativity NSPredicate/NSExpression is using
+		//mathematically, it should be right associative, but it's usually parsed as left associative
+		//rdar://problem/8692313
+		NSExpression * powerExpression = [(NSComparisonPredicate *)[NSPredicate predicateWithFormat:@"2 ** 3 ** 2 == 0"] leftExpression];
+		NSNumber * powerResult = [powerExpression expressionValueWithObject:nil context:nil];
+		if ([powerResult intValue] == 512) {
+			powerAssociativity = DDMathParserAssociativityRight;
+		} else {
+			powerAssociativity = DDMathParserAssociativityLeft;
+		}
 	}
 	return self;
 }
