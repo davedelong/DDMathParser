@@ -127,27 +127,27 @@ Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathPars
 
 There are several ways to evaluate strings, depending on how much customization you want to do:
 
-### `NSString` category:
+### NSString
 
     NSLog(@"%@", [@"1 + 2" numberByEvaluatingString]);
     
 Useful for the simplest evaluations (ie, no variables).  Uses the `[DDMathEvaluator sharedMathEvaluator]` and all functions registered with it.
     
-### `DDExpression`
+### DDExpression
 
 	DDExpression * e = [DDExpression expressionFromString:@"1 + 2"];
 	NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil]);
 	
 Useful for specifying variable substitutions or a custom evaluator.
 
-### `DDMathEvaluator`
+### DDMathEvaluator
 
     DDMathEvaluator * eval = [DDMathEvaluator sharedMathEvaluator];
     NSLog(@"%@", [eval evaluateString:@"1 + 2" withSubstitutions:nil]);
     
 Useful for specifying variable substitutions or a custom evaluator.
 
-### `DDMathParser`
+### DDMathParser
 
     DDMathParser * parser = [DDMathParser mathParserWithString:@"1 + 2"];
     DDExpression * e = [parser parsedExpression];
