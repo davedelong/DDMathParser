@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "DDMathEvaluator.h"
+#import "DDMathParsing.h"
 
 NSString* readLine() {
 	NSMutableString * str = [NSMutableString string];
@@ -39,7 +39,7 @@ int main (int argc, const char * argv[]) {
 		if ([line isEqual:@"exit"]) { break; }
 		if ([line isEqual:@"list"]) { listFunctions(); continue; }
 		
-		NSNumber * value = [[DDMathEvaluator sharedMathEvaluator] evaluateString:line withSubstitutions:nil];
+		NSNumber * value = [line numberByEvaluatingString];
 		printf("\t%s = %s\n", [line UTF8String], [[value description] UTF8String]);
 
 	} while (1);

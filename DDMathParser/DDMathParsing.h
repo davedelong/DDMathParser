@@ -10,3 +10,4 @@
 #import "DDExpression.h"
 #import "DDMathParser.h"
 #import "DDTypes.h"
+#import "NSString+DDMathParsing.h"

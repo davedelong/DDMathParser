@@ -24,6 +24,8 @@ Registering new functions is easy.  You just need a block, a name, and the numbe
 You can also unregister added functions.  You cannot unregister built-in functions, nor can they be overridden.
     
 Function names must begin with a letter, and can contain letters and digits.  Functions are case-insensitive.  (`mUlTiPlYbY42` is the same as `multiplyby42`)
+
+Functions are registered with a specific instance of `DDMathEvaluator`.  The simplest approach is to register everything with the shared instance (`[DDMathEvaluator sharedMathEvaluator]`).  However, should you only need certain functions available in certain contexts, you can allocate and initialize any number of `DDMathEvaluator` objects.  All math evaluators recognize the built-in functions.
     
 ### Variables
 
@@ -82,7 +84,7 @@ Functions that take > 1 parameter
 - `mode()` - returns the mode of the passed parameters
 - `stddev()` - returns the standard deviation of the passed parameters
 
-Functiosn that take 1 parameter:
+Functions that take 1 parameter:
 
 - `sqrt()` - returns the square root of the passed parameter
 - `log()` - returns the base 10 log of the passed parameter
@@ -122,6 +124,36 @@ Functions that take no parameters:
 ## Usage
 
 Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParsing.h"`, and you're good to go.
+
+There are several ways to evaluate strings, depending on how much customization you want to do:
+
+### `NSString` category:
+
+    NSLog(@"%@", [@"1 + 2" numberByEvaluatingString]);
+    
+Useful for the simplest evaluations (ie, no variables).  Uses the `[DDMathEvaluator sharedMathEvaluator]` and all functions registered with it.
+    
+### `DDExpression`
+
+	DDExpression * e = [DDExpression expressionFromString:@"1 + 2"];
+	NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil]);
+	
+Useful for specifying variable substitutions or a custom evaluator.
+
+### `DDMathEvaluator`
+
+    DDMathEvaluator * eval = [DDMathEvaluator sharedMathEvaluator];
+    NSLog(@"%@", [eval evaluateString:@"1 + 2" withSubstitutions:nil]);
+    
+Useful for specifying variable substitutions or a custom evaluator.
+
+### `DDMathParser`
+
+    DDMathParser * parser = [DDMathParser mathParserWithString:@"1 + 2"];
+    DDExpression * e = [parser parsedExpression];
+    NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil]);
+    
+Useful for specifying a custom parser or custom operator associativities, specifying variables, or specifying a custom evaluator.
 
 ## Compatibility
 
