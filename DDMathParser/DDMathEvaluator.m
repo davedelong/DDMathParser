@@ -181,6 +181,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"atan",
 			@"dtor",
 			@"rtod",
+			@"sinh",
+			@"cosh",
+			@"tanh",
+			@"asinh",
+			@"acosh",
+			@"atanh",
 			
 			//functions that take 0 parameters
 			@"pi",

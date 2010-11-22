@@ -2,7 +2,7 @@
 
 You have an `NSString`.  You want an `NSNumber`.  Previously, you would have to rely on [abusing `NSPredicate`](http://tumblr.com/xqopow93r) to turn your string into an `NSExpression` that you could then evaluate.  However, this has a major flaw:  extending it to support functions that aren't built-in to `NSExpression` provided for some awkward syntax.  So if you really need `sin()`, you have to jump through some intricate hoops to get it.
 
-You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This, however, isn't extensible at all.  So if you really needed a `floor()` function, you're out of luck.
+You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This, however, isn't extensible at all.  So if you really needed a `stddev()` function, you're out of luck.
 
 Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all the ways that matter (in fact, it actually uses `NSExpression` to evaluate many of its built-in functions), but with the major addition that you can define new functions as you need.
 
@@ -100,6 +100,12 @@ Functiosn that take 1 parameter:
 - `atan()` - returns (in radians) the arctangent of the passed parameter
 - `dtor()` - converts the passed parameter from degrees to radians
 - `rtod()` - converts the passed parameter from radians to degrees
+- `sinh()` - returns the hyperbolic sine of the passed parameter
+- `cosh()` - returns the hyperbolic cosine of the passed parameter
+- `tanh()` - returns the hyperbolic tangent of the passed parameter
+- `asinh()` - returns the hyperbolic arcsine of the passed parameter
+- `acosh()` - returns the hyperbolic arccosine of the passed parameter
+- `atanh()` - returns the hyperbolic arctangent of the passed parameter
 
 Functions that take no parameters:
 

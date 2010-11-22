@@ -372,7 +372,7 @@
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
 		DDExpression * argument = [arguments objectAtIndex:0];
 		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
-		NSNumber * r = [NSNumber numberWithDouble:atanf([n doubleValue])];
+		NSNumber * r = [NSNumber numberWithDouble:atan([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:r];
 	};
 	return [self mathFunctionWithName:@"atan" function:function numberOfArguments:1];
@@ -398,6 +398,66 @@
 		return [DDExpression numberExpressionWithNumber:r];
 	};
 	return [self mathFunctionWithName:@"rtod" function:function numberOfArguments:1];
+}
+
++ (id) _sinhFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:sinh([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"sin" function:function numberOfArguments:1];
+}
+
++ (id) _coshFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:cosh([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"cos" function:function numberOfArguments:1];
+}
+
++ (id) _tanhFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:tanh([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"tan" function:function numberOfArguments:1];
+}
+
++ (id) _asinhFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:asinh([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"asin" function:function numberOfArguments:1];
+}
+
++ (id) _acoshFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:acosh([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"acos" function:function numberOfArguments:1];
+}
+
++ (id) _atanhFunctionContainer {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		DDExpression * argument = [arguments objectAtIndex:0];
+		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSNumber * r = [NSNumber numberWithDouble:atanh([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:r];
+	};
+	return [self mathFunctionWithName:@"atan" function:function numberOfArguments:1];
 }
 
 #pragma mark Container methods
