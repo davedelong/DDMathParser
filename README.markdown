@@ -6,6 +6,8 @@ You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This,
 
 Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all the ways that matter (in fact, it actually uses `NSExpression` to evaluate many of its built-in functions), but with the major addition that you can define new functions as you need.
 
+## Features
+
 ### Registering Functions
 
 Registering new functions is easy.  You just need a block, a name, and the number of arguments the function accepts.  So for example:
@@ -39,7 +41,9 @@ Variables are denoted in the source string as beginning with `$` and can contain
 
 By default, all binary operators are left associative.  That means if you give a string, such as `@"2 ** 3 ** 2"`, it will be parsed as `@"(2 ** 3) ** 2`, in order to maintain parity with `NSExpression`.
 
-If you want this operator to be parsed with right associativity, you can do so like this:
+The exception to this is the power operator (`**`), which has its associativity determined at runtime.  The reason for this is that the power operator is supposed to be right associative, but is interpreted by `NSPredicate` as left associative ([rdar://problem/8692313](rdar://problem/8692313)).  `DDMathParser` performs a test to match the associativity used by `NSPredicate`.
+
+If you want this operator to be parsed with specific associativity, you can do so like this:
 
     DDMathParser * parser = [DDMathParser mathParserWithString:@"2 ** 3 ** 2"];
     [parser setPowerAssociativity:DDMathParserAssociativityRight];
