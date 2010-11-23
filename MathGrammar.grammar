@@ -23,3 +23,6 @@
 <id>				= a valid identifier (ie: [a-zA-Z][a-zA-Z0-9]+)
 <number>			= a valid number (anything parseable by NSNumberFormatter)
 <variable>			= "$", <id>
+
+One important thing to understand:
+All but one of the binary operators (|, ^, &, <<, >>, -, +, /, *, and %) are left associative.  In other words, if you have the string "1 - 2 - 3", it should be parsed as "(1 - 2) - 3" (= -4).  A right associative parsing would result in "1 - (2 - 3)" (= 2).  The exception to this is the power operator "**".  The grammar above defines it as right associative, because 2 ** 3 ** 2 should be parsed as "2 ** (3 ** 2)" (= 512) and not "(2 ** 3) ** 2" (= 64).  DDMathParser, however, allows you to specify the associativities of these operators, should you so desire.
