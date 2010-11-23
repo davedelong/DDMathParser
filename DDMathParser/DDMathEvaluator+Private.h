@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DDMathEvaluator.h"
+#import "_DDFunctionExpression.h"
 
 @interface DDMathEvaluator ()
 
@@ -16,5 +17,7 @@
 
 - (NSNumber *) evaluateFunction:(DDExpression *)function withSubstitutions:(NSDictionary *)variables;
 - (NSString *) nsexpressionFunctionWithName:(NSString *)functionName;
+
+- (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression;
 
 @end

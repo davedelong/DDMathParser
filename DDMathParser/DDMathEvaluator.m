@@ -87,6 +87,10 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	return function;
 }
 
+- (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression {
+	[NSException raise:NSInvalidArgumentException format:@"unknown function: %@", [functionExpression function]];
+}
+
 #pragma mark Evaluation
 
 - (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)variables {

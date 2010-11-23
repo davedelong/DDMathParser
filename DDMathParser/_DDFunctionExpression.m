@@ -75,33 +75,39 @@
 - (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator {
 	if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 	
-	NSInteger numberOfAllowedArguments = [evaluator numberOfArgumentsForFunction:[self function]];
-	if (numberOfAllowedArguments != DDMathFunctionUnlimitedArguments) {
-		if (numberOfAllowedArguments != [[self arguments] count]) {
-			[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments to %@ function.  %ld required", [self function], numberOfAllowedArguments];
-			return nil;
-		}
-	}
-	
 	DDMathFunction mathFunction = [evaluator functionWithName:[self function]];
 	
-	id result = mathFunction([self arguments], substitutions, evaluator);
-	
-	while ([result isKindOfClass:[_DDVariableExpression class]]) {
-		result = [result evaluateWithSubstitutions:substitutions evaluator:evaluator];
-	}
-	
-	NSNumber * numberValue = nil;
-	if ([result isKindOfClass:[_DDNumberExpression class]]) {
-		numberValue = [result number];
-	} else if ([result isKindOfClass:[NSNumber class]]) {
-		numberValue = result;
+	if (mathFunction != nil) {
+		
+		NSInteger numberOfAllowedArguments = [evaluator numberOfArgumentsForFunction:[self function]];
+		if (numberOfAllowedArguments != DDMathFunctionUnlimitedArguments) {
+			if (numberOfAllowedArguments != [[self arguments] count]) {
+				[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments to %@ function.  %ld required", [self function], numberOfAllowedArguments];
+				return nil;
+			}
+		}
+		
+		id result = mathFunction([self arguments], substitutions, evaluator);
+		
+		while ([result isKindOfClass:[_DDVariableExpression class]]) {
+			result = [result evaluateWithSubstitutions:substitutions evaluator:evaluator];
+		}
+		
+		NSNumber * numberValue = nil;
+		if ([result isKindOfClass:[_DDNumberExpression class]]) {
+			numberValue = [result number];
+		} else if ([result isKindOfClass:[NSNumber class]]) {
+			numberValue = result;
+		} else {
+			[NSException raise:NSInvalidArgumentException format:@"invalid return type from %@ function", [self function]];
+			return nil;
+		}
+		return numberValue;
 	} else {
-		[NSException raise:NSInvalidArgumentException format:@"invalid return type from %@ function", [self function]];
+		[evaluator functionExpressionFailedToResolve:self];
 		return nil;
 	}
-	return numberValue;
-
+	
 }
 
 - (NSExpression *) expressionValueForEvaluator:(DDMathEvaluator *)evaluator {
