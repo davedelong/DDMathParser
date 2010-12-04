@@ -52,6 +52,18 @@
 	return functions;
 }
 
++ (NSDictionary *) functionsForNSExpressionFunctions {
+	static NSDictionary * functions = nil;
+	if (functions == nil) {
+		functions = [[NSMutableDictionary alloc] init];
+		NSDictionary * map = [self nsexpressionFunctions];
+		for (NSString * ddfunction in map) {
+			[(NSMutableDictionary *)functions setObject:ddfunction forKey:[map objectForKey:ddfunction]];
+		}
+	}
+	return functions;
+}
+
 + (DDMathFunction) oneArgumentFunctionForMethod:(NSString *)method {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];

@@ -9,7 +9,8 @@
 #import "DDExpression.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
-#import "DDMathParser.h"
+#import "DDParser.h"
+#import "DDParser.h"
 
 #import "_DDNumberExpression.h"
 #import "_DDFunctionExpression.h"
@@ -19,7 +20,7 @@
 @implementation DDExpression
 
 + (id) expressionFromString:(NSString *)expressionString {
-	return [[DDMathParser mathParserWithString:expressionString] parsedExpression];
+	return [[DDParser parserWithString:expressionString] parsedExpression];
 }
 
 + (id) numberExpressionWithNumber:(NSNumber *)number {

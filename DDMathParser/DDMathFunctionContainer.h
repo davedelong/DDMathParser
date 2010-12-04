@@ -19,6 +19,8 @@
 @property (nonatomic) NSInteger numberOfArguments;
 
 + (NSDictionary *) nsexpressionFunctions;
++ (NSDictionary *) functionsForNSExpressionFunctions;
+
 + (id) mathFunctionWithName:(NSString *)name function:(DDMathFunction)function numberOfArguments:(NSInteger)numberOfArguments;
 
 @end

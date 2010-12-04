@@ -13,14 +13,20 @@
 					| "-", <unary_expr>
 					| "~", <unary_expr>
 <factorial_expr>	= <power_expr> { [ "!" ] }
-<power_expr>		= <expression>, "**", <power_expr> 
-					| <expression>
+
+//right associative power_expr rule:
+<power_expr>		= <expression>, [ "**", <power_expr> ]
+
+//left associative power_expr rule:
+<power_expr>		= <expression>, { [ "**", <expression> ] }
+
+
 <expression>		= <number> 
 					| <variable>
 					| "(", <start>, ")" 
 					| <id>, "(", [ <start>, [",", <start>] ], ")"
 
-<id>				= a valid identifier (ie: [a-zA-Z][a-zA-Z0-9]+)
+<id>				= a valid identifier (ie: [a-zA-Z][a-zA-Z0-9]*)
 <number>			= a valid number (anything parseable by NSNumberFormatter)
 <variable>			= "$", <id>
 

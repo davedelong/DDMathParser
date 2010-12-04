@@ -7,13 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef enum {
-	DDTokenTypeNumber = 0,
-	DDTokenTypeOperator = 1,
-	DDTokenTypeFunction = 2,
-	DDTokenTypeVariable = 3
-} DDTokenType;
+#import "DDParserTypes.h"
 
 @interface DDMathStringToken : NSObject {
 
@@ -23,6 +17,7 @@ typedef enum {
 
 @property (readonly) NSString * token;
 @property (readonly) DDTokenType tokenType;
+@property (readonly) DDOperator operatorType;
 
 - (NSNumber *) numberValue;
 

@@ -11,7 +11,7 @@
 
 @interface DDMathStringTokenizer ()
 
-- (DDMathStringToken *) nextToken;
+- (DDMathStringToken *) _nextToken;
 
 - (DDMathStringToken *) parsedOperator:(unichar)firstCharacter;
 - (DDMathStringToken *) parsedNumber:(unichar)firstCharacter;
@@ -38,7 +38,7 @@
 		
 		@try {
 			DDMathStringToken * token = nil;
-			while ((token = [self nextToken])) {
+			while ((token = [self _nextToken])) {
 				[tokens addObject:token];
 			}
 		}
@@ -46,6 +46,8 @@
 			NSLog(@"caught: %@", e);
 			@throw e;
 		}
+		
+		[self reset];
 	}
 	return self;
 }
@@ -61,7 +63,32 @@
 	return [[tokens copy] autorelease];
 }
 
-- (unichar) nextCharacter {
+- (DDMathStringToken *) nextToken {
+	currentTokenIndex++;
+	return [self currentToken];
+}
+
+- (DDMathStringToken *) currentToken {
+	if (currentTokenIndex >= [tokens count]) { return nil; }
+	return [tokens objectAtIndex:currentTokenIndex];
+}
+
+- (DDMathStringToken *) peekNextToken {
+	DDMathStringToken * peek = [self nextToken];
+	currentTokenIndex--;
+	return peek;
+}
+
+- (DDMathStringToken *) previousToken {
+	if (currentTokenIndex <= 0) { return nil; }
+	return [tokens objectAtIndex:currentTokenIndex - 1];
+}
+
+- (void) reset {
+	currentTokenIndex = -1;
+}
+
+- (unichar) _nextCharacter {
 	if (currentCharacterIndex >= [sourceString length]) { return 0; }
 	
 	unichar character = [sourceString characterAtIndex:currentCharacterIndex];
@@ -69,20 +96,20 @@
 	return character;
 }
 
-- (unichar) peekNextCharacter {
-	unichar peek = [self nextCharacter];
+- (unichar) _peekNextCharacter {
+	unichar peek = [self _nextCharacter];
 	if (peek != 0) { currentCharacterIndex--; }
 	return peek;
 }
 
-- (DDMathStringToken *) nextToken {
+- (DDMathStringToken *) _nextToken {
 	if (currentCharacterIndex >= [sourceString length]) { return nil; }
 	
-	unichar character = [self nextCharacter];
+	unichar character = [self _nextCharacter];
 	
 	NSUInteger currentIndex = currentCharacterIndex;
 	@try {
-		if (character >= '0' && character <= '9') {
+		if ((character >= '0' && character <= '9')/* || (character == '-')*/) {
 			return [self parsedNumber:character];
 		}
 		if ((character >= 'a' && character <= 'z') ||
@@ -108,15 +135,16 @@
 	 "max" "(" "3" "," "9" ")"
 	 */
 	NSMutableString * n = [NSMutableString stringWithFormat:@"%C", firstCharacter];
-	NSMutableCharacterSet * allowed = [NSMutableCharacterSet decimalDigitCharacterSet];
-	[allowed addCharactersInString:@".eE"];
+	NSMutableCharacterSet * mutable = [NSMutableCharacterSet decimalDigitCharacterSet];
+	[mutable addCharactersInString:@".eE"];
+	NSCharacterSet * allowed = [mutable copy];
 	
 	do {
-		unichar next = [self peekNextCharacter];
+		unichar next = [self _peekNextCharacter];
 		if (next != 0) {
 			//allowed characters: 0-9, e, .
 			if ([allowed characterIsMember:next]) {
-				[n appendFormat:@"%C", [self nextCharacter]];
+				[n appendFormat:@"%C", [self _nextCharacter]];
 			} else {
 				break;
 			}
@@ -124,6 +152,8 @@
 			break;
 		}
 	} while (1);
+	
+	[allowed release];
 	
 	//now that we have a string, verify that it makes a number:
 	//use < spellOut, since we don't recognize spelled-out numbers
@@ -149,11 +179,11 @@
 //	[allowed addCharactersInString:@".#"]; //for keypaths
 	
 	NSMutableString * f = [NSMutableString stringWithFormat:@"%C", firstCharacter];
-	while ([allowed characterIsMember:[self peekNextCharacter]]) {
-		[f appendFormat:@"%C", [self nextCharacter]];
+	while ([allowed characterIsMember:[self _peekNextCharacter]]) {
+		[f appendFormat:@"%C", [self _nextCharacter]];
 	}
 	
-	if ([self peekNextCharacter] == '(') {
+	if ([self _peekNextCharacter] == '(') {
 		return [DDMathStringToken mathStringTokenWithToken:f type:DDTokenTypeFunction];
 	}
 	
@@ -170,8 +200,8 @@
 	//for simplicity, we're allowing letters and numbers in variables
 	
 	NSMutableString * v = [NSMutableString string];
-	while ([allowed characterIsMember:[self peekNextCharacter]]) {
-		[v appendFormat:@"%C", [self nextCharacter]];
+	while ([allowed characterIsMember:[self _peekNextCharacter]]) {
+		[v appendFormat:@"%C", [self _nextCharacter]];
 	}
 	
 	if ([v length] == 0) {
@@ -189,11 +219,11 @@
 	if ([allowed characterIsMember:firstCharacter]) {
 		if (firstCharacter == '*') {
 			//recognize "**" (pow) as different than "*" (mul)
-			if ([self peekNextCharacter] == '*') {
-				token = [token stringByAppendingFormat:@"%C", [self nextCharacter]];
+			if ([self _peekNextCharacter] == '*') {
+				token = [token stringByAppendingFormat:@"%C", [self _nextCharacter]];
 			}
 		} else if (firstCharacter == '<' || firstCharacter == '>') {
-			unichar nextCharacter = [self nextCharacter];
+			unichar nextCharacter = [self _nextCharacter];
 			if (firstCharacter != nextCharacter) {
 				[NSException raise:NSInvalidArgumentException format:@"< and > are not supported operators"];
 				return nil;

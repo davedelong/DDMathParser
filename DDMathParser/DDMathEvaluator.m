@@ -8,7 +8,7 @@
 
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
-#import "DDMathParser.h"
+#import "DDParser.h"
 #import "DDExpression.h"
 #import "DDMathFunctionContainer.h"
 
@@ -96,7 +96,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 - (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)variables {
 	NSNumber * returnValue = nil;
 	@try {
-		DDMathParser * parser = [DDMathParser mathParserWithString:expressionString];
+		DDParser * parser = [DDParser parserWithString:expressionString];
 		DDExpression * parsedExpression = [parser parsedExpression];
 		returnValue = [parsedExpression evaluateWithSubstitutions:variables evaluator:self];
 	}

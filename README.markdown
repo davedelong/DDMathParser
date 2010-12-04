@@ -35,7 +35,8 @@ If you don't know what the value of a particular term should be when the string 
     
 Then when you figure out what the value is supposed to be, you can pass it along in the substitution dictionary:
 
-    NSLog(@"%@", [[DDMathEvaluator sharedMathEvaluator] evaluateString:math withSubstitutions:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:7] forKey:@"a"]]); //logs "42"
+    NSDictionary * variableSubstitutions = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:7] forKey:@"a"];
+    NSLog(@"%@", [[DDMathEvaluator sharedMathEvaluator] evaluateString:math withSubstitutions:variableSubstitutions]); //logs "42"
     
 Variables are denoted in the source string as beginning with `$` and can contain numbers or letters.  They are case sensitive.  (`$a` is not the same as `$A`)
     
@@ -43,12 +44,12 @@ Variables are denoted in the source string as beginning with `$` and can contain
 
 By default, all binary operators are left associative.  That means if you give a string, such as `@"2 ** 3 ** 2"`, it will be parsed as `@"(2 ** 3) ** 2`, in order to maintain parity with `NSExpression`.
 
-The exception to this is the power operator (`**`), which has its associativity determined at runtime.  The reason for this is that the power operator is supposed to be right associative, but is interpreted by `NSPredicate` as left associative ([rdar://problem/8692313](rdar://problem/8692313)).  `DDMathParser` performs a test to match the associativity used by `NSPredicate`.
+The exception to this is the power operator (`**`), which has its associativity determined at runtime.  The reason for this is that the power operator is supposed to be right associative, but is interpreted by `NSPredicate` as left associative ([rdar://problem/8692313](rdar://problem/8692313)).  `DDParser` performs a test to match the associativity used by `NSPredicate`.
 
 If you want this operator to be parsed with specific associativity, you can do so like this:
 
-    DDMathParser * parser = [DDMathParser mathParserWithString:@"2 ** 3 ** 2"];
-    [parser setPowerAssociativity:DDMathParserAssociativityRight];
+    DDParser * parser = [DDParser parserWithString:@"2 ** 3 ** 2"];
+    [parser setPowerAssociativity:DDOperatorAssociativityRight];
     DDExpression * e = [parser parsedExpression];
    
 All binary operators can have their associativity changed this way.
@@ -63,12 +64,15 @@ All binary operators can have their associativity changed this way.
 - `/` - division
 - `%` - modulus
 - `!` - factorial
+- `**` - exponentiation
 - `&` - bitwise and
 - `|` - bitwise or
 - `^` - bitwise xor
 - `~` - bitwise not
 - `<<` - bitwise left shift
 - `>>` - bitwise right shift
+
+The unary plus operator (`+`, as in `1e+10`) is *not* a valid operator.
 
 ### Built-in functions
 
@@ -123,7 +127,7 @@ Functions that take no parameters:
 
 ## Usage
 
-Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParsing.h"`, and you're good to go.
+Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParser.h"`, and you're good to go.
 
 There are several ways to evaluate strings, depending on how much customization you want to do:
 
@@ -147,9 +151,9 @@ Useful for specifying variable substitutions or a custom evaluator.
     
 Useful for specifying variable substitutions or a custom evaluator.
 
-### DDMathParser
+### DDParser
 
-    DDMathParser * parser = [DDMathParser mathParserWithString:@"1 + 2"];
+    DDParser * parser = [DDParser parserWithString:@"1 + 2"];
     DDExpression * e = [parser parsedExpression];
     NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil]);
     

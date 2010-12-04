@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import "DDMathParsing.h"
+#import "DDMathParser.h"
 
 NSString* readLine() {
 	NSMutableString * str = [NSMutableString string];

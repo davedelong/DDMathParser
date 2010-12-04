@@ -15,6 +15,7 @@
 	NSUInteger currentCharacterIndex;
 	
 	NSMutableArray * tokens;
+	NSInteger currentTokenIndex;
 	
 	NSNumberFormatter * numberFormatter;
 }
@@ -22,6 +23,12 @@
 - (id) initWithString:(NSString *)expressionString;
 
 - (NSArray *) tokens;
+
+- (DDMathStringToken *) nextToken;
+- (DDMathStringToken *) currentToken;
+- (DDMathStringToken *) peekNextToken;
+- (DDMathStringToken *) previousToken;
+- (void) reset;
 
 
 @end
