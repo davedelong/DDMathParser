@@ -44,6 +44,7 @@
 - (void) dealloc {
 	//parser is "assign"
 	[term release];
+	[resolvedExpression release];
 	[super dealloc];
 }
 
