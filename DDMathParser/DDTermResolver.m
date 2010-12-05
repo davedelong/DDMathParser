@@ -62,14 +62,14 @@
 - (DDExpression *) expressionByResolvingTerm {
 	if (resolved == NO) {
 		DDExpression * e = nil;
-		if ([[term subTerms] count] > 0) {
-			if ([term tokenValue] != nil) {
+		if ([term tokenValue] != nil) {
+			if ([[term tokenValue] tokenType] == DDTokenTypeFunction) {
 				e = [self _resolveFunctionTerm];
 			} else {
-				e = [self _resolveGroupedTerm];
+				e = [self _resolveSimpleTerm];
 			}
 		} else {
-			e = [self _resolveSimpleTerm];
+			e = [self _resolveGroupedTerm];
 		}
 		
 		[resolvedExpression release];
