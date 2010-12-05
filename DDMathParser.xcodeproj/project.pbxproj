@@ -10,6 +10,22 @@
 		55325A0612A8C34E00DE9EB0 /* DDTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 55325A0512A8C34E00DE9EB0 /* DDTerm.m */; };
 		55325A1912A8C82C00DE9EB0 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
 		55325A1A12A8C83000DE9EB0 /* DDTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 55325A0512A8C34E00DE9EB0 /* DDTerm.m */; };
+		5537E36012AB20F30000CFED /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
+		5537E36112AB20F30000CFED /* DDTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 55325A0512A8C34E00DE9EB0 /* DDTerm.m */; };
+		5537E36212AB20F30000CFED /* DDTermResolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5570E32E12AA16AF002FE945 /* DDTermResolver.m */; };
+		5537E36312AB20F30000CFED /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9BE128CDFD600A80228 /* DDMathStringTokenizer.m */; };
+		5537E36412AB20F30000CFED /* DDMathStringToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F795E21293175B00EF2716 /* DDMathStringToken.m */; };
+		5537E36512AB20F30000CFED /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
+		5537E36612AB20F30000CFED /* NSExpression+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5538F3B9129CC0B30099B842 /* NSExpression+DDMathParsing.m */; };
+		5537E36712AB20F30000CFED /* DDMathEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5554D58A12944AFD00A62529 /* DDMathEvaluator.m */; };
+		5537E36812AB20F30000CFED /* DDMathFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFE61295A99700F4A9FD /* DDMathFunctionContainer.m */; };
+		5537E36912AB20F30000CFED /* DDExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F7963612934A1400EF2716 /* DDExpression.m */; };
+		5537E36A12AB20F30000CFED /* _DDFunctionExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */; };
+		5537E36B12AB20F30000CFED /* _DDNumberExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */; };
+		5537E36C12AB20F30000CFED /* _DDVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */; };
+		5537E36F12AB21140000CFED /* Demo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537E36E12AB21140000CFED /* Demo.m */; };
+		5537E37312AB214D0000CFED /* DemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537E37212AB214D0000CFED /* DemoController.m */; };
+		5537E37512AB229C0000CFED /* Demo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5537E37412AB229C0000CFED /* Demo.xib */; };
 		5538F3BA129CC0B30099B842 /* NSExpression+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5538F3B9129CC0B30099B842 /* NSExpression+DDMathParsing.m */; };
 		5538F3BD129CC2450099B842 /* NSExpression+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 5538F3B9129CC0B30099B842 /* NSExpression+DDMathParsing.m */; };
 		554DA12A12985DAA00433840 /* DDMathFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFE61295A99700F4A9FD /* DDMathFunctionContainer.m */; };
@@ -61,6 +77,12 @@
 		32A70AAB03705E1F00C91783 /* DDMathParser_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathParser_Prefix.pch; sourceTree = "<group>"; };
 		55325A0412A8C34E00DE9EB0 /* DDTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTerm.h; sourceTree = "<group>"; };
 		55325A0512A8C34E00DE9EB0 /* DDTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTerm.m; sourceTree = "<group>"; };
+		5537E35A12AB20D20000CFED /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5537E35C12AB20D20000CFED /* Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Demo-Info.plist"; sourceTree = "<group>"; };
+		5537E36E12AB21140000CFED /* Demo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Demo.m; sourceTree = "<group>"; };
+		5537E37112AB214D0000CFED /* DemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoController.h; sourceTree = "<group>"; };
+		5537E37212AB214D0000CFED /* DemoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoController.m; sourceTree = "<group>"; };
+		5537E37412AB229C0000CFED /* Demo.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Demo.xib; sourceTree = "<group>"; };
 		5538F3B8129CC0B30099B842 /* NSExpression+DDMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSExpression+DDMathParsing.h"; sourceTree = "<group>"; };
 		5538F3B9129CC0B30099B842 /* NSExpression+DDMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSExpression+DDMathParsing.m"; sourceTree = "<group>"; };
 		5554D58912944AFD00A62529 /* DDMathEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathEvaluator.h; sourceTree = "<group>"; };
@@ -104,6 +126,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5537E35812AB20D20000CFED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55BFA9A3128CDDEB00A80228 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -130,6 +159,7 @@
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 				55BFA9A7128CDDEB00A80228 /* UnitTests-Info.plist */,
+				5537E35C12AB20D20000CFED /* Demo-Info.plist */,
 			);
 			name = DDMathParser;
 			sourceTree = "<group>";
@@ -139,9 +169,8 @@
 			children = (
 				32A70AAB03705E1F00C91783 /* DDMathParser_Prefix.pch */,
 				08FB7796FE84155DC02AAC07 /* main.m */,
-				55BA673E1298ECA2002279A5 /* DDMathParser.h */,
-				55BFA9B2128CDEA200A80228 /* Parser */,
-				55F7966612934F8900EF2716 /* Evaluator */,
+				5537E37012AB21440000CFED /* Demo */,
+				5537E36D12AB21050000CFED /* DDMathParser */,
 				55BFA9BA128CDF8F00A80228 /* Unit Tests */,
 			);
 			name = Source;
@@ -160,6 +189,7 @@
 			children = (
 				8DD76FA10486AA7600D96B5E /* DDMathParser */,
 				55BFA9A6128CDDEB00A80228 /* UnitTests.octest */,
+				5537E35A12AB20D20000CFED /* Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -175,6 +205,27 @@
 				5570E32E12AA16AF002FE945 /* DDTermResolver.m */,
 			);
 			name = "Precedence Parser";
+			sourceTree = "<group>";
+		};
+		5537E36D12AB21050000CFED /* DDMathParser */ = {
+			isa = PBXGroup;
+			children = (
+				55BA673E1298ECA2002279A5 /* DDMathParser.h */,
+				55BFA9B2128CDEA200A80228 /* Parser */,
+				55F7966612934F8900EF2716 /* Evaluator */,
+			);
+			name = DDMathParser;
+			sourceTree = "<group>";
+		};
+		5537E37012AB21440000CFED /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				5537E36E12AB21140000CFED /* Demo.m */,
+				5537E37112AB214D0000CFED /* DemoController.h */,
+				5537E37212AB214D0000CFED /* DemoController.m */,
+				5537E37412AB229C0000CFED /* Demo.xib */,
+			);
+			name = Demo;
 			sourceTree = "<group>";
 		};
 		5570E4E412AABEF3002FE945 /* Tokens */ = {
@@ -251,6 +302,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5537E35912AB20D20000CFED /* Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5537E35F12AB20D30000CFED /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildPhases = (
+				5537E35612AB20D20000CFED /* Resources */,
+				5537E35712AB20D20000CFED /* Sources */,
+				5537E35812AB20D20000CFED /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Demo;
+			productName = Demo;
+			productReference = 5537E35A12AB20D20000CFED /* Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		55BFA9A5128CDDEB00A80228 /* UnitTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 55BFA9AB128CDDEC00A80228 /* Build configuration list for PBXNativeTarget "UnitTests" */;
@@ -307,11 +375,20 @@
 			targets = (
 				8DD76F960486AA7600D96B5E /* DDMathParser */,
 				55BFA9A5128CDDEB00A80228 /* UnitTests */,
+				5537E35912AB20D20000CFED /* Demo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5537E35612AB20D20000CFED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5537E37512AB229C0000CFED /* Demo.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55BFA9A1128CDDEB00A80228 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -322,6 +399,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5537E35712AB20D20000CFED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5537E36012AB20F30000CFED /* DDParser.m in Sources */,
+				5537E36112AB20F30000CFED /* DDTerm.m in Sources */,
+				5537E36212AB20F30000CFED /* DDTermResolver.m in Sources */,
+				5537E36312AB20F30000CFED /* DDMathStringTokenizer.m in Sources */,
+				5537E36412AB20F30000CFED /* DDMathStringToken.m in Sources */,
+				5537E36512AB20F30000CFED /* NSString+DDMathParsing.m in Sources */,
+				5537E36612AB20F30000CFED /* NSExpression+DDMathParsing.m in Sources */,
+				5537E36712AB20F30000CFED /* DDMathEvaluator.m in Sources */,
+				5537E36812AB20F30000CFED /* DDMathFunctionContainer.m in Sources */,
+				5537E36912AB20F30000CFED /* DDExpression.m in Sources */,
+				5537E36A12AB20F30000CFED /* _DDFunctionExpression.m in Sources */,
+				5537E36B12AB20F30000CFED /* _DDNumberExpression.m in Sources */,
+				5537E36C12AB20F30000CFED /* _DDVariableExpression.m in Sources */,
+				5537E36F12AB21140000CFED /* Demo.m in Sources */,
+				5537E37312AB214D0000CFED /* DemoController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55BFA9A2128CDDEB00A80228 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -425,6 +524,54 @@
 			};
 			name = Release;
 		};
+		5537E35D12AB20D30000CFED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "Demo-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Demo;
+			};
+			name = Debug;
+		};
+		5537E35E12AB20D30000CFED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "Demo-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Demo;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		55BFA9A9128CDDEC00A80228 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -496,6 +643,15 @@
 			buildConfigurations = (
 				1DEB927908733DD40010E9CD /* Debug */,
 				1DEB927A08733DD40010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5537E35F12AB20D30000CFED /* Build configuration list for PBXNativeTarget "Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5537E35D12AB20D30000CFED /* Debug */,
+				5537E35E12AB20D30000CFED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

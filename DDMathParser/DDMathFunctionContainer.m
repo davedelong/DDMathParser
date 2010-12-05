@@ -395,7 +395,11 @@
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
 		DDExpression * argument = [arguments objectAtIndex:0];
 		NSNumber * n = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
-		double radians = ([n doubleValue] / 180.0f) * M_PI;
+		double input = [n doubleValue];
+		while (input >= 360.0) {
+			input -= 360.0;
+		}
+		double radians = (input / 180.0f) * M_PI;
 		NSNumber * r = [NSNumber numberWithDouble:radians];
 		return [DDExpression numberExpressionWithNumber:r];
 	};
