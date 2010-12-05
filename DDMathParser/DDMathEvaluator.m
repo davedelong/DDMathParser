@@ -15,6 +15,7 @@
 @interface DDMathEvaluator ()
 
 - (NSSet *) _standardFunctions;
+- (NSDictionary *) _standardAliases;
 - (void) _registerStandardFunctions;
 
 @end
@@ -89,6 +90,22 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 
 - (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression {
 	[NSException raise:NSInvalidArgumentException format:@"unknown function: %@", [functionExpression function]];
+}
+
+- (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName {
+	//we can't add an alias for a function that already exists
+	DDMathFunction function = [self functionWithName:alias];
+	if (function != nil) { return NO; }
+	
+	function = [self functionWithName:functionName];
+	NSInteger numberOfArgs = [self numberOfArgumentsForFunction:functionName];
+	return [self registerFunction:function forName:alias numberOfArguments:numberOfArgs];
+}
+
+- (void) removeAlias:(NSString *)alias {
+	//you can't unregister a standard alias (like "avg")
+	if ([[self _standardAliases] objectForKey:[alias lowercaseString]] != nil) { return; }
+	[self unregisterFunctionWithName:alias];
 }
 
 #pragma mark Evaluation
@@ -206,6 +223,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	
 }
 
+- (NSDictionary *) _standardAliases {
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+			@"average", @"avg",
+			nil];
+}
+
 - (void) _registerStandardFunctions {
 	for (NSString * functionName in [self _standardFunctions]) {
 		
@@ -217,6 +240,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 		} else {
 			NSLog(@"error registering function: %@", functionName);
 		}
+	}
+	
+	NSDictionary * aliases = [self _standardAliases];
+	for (NSString * alias in aliases) {
+		NSString * function = [aliases objectForKey:alias];
+		(void)[self addAlias:alias forFunctionName:function];
 	}
 }
 

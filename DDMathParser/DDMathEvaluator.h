@@ -24,4 +24,7 @@
 
 - (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions;
 
+- (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName;
+- (void) removeAlias:(NSString *)alias;
+
 @end

@@ -99,10 +99,11 @@
 		NSMutableArray * parameters = [NSMutableArray array];
 		for (DDExpression * argument in arguments) {
 			NSNumber * value = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
-			[parameters addObject:[NSExpression expressionForConstantValue:value]];
+			[parameters addObject:value];
 		}
 		
-		NSExpression * e = [NSExpression expressionForFunction:method arguments:parameters];
+		NSArray * boxed = [NSArray arrayWithObject:[NSExpression expressionForConstantValue:parameters]];
+		NSExpression * e = [NSExpression expressionForFunction:method arguments:boxed];
 		NSNumber * value = [e expressionValueWithObject:nil context:nil];
 		return [DDExpression numberExpressionWithNumber:value];
 	};

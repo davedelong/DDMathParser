@@ -87,6 +87,7 @@ Functions that take > 1 parameter
 - `median()` - returns the median of the passed parameters
 - `mode()` - returns the mode of the passed parameters
 - `stddev()` - returns the standard deviation of the passed parameters
+- `average()` - returns the average of the passed parameters
 
 Functions that take 1 parameter:
 
@@ -124,6 +125,17 @@ Functions that take no parameters:
 - `log10e()` - returns the value of the log base 10 of e
 - `ln2()` - returns the value of the log base e of 2
 - `ln10()` - returns the value of the log base e of 10
+
+#### Aliases
+
+Functions can also have aliases.  For example, the following strings are equivalent:
+
+    average(1,2,3)
+    avg(1,2,3)
+  
+You can create your own aliases as well.  If "`onescomplement`" is too long to type for you, feel free to do:
+
+    [[DDMathEvaluator sharedMathEvaluator] addAlias:@"ones" forFunctionName:@"onescomplement"];
 
 ## Usage
 
