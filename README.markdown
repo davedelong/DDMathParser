@@ -139,7 +139,7 @@ You can create your own aliases as well.  If "`onescomplement`" is too long to t
 
 ## Usage
 
-Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParser.h"`, and you're good to go.
+Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParser.h"`, and you're good to go.  A demo target is included as part of the project.  It shows how to evaluate a user-entered string, with support for variables.
 
 There are several ways to evaluate strings, depending on how much customization you want to do:
 
@@ -148,6 +148,13 @@ There are several ways to evaluate strings, depending on how much customization 
     NSLog(@"%@", [@"1 + 2" numberByEvaluatingString]);
     
 Useful for the simplest evaluations (ie, no variables).  Uses the `[DDMathEvaluator sharedMathEvaluator]` and all functions registered with it.
+
+### NSString with substitutions
+
+    NSDictionary * s = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:42] forKey:@"a"];
+    NSLog(@"%@", [@"1 + $a" numberByEvaluatingStringWithSubstitutions:s]);
+    
+Useful for specifying variable substitutions.  Uses the default `[DDMathEvaluator sharedMathEvaluator]`.
     
 ### DDExpression
 
@@ -196,3 +203,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+## To Do:
+
+- Add support for the unary `+` operator
+- Add support for implicit multiplication (ex: `3(4)` => `12`)
+- Transform to an `NSError`-based API
+- Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision)
+- Add default associativity for all `DDParser` objects (in addition to the existing per-parser basis)

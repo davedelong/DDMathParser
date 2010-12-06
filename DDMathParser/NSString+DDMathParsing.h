@@ -12,5 +12,6 @@
 @interface NSString (DDMathParsing)
 
 - (NSNumber *) numberByEvaluatingString;
+- (NSNumber *) numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions;
 
 @end

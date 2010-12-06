@@ -12,10 +12,14 @@
 @implementation NSString (DDMathParsing)
 
 - (NSNumber *) numberByEvaluatingString {
+	return [self numberByEvaluatingStringWithSubstitutions:nil];
+}
+
+- (NSNumber *) numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions {
 	NSNumber * returnValue = nil;
 	@try {
 		DDExpression * e = [DDExpression expressionFromString:self];
-		returnValue = [e evaluateWithSubstitutions:nil evaluator:nil];
+		returnValue = [e evaluateWithSubstitutions:substitutions evaluator:nil];
 	}
 	@catch (NSException * e) {
 		NSLog(@"caught exception: %@", e);

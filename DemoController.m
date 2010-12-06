@@ -63,7 +63,6 @@
 - (void) evaluate {
 	NSString * string = [inputField stringValue];
 	if ([string length] > 0) {
-		NSLog(@"evaluating: %@", string);
 		@try {
 			DDExpression * expression = [DDExpression expressionFromString:string];
 			NSLog(@"parsed: %@", expression);
