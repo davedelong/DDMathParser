@@ -56,6 +56,12 @@
 	[sourceString release];
 	[numberFormatter release];
 	[tokens release];
+	
+	[allowedFunctionCharacters release];
+	[allowedVariableCharacters release];
+	[allowedNumberCharacters release];
+	[allowedOperatorCharacters release];
+	
 	[super dealloc];
 }
 
@@ -127,23 +133,28 @@
 	return [self parsedOperator:character];
 }
 
+- (NSCharacterSet *) allowedNumberCharacters {
+	if (allowedNumberCharacters == nil) {
+		/**
+		 we don't allow commas in numbers, because then "max(3,9)" would be naïvely tokenized as:
+		 "max" "(" "3,9" ")"
+		 instead of the expected
+		 "max" "(" "3" "," "9" ")"
+		 */
+		NSMutableCharacterSet * c = [NSMutableCharacterSet decimalDigitCharacterSet];
+		[c addCharactersInString:@".eE"];
+		allowedNumberCharacters = [c copy];
+	}
+	return allowedNumberCharacters;
+}
+
 - (DDMathStringToken *) parsedNumber:(unichar)firstCharacter {
-	/**
-	 we don't allow commas in numbers, because then "max(3,9)" would be naïvely tokenized as:
-	 "max" "(" "3,9" ")"
-	 instead of the expected
-	 "max" "(" "3" "," "9" ")"
-	 */
 	NSMutableString * n = [NSMutableString stringWithFormat:@"%C", firstCharacter];
-	NSMutableCharacterSet * mutable = [NSMutableCharacterSet decimalDigitCharacterSet];
-	[mutable addCharactersInString:@".eE"];
-	NSCharacterSet * allowed = [mutable copy];
-	
 	do {
 		unichar next = [self _peekNextCharacter];
 		if (next != 0) {
 			//allowed characters: 0-9, e, .
-			if ([allowed characterIsMember:next]) {
+			if ([[self allowedNumberCharacters] characterIsMember:next]) {
 				[n appendFormat:@"%C", [self _nextCharacter]];
 			} else {
 				break;
@@ -152,8 +163,6 @@
 			break;
 		}
 	} while (1);
-	
-	[allowed release];
 	
 	//now that we have a string, verify that it makes a number:
 	//use < spellOut, since we don't recognize spelled-out numbers
@@ -172,14 +181,20 @@
 	return [DDMathStringToken mathStringTokenWithToken:n type:DDTokenTypeNumber];
 }
 
-- (DDMathStringToken *) parsedFunction:(unichar)firstCharacter {
-	NSMutableCharacterSet * allowed = [NSMutableCharacterSet lowercaseLetterCharacterSet];
-	[allowed formUnionWithCharacterSet:[NSCharacterSet uppercaseLetterCharacterSet]];
-	[allowed formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
-//	[allowed addCharactersInString:@".#"]; //for keypaths
-	
+- (NSCharacterSet *) allowedFunctionCharacters {
+	if (allowedFunctionCharacters == nil) {
+		NSMutableCharacterSet * c = [NSMutableCharacterSet lowercaseLetterCharacterSet];
+		[c formUnionWithCharacterSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+		[c formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
+		[c addCharactersInString:@"_"];
+		allowedFunctionCharacters = [c copy];
+	}
+	return allowedFunctionCharacters;
+}
+
+- (DDMathStringToken *) parsedFunction:(unichar)firstCharacter {	
 	NSMutableString * f = [NSMutableString stringWithFormat:@"%C", firstCharacter];
-	while ([allowed characterIsMember:[self _peekNextCharacter]]) {
+	while ([[self allowedFunctionCharacters] characterIsMember:[self _peekNextCharacter]]) {
 		[f appendFormat:@"%C", [self _nextCharacter]];
 	}
 	
@@ -191,16 +206,21 @@
 	return nil;
 }
 
+- (NSCharacterSet *) allowedVariableCharacters {
+	if (allowedVariableCharacters == nil) {
+		NSMutableCharacterSet * c = [NSMutableCharacterSet lowercaseLetterCharacterSet];
+		[c formUnionWithCharacterSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+		[c formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
+		[c addCharactersInString:@"_"];
+		allowedVariableCharacters = [c copy];
+	}
+	return allowedVariableCharacters;
+}
+
 - (DDMathStringToken *) parsedVariable:(unichar)firstCharacter {
 	//in this case, we *don't* use the firstCharacter (since it is $).  The $ is only to indicate that what follows is a variable
-	
-	NSMutableCharacterSet * allowed = [NSMutableCharacterSet lowercaseLetterCharacterSet];
-	[allowed formUnionWithCharacterSet:[NSCharacterSet uppercaseLetterCharacterSet]];
-	[allowed formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
-	//for simplicity, we're allowing letters and numbers in variables
-	
 	NSMutableString * v = [NSMutableString string];
-	while ([allowed characterIsMember:[self _peekNextCharacter]]) {
+	while ([[self allowedVariableCharacters] characterIsMember:[self _peekNextCharacter]]) {
 		[v appendFormat:@"%C", [self _nextCharacter]];
 	}
 	
@@ -212,11 +232,16 @@
 	return [DDMathStringToken mathStringTokenWithToken:v type:DDTokenTypeVariable];
 }
 
+- (NSCharacterSet *) allowedOperatorCharacters {
+	if (allowedOperatorCharacters == nil) {
+		allowedOperatorCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,x"] retain];
+	}
+	return allowedOperatorCharacters;
+}
+
 - (DDMathStringToken *) parsedOperator:(unichar)firstCharacter {
 	NSString * token = [NSString stringWithFormat:@"%C", firstCharacter];
-	NSMutableCharacterSet * allowed = [[[NSMutableCharacterSet alloc] init] autorelease];
-	[allowed addCharactersInString:@"+-*/&|!%^~()<>,x"];
-	if ([allowed characterIsMember:firstCharacter]) {
+	if ([[self allowedOperatorCharacters] characterIsMember:firstCharacter]) {
 		if (firstCharacter == '*') {
 			//recognize "**" (pow) as different than "*" (mul)
 			if ([self _peekNextCharacter] == '*') {

@@ -197,47 +197,42 @@
 	NSMutableArray * subterms = [[term subTerms] mutableCopy];
 	
 	DDExpression * final = nil;
-	if ([subterms count] == 1) {
-		[self setTerm:[subterms objectAtIndex:0]];
-		final = [self expressionByResolvingTerm];
-	} else {
-		while ([subterms count] > 1) {
-			/**
-			 steps:
-			 1. find the indexes of the operators with the highest precedence
-			 2. if there are multiple, use [self parser] to determine which one (rightmost or leftmost)
-			 3. 
-			 **/
-			NSIndexSet * indices = [self indicesOfOperatorsWithHighestPrecedenceInArray:subterms];
-			if ([indices count] > 0) {
-				NSUInteger index = [indices firstIndex];
-				if ([indices count] > 1) {
-					//there's more than one. do we use the rightmost or leftmost operator?
-					DDTerm * operatorTerm = [subterms objectAtIndex:index];
-					DDOperatorAssociativity associativity = [[self parser] associativityForOperator:[[operatorTerm tokenValue] operatorType]];
-					DDPrecedence operatorPrecedence = [operatorTerm precedence];
-					if (operatorPrecedence == DDPrecedenceUnary) {
-						associativity = DDOperatorAssociativityRight;
-					}
-					if (associativity == DDOperatorAssociativityRight) {
-						index = [indices lastIndex];
-					}
+	while ([subterms count] > 1) {
+		/**
+		 steps:
+		 1. find the indexes of the operators with the highest precedence
+		 2. if there are multiple, use [self parser] to determine which one (rightmost or leftmost)
+		 3. 
+		 **/
+		NSIndexSet * indices = [self indicesOfOperatorsWithHighestPrecedenceInArray:subterms];
+		if ([indices count] > 0) {
+			NSUInteger index = [indices firstIndex];
+			if ([indices count] > 1) {
+				//there's more than one. do we use the rightmost or leftmost operator?
+				DDTerm * operatorTerm = [subterms objectAtIndex:index];
+				DDOperatorAssociativity associativity = [[self parser] associativityForOperator:[[operatorTerm tokenValue] operatorType]];
+				DDPrecedence operatorPrecedence = [operatorTerm precedence];
+				if (operatorPrecedence == DDPrecedenceUnary) {
+					associativity = DDOperatorAssociativityRight;
 				}
-				
-				//we have our operator!
-				[self reduceTermsInArray:subterms aroundOperatorAtIndex:index];
-			} else {
-				//there are no more operators
-				//but there are 2 terms?
-				//BARF!
-				[NSException raise:NSGenericException format:@"invalid format: %@", subterms];
-				return nil;
+				if (associativity == DDOperatorAssociativityRight) {
+					index = [indices lastIndex];
+				}
 			}
+			
+			//we have our operator!
+			[self reduceTermsInArray:subterms aroundOperatorAtIndex:index];
+		} else {
+			//there are no more operators
+			//but there are 2 terms?
+			//BARF!
+			[NSException raise:NSGenericException format:@"invalid format: %@", subterms];
+			return nil;
 		}
-		
-		[self setTerm:[subterms objectAtIndex:0]];
-		final = [self expressionByResolvingTerm];
 	}
+	
+	[self setTerm:[subterms objectAtIndex:0]];
+	final = [self expressionByResolvingTerm];
 	
 	[subterms release];
 	return final;

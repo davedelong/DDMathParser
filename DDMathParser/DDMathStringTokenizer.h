@@ -18,6 +18,11 @@
 	NSInteger currentTokenIndex;
 	
 	NSNumberFormatter * numberFormatter;
+	
+	NSCharacterSet * allowedNumberCharacters;
+	NSCharacterSet * allowedVariableCharacters;
+	NSCharacterSet * allowedFunctionCharacters;
+	NSCharacterSet * allowedOperatorCharacters;
 }
 
 - (id) initWithString:(NSString *)expressionString;
