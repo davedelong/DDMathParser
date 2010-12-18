@@ -41,7 +41,9 @@
 			while ((token = [self _nextToken])) {
 				if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
 					DDMathStringToken * previous = [tokens lastObject];
-					if ([previous tokenType] == DDTokenTypeOperator && [previous operatorType] != DDOperatorParenthesisClose) {
+					if (previous == nil) {
+						[token setOperatorPrecedence:DDPrecedenceUnary];
+					} else if ([previous tokenType] == DDTokenTypeOperator && [previous operatorType] != DDOperatorParenthesisClose) {
 						[token setOperatorPrecedence:DDPrecedenceUnary];
 					} else if ([[token token] isEqual:@"+"]) {
 						[token setOperatorPrecedence:DDPrecedenceAddition];
