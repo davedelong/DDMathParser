@@ -58,7 +58,7 @@ All binary operators can have their associativity changed this way.
 
 `DDMathEvaluator` recognizes all common mathematical operators:
 
-- `+` - addition
+- `+` - addition (also as a unary plus)
 - `-` - subtraction (also negation)
 - `*` (or `x`) - multiplication
 - `/` - division
@@ -71,8 +71,6 @@ All binary operators can have their associativity changed this way.
 - `~` - bitwise not
 - `<<` - bitwise left shift
 - `>>` - bitwise right shift
-
-The unary plus operator (`+`, as in `1e+10`) is *not* a valid operator.
 
 ### Built-in functions
 
@@ -206,7 +204,6 @@ THE SOFTWARE.
 
 ## To Do:
 
-- Add support for the unary `+` operator
 - Add support for implicit multiplication (ex: `3(4)` => `12`)
 - Transform to an `NSError`-based API
 - Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision)

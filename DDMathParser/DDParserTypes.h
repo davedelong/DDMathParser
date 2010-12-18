@@ -59,12 +59,10 @@ enum {
 	DDPrecedencePower,
 	DDPrecedenceParentheses,
 	
-	DDPrecedenceUnknown = -1
+	DDPrecedenceUnknown = -1,
+	DDPrecedenceNone = -2
 };
 
-enum {
-	DDPrecedenceNone = DDPrecedenceUnknown
-};
 typedef NSInteger DDPrecedence;
 
 //the layout of this array must have the same lyout as the DDPrecedence enum

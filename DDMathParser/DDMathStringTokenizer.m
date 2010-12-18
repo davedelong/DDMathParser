@@ -27,7 +27,7 @@
 	if (self) {
 		tokens = [[NSMutableArray alloc] init];
 		
-		currentCharacterIndex = 0;
+		currentCharacterIndex = NSUIntegerMax;
 		
 		//remove all whitespace:
 		NSArray * t = [expressionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -39,6 +39,18 @@
 		@try {
 			DDMathStringToken * token = nil;
 			while ((token = [self _nextToken])) {
+				if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
+					DDMathStringToken * previous = [tokens lastObject];
+					if ([previous tokenType] == DDTokenTypeOperator && [previous operatorType] != DDOperatorParenthesisClose) {
+						[token setOperatorPrecedence:DDPrecedenceUnary];
+					} else if ([[token token] isEqual:@"+"]) {
+						[token setOperatorPrecedence:DDPrecedenceAddition];
+					} else if ([[token token] isEqual:@"-"]) {
+						[token setOperatorPrecedence:DDPrecedenceSubtraction];
+					} else {
+						[NSException raise:NSGenericException format:@"unknown precedence for token: %@", token];
+					}
+				}
 				[tokens addObject:token];
 			}
 		}
@@ -92,14 +104,31 @@
 
 - (void) reset {
 	currentTokenIndex = -1;
+	currentCharacterIndex = NSUIntegerMax;
+}
+
+- (unichar) _previousCharacter {
+	unichar character = '\0';
+	if (currentCharacterIndex <= [sourceString length] && currentCharacterIndex > 0) {
+		character = [sourceString characterAtIndex:(currentCharacterIndex-1)];
+	}
+	return character;
+}
+
+- (unichar) _currentCharacter {
+	if (currentCharacterIndex < [sourceString length]) {
+		return [sourceString characterAtIndex:currentCharacterIndex];
+	}
+	return '\0';
 }
 
 - (unichar) _nextCharacter {
-	if (currentCharacterIndex >= [sourceString length]) { return 0; }
-	
-	unichar character = [sourceString characterAtIndex:currentCharacterIndex];
-	currentCharacterIndex++;
-	return character;
+	if (currentCharacterIndex == NSUIntegerMax) {
+		currentCharacterIndex = 0;
+	} else {
+		currentCharacterIndex++;
+	}
+	return [self _currentCharacter];
 }
 
 - (unichar) _peekNextCharacter {
@@ -109,9 +138,8 @@
 }
 
 - (DDMathStringToken *) _nextToken {
-	if (currentCharacterIndex >= [sourceString length]) { return nil; }
-	
 	unichar character = [self _nextCharacter];
+	if (character == '\0') { return nil; }
 	
 	NSUInteger currentIndex = currentCharacterIndex;
 	@try {
@@ -119,7 +147,7 @@
 			return [self parsedNumber:character];
 		}
 		if ((character >= 'a' && character <= 'z') ||
-				   (character >= 'A' && character <= 'Z')) {
+			(character >= 'A' && character <= 'Z')) {
 			return [self parsedFunction:character];
 		}
 		if (character == '$') {
@@ -154,7 +182,9 @@
 		unichar next = [self _peekNextCharacter];
 		if (next != 0) {
 			//allowed characters: 0-9, e, .
-			if ([[self allowedNumberCharacters] characterIsMember:next]) {
+			unichar current = [self _currentCharacter];
+			if (([[self allowedNumberCharacters] characterIsMember:next]) || 
+				((current == 'e' || current == 'E') && (next == '-' || next == '+'))) {
 				[n appendFormat:@"%C", [self _nextCharacter]];
 			} else {
 				break;

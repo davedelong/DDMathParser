@@ -10,42 +10,64 @@
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
 
-@implementation DDTerm
-@synthesize precedence, tokenValue, subTerms;
+#import "DDGroupTerm.h"
+#import "DDFunctionTerm.h"
+#import "DDOperatorTerm.h"
 
-+ (id) termWithTokenValue:(DDMathStringToken *)o {
-	return [self termWithPrecedence:DDPrecedenceNone tokenValue:o];
+@implementation DDTerm
+@synthesize tokenValue;
+
++ (id) termForTokenType:(DDTokenType)tokenType withTokenizer:(DDMathStringTokenizer *)tokenizer {
+	switch (tokenType) {
+		case DDTokenTypeFunction:
+			return [DDFunctionTerm termWithTokenizer:tokenizer];
+		case DDTokenTypeOperator:
+			if ([[tokenizer peekNextToken] operatorType] == DDOperatorParenthesisOpen) {
+				return [DDGroupTerm termWithTokenizer:tokenizer];
+			} else {
+				return [DDOperatorTerm termWithTokenizer:tokenizer];
+			}
+		case DDTokenTypeNumber:
+		case DDTokenTypeVariable:
+		default:
+			return [self termWithTokenizer:tokenizer];
+	}
 }
 
-+ (id) termWithPrecedence:(DDPrecedence)p tokenValue:(DDMathStringToken *)o {
-	DDTerm * t = [[DDTerm alloc] init];
-	[t setPrecedence:p];
-	[t setTokenValue:o];
-	
-	if (p == DDPrecedenceParentheses) {
-		[t setSubTerms:[NSMutableArray array]];
-	} else {
-		[t setSubTerms:nil];
++ (id) termWithTokenizer:(DDMathStringTokenizer *)tokenizer {
+	return [[[self alloc] initWithTokenizer:tokenizer] autorelease];
+}
+
+- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer {
+	self = [super init];
+	if (self) {
+		DDMathStringToken * token = [tokenizer nextToken];
+		[self setTokenValue:token];
 	}
-	return [t autorelease];	
+	return self;
 }
 
 - (void) dealloc {
 	[tokenValue release];
-	[subTerms release];
 	[super dealloc];
 }
 
 - (NSString *) description {
-	if ([subTerms count] == 0) {
-		if (precedence != DDPrecedenceNone) {
-			return [NSString stringWithFormat:@"%@[%d]", tokenValue, precedence];
-		}
-		return [tokenValue description];
+	return [tokenValue token];
+}
+
+- (void) resolveWithParser:(DDParser *)parser {
+	return;
+}
+
+- (DDExpression *) expression {
+	if ([[self tokenValue] tokenType] == DDTokenTypeNumber) {
+		return [DDExpression numberExpressionWithNumber:[[self tokenValue] numberValue]];
+	} else if ([[self tokenValue] tokenType] == DDTokenTypeVariable) {
+		return [DDExpression variableExpressionWithVariable:[[self tokenValue] token]];
 	}
-	NSArray * subDescriptions = [subTerms valueForKey:@"description"];
-	NSString * join = [subDescriptions componentsJoinedByString:@", "];
-	return [NSString stringWithFormat:@"%@(%@)", (tokenValue ? [tokenValue description] : @""), join];
+	[NSException raise:NSGenericException format:@"can't convert %@ to expression", self];
+	return nil;
 }
 
 @end

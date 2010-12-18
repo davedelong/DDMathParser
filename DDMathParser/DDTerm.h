@@ -8,21 +8,25 @@
 
 #import <Foundation/Foundation.h>
 #import "DDParserTypes.h"
-
-@class DDExpression;
-@class DDMathStringToken;
+#import "DDMathStringTokenizer.h"
+#import "DDMathStringToken.h"
+#import "DDParser.h"
+#import "DDExpression.h"
 
 @interface DDTerm : NSObject {
-	DDPrecedence precedence;
+	BOOL resolved;
 	DDMathStringToken * tokenValue;
-	NSMutableArray * subTerms;
 }
 
-+ (id) termWithTokenValue:(DDMathStringToken *)o;
-+ (id) termWithPrecedence:(DDPrecedence)p tokenValue:(DDMathStringToken *)o;
-
-@property DDPrecedence precedence;
 @property (retain) DDMathStringToken * tokenValue;
-@property (retain) NSMutableArray * subTerms;
+
++ (id) termForTokenType:(DDTokenType)tokenType withTokenizer:(DDMathStringTokenizer *)tokenizer;
+
++ (id) termWithTokenizer:(DDMathStringTokenizer *)tokenizer;
+- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer;
+
+- (void) resolveWithParser:(DDParser *)parser;
+
+- (DDExpression *) expression;
 
 @end

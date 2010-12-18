@@ -18,6 +18,7 @@
 @property (readonly) NSString * token;
 @property (readonly) DDTokenType tokenType;
 @property (readonly) DDOperator operatorType;
+@property DDPrecedence operatorPrecedence;
 
 - (NSNumber *) numberValue;
 

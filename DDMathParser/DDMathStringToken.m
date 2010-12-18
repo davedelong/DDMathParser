@@ -10,7 +10,7 @@
 
 
 @implementation DDMathStringToken
-@synthesize token, tokenType, operatorType;
+@synthesize token, tokenType, operatorType, operatorPrecedence;
 
 - (void) dealloc {
 	[token release];
@@ -23,25 +23,73 @@
 		token = [t copy];
 		tokenType = type;
 		operatorType = DDOperatorInvalid;
+		operatorPrecedence = DDPrecedenceNone;
 		
 		if (tokenType == DDTokenTypeOperator) {
-			if ([token isEqual:@"|"]) { operatorType = DDOperatorBitwiseOr; }
-			if ([token isEqual:@"^"]) { operatorType = DDOperatorBitwiseXor; }
-			if ([token isEqual:@"&"]) { operatorType = DDOperatorBitwiseAnd; }
-			if ([token isEqual:@"<<"]) { operatorType = DDOperatorLeftShift; }
-			if ([token isEqual:@">>"]) { operatorType = DDOperatorRightShift; }
-			if ([token isEqual:@"-"]) { operatorType = DDOperatorMinus; }
-			if ([token isEqual:@"+"]) { operatorType = DDOperatorAdd; }
-			if ([token isEqual:@"/"]) { operatorType = DDOperatorDivide; }
-			if ([token isEqual:@"*"]) { operatorType = DDOperatorMultiply; }
-			if ([token isEqual:@"%"]) { operatorType = DDOperatorModulo; }
-			if ([token isEqual:@"~"]) { operatorType = DDOperatorBitwiseNot; }
-			if ([token isEqual:@"!"]) { operatorType = DDOperatorFactorial; }
-			if ([token isEqual:@"**"]) { operatorType = DDOperatorPower; }
-			if ([token isEqual:@"("]) { operatorType = DDOperatorParenthesisOpen; }
-			if ([token isEqual:@")"]) { operatorType = DDOperatorParenthesisClose; }
+			if ([token isEqual:@"|"]) {
+				operatorType = DDOperatorBitwiseOr;
+				operatorPrecedence = DDPrecedenceBitwiseOr;
+			}
+			if ([token isEqual:@"^"]) {
+				operatorType = DDOperatorBitwiseXor; 
+				operatorPrecedence = DDPrecedenceBitwiseXor;
+			}
+			if ([token isEqual:@"&"]) {
+				operatorType = DDOperatorBitwiseAnd;
+				operatorPrecedence = DDPrecedenceBitwiseAnd;
+			}
+			if ([token isEqual:@"<<"]) {
+				operatorType = DDOperatorLeftShift;
+				operatorPrecedence = DDPrecedenceLeftShift;
+			}
+			if ([token isEqual:@">>"]) {
+				operatorType = DDOperatorRightShift;
+				operatorPrecedence = DDPrecedenceRightShift;
+			}
+			if ([token isEqual:@"-"]) {
+				operatorType = DDOperatorMinus;
+				operatorPrecedence = DDPrecedenceUnknown;
+			}
+			if ([token isEqual:@"+"]) {
+				operatorType = DDOperatorAdd;
+				operatorPrecedence = DDPrecedenceUnknown;
+			}
+			if ([token isEqual:@"/"]) {
+				operatorType = DDOperatorDivide;
+				operatorPrecedence = DDOperatorDivide;
+			}
+			if ([token isEqual:@"*"]) {
+				operatorType = DDOperatorMultiply;
+				operatorPrecedence = DDPrecedenceMultiplication;
+			}
+			if ([token isEqual:@"%"]) {
+				operatorType = DDOperatorModulo;
+				operatorPrecedence = DDPrecedenceModulo;
+			}
+			if ([token isEqual:@"~"]) {
+				operatorType = DDOperatorBitwiseNot;
+				operatorPrecedence = DDPrecedenceUnary;
+			}
+			if ([token isEqual:@"!"]) {
+				operatorType = DDOperatorFactorial;
+				operatorPrecedence = DDPrecedenceFactorial;
+			}
+			if ([token isEqual:@"**"]) {
+				operatorType = DDOperatorPower;
+				operatorPrecedence = DDPrecedencePower;
+			}
+			if ([token isEqual:@"("]) {
+				operatorType = DDOperatorParenthesisOpen;
+				operatorPrecedence = DDPrecedenceParentheses;
+			}
+			if ([token isEqual:@")"]) {
+				operatorType = DDOperatorParenthesisClose;
+				operatorPrecedence = DDPrecedenceParentheses;
+			}
 			
-			if ([token isEqual:@","]) { operatorType = DDOperatorComma; }
+			if ([token isEqual:@","]) {
+				operatorType = DDOperatorComma;
+			}
 		}
 	}
 	return self;
