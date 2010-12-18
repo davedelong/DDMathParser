@@ -102,16 +102,8 @@
 	NSAutoreleasePool * parserPool = [[NSAutoreleasePool alloc] init];
 	DDTerm * rootTerm = [DDGroupTerm rootTermWithTokenizer:tokenizer];
 	
-	NSLog(@"rootTerm: %@", rootTerm);
-	
 	[rootTerm resolveWithParser:self];
-	
-	NSLog(@"rootTerm: %@", rootTerm);
-	
 	DDExpression * expression = [[rootTerm expression] retain];
-	
-	NSLog(@"expression: %@", expression);
-	
 	[parserPool drain];
 	
 	return [expression autorelease];
