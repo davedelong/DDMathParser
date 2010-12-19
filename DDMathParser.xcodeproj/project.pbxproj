@@ -257,8 +257,8 @@
 			isa = PBXGroup;
 			children = (
 				5570E3B112AA2D8D002FE945 /* DDParserTypes.h */,
-				55325A0312A8C34400DE9EB0 /* Precedence Parser */,
 				5570E4E412AABEF3002FE945 /* Tokens */,
+				55325A0312A8C34400DE9EB0 /* Precedence Parser */,
 				55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */,
 				55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */,
 				5538F3B8129CC0B30099B842 /* NSExpression+DDMathParsing.h */,

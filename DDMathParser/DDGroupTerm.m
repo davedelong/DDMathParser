@@ -61,6 +61,8 @@
 		subTerms = [[NSMutableArray alloc] init];
 		
 		if (tokenizer != nil && [self isMemberOfClass:[DDGroupTerm class]]) {
+			[self setTokenValue:nil]; //we don't need no stinkin' parenthesis
+			
 			//TODO: find all the terms in this group
 			DDMathStringToken * next = nil;
 			while ((next = [tokenizer peekNextToken])) {

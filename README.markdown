@@ -72,6 +72,12 @@ All binary operators can have their associativity changed this way.
 - `<<` - bitwise left shift
 - `>>` - bitwise right shift
 
+### Implicit Multiplication
+
+The parser recognizes implicit multiplication.  For example, we can write `3(4)` and understand that the answer should be `12`.  Implicit multiplication is applied when a number, variable, or closing parenthesis are followed by either a number, variable, function, or opening parenthesis.
+
+A full explanation of how the implicit multiplication is handled is in the source of `DDMathStringTokenizer.m`.
+
 ### Built-in functions
 
 In addition to the functions defined by the operators above, the following functions are built in:
@@ -204,7 +210,6 @@ THE SOFTWARE.
 
 ## To Do:
 
-- Add support for implicit multiplication (ex: `3(4)` => `12`)
 - Transform to an `NSError`-based API
 - Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision)
 - Add default associativity for all `DDParser` objects (in addition to the existing per-parser basis)

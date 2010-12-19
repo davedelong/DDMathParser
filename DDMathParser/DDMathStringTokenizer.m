@@ -39,6 +39,8 @@
 		@try {
 			DDMathStringToken * token = nil;
 			while ((token = [self _nextToken])) {
+				
+				//figure out if "-" and "+" are unary or binary
 				if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
 					DDMathStringToken * previous = [tokens lastObject];
 					if (previous == nil) {
@@ -53,6 +55,59 @@
 						[NSException raise:NSGenericException format:@"unknown precedence for token: %@", token];
 					}
 				}
+				
+				//this adds support for implicit multiplication
+				/**
+				 If you have <first token><second token>, then you can either inject a multiplication token or leave it alone.
+				 This table explains what should happen for each possible combination:
+				 
+				 First Token		Second Token	Action
+				 -----------------------------------------
+				 Number				Number			Multiply
+				 Number				Operator		Normal
+				 Number				Variable		Multiply
+				 Number				Function		Multiply
+				 Number				(				Multiply
+				 
+				 Operator			Number			Normal
+				 Operator			Operator		Normal
+				 Operator			Variable		Normal
+				 Operator			Function		Normal
+				 Operator			(				Normal
+				 
+				 Variable			Number			Multiply
+				 Variable			Operator		Normal
+				 Variable			Variable		Multiply
+				 Variable			Function		Multiply
+				 Variable			(				Multiply
+				 
+				 Function			Number			Normal
+				 Function			Operator		Normal
+				 Function			Variable		Normal
+				 Function			Function		Normal
+				 Function			(				Normal
+				 
+				 )					Number			Multiply
+				 )					Operator		Normal
+				 )					Variable		Multiply
+				 )					Function		Multiply
+				 )					(				Multiply
+				 **/
+				DDMathStringToken * previousToken = [tokens lastObject];
+				if (previousToken != nil) {
+					if ([previousToken tokenType] == DDTokenTypeNumber ||
+						[previousToken tokenType] == DDTokenTypeVariable ||
+						[previousToken operatorType] == DDOperatorParenthesisClose) {
+						
+						if ([token tokenType] != DDTokenTypeOperator || [token operatorType] == DDOperatorParenthesisOpen) {
+							//inject a "multiplication" token:
+							DDMathStringToken * multiply = [DDMathStringToken mathStringTokenWithToken:@"*" type:DDTokenTypeOperator];
+							[tokens addObject:multiply];
+						}
+						
+					}
+				}
+				
 				[tokens addObject:token];
 			}
 		}
