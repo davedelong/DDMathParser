@@ -14,6 +14,10 @@
 @implementation NSExpression (DDMathParsing)
 
 - (DDExpression *) ddexpressionValue {
+	[NSException raise:NSGenericException format:@"%s is not yet implemented", __PRETTY_FUNCTION__];
+	return nil;
+	
+	/**
 	if ([self expressionType] == NSVariableExpressionType) {
 		return [DDExpression variableExpressionWithVariable:[self variable]];
 	}
@@ -46,6 +50,7 @@
 			NSString * ddfunctionName = [[DDMathFunctionContainer functionsForNSExpressionFunctions] objectForKey:functionName];
 		}
 	}
+	 **/
 }
 
 @end
