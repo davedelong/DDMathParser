@@ -51,13 +51,6 @@
 	
 	if (canSimplify) {
 		if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
-		NSInteger numberOfAllowedArguments = [evaluator numberOfArgumentsForFunction:[self function]];
-		if (numberOfAllowedArguments != DDMathFunctionUnlimitedArguments) {
-			if (numberOfAllowedArguments != [[self arguments] count]) {
-				[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments to %@ function.  %ld required", [self function], numberOfAllowedArguments];
-				return nil;
-			}
-		}
 		
 		DDMathFunction mathFunction = [evaluator functionWithName:[self function]];
 		id result = mathFunction([self arguments], nil, evaluator);
@@ -78,14 +71,6 @@
 	DDMathFunction mathFunction = [evaluator functionWithName:[self function]];
 	
 	if (mathFunction != nil) {
-		
-		NSInteger numberOfAllowedArguments = [evaluator numberOfArgumentsForFunction:[self function]];
-		if (numberOfAllowedArguments != DDMathFunctionUnlimitedArguments) {
-			if (numberOfAllowedArguments != [[self arguments] count]) {
-				[NSException raise:NSInvalidArgumentException format:@"invalid number of arguments to %@ function.  %ld required", [self function], numberOfAllowedArguments];
-				return nil;
-			}
-		}
 		
 		id result = mathFunction([self arguments], substitutions, evaluator);
 		

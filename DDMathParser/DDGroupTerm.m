@@ -211,7 +211,7 @@
 - (DDExpression *) expression {
 	if ([[self subTerms] count] == 0) { return nil; }
 	
-	return [[[self subTerms] objectAtIndex:0] expression];
+	return [(DDTerm *)[[self subTerms] objectAtIndex:0] expression];
 }
 
 @end

@@ -13,7 +13,6 @@
 @interface DDMathEvaluator ()
 
 - (DDMathFunction) functionWithName:(NSString *)functionName;
-- (NSInteger) numberOfArgumentsForFunction:(NSString *)functionName;
 
 - (NSNumber *) evaluateFunction:(DDExpression *)function withSubstitutions:(NSDictionary *)variables;
 - (NSString *) nsexpressionFunctionWithName:(NSString *)functionName;

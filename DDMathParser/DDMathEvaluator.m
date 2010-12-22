@@ -10,7 +10,7 @@
 #import "DDMathEvaluator+Private.h"
 #import "DDParser.h"
 #import "DDExpression.h"
-#import "DDMathFunctionContainer.h"
+#import "_DDFunctionUtilities.h"
 
 @interface DDMathEvaluator ()
 
@@ -49,16 +49,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	[super dealloc];
 }
 
-- (BOOL) registerFunction:(DDMathFunction)function forName:(NSString *)functionName numberOfArguments:(NSInteger)argCount {
+- (BOOL) registerFunction:(DDMathFunction)function forName:(NSString *)functionName {
 	if ([self functionWithName:functionName] != nil) { return NO; }
 	if ([[self _standardFunctions] containsObject:[functionName lowercaseString]]) { return NO; }
 	
-	DDMathFunctionContainer * c = [DDMathFunctionContainer mathFunctionWithName:[functionName lowercaseString] function:function numberOfArguments:argCount];
-	if (c != nil) {
-		[functions setObject:c forKey:[c name]];
-		return YES;
-	}
-	return NO;
+	[functions setObject:function forKey:[functionName lowercaseString]];
+	return YES;
 }
 
 - (void) unregisterFunctionWithName:(NSString *)functionName {
@@ -69,13 +65,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (DDMathFunction) functionWithName:(NSString *)functionName {
-	DDMathFunctionContainer * c = [functions objectForKey:[functionName lowercaseString]];
-	return [c function];
-}
-
-- (NSInteger) numberOfArgumentsForFunction:(NSString *)functionName {
-	DDMathFunctionContainer * c = [functions objectForKey:[functionName lowercaseString]];
-	return [c numberOfArguments];
+	return [functions objectForKey:[functionName lowercaseString]];
 }
 
 - (NSArray *) registeredFunctions {
@@ -83,9 +73,10 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (NSString *) nsexpressionFunctionWithName:(NSString *)functionName {
-	NSDictionary * map = [DDMathFunctionContainer nsexpressionFunctions];
-	NSString * function = [map objectForKey:[functionName lowercaseString]];
-	return function;
+	return nil;
+//	NSDictionary * map = [DDMathFunctionContainer nsexpressionFunctions];
+//	NSString * function = [map objectForKey:[functionName lowercaseString]];
+//	return function;
 }
 
 - (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression {
@@ -98,8 +89,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if (function != nil) { return NO; }
 	
 	function = [self functionWithName:functionName];
-	NSInteger numberOfArgs = [self numberOfArgumentsForFunction:functionName];
-	return [self registerFunction:function forName:alias numberOfArguments:numberOfArgs];
+	return [self registerFunction:function forName:alias];
 }
 
 - (void) removeAlias:(NSString *)alias {
@@ -232,13 +222,15 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 - (void) _registerStandardFunctions {
 	for (NSString * functionName in [self _standardFunctions]) {
 		
-		NSString * methodName = [NSString stringWithFormat:@"_%@FunctionContainer", [functionName lowercaseString]];
-		
-		DDMathFunctionContainer * container = [DDMathFunctionContainer performSelector:NSSelectorFromString(methodName)];
-		if (container != nil) {
-			[functions setObject:container forKey:[functionName lowercaseString]];
-		} else {
-			NSLog(@"error registering function: %@", functionName);
+		NSString * methodName = [NSString stringWithFormat:@"%@Function", [functionName lowercaseString]];
+		SEL methodSelector = NSSelectorFromString(methodName);
+		if ([_DDFunctionUtilities respondsToSelector:methodSelector]) {
+			DDMathFunction function = [_DDFunctionUtilities performSelector:methodSelector];
+			if (function != nil) {
+				[functions setObject:function forKey:[functionName lowercaseString]];
+			} else {
+				NSLog(@"error registering function: %@", functionName);
+			}
 		}
 	}
 	
