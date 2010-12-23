@@ -113,9 +113,13 @@ static inline NSDecimal NSDecimalOne() {
 
 + (DDMathFunction) factorialFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		NSDecimal result = NSDecimalOne();
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
+		NSUInteger upperBound = [firstValue unsignedIntegerValue];
+		for (int i = upperBound; i > 1; --i) {
+			
+		}
 		
-		NSDecimal result;
 		NSDecimal a = [firstValue decimalValue];
 		NSDecimal nOne = NSDecimalNegativeOne();
 		NSDecimalMultiply(&result, &nOne, &a, NSRoundBankers);
