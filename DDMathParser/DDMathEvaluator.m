@@ -199,6 +199,20 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"acosh",
 			@"atanh",
 			
+			//trig inverse functions
+			@"csc",
+			@"sec",
+			@"cotan",
+			@"acsc",
+			@"asec",
+			@"acotan",
+			@"csch",
+			@"sech",
+			@"cotanh",
+			@"acsch",
+			@"asech",
+			@"acotanh",
+			
 			//functions that take 0 parameters
 			@"pi",
 			@"pi_2",
@@ -216,6 +230,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 - (NSDictionary *) _standardAliases {
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			@"average", @"avg",
+			@"average", @"mean",
 			nil];
 }
 

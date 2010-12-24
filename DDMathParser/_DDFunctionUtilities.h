@@ -57,6 +57,21 @@
 + (DDMathFunction) asinhFunction;
 + (DDMathFunction) acoshFunction;
 + (DDMathFunction) atanhFunction;
+
++ (DDMathFunction) cscFunction;
++ (DDMathFunction) secFunction;
++ (DDMathFunction) cotanFunction;
++ (DDMathFunction) acscFunction;
++ (DDMathFunction) asecFunction;
++ (DDMathFunction) acotanFunction;
++ (DDMathFunction) cschFunction;
++ (DDMathFunction) sechFunction;
++ (DDMathFunction) cotanhFunction;
++ (DDMathFunction) acschFunction;
++ (DDMathFunction) asechFunction;
++ (DDMathFunction) acotanhFunction;
+
+
 + (DDMathFunction) dtorFunction;
 + (DDMathFunction) rtodFunction;
 

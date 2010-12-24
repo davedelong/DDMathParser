@@ -9,7 +9,6 @@
 #import "NSExpression+DDMathParsing.h"
 #import "DDExpression.h"
 #import "DDMathEvaluator.h"
-#import "DDMathFunctionContainer.h"
 
 @implementation NSExpression (DDMathParsing)
 
