@@ -56,7 +56,7 @@
 			}
 			if ([token isEqual:@"/"]) {
 				operatorType = DDOperatorDivide;
-				operatorPrecedence = DDOperatorDivide;
+				operatorPrecedence = DDPrecedenceDivision;
 			}
 			if ([token isEqual:@"*"]) {
 				operatorType = DDOperatorMultiply;

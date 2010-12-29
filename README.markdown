@@ -100,23 +100,24 @@ Functions that take 1 parameter:
 - `ln()` - returns the base e log of the passed parameter
 - `exp()` - returns e raised to the power of the passed parameter
 - `ceil()` - returns the passed parameter rounded up
-- `trunc()` - returns the passed parameter rounded up or down
 - `floor()` - returns the passed parameter rounded down
-- `onescomplement()` - returns the ones complement of the passed parameter
+
 - `sin()` - returns the sine of the passed parameter (in radians)
 - `cos()` - returns the cosine of the passed parameter (in radians)
 - `tan()` - returns the tangent of the passed parameter (in radians)
 - `asin()` - returns (in radians) the arcsine of the passed parameter
 - `acos()` - returns (in radians) the arccosine of the passed parameter
 - `atan()` - returns (in radians) the arctangent of the passed parameter
-- `dtor()` - converts the passed parameter from degrees to radians
-- `rtod()` - converts the passed parameter from radians to degrees
 - `sinh()` - returns the hyperbolic sine of the passed parameter
 - `cosh()` - returns the hyperbolic cosine of the passed parameter
 - `tanh()` - returns the hyperbolic tangent of the passed parameter
 - `asinh()` - returns the hyperbolic arcsine of the passed parameter
 - `acosh()` - returns the hyperbolic arccosine of the passed parameter
 - `atanh()` - returns the hyperbolic arctangent of the passed parameter
+- all the inverses of the above trigonometric functions (`csc`, `sec`, `cotan`, `acsc`, `asec`, `acotan`, `csch`, `sech`, `cotanh`, `acsch`, `asech`, `acotanh`)
+
+- `dtor()` - converts the passed parameter from degrees to radians
+- `rtod()` - converts the passed parameter from radians to degrees
 
 Functions that take no parameters:
 
@@ -136,10 +137,11 @@ Functions can also have aliases.  For example, the following strings are equival
 
     average(1,2,3)
     avg(1,2,3)
+    mean(1,2,3)
   
-You can create your own aliases as well.  If "`onescomplement`" is too long to type for you, feel free to do:
+You can create your own aliases as well.  If "`acotanh`" is too long to type for you, feel free to do:
 
-    [[DDMathEvaluator sharedMathEvaluator] addAlias:@"ones" forFunctionName:@"onescomplement"];
+    [[DDMathEvaluator sharedMathEvaluator] addAlias:@"acth" forFunctionName:@"acotanh"];
 
 ## Usage
 

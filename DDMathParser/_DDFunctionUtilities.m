@@ -7,55 +7,8 @@
 //
 
 #import "_DDFunctionUtilities.h"
+#import "_DDDecimalFunctions.h"
 #import "DDExpression.h"
-
-static inline NSDecimal DDDecimalNegativeOne() {
-	NSDecimal d = { ._exponent = 0, ._length = 1, ._isNegative = 1, ._isCompact = 1, ._reserved = 0, ._mantissa = {1, 0, 0, 0, 0, 0, 0, 0}};
-	return d;
-}
-
-static inline NSDecimal DDDecimalZero() {
-	return [[NSDecimalNumber zero] decimalValue];
-}
-
-static inline NSDecimal DDDecimalOne() {
-	NSDecimal d = { ._exponent = 0, ._length = 1, ._isNegative = 0, ._isCompact = 1, ._reserved = 0, ._mantissa = {1, 0, 0, 0, 0, 0, 0, 0}};
-	return d;
-}
-
-static inline NSDecimal DDDecimalTwo() {
-	NSDecimal d = { ._exponent = 0, ._length = 1, ._isNegative = 0, ._isCompact = 1, ._reserved = 0, ._mantissa = {2, 0, 0, 0, 0, 0, 0, 0}};
-	return d;
-}
-
-static inline BOOL DDDecimalIsNegative(NSDecimal d) {
-	NSDecimal z = DDDecimalZero();
-	return (NSDecimalCompare(&d, &z) == NSOrderedAscending); //d < z
-}
-
-static inline NSDecimal DDDecimalAverage2(NSDecimal a, NSDecimal b) {
-	NSDecimal r;
-	NSDecimalAdd(&r, &a, &b, NSRoundBankers);
-	NSDecimal t = DDDecimalTwo();
-	NSDecimalDivide(&r, &r, &t, NSRoundBankers);
-	return r;
-}
-
-static inline void DDDecimalAbsoluteValue(NSDecimal * a) {
-	if (DDDecimalIsNegative(*a)) {
-		a->_isNegative = 0;
-	}
-}
-
-static inline BOOL DDDecimalLessThanEpsilon(NSDecimal a, NSDecimal b) {
-	NSDecimal epsilon = DDDecimalOne();
-	NSDecimalMultiplyByPowerOf10(&epsilon, &epsilon, -64, NSRoundBankers);
-	
-	NSDecimal diff;
-	NSDecimalSubtract(&diff, &a, &b, NSRoundBankers);
-	DDDecimalAbsoluteValue(&diff);
-	return (NSDecimalCompare(&diff, &epsilon) == NSOrderedAscending);
-}
 
 #define REQUIRE_N_ARGS(__n) { \
 if ([arguments count] != __n) { \
@@ -134,20 +87,12 @@ if ([arguments count] < __n) { \
 }
 
 + (DDMathFunction) modFunction {
-	//a % n == a - (n * floor(a / n))
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
 		REQUIRE_N_ARGS(2);
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
 		NSNumber * secondValue = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator];
 		
-		NSDecimal result;
-		NSDecimal a = [firstValue decimalValue];
-		NSDecimal n = [secondValue decimalValue];
-		
-		NSDecimalDivide(&result, &a, &n, NSRoundBankers);
-		NSDecimalRound(&result, &result, 0, NSRoundDown);
-		NSDecimalMultiply(&result, &n, &result, NSRoundBankers);
-		NSDecimalSubtract(&result, &a, &result, NSRoundBankers);
+		NSDecimal result = DDDecimalMod([firstValue decimalValue], [secondValue decimalValue]);
 		
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
 	};
@@ -344,10 +289,7 @@ if ([arguments count] < __n) { \
 			NSUInteger highIndex = floor([evaluatedNumbers count] / 2);
 			NSDecimal lowDecimal = [[evaluatedNumbers objectAtIndex:lowIndex] decimalValue];
 			NSDecimal highDecimal = [[evaluatedNumbers objectAtIndex:highIndex] decimalValue];
-			NSDecimal two = DDDecimalTwo();
-			NSDecimal result;
-			NSDecimalAdd(&result, &lowDecimal, &highDecimal, NSRoundBankers);
-			NSDecimalDivide(&result, &result, &two, NSRoundBankers);
+			NSDecimal result = DDDecimalAverage2(lowDecimal, highDecimal);
 			median = [NSDecimalNumber decimalNumberWithDecimal:result];
 		}
 		return [DDExpression numberExpressionWithNumber:median];
@@ -355,79 +297,464 @@ if ([arguments count] < __n) { \
 	return [[function copy] autorelease];
 }
 
-//+ (DDMathFunction) modeFunction;
-//+ (DDMathFunction) stddevFunction;
++ (DDMathFunction) stddevFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_GTOE_N_ARGS(1);
+		DDMathFunction avgFunction = [_DDFunctionUtilities averageFunction];
+		DDExpression * avgExpression = avgFunction(arguments, variables, evaluator);
+		NSDecimal avg = [[avgExpression number] decimalValue];
+		NSDecimal stddev = DDDecimalZero();
+		for (DDExpression * arg in arguments) {
+			NSDecimal n = [[arg evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+			NSDecimal diff;
+			NSDecimalSubtract(&diff, &avg, &n, NSRoundBankers);
+			NSDecimalMultiply(&diff, &diff, &diff, NSRoundBankers);
+			NSDecimalAdd(&stddev, &stddev, &diff, NSRoundBankers);
+		}
+		NSDecimal count = DDDecimalFromInteger([arguments count]);
+		NSDecimalDivide(&stddev, &stddev, &count, NSRoundBankers);
+		stddev = DDDecimalSqrt(&stddev);
+		
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:stddev]];
+	};
+	return [[function copy] autorelease];
+}
 
 + (DDMathFunction) sqrtFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
 		REQUIRE_N_ARGS(1);
 		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
 		NSDecimal number = [n decimalValue];
-		NSDecimal s;
-		NSDecimal two = DDDecimalTwo();
-		NSDecimalDivide(&s, &number, &two, NSRoundBankers);
-		for (NSUInteger iterationCount = 0; iterationCount < 50; ++iterationCount) {
-			NSDecimal low;
-			NSDecimalDivide(&low, &number, &s, NSRoundBankers);
-			s = DDDecimalAverage2(low, s);
-			
-			NSDecimal square;
-			NSDecimalMultiply(&square, &s, &s, NSRoundBankers);
-			if (DDDecimalLessThanEpsilon(square, number)) { break; }
-		};
+		NSDecimal s = DDDecimalSqrt(&number);
 		
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:s]];
 	};
 	return [[function copy] autorelease];
 }
 
-/**
-+ (DDMathFunction) logFunction;
-+ (DDMathFunction) lnFunction;
-+ (DDMathFunction) expFunction;
-+ (DDMathFunction) ceilFunction;
-+ (DDMathFunction) absFunction;
-+ (DDMathFunction) truncFunction;
-+ (DDMathFunction) floorFunction;
-+ (DDMathFunction) onescomplementFunction;
++ (DDMathFunction) logFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:log10([n doubleValue])]];
+	};
+	return [[function copy] autorelease];
+}
 
-+ (DDMathFunction) sinFunction;
-+ (DDMathFunction) cosFunction;
-+ (DDMathFunction) tanFunction;
-+ (DDMathFunction) asinFunction;
-+ (DDMathFunction) acosFunction;
-+ (DDMathFunction) atanFunction;
-+ (DDMathFunction) sinhFunction;
-+ (DDMathFunction) coshFunction;
-+ (DDMathFunction) tanhFunction;
-+ (DDMathFunction) asinhFunction;
-+ (DDMathFunction) acoshFunction;
-+ (DDMathFunction) atanhFunction;
++ (DDMathFunction) lnFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:log([n doubleValue])]];
+	};
+	return [[function copy] autorelease];
+}
 
-+ (DDMathFunction) cscFunction;
-+ (DDMathFunction) secFunction;
-+ (DDMathFunction) cotanFunction;
-+ (DDMathFunction) acscFunction;
-+ (DDMathFunction) asecFunction;
-+ (DDMathFunction) acotanFunction;
-+ (DDMathFunction) cschFunction;
-+ (DDMathFunction) sechFunction;
-+ (DDMathFunction) cotanhFunction;
-+ (DDMathFunction) acschFunction;
-+ (DDMathFunction) asechFunction;
-+ (DDMathFunction) acotanhFunction;
++ (DDMathFunction) expFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:exp([n doubleValue])]];
+	};
+	return [[function copy] autorelease];
+}
 
-+ (DDMathFunction) dtorFunction;
-+ (DDMathFunction) rtodFunction;
++ (DDMathFunction) ceilFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal ceil = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		NSDecimalRound(&ceil, &ceil, 0, NSRoundUp);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:ceil]];
+	};
+	return [[function copy] autorelease];
+}
 
-+ (DDMathFunction) piFunction;
-+ (DDMathFunction) pi_2Function;
-+ (DDMathFunction) pi_4Function;
-+ (DDMathFunction) sqrt2Function;
-+ (DDMathFunction) eFunction;
-+ (DDMathFunction) log2eFunction;
-+ (DDMathFunction) log10eFunction;
-+ (DDMathFunction) ln2Function;
-+ (DDMathFunction) ln10Function;
- **/
++ (DDMathFunction) absFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal abs = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		abs = DDDecimalAbsoluteValue(abs);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:abs]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) floorFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal n = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		NSDecimalRound(&n, &n, 0, NSRoundDown);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:n]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) sinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalSin(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) cosFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalCos(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) tanFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalTan(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) asinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAsin(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) acosFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAcos(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) atanFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAtan(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) sinhFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalSinh(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) coshFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalCosh(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) tanhFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalTanh(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) asinhFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAsinh(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) acoshFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAcosh(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) atanhFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAtanh(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) cscFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalSin(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) secFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalCos(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) cotanFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalTan(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) acscFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAsin(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) asecFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAcos(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) acotanFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAtan(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) cschFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalSinh(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) sechFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalCosh(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) cotanhFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalTanh(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) acschFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAsinh(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) asechFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAcosh(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) acotanhFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal num = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		num = DDDecimalAtanh(num);
+		num = DDDecimalInverse(num);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) dtorFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal n = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		NSDecimal tsz = DDDecimalFromInteger(360);
+		NSDecimal tpi = DDDecimal2Pi();
+		
+		n = DDDecimalMod(n, tsz);
+		NSDecimal r;
+		NSDecimalDivide(&r, &n, &tsz, NSRoundBankers);
+		NSDecimalMultiply(&r, &r, &tpi, NSRoundBankers);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:r]];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) rtodFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSDecimal n = [[[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator] decimalValue];
+		NSDecimal tsz = DDDecimalFromInteger(360);
+		NSDecimal tpi = DDDecimal2Pi();
+		
+		n = DDDecimalMod2Pi(n);
+		NSDecimal r;
+		NSDecimalDivide(&r, &n, &tpi, NSRoundBankers);
+		NSDecimalMultiply(&r, &r, &tsz, NSRoundBankers);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:r]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
+#pragma mark Constant Functions
+
++ (DDMathFunction) piFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalPi()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) pi_2Function {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalPi_2()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) pi_4Function {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalPi_4()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) sqrt2Function {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalSqrt2()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) eFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalE()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) log2eFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLog2e()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) log10eFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLog10e()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) ln2Function {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLn2()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) ln10Function {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLn10()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
 @end

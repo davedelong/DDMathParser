@@ -161,14 +161,13 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"rshift",
 			@"lshift",
 			
-			//functions that take n parameters
+			//functions that take > 0 parameters
 			@"average",
 			@"sum",
 			@"count",
 			@"min",
 			@"max",
 			@"median",
-			@"mode",
 			@"stddev",
 			
 			//functions that take 1 parameter
@@ -181,7 +180,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"ceil",
 			@"trunc",
 			@"floor",
-			@"onescomplement",
+			@"abs",
 			
 			//trig functions
 			@"sin",
@@ -231,6 +230,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 			@"average", @"avg",
 			@"average", @"mean",
+			@"floor", @"trunc",
 			nil];
 }
 

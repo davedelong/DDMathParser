@@ -44,6 +44,9 @@
 		554DA13012985DB500433840 /* _DDVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */; };
 		5554D58B12944AFD00A62529 /* DDMathEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5554D58A12944AFD00A62529 /* DDMathEvaluator.m */; };
 		5554D58C12944AFD00A62529 /* DDMathEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5554D58A12944AFD00A62529 /* DDMathEvaluator.m */; };
+		559E92A812C521CF00942099 /* _DDDecimalFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 559E92A712C521CF00942099 /* _DDDecimalFunctions.m */; };
+		559E92A912C521CF00942099 /* _DDDecimalFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 559E92A712C521CF00942099 /* _DDDecimalFunctions.m */; };
+		559E92AA12C521CF00942099 /* _DDDecimalFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 559E92A712C521CF00942099 /* _DDDecimalFunctions.m */; };
 		55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55BA67A11299FAEF002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55BFA9B0128CDE7600A80228 /* ParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9AF128CDE7600A80228 /* ParserTests.m */; };
@@ -103,6 +106,8 @@
 		5554D58A12944AFD00A62529 /* DDMathEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathEvaluator.m; sourceTree = "<group>"; };
 		5554D5EF129478E800A62529 /* DDMathEvaluator+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDMathEvaluator+Private.h"; sourceTree = "<group>"; };
 		5570E3B112AA2D8D002FE945 /* DDParserTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDParserTypes.h; sourceTree = "<group>"; };
+		559E92A612C521CF00942099 /* _DDDecimalFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDDecimalFunctions.h; sourceTree = "<group>"; };
+		559E92A712C521CF00942099 /* _DDDecimalFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDDecimalFunctions.m; sourceTree = "<group>"; };
 		55BA673E1298ECA2002279A5 /* DDMathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMathParser.h; path = DDMathParser/DDMathParser.h; sourceTree = "<group>"; };
 		55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDMathParsing.h"; sourceTree = "<group>"; };
 		55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DDMathParsing.m"; sourceTree = "<group>"; };
@@ -292,6 +297,8 @@
 				5554D5EF129478E800A62529 /* DDMathEvaluator+Private.h */,
 				552532B512C1C92D00A942A7 /* _DDFunctionUtilities.h */,
 				552532B612C1C92D00A942A7 /* _DDFunctionUtilities.m */,
+				559E92A612C521CF00942099 /* _DDDecimalFunctions.h */,
+				559E92A712C521CF00942099 /* _DDDecimalFunctions.m */,
 				55F7963512934A1400EF2716 /* DDExpression.h */,
 				55F7963612934A1400EF2716 /* DDExpression.m */,
 				55F9EFE91295AF3D00F4A9FD /* _DDFunctionExpression.h */,
@@ -434,6 +441,7 @@
 				5508991E12BCA4F000BBC2D9 /* DDFunctionTerm.m in Sources */,
 				5508992312BCAD5C00BBC2D9 /* DDOperatorTerm.m in Sources */,
 				552532B812C1C92D00A942A7 /* _DDFunctionUtilities.m in Sources */,
+				559E92A912C521CF00942099 /* _DDDecimalFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,6 +468,7 @@
 				5508991F12BCA4F000BBC2D9 /* DDFunctionTerm.m in Sources */,
 				5508992412BCAD5C00BBC2D9 /* DDOperatorTerm.m in Sources */,
 				552532B912C1C92D00A942A7 /* _DDFunctionUtilities.m in Sources */,
+				559E92AA12C521CF00942099 /* _DDDecimalFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +492,7 @@
 				5508991D12BCA4F000BBC2D9 /* DDFunctionTerm.m in Sources */,
 				5508992212BCAD5C00BBC2D9 /* DDOperatorTerm.m in Sources */,
 				552532B712C1C92D00A942A7 /* _DDFunctionUtilities.m in Sources */,
+				559E92A812C521CF00942099 /* _DDDecimalFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

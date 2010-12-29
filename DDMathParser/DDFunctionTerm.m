@@ -29,7 +29,7 @@
 			[tokenizer nextToken]; //consume the opening parenthesis
 			
 			NSUInteger groupingIndex = 0;
-			while ([[tokenizer peekNextToken] operatorType] != DDOperatorParenthesisClose) {
+			while ([tokenizer peekNextToken] != nil && [[tokenizer peekNextToken] operatorType] != DDOperatorParenthesisClose) {
 				DDMathStringToken * peek = [tokenizer peekNextToken];
 				if ([peek operatorType] == DDOperatorComma) {
 					[tokenizer nextToken]; //consume the comma

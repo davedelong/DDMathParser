@@ -33,7 +33,6 @@
 + (DDMathFunction) minFunction;
 + (DDMathFunction) maxFunction;
 + (DDMathFunction) medianFunction;
-+ (DDMathFunction) modeFunction;
 + (DDMathFunction) stddevFunction;
 + (DDMathFunction) sqrtFunction;
 + (DDMathFunction) logFunction;
@@ -41,9 +40,7 @@
 + (DDMathFunction) expFunction;
 + (DDMathFunction) ceilFunction;
 + (DDMathFunction) absFunction;
-+ (DDMathFunction) truncFunction;
 + (DDMathFunction) floorFunction;
-+ (DDMathFunction) onescomplementFunction;
 
 + (DDMathFunction) sinFunction;
 + (DDMathFunction) cosFunction;
