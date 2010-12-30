@@ -122,4 +122,12 @@
 	return d;
 }
 
+- (DDOperator) operatorType {
+	if (operatorPrecedence == DDPrecedenceUnary) {
+		if (operatorType == DDOperatorAdd) { return DDOperatorUnaryPlus; }
+		if (operatorType == DDOperatorMinus) { return DDOperatorUnaryMinus; }
+	}
+	return operatorType;
+}
+
 @end

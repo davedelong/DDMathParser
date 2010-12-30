@@ -112,6 +112,7 @@
 	NSMutableArray * terms = [self subTerms];
 	
 	DDOperatorTerm * operator = [terms objectAtIndex:index];
+	NSString * functionName = [operator operatorFunction];
 	
 	NSRange replacementRange = NSMakeRange(0, 0);
 	DDGroupTerm * replacement = nil;
@@ -120,24 +121,22 @@
 	if ([operator operatorPrecedence] == DDPrecedenceFactorial) {
 		replacementRange.location = index - 1;
 		replacementRange.length = 2;
-		replacement = [DDFunctionTerm functionTermWithName:@"factorial"];
+		replacement = [DDFunctionTerm functionTermWithName:functionName];
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 	} else if ([operator operatorPrecedence] == DDPrecedenceUnary) {
 		replacementRange.location = index;
 		replacementRange.length = 2;
-		if ([[[operator tokenValue] token] isEqual:@"+"]) {
+		if ([[operator tokenValue] operatorType] == DDOperatorUnaryPlus) {
 			//in other words, the unary + is a worthless operator:
 			replacement = [terms objectAtIndex:index+1];
 		} else {
-			NSString * function = ([[[operator tokenValue] token] isEqual:@"~"] ? @"not" : @"negate");
-			replacement = [DDFunctionTerm functionTermWithName:function];
+			replacement = [DDFunctionTerm functionTermWithName:functionName];
 			[[replacement subTerms] addObject:[terms objectAtIndex:index+1]];
 		}
 	} else {
 		replacementRange.location = index - 1;
 		replacementRange.length = 3;
-		NSString * function = DDOperatorNames[[operator operatorPrecedence]];
-		replacement = [DDFunctionTerm functionTermWithName:function];
+		replacement = [DDFunctionTerm functionTermWithName:functionName];
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 		
 		//special edge case where the right term of the power operator has 1+ unary operators

@@ -15,5 +15,6 @@
 
 @property (readonly) DDOperator operatorType;
 @property (readonly) DDPrecedence operatorPrecedence;
+@property (readonly) NSString * operatorFunction;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "DDOperatorTerm.h"
 
+static NSDictionary * operatorNames = nil;
 
 @implementation DDOperatorTerm
 
@@ -23,6 +24,39 @@
 		[NSException raise:NSGenericException format:@"not an operator term"];
 	}
 	return [[self tokenValue] operatorPrecedence];
+}
+
+- (NSString *) operatorFunction {
+	if ([[self tokenValue] tokenType] != DDTokenTypeOperator) {
+		[NSException raise:NSGenericException format:@"not an operator term"];
+	}
+	
+	if (operatorNames == nil) {
+		operatorNames = [[NSDictionary alloc] initWithObjectsAndKeys:
+						 @"or", @"|",
+						 @"xor", @"^", 
+						 @"and", @"&", 
+						 @"lshift", @"<<", 
+						 @"rshift", @">>", 
+						 @"subtract", @"-",
+						 @"add", @"+", 
+						 @"divide", @"/", 
+						 @"multiply", @"*", 
+						 @"mod", @"%", 
+						 @"not", @"~", 
+						 @"factorial", @"!", 
+						 @"pow", @"**", 
+						 nil];
+						 
+	}
+	
+	NSString * function = [operatorNames objectForKey:[[self tokenValue] token]];
+	if ([[self tokenValue] operatorPrecedence] == DDPrecedenceUnary) {
+		if ([[[self tokenValue] token] isEqual:@"-"]) { return @"negate"; }
+		if ([[[self tokenValue] token] isEqual:@"+"]) { return @""; }
+	}
+	
+	return function;
 }
 
 @end

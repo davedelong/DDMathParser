@@ -40,7 +40,8 @@ typedef enum {
 	DDOperatorParenthesisClose,
 	
 	DDOperatorComma,
-	DDOperatorNegate,
+	DDOperatorUnaryMinus,
+	DDOperatorUnaryPlus
 } DDOperator;
 
 enum {
@@ -50,9 +51,9 @@ enum {
 	DDPrecedenceLeftShift,
 	DDPrecedenceRightShift,
 	DDPrecedenceSubtraction,
-	DDPrecedenceAddition,
+	DDPrecedenceAddition = DDPrecedenceSubtraction,
 	DDPrecedenceDivision,
-	DDPrecedenceMultiplication,
+	DDPrecedenceMultiplication = DDPrecedenceDivision,
 	DDPrecedenceModulo,
 	DDPrecedenceUnary,
 	DDPrecedenceFactorial,
@@ -64,21 +65,3 @@ enum {
 };
 
 typedef NSInteger DDPrecedence;
-
-//the layout of this array must have the same lyout as the DDPrecedence enum
-static NSString * const DDOperatorNames[] = {
-	@"or",
-	@"xor",
-	@"and",
-	@"lshift",
-	@"rshift",
-	@"subtract",
-	@"add",
-	@"divide",
-	@"multiply",
-	@"mod",
-	@"not",
-	@"factorial",
-	@"pow",
-	nil
-};
