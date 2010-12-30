@@ -30,9 +30,7 @@
 @synthesize bitwiseAndAssociativity;
 @synthesize bitwiseLeftShiftAssociativity;
 @synthesize bitwiseRightShiftAssociativity;
-@synthesize subtractionAssociativity;
 @synthesize additionAssociativity;
-@synthesize divisionAssociativity;
 @synthesize multiplicationAssociativity;
 @synthesize modAssociativity;
 @synthesize powerAssociativity;
@@ -51,9 +49,7 @@
 		bitwiseAndAssociativity = DDOperatorAssociativityLeft;
 		bitwiseLeftShiftAssociativity = DDOperatorAssociativityLeft;
 		bitwiseRightShiftAssociativity = DDOperatorAssociativityLeft;
-		subtractionAssociativity = DDOperatorAssociativityLeft;
 		additionAssociativity = DDOperatorAssociativityLeft;
-		divisionAssociativity = DDOperatorAssociativityLeft;
 		multiplicationAssociativity = DDOperatorAssociativityLeft;
 		modAssociativity = DDOperatorAssociativityLeft;
 		
@@ -83,9 +79,9 @@
 		case DDOperatorBitwiseAnd: return bitwiseAndAssociativity;
 		case DDOperatorLeftShift: return bitwiseLeftShiftAssociativity;
 		case DDOperatorRightShift: return bitwiseRightShiftAssociativity;
-		case DDOperatorMinus: return subtractionAssociativity;
+		case DDOperatorMinus:
 		case DDOperatorAdd: return additionAssociativity;
-		case DDOperatorDivide: return divisionAssociativity;
+		case DDOperatorDivide:
 		case DDOperatorMultiply: return multiplicationAssociativity;
 		case DDOperatorModulo: return modAssociativity;
 		case DDOperatorPower: return powerAssociativity;

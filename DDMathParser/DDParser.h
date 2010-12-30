@@ -20,9 +20,7 @@
 	DDOperatorAssociativity bitwiseAndAssociativity;
 	DDOperatorAssociativity bitwiseLeftShiftAssociativity;
 	DDOperatorAssociativity bitwiseRightShiftAssociativity;
-	DDOperatorAssociativity subtractionAssociativity;
 	DDOperatorAssociativity additionAssociativity;
-	DDOperatorAssociativity divisionAssociativity;
 	DDOperatorAssociativity multiplicationAssociativity;
 	DDOperatorAssociativity modAssociativity;
 	DDOperatorAssociativity powerAssociativity;
@@ -34,9 +32,7 @@
 @property DDOperatorAssociativity bitwiseAndAssociativity;
 @property DDOperatorAssociativity bitwiseLeftShiftAssociativity;
 @property DDOperatorAssociativity bitwiseRightShiftAssociativity;
-@property DDOperatorAssociativity subtractionAssociativity;
 @property DDOperatorAssociativity additionAssociativity;
-@property DDOperatorAssociativity divisionAssociativity;
 @property DDOperatorAssociativity multiplicationAssociativity;
 @property DDOperatorAssociativity modAssociativity;
 @property DDOperatorAssociativity powerAssociativity;
