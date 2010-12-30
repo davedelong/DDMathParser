@@ -42,7 +42,7 @@ Variables are denoted in the source string as beginning with `$` and can contain
     
 ### Associativity
 
-By default, all binary operators are left associative.  That means if you give a string, such as `@"2 ** 3 ** 2"`, it will be parsed as `@"(2 ** 3) ** 2`, in order to maintain parity with `NSExpression`.
+By default, all binary operators are left associative.  That means if you give a string, such as `@"1 - 2 - 3"`, it will be parsed as `@"(1 - 2) - 3`.
 
 The exception to this is the power operator (`**`), which has its associativity determined at runtime.  The reason for this is that the power operator is supposed to be right associative, but is interpreted by `NSPredicate` as left associative ([rdar://problem/8692313](rdar://problem/8692313)).  `DDParser` performs a test to match the associativity used by `NSPredicate`.
 
@@ -52,7 +52,12 @@ If you want this operator to be parsed with specific associativity, you can do s
     [parser setPowerAssociativity:DDOperatorAssociativityRight];
     DDExpression * e = [parser parsedExpression];
    
-All binary operators can have their associativity changed this way.
+All binary operators can have their associativity changed this way.  If you want to change the associativity of an operator for all future parsings, you can use the class methods on `DDParser` to do so.  For example:
+
+	[DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
+	NSLog(@"%@", [@"2 ** 3 ** 2" numberByEvaluatingString]); //logs 512
+	
+Changing the default associativity only affects parsers instantiated after the change.  It does not affect existing parsers.
 
 ### Operators
 
@@ -133,7 +138,7 @@ Functions that take no parameters:
 
 #### Aliases
 
-Functions can also have aliases.  For example, the following strings are equivalent:
+Functions can also have aliases.  For example, the following are equivalent:
 
     average(1,2,3)
     avg(1,2,3)
@@ -213,5 +218,4 @@ THE SOFTWARE.
 ## To Do:
 
 - Transform to an `NSError`-based API
-- Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision)
-- Add default associativity for all `DDParser` objects (in addition to the existing per-parser basis)
+- Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision); mostly implemented (except for trig functions)

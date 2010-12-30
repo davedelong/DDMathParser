@@ -37,6 +37,33 @@
 @property DDOperatorAssociativity modAssociativity;
 @property DDOperatorAssociativity powerAssociativity;
 
++ (DDOperatorAssociativity) defaultBitwiseOrAssociativity;
++ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultBitwiseXorAssociativity;
++ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultBitwiseAndAssociativity;
++ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity;
++ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity;
++ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultAdditionAssociativity;
++ (void) setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultMultiplicationAssociativity;
++ (void) setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultModAssociativity;
++ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity;
+
++ (DDOperatorAssociativity) defaultPowerAssociativity;
++ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity;
+
 + (id) parserWithString:(NSString *)string;
 - (id) initWithString:(NSString *)string;
 

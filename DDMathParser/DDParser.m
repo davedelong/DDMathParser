@@ -14,14 +14,15 @@
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
 
-@interface DDParser ()
-
-//- (DDTerm *) parseTerm;
-//- (DDTerm *) parseParentheticalTerm;
-//- (DDTerm *) parseParentheticalTerm:(BOOL)isRootTerm;
-
-@end
-
+static DDOperatorAssociativity defaultBitwiseOrAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultBitwiseXorAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultBitwiseAndAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultBitwiseLeftShiftAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultBitwiseRightShiftAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultAdditionAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultMultiplicationAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultModAssociativity = DDOperatorAssociativityLeft;
+static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativityLeft;
 
 @implementation DDParser
 
@@ -35,6 +36,46 @@
 @synthesize modAssociativity;
 @synthesize powerAssociativity;
 
++ (void) initialize {
+	if (self == [DDParser class]) {
+		//determine what associativity NSPredicate/NSExpression is using
+		//mathematically, it should be right associative, but it's usually parsed as left associative
+		//rdar://problem/8692313
+		NSExpression * powerExpression = [(NSComparisonPredicate *)[NSPredicate predicateWithFormat:@"2 ** 3 ** 2 == 0"] leftExpression];
+		NSNumber * powerResult = [powerExpression expressionValueWithObject:nil context:nil];
+		if ([powerResult intValue] == 512) {
+			[self setDefaultPowerAssociativity:DDOperatorAssociativityRight];
+		}
+	}
+}
+
++ (DDOperatorAssociativity) defaultBitwiseOrAssociativity { return defaultBitwiseOrAssociativity; }
++ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseOrAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultBitwiseXorAssociativity { return defaultBitwiseXorAssociativity; }
++ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseXorAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultBitwiseAndAssociativity { return defaultBitwiseAndAssociativity; }
++ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseAndAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity { return defaultBitwiseLeftShiftAssociativity; }
++ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseLeftShiftAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity { return defaultBitwiseRightShiftAssociativity; }
++ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseRightShiftAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultAdditionAssociativity { return defaultAdditionAssociativity; }
++ (void) setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity { defaultAdditionAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultMultiplicationAssociativity { return defaultMultiplicationAssociativity; }
++ (void) setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity { defaultMultiplicationAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultModAssociativity { return defaultModAssociativity; }
++ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { defaultModAssociativity = newAssociativity; }
+
++ (DDOperatorAssociativity) defaultPowerAssociativity { return defaultPowerAssociativity; }
++ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { defaultPowerAssociativity = newAssociativity; }
+
 + (id) parserWithString:(NSString *)string {
 	return [[[self alloc] initWithString:string] autorelease];
 }
@@ -44,25 +85,15 @@
 	if (self) {
 		tokenizer = [[DDMathStringTokenizer alloc] initWithString:string];
 		
-		bitwiseOrAssociativity = DDOperatorAssociativityLeft;
-		bitwiseXorAssociativity = DDOperatorAssociativityLeft;
-		bitwiseAndAssociativity = DDOperatorAssociativityLeft;
-		bitwiseLeftShiftAssociativity = DDOperatorAssociativityLeft;
-		bitwiseRightShiftAssociativity = DDOperatorAssociativityLeft;
-		additionAssociativity = DDOperatorAssociativityLeft;
-		multiplicationAssociativity = DDOperatorAssociativityLeft;
-		modAssociativity = DDOperatorAssociativityLeft;
-		
-		//determine what associativity NSPredicate/NSExpression is using
-		//mathematically, it should be right associative, but it's usually parsed as left associative
-		//rdar://problem/8692313
-		NSExpression * powerExpression = [(NSComparisonPredicate *)[NSPredicate predicateWithFormat:@"2 ** 3 ** 2 == 0"] leftExpression];
-		NSNumber * powerResult = [powerExpression expressionValueWithObject:nil context:nil];
-		if ([powerResult intValue] == 512) {
-			powerAssociativity = DDOperatorAssociativityRight;
-		} else {
-			powerAssociativity = DDOperatorAssociativityLeft;
-		}
+		bitwiseOrAssociativity = [[self class] defaultBitwiseOrAssociativity];
+		bitwiseXorAssociativity = [[self class] defaultBitwiseXorAssociativity];
+		bitwiseAndAssociativity = [[self class] defaultBitwiseAndAssociativity];
+		bitwiseLeftShiftAssociativity = [[self class] defaultBitwiseLeftShiftAssociativity];
+		bitwiseRightShiftAssociativity = [[self class] defaultBitwiseRightShiftAssociativity];
+		additionAssociativity = [[self class] defaultAdditionAssociativity];
+		multiplicationAssociativity = [[self class] defaultMultiplicationAssociativity];
+		modAssociativity = [[self class] defaultModAssociativity];
+		powerAssociativity = [[self class] defaultPowerAssociativity];
 	}
 	return self;
 }
