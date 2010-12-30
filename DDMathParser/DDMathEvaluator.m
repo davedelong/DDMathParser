@@ -53,7 +53,10 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if ([self functionWithName:functionName] != nil) { return NO; }
 	if ([[self _standardFunctions] containsObject:[functionName lowercaseString]]) { return NO; }
 	
+	function = Block_copy(function);
 	[functions setObject:function forKey:[functionName lowercaseString]];
+	Block_release(function);
+	
 	return YES;
 }
 
