@@ -17,7 +17,7 @@ Registering new functions is easy.  You just need a block, a name, and the numbe
       NSNumber * result = [NSNumber numberWithDouble:[n doubleValue] * 42.0f];
       return [DDExpression numberExpressionWithNumber:result];
     };
-    [[DDMathEvaluator sharedMathEvaluator] registerFunction:function forName:@"multiplyBy42" numberOfArguments:1];
+    [[DDMathEvaluator sharedMathEvaluator] registerFunction:function forName:@"multiplyBy42"];
     
     NSLog(@"%@", [[DDMathEvaluator sharedMathEvaluator] evaluateString:@"multiplyBy42(3)" withSubstitutions:nil]);  //logs "126"
     
