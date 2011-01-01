@@ -37,6 +37,7 @@
 + (DDMathFunction) sqrtFunction;
 + (DDMathFunction) logFunction;
 + (DDMathFunction) lnFunction;
++ (DDMathFunction) log2Function;
 + (DDMathFunction) expFunction;
 + (DDMathFunction) ceilFunction;
 + (DDMathFunction) absFunction;

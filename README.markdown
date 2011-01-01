@@ -94,7 +94,6 @@ Functions that take > 1 parameter
 - `min()` - returns the minimum of the passed parameters
 - `max()` - returns the maximum of the passed parameters
 - `median()` - returns the median of the passed parameters
-- `mode()` - returns the mode of the passed parameters
 - `stddev()` - returns the standard deviation of the passed parameters
 - `average()` - returns the average of the passed parameters
 
@@ -103,6 +102,7 @@ Functions that take 1 parameter:
 - `sqrt()` - returns the square root of the passed parameter
 - `log()` - returns the base 10 log of the passed parameter
 - `ln()` - returns the base e log of the passed parameter
+- `log2()` - returns the base 2 log of the passed parameter
 - `exp()` - returns e raised to the power of the passed parameter
 - `ceil()` - returns the passed parameter rounded up
 - `floor()` - returns the passed parameter rounded down
@@ -128,7 +128,7 @@ Functions that take no parameters:
 
 - `pi()` - returns the value of π
 - `pi_2()` - returns the value of π/2
-- `pi_4()` - returns the value of π/2
+- `pi_4()` - returns the value of π/4
 - `sqrt2()` - returns the value of the square root of 2
 - `e()` - returns the value of e
 - `log2e()` - returns the value of the log base 2 of e

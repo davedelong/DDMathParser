@@ -350,6 +350,15 @@ if ([arguments count] < __n) { \
 	return [[function copy] autorelease];
 }
 
++ (DDMathFunction) log2Function {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		REQUIRE_N_ARGS(1);
+		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:log2([n doubleValue])]];
+	};
+	return [[function copy] autorelease];
+}
+
 + (DDMathFunction) expFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
 		REQUIRE_N_ARGS(1);

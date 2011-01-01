@@ -179,6 +179,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"sqrt",
 			@"log",
 			@"ln",
+			@"log2",
 			@"exp",
 			@"ceil",
 			@"trunc",
