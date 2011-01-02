@@ -332,6 +332,45 @@ if ([arguments count] < __n) { \
 	return [[function copy] autorelease];
 }
 
++ (DDMathFunction) randomFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
+		if ([arguments count] > 2) {
+			[NSException raise:NSInvalidArgumentException format:@"random() may only have up to 2 arguments"];
+			return nil;
+		}
+		
+		NSMutableArray * params = [NSMutableArray array];
+		for (DDExpression * argument in arguments) {
+			NSNumber * value = [argument evaluateWithSubstitutions:variables evaluator:evaluator];
+			[params addObject:value];
+		}
+		
+		NSInteger random = arc4random();
+		
+		if ([params count] == 1) {
+			NSNumber * lowerBound = [params objectAtIndex:0];
+			while (random < [lowerBound integerValue]) {
+				random += [lowerBound integerValue];
+			}
+		} else if ([params count] == 2) {
+			NSNumber * lowerBound = [params objectAtIndex:0];
+			NSNumber * upperBound = [params objectAtIndex:1];
+			
+			if ([upperBound integerValue] <= [lowerBound integerValue]) {
+				[NSException raise:NSInvalidArgumentException format:@"upper bound (%ld) of random() must be larger than lower bound (%ld)", [upperBound integerValue], [lowerBound integerValue]];
+				return nil;
+			}
+			
+			NSInteger range = abs(([upperBound integerValue] - [lowerBound integerValue]) + 1);
+			random = random % range;
+			random += [lowerBound integerValue];
+		}
+		
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithInteger:random]];
+	};
+	return [[function copy] autorelease];
+}
+
 + (DDMathFunction) logFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray * arguments, NSDictionary * variables, DDMathEvaluator * evaluator) {
 		REQUIRE_N_ARGS(1);

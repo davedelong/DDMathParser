@@ -34,6 +34,7 @@
 + (DDMathFunction) maxFunction;
 + (DDMathFunction) medianFunction;
 + (DDMathFunction) stddevFunction;
++ (DDMathFunction) randomFunction;
 + (DDMathFunction) sqrtFunction;
 + (DDMathFunction) logFunction;
 + (DDMathFunction) lnFunction;

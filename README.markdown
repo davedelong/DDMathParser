@@ -96,6 +96,7 @@ Functions that take > 1 parameter
 - `median()` - returns the median of the passed parameters
 - `stddev()` - returns the standard deviation of the passed parameters
 - `average()` - returns the average of the passed parameters
+- `random()` - returns a random integer.  Can take 0, 1, or 2 parameters.  The first parameter (if given) is the lower bound of the random integer.  The second parameter (if given) is the upper bound of the random integer.
 
 Functions that take 1 parameter:
 
@@ -218,4 +219,4 @@ THE SOFTWARE.
 ## To Do:
 
 - Transform to an `NSError`-based API
-- Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision); mostly implemented (except for trig functions)
+- Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision); mostly implemented (except for trig/transcendental functions)

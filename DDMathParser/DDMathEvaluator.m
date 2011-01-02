@@ -172,6 +172,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"max",
 			@"median",
 			@"stddev",
+			@"random",
 			
 			//functions that take 1 parameter
 			@"negate",
