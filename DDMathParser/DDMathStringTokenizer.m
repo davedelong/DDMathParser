@@ -8,6 +8,7 @@
 
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
+#import "NSNumberFormatter+DDMathParser.h"
 
 @interface DDMathStringTokenizer ()
 
@@ -198,9 +199,10 @@
 	unichar character = [self _nextCharacter];
 	if (character == '\0') { return nil; }
 	
+	unichar decimalSeparator = [[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator] characterAtIndex:0];
 	NSUInteger currentIndex = currentCharacterIndex;
 	@try {
-		if ((character >= '0' && character <= '9')/* || (character == '-')*/) {
+		if ((character >= '0' && character <= '9') || character == decimalSeparator) {
 			return [self parsedNumber:character];
 		}
 		if ((character >= 'a' && character <= 'z') ||
@@ -235,30 +237,35 @@
 
 - (DDMathStringToken *) parsedNumber:(unichar)firstCharacter {
 	NSMutableString * n = [NSMutableString stringWithFormat:@"%C", firstCharacter];
+	NSNumber * parsedNumber = nil;
 	do {
-		unichar next = [self _peekNextCharacter];
-		if (next != 0) {
-			//allowed characters: 0-9, e, .
-			unichar current = [self _currentCharacter];
-			if (([[self allowedNumberCharacters] characterIsMember:next]) || 
-				((current == 'e' || current == 'E') && (next == '-' || next == '+'))) {
-				[n appendFormat:@"%C", [self _nextCharacter]];
+		unichar peek = [self _peekNextCharacter];
+		if (peek == '\0') { break; }
+		[n appendFormat:@"%C", peek];
+		NSNumber *thisNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
+		if (thisNumber != nil) {
+			//we found something!
+			//keep going
+			parsedNumber = thisNumber;
+			//consume the character
+			[self _nextCharacter];
+		} else {
+			//this didn't work
+			//try appending something to the string and see if it likes that
+			//this will handle "1e", "1e-", "1e+", ".", and similar
+			[n appendString:@"2"];
+			thisNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
+			if (thisNumber != nil) {
+				//it worked
+				//remove the "2"
+				[n replaceCharactersInRange:NSMakeRange([n length]-1, 1) withString:@""];
+				parsedNumber = thisNumber;
+				[self _nextCharacter];
 			} else {
 				break;
 			}
-		} else {
-			break;
 		}
 	} while (1);
-	
-	//now that we have a string, verify that it makes a number:
-	//use < spellOut, since we don't recognize spelled-out numbers
-	NSNumber * parsedNumber = nil;
-	for (int i = NSNumberFormatterNoStyle; i < NSNumberFormatterSpellOutStyle; ++i) {
-		[numberFormatter setNumberStyle:i];
-		parsedNumber = [numberFormatter numberFromString:n];
-		if (parsedNumber != nil) { break; }
-	}
 	
 	if (parsedNumber == nil) {
 		[NSException raise:NSInvalidArgumentException format:@"unabled to parse: %@", n];
