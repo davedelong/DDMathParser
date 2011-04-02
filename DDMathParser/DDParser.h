@@ -64,10 +64,10 @@
 + (DDOperatorAssociativity) defaultPowerAssociativity;
 + (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (id) parserWithString:(NSString *)string;
-- (id) initWithString:(NSString *)string;
++ (id) parserWithString:(NSString *)string error:(NSError **)error;
+- (id) initWithString:(NSString *)string error:(NSError **)error;
 
-- (DDExpression *) parsedExpression;
+- (DDExpression *) parsedExpressionWithError:(NSError **)error;
 - (DDOperatorAssociativity) associativityForOperator:(DDOperator)operatorType;
 
 @end

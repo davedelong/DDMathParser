@@ -20,13 +20,13 @@
 
 @property (retain) DDMathStringToken * tokenValue;
 
-+ (id) termForTokenType:(DDTokenType)tokenType withTokenizer:(DDMathStringTokenizer *)tokenizer;
++ (id) termForTokenType:(DDTokenType)tokenType withTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 
-+ (id) termWithTokenizer:(DDMathStringTokenizer *)tokenizer;
-- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer;
++ (id) termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
+- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 
-- (void) resolveWithParser:(DDParser *)parser;
+- (void) resolveWithParser:(DDParser *)parser error:(NSError **)error;
 
-- (DDExpression *) expression;
+- (DDExpression *) expressionWithError:(NSError **)error;
 
 @end

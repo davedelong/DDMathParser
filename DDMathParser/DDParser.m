@@ -76,14 +76,14 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 + (DDOperatorAssociativity) defaultPowerAssociativity { return defaultPowerAssociativity; }
 + (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { defaultPowerAssociativity = newAssociativity; }
 
-+ (id) parserWithString:(NSString *)string {
-	return [[[self alloc] initWithString:string] autorelease];
++ (id) parserWithString:(NSString *)string error:(NSError **)error {
+	return [[[self alloc] initWithString:string error:error] autorelease];
 }
 
-- (id) initWithString:(NSString *)string {
+- (id) initWithString:(NSString *)string error:(NSError **)error {
 	self = [super init];
 	if (self) {
-		tokenizer = [[DDMathStringTokenizer alloc] initWithString:string];
+		tokenizer = [[DDMathStringTokenizer alloc] initWithString:string error:error];
 		
 		bitwiseOrAssociativity = [[self class] defaultBitwiseOrAssociativity];
 		bitwiseXorAssociativity = [[self class] defaultBitwiseXorAssociativity];
@@ -123,16 +123,32 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 	return DDOperatorAssociativityLeft;
 }
 
-- (DDExpression *) parsedExpression {
+- (DDExpression *) parsedExpressionWithError:(NSError **)error {
 	[tokenizer reset]; //reset the token stream
 	
+	DDExpression *expression = nil;
+	
 	NSAutoreleasePool * parserPool = [[NSAutoreleasePool alloc] init];
-	DDTerm * rootTerm = [DDGroupTerm rootTermWithTokenizer:tokenizer];
+	DDTerm * rootTerm = [DDGroupTerm rootTermWithTokenizer:tokenizer error:error];
+	if (error && *error) { goto errorExit; }
 	
-	[rootTerm resolveWithParser:self];
-	DDExpression * expression = [[rootTerm expression] retain];
+	[rootTerm resolveWithParser:self error:error];
+	if (error && *error) {
+		goto errorExit;
+	}
+	expression = [[rootTerm expressionWithError:error] retain];
+	if (error && *error) {
+		[expression release], expression = nil;
+	}
+	
+errorExit:
+	if (error && *error) {
+		[*error retain];
+	}
 	[parserPool drain];
-	
+	if (error && *error) {
+		[*error autorelease];
+	}
 	return [expression autorelease];
 }
 

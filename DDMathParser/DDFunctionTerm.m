@@ -8,23 +8,28 @@
 
 #import "DDFunctionTerm.h"
 #import "DDGroupTerm.h"
+#import "DDMathParserMacros.h"
 
 @interface DDFunctionTerm ()
 
-- (void) groupParametersStartingAtIndex:(NSUInteger)index;
+- (void) groupParametersStartingAtIndex:(NSUInteger)index error:(NSError **)error;
 
 @end
 
 
 @implementation DDFunctionTerm
 
-- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer {
-	self = [super initWithTokenizer:tokenizer];
+- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+	self = [super initWithTokenizer:tokenizer error:error];
 	if (self) {
 		if (tokenizer != nil) {
 			DDMathStringToken * token = [tokenizer peekNextToken];
 			if ([token operatorType] != DDOperatorParenthesisOpen) {
-				[NSException raise:NSGenericException format:@"function not followed by an open parenthesis"];
+				if (error) {
+					*error = ERR_BADARG(@"function not followed by an open parenthesis");
+				}
+				[self release];
+				return nil;
 			}
 			[tokenizer nextToken]; //consume the opening parenthesis
 			
@@ -33,36 +38,57 @@
 				DDMathStringToken * peek = [tokenizer peekNextToken];
 				if ([peek operatorType] == DDOperatorComma) {
 					[tokenizer nextToken]; //consume the comma
-					[self groupParametersStartingAtIndex:groupingIndex++];
+					[self groupParametersStartingAtIndex:groupingIndex++ error:error];
+					if (error && *error) {
+						[self release];
+						return nil;
+					}
 				} else {
-					DDTerm * t = [DDTerm termForTokenType:[peek tokenType] withTokenizer:tokenizer];
+					DDTerm * t = [DDTerm termForTokenType:[peek tokenType] withTokenizer:tokenizer error:error];
+					if (error && *error) {
+						[self release];
+						return nil;
+					}
 					[[self subTerms] addObject:t];
 				}
 			}
 			
 			if (groupingIndex == 0 && [[self subTerms] count] > 0) {
 				//we added terms, but never grouped
-				[self groupParametersStartingAtIndex:groupingIndex];
+				[self groupParametersStartingAtIndex:groupingIndex error:error];
+				if (error && *error) {
+					[self release];
+					return nil;
+				}
 			}
 			
 			token = [tokenizer nextToken];
 			if ([token operatorType] != DDOperatorParenthesisClose) {
-				[NSException raise:NSGenericException format:@"function does not have a close parenthesis"];
+				if (error) {
+					*error = ERR_BADARG(@"function does not have a close parenthesis");
+				}
+				[self release];
+				return nil;
 			}
 		}
 	}
 	return self;
 }
 
-- (void) groupParametersStartingAtIndex:(NSUInteger)index {
+- (void) groupParametersStartingAtIndex:(NSUInteger)index error:(NSError **)error {
 	if ([[self subTerms] count] == 0) {
 		//we hit a comma
-		[NSException raise:NSGenericException format:@"empty function parameter"];
+		if (error) {
+			*error = ERR_EVAL(@"empty function parameter");
+		}
+		return;
 	}
 	NSRange groupingRange = NSMakeRange(index, [[self subTerms] count] - index);
 	
 	if (index >= [[self subTerms] count] || groupingRange.length <= 0) {
-		[NSException raise:NSGenericException format:@"invalid comma placement"];
+		if (error) {
+			*error = ERR_EVAL(@"invalid comma placement");
+		}
 		return;
 	}
 	
@@ -76,7 +102,10 @@
 	}
 	
 	NSArray * sub = [[self subTerms] subarrayWithRange:groupingRange];
-	DDTerm * parameterGroup = [DDGroupTerm groupTermWithSubTerms:sub];
+	DDTerm * parameterGroup = [DDGroupTerm groupTermWithSubTerms:sub error:error];
+	if (error && *error) {
+		return;
+	}
 	[[self subTerms] replaceObjectsInRange:groupingRange withObjectsFromArray:[NSArray arrayWithObject:parameterGroup]];
 }
 
@@ -84,23 +113,31 @@
 	return [tokenValue token];
 }
 
-- (void) resolveWithParser:(DDParser *)parser {
-	[[self subTerms] makeObjectsPerformSelector:_cmd withObject:parser];
+- (void) resolveWithParser:(DDParser *)parser error:(NSError **)error {
+	for (DDTerm *subTerm in [self subTerms]) {
+		[subTerm resolveWithParser:parser error:error];
+		if (error && *error) {
+			return;
+		}
+	}
 }
 
 - (NSString *) description {
 	return [NSString stringWithFormat:@"%@%@", [[self tokenValue] token], [super description]];
 }
 
-- (DDExpression *) expression {
+- (DDExpression *) expressionWithError:(NSError **)error {
 	NSMutableArray * parameters = [NSMutableArray array];
 	for (DDTerm * param in [self subTerms]) {
-		DDExpression * e = [param expression];
+		DDExpression * e = [param expressionWithError:error];
+		if (error && *error) {
+			return nil;
+		}
 		if (e != nil) {
 			[parameters addObject:e];
 		}
 	}
-	return [DDExpression functionExpressionWithFunction:[self function] arguments:parameters];
+	return [DDExpression functionExpressionWithFunction:[self function] arguments:parameters error:error];
 }
 
 @end

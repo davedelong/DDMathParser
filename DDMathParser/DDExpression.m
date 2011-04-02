@@ -19,16 +19,16 @@
 
 @implementation DDExpression
 
-+ (id) expressionFromString:(NSString *)expressionString {
-	return [[DDParser parserWithString:expressionString] parsedExpression];
++ (id) expressionFromString:(NSString *)expressionString error:(NSError **)error {
+	return [[DDParser parserWithString:expressionString error:error] parsedExpressionWithError:error];
 }
 
 + (id) numberExpressionWithNumber:(NSNumber *)number {
 	return [[[_DDNumberExpression alloc] initWithNumber:number] autorelease];
 }
 
-+ (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments {
-	return [[[_DDFunctionExpression alloc] initWithFunction:function arguments:arguments] autorelease];
++ (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError **)error {
+	return [[[_DDFunctionExpression alloc] initWithFunction:function arguments:arguments error:error] autorelease];
 }
 
 + (id) variableExpressionWithVariable:(NSString *)variable {
@@ -42,21 +42,20 @@
 	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)];
 	return 0;
 }
-- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator { 
+- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error { 
 	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)]; 
 	return nil; 
 }
 - (DDExpression *) simplifiedExpression {
-	return [self simplifiedExpressionWithEvaluator:[DDMathEvaluator sharedMathEvaluator]];
+	NSError *error = nil;
+	DDExpression *simplified = [self simplifiedExpressionWithEvaluator:[DDMathEvaluator sharedMathEvaluator] error:&error];
+	if (error != nil) {
+		NSLog(@"error: %@", error);
+		return nil;
+	}
+	return simplified;
 }
-- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
-	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)]; 
-	return nil; 
-}
-- (NSExpression *) expressionValue { 
-	return [self expressionValueForEvaluator:[DDMathEvaluator sharedMathEvaluator]];
-}
-- (NSExpression *) expressionValueForEvaluator:(DDMathEvaluator *)evaluator {
+- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)]; 
 	return nil; 
 }

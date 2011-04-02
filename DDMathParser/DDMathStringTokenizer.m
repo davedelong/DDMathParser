@@ -9,21 +9,22 @@
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
 #import "NSNumberFormatter+DDMathParser.h"
+#import "DDMathParserMacros.h"
 
 @interface DDMathStringTokenizer ()
 
-- (DDMathStringToken *) _nextToken;
+- (DDMathStringToken *) _nextTokenWithError:(NSError **)error;
 
-- (DDMathStringToken *) parsedOperator:(unichar)firstCharacter;
-- (DDMathStringToken *) parsedNumber:(unichar)firstCharacter;
-- (DDMathStringToken *) parsedVariable:(unichar)firstCharacter;
-- (DDMathStringToken *) parsedFunction:(unichar)firstCharacter;
+- (DDMathStringToken *) parsedOperator:(unichar)firstCharacter error:(NSError **)error;
+- (DDMathStringToken *) parsedNumber:(unichar)firstCharacter error:(NSError **)error;
+- (DDMathStringToken *) parsedVariable:(unichar)firstCharacter error:(NSError **)error;
+- (DDMathStringToken *) parsedFunction:(unichar)firstCharacter error:(NSError **)error;
 
 @end
 
 @implementation DDMathStringTokenizer
 
-- (id) initWithString:(NSString *)expressionString {
+- (id) initWithString:(NSString *)expressionString error:(NSError **)error {
 	self = [super init];
 	if (self) {
 		tokens = [[NSMutableArray alloc] init];
@@ -37,84 +38,86 @@
 		sourceString = [expressionString retain];
 		numberFormatter = [[NSNumberFormatter alloc] init];
 		
-		@try {
-			DDMathStringToken * token = nil;
-			while ((token = [self _nextToken])) {
-				
-				//figure out if "-" and "+" are unary or binary
-				if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
-					DDMathStringToken * previous = [tokens lastObject];
-					if (previous == nil) {
-						[token setOperatorPrecedence:DDPrecedenceUnary];
-					} else if ([previous tokenType] == DDTokenTypeOperator && [previous operatorType] != DDOperatorParenthesisClose) {
-						[token setOperatorPrecedence:DDPrecedenceUnary];
-					} else if ([[token token] isEqual:@"+"]) {
-						[token setOperatorPrecedence:DDPrecedenceAddition];
-					} else if ([[token token] isEqual:@"-"]) {
-						[token setOperatorPrecedence:DDPrecedenceSubtraction];
-					} else {
-						[NSException raise:NSGenericException format:@"unknown precedence for token: %@", token];
-					}
-				}
-				
-				//this adds support for implicit multiplication
-				/**
-				 If you have <first token><second token>, then you can either inject a multiplication token or leave it alone.
-				 This table explains what should happen for each possible combination:
-				 
-				 First Token		Second Token	Action
-				 -----------------------------------------
-				 Number				Number			Multiply
-				 Number				Operator		Normal
-				 Number				Variable		Multiply
-				 Number				Function		Multiply
-				 Number				(				Multiply
-				 
-				 Operator			Number			Normal
-				 Operator			Operator		Normal
-				 Operator			Variable		Normal
-				 Operator			Function		Normal
-				 Operator			(				Normal
-				 
-				 Variable			Number			Multiply
-				 Variable			Operator		Normal
-				 Variable			Variable		Multiply
-				 Variable			Function		Multiply
-				 Variable			(				Multiply
-				 
-				 Function			Number			Normal
-				 Function			Operator		Normal
-				 Function			Variable		Normal
-				 Function			Function		Normal
-				 Function			(				Normal
-				 
-				 )					Number			Multiply
-				 )					Operator		Normal
-				 )					Variable		Multiply
-				 )					Function		Multiply
-				 )					(				Multiply
-				 **/
-				DDMathStringToken * previousToken = [tokens lastObject];
-				if (previousToken != nil) {
-					if ([previousToken tokenType] == DDTokenTypeNumber ||
-						[previousToken tokenType] == DDTokenTypeVariable ||
-						[previousToken operatorType] == DDOperatorParenthesisClose) {
-						
-						if ([token tokenType] != DDTokenTypeOperator || [token operatorType] == DDOperatorParenthesisOpen) {
-							//inject a "multiplication" token:
-							DDMathStringToken * multiply = [DDMathStringToken mathStringTokenWithToken:@"*" type:DDTokenTypeOperator];
-							[tokens addObject:multiply];
-						}
-						
-					}
-				}
-				
-				[tokens addObject:token];
+		DDMathStringToken * token = nil;
+		while ((token = [self _nextTokenWithError:error])) {
+			if (error && *error) {
+				[self release];
+				return nil;
 			}
-		}
-		@catch (NSException * e) {
-			NSLog(@"caught: %@", e);
-			@throw e;
+			
+			//figure out if "-" and "+" are unary or binary
+			if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
+				DDMathStringToken * previous = [tokens lastObject];
+				if (previous == nil) {
+					[token setOperatorPrecedence:DDPrecedenceUnary];
+				} else if ([previous tokenType] == DDTokenTypeOperator && [previous operatorType] != DDOperatorParenthesisClose) {
+					[token setOperatorPrecedence:DDPrecedenceUnary];
+				} else if ([[token token] isEqual:@"+"]) {
+					[token setOperatorPrecedence:DDPrecedenceAddition];
+				} else if ([[token token] isEqual:@"-"]) {
+					[token setOperatorPrecedence:DDPrecedenceSubtraction];
+				} else {
+					if (error != nil) {
+						*error = ERR_EVAL(@"unknown precedence for token: %@", token);
+					}
+					[self release];
+					return nil;
+				}
+			}
+			
+			//this adds support for implicit multiplication
+			/**
+			 If you have <first token><second token>, then you can either inject a multiplication token or leave it alone.
+			 This table explains what should happen for each possible combination:
+			 
+			 First Token		Second Token	Action
+			 -----------------------------------------
+			 Number				Number			Multiply
+			 Number				Operator		Normal
+			 Number				Variable		Multiply
+			 Number				Function		Multiply
+			 Number				(				Multiply
+			 
+			 Operator			Number			Normal
+			 Operator			Operator		Normal
+			 Operator			Variable		Normal
+			 Operator			Function		Normal
+			 Operator			(				Normal
+			 
+			 Variable			Number			Multiply
+			 Variable			Operator		Normal
+			 Variable			Variable		Multiply
+			 Variable			Function		Multiply
+			 Variable			(				Multiply
+			 
+			 Function			Number			Normal
+			 Function			Operator		Normal
+			 Function			Variable		Normal
+			 Function			Function		Normal
+			 Function			(				Normal
+			 
+			 )					Number			Multiply
+			 )					Operator		Normal
+			 )					Variable		Multiply
+			 )					Function		Multiply
+			 )					(				Multiply
+			 **/
+			DDMathStringToken * previousToken = [tokens lastObject];
+			if (previousToken != nil) {
+				if ([previousToken tokenType] == DDTokenTypeNumber ||
+					[previousToken tokenType] == DDTokenTypeVariable ||
+					[previousToken operatorType] == DDOperatorParenthesisClose) {
+					
+					if ([token tokenType] != DDTokenTypeOperator || [token operatorType] == DDOperatorParenthesisOpen) {
+						//inject a "multiplication" token:
+						DDMathStringToken * multiply = [DDMathStringToken mathStringTokenWithToken:@"*" type:DDTokenTypeOperator];
+						[tokens addObject:multiply];
+					}
+					
+				}
+			}
+			
+			[tokens addObject:token];
 		}
 		
 		[self reset];
@@ -195,29 +198,29 @@
 	return peek;
 }
 
-- (DDMathStringToken *) _nextToken {
+- (DDMathStringToken *) _nextTokenWithError:(NSError **)error {
 	unichar character = [self _nextCharacter];
 	if (character == '\0') { return nil; }
 	
 	unichar decimalSeparator = [[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator] characterAtIndex:0];
 	NSUInteger currentIndex = currentCharacterIndex;
-	@try {
-		if ((character >= '0' && character <= '9') || character == decimalSeparator) {
-			return [self parsedNumber:character];
-		}
-		if ((character >= 'a' && character <= 'z') ||
-			(character >= 'A' && character <= 'Z')) {
-			return [self parsedFunction:character];
-		}
-		if (character == '$') {
-			return [self parsedVariable:character];
-		}
+	
+	DDMathStringToken *token = nil;
+	if ((character >= '0' && character <= '9') || character == decimalSeparator) {
+		token = [self parsedNumber:character error:error];
+	} else if ((character >= 'a' && character <= 'z') ||
+		(character >= 'A' && character <= 'Z')) {
+		token = [self parsedFunction:character error:error];
+	} else if (character == '$') {
+		token = [self parsedVariable:character error:error];
 	}
-	@catch (NSException * e) {
+	
+	if (token == nil) {
 		//failed; reset to where we were before we started
 		currentCharacterIndex = currentIndex;
+		token = [self parsedOperator:character error:error];
 	}
-	return [self parsedOperator:character];
+	return token;
 }
 
 - (NSCharacterSet *) allowedNumberCharacters {
@@ -235,9 +238,9 @@
 	return allowedNumberCharacters;
 }
 
-- (DDMathStringToken *) parsedNumber:(unichar)firstCharacter {
+- (DDMathStringToken *) parsedNumber:(unichar)firstCharacter error:(NSError **)error {
 	NSMutableString * n = [NSMutableString stringWithFormat:@"%C", firstCharacter];
-	NSNumber * parsedNumber = nil;
+	NSNumber * parsedNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
 	do {
 		unichar peek = [self _peekNextCharacter];
 		if (peek == '\0') { break; }
@@ -255,20 +258,25 @@
 			//this will handle "1e", "1e-", "1e+", ".", and similar
 			[n appendString:@"2"];
 			thisNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
+			//remove the "2"
+			[n replaceCharactersInRange:NSMakeRange([n length]-1, 1) withString:@""];
 			if (thisNumber != nil) {
 				//it worked
 				//remove the "2"
-				[n replaceCharactersInRange:NSMakeRange([n length]-1, 1) withString:@""];
 				parsedNumber = thisNumber;
 				[self _nextCharacter];
 			} else {
+				//still couldn't parse. remove the last character that was appended
+				[n replaceCharactersInRange:NSMakeRange([n length]-1, 1) withString:@""];
 				break;
 			}
 		}
 	} while (1);
 	
 	if (parsedNumber == nil) {
-		[NSException raise:NSInvalidArgumentException format:@"unabled to parse: %@", n];
+		if (error != nil) {
+			*error = ERR_BADARG(@"unable to parse: %@", n);
+		}
 		return nil;
 	}
 	
@@ -286,7 +294,7 @@
 	return allowedFunctionCharacters;
 }
 
-- (DDMathStringToken *) parsedFunction:(unichar)firstCharacter {	
+- (DDMathStringToken *) parsedFunction:(unichar)firstCharacter error:(NSError **)error {	
 	NSMutableString * f = [NSMutableString stringWithFormat:@"%C", firstCharacter];
 	while ([[self allowedFunctionCharacters] characterIsMember:[self _peekNextCharacter]]) {
 		[f appendFormat:@"%C", [self _nextCharacter]];
@@ -296,7 +304,9 @@
 		return [DDMathStringToken mathStringTokenWithToken:f type:DDTokenTypeFunction];
 	}
 	
-	[NSException raise:NSInvalidArgumentException format:@"unknown identifier: %@", f];
+	if (error != nil) {
+		*error = ERR_BADARG(@"unknown identifier: %@", f);
+	}
 	return nil;
 }
 
@@ -311,7 +321,7 @@
 	return allowedVariableCharacters;
 }
 
-- (DDMathStringToken *) parsedVariable:(unichar)firstCharacter {
+- (DDMathStringToken *) parsedVariable:(unichar)firstCharacter error:(NSError **)error {
 	//in this case, we *don't* use the firstCharacter (since it is $).  The $ is only to indicate that what follows is a variable
 	NSMutableString * v = [NSMutableString string];
 	while ([[self allowedVariableCharacters] characterIsMember:[self _peekNextCharacter]]) {
@@ -319,7 +329,9 @@
 	}
 	
 	if ([v length] == 0) {
-		[NSException raise:NSInvalidArgumentException format:@"variable names must be at least 1 character long"];
+		if (error != nil) {
+			*error = ERR_BADARG(@"variable names must be at least 1 character long");
+		}
 		return nil;
 	}
 	
@@ -333,7 +345,7 @@
 	return allowedOperatorCharacters;
 }
 
-- (DDMathStringToken *) parsedOperator:(unichar)firstCharacter {
+- (DDMathStringToken *) parsedOperator:(unichar)firstCharacter error:(NSError **)error {
 	NSString * token = [NSString stringWithFormat:@"%C", firstCharacter];
 	if ([[self allowedOperatorCharacters] characterIsMember:firstCharacter]) {
 		if (firstCharacter == '*') {
@@ -344,7 +356,9 @@
 		} else if (firstCharacter == '<' || firstCharacter == '>') {
 			unichar nextCharacter = [self _nextCharacter];
 			if (firstCharacter != nextCharacter) {
-				[NSException raise:NSInvalidArgumentException format:@"< and > are not supported operators"];
+				if (error != nil) {
+					*error = ERR_BADARG(@"< and > are not supported operators");
+				}
 				return nil;
 			}
 			token = [token stringByAppendingFormat:@"%C", nextCharacter];
@@ -354,7 +368,7 @@
 		return [DDMathStringToken mathStringTokenWithToken:token type:DDTokenTypeOperator];
 	}
 	
-	[NSException raise:NSInvalidArgumentException format:@"%@ is not a valid operator", token];
+	*error = ERR_BADARG(@"%@ is not a valid operator", token);
 	return nil;
 }
 

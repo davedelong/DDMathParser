@@ -9,6 +9,7 @@
 #import "DDGroupTerm.h"
 #import "DDFunctionTerm.h"
 #import "DDOperatorTerm.h"
+#import "DDMathParserMacros.h"
 
 @interface DDMathStringToken ()
 
@@ -19,15 +20,18 @@
 
 @interface DDFunctionTerm (DDGroupResolving)
 
-+ (id) functionTermWithName:(NSString *)function;
++ (id) functionTermWithName:(NSString *)function error:(NSError **)error;
 
 @end
 
 @implementation DDFunctionTerm (DDGroupResolving)
 
-+ (id) functionTermWithName:(NSString *)function {
++ (id) functionTermWithName:(NSString *)function error:(NSError **)error {
 	DDMathStringToken * token = [DDMathStringToken mathStringTokenWithToken:function type:DDTokenTypeFunction];
-	DDFunctionTerm * f = [DDFunctionTerm groupTermWithSubTerms:[NSArray array]];
+	DDFunctionTerm * f = [DDFunctionTerm groupTermWithSubTerms:[NSArray array] error:error];
+	if (error && *error) {
+		f = nil;
+	}
 	[f setTokenValue:token];
 	return f;
 }
@@ -38,25 +42,31 @@
 @implementation DDGroupTerm
 @synthesize subTerms;
 
-+ (id) rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer {
-	DDGroupTerm * g = [DDGroupTerm termWithTokenizer:nil];
++ (id) rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+	DDGroupTerm * g = [DDGroupTerm termWithTokenizer:nil error:error];
+	if (error && *error) { return nil; }
 	
 	DDMathStringToken * t = nil;
 	while ((t = [tokenizer peekNextToken])) {
-		[[g subTerms] addObject:[DDTerm termForTokenType:[t tokenType] withTokenizer:tokenizer]];
+		[[g subTerms] addObject:[DDTerm termForTokenType:[t tokenType] withTokenizer:tokenizer error:error]];
+		if (error && *error) { return nil; }
 	}
 	
 	return g;
 }
 
-+ (id) groupTermWithSubTerms:(NSArray *)sub {
-	DDGroupTerm * g = [[self alloc] initWithTokenizer:nil];
++ (id) groupTermWithSubTerms:(NSArray *)sub error:(NSError **)error {
+	DDGroupTerm * g = [[self alloc] initWithTokenizer:nil error:error];
+	if (error && *error) {
+		[g release];
+		return nil;
+	}
 	[[g subTerms] addObjectsFromArray:sub];
 	return [g autorelease];
 }
 
-- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer {
-	self = [super initWithTokenizer:tokenizer];
+- (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+	self = [super initWithTokenizer:tokenizer error:error];
 	if (self) {
 		subTerms = [[NSMutableArray alloc] init];
 		
@@ -68,12 +78,21 @@
 			while ((next = [tokenizer peekNextToken])) {
 				if ([next operatorType] == DDOperatorParenthesisClose) { break; }
 				
-				[[self subTerms] addObject:[DDTerm termForTokenType:[next tokenType] withTokenizer:tokenizer]];
+				DDTerm *nextTerm = [DDTerm termForTokenType:[next tokenType] withTokenizer:tokenizer error:error];
+				if (error && *error) {
+					[self release];
+					return nil;
+				}
+				[[self subTerms] addObject:nextTerm];
 			}
 			
 			next = [tokenizer nextToken];
 			if ([next operatorType] != DDOperatorParenthesisClose) {
-				[NSException raise:NSGenericException format:@"imbalanced parentheses"];
+				if (error) {
+					*error = ERR_BADARG(@"imbalanced parentheses");
+				}
+				[self release];
+				return nil;
 			}
 			
 		}
@@ -108,7 +127,7 @@
 	return indices;
 }
 
-- (void) reduceTermsAroundOperatorAtIndex:(NSUInteger)index {
+- (void) reduceTermsAroundOperatorAtIndex:(NSUInteger)index error:(NSError **)error {
 	NSMutableArray * terms = [self subTerms];
 	
 	DDOperatorTerm * operator = [terms objectAtIndex:index];
@@ -121,7 +140,8 @@
 	if ([operator operatorPrecedence] == DDPrecedenceFactorial) {
 		replacementRange.location = index - 1;
 		replacementRange.length = 2;
-		replacement = [DDFunctionTerm functionTermWithName:functionName];
+		replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
+		if (error && *error) { return; }
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 	} else if ([operator operatorPrecedence] == DDPrecedenceUnary) {
 		replacementRange.location = index;
@@ -130,13 +150,15 @@
 			//in other words, the unary + is a worthless operator:
 			replacement = [terms objectAtIndex:index+1];
 		} else {
-			replacement = [DDFunctionTerm functionTermWithName:functionName];
+			replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
+			if (error && *error) { return; }
 			[[replacement subTerms] addObject:[terms objectAtIndex:index+1]];
 		}
 	} else {
 		replacementRange.location = index - 1;
 		replacementRange.length = 3;
-		replacement = [DDFunctionTerm functionTermWithName:functionName];
+		replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
+		if (error && *error) { return; }
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 		
 		//special edge case where the right term of the power operator has 1+ unary operators
@@ -152,7 +174,8 @@
 		if (rightTermRange.length > 1) {
 			//the right term has unary operators
 			NSArray * unaryExpressionTerms = [terms subarrayWithRange:rightTermRange];
-			rightTerm = [DDGroupTerm groupTermWithSubTerms:unaryExpressionTerms];
+			rightTerm = [DDGroupTerm groupTermWithSubTerms:unaryExpressionTerms error:error];
+			if (error && *error) { return; }
 			//replace the unary expression with the new term (so that replacementRange is still valid)
 			[terms replaceObjectsInRange:rightTermRange withObjectsFromArray:[NSArray arrayWithObject:rightTerm]];
 		}
@@ -165,7 +188,7 @@
 	}
 }
 
-- (void) resolveWithParser:(DDParser *)parser {
+- (void) resolveWithParser:(DDParser *)parser error:(NSError **)error {
 	while ([[self subTerms] count] > 1) {
 		/**
 		 steps:
@@ -191,7 +214,10 @@
 			}
 			
 			//we have our operator!
-			[self reduceTermsAroundOperatorAtIndex:index];
+			[self reduceTermsAroundOperatorAtIndex:index error:error];
+			if (error && *error) {
+				return;
+			}
 		} else {
 			//there are no more operators
 			//but there are 2 terms?
@@ -199,7 +225,12 @@
 			[NSException raise:NSGenericException format:@"invalid format: %@", [self subTerms]];
 		}
 	}
-	[[self subTerms] makeObjectsPerformSelector:_cmd withObject:parser];
+	for (DDTerm *subTerm in [self subTerms]) {
+		[subTerm resolveWithParser:parser error:error];
+		if (error && *error) {
+			return;
+		}
+	}
 }
 
 - (NSString *) description {
@@ -207,10 +238,10 @@
 	return [NSString stringWithFormat:@"(%@)", [elementDescriptions componentsJoinedByString:@", "]];
 }
 
-- (DDExpression *) expression {
+- (DDExpression *) expressionWithError:(NSError **)error {
 	if ([[self subTerms] count] == 0) { return nil; }
 	
-	return [(DDTerm *)[[self subTerms] objectAtIndex:0] expression];
+	return [(DDTerm *)[[self subTerms] objectAtIndex:0] expressionWithError:error];
 }
 
 @end

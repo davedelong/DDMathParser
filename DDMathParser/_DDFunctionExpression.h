@@ -14,6 +14,6 @@
 	NSArray * arguments;
 }
 
-- (id) initWithFunction:(NSString *)f arguments:(NSArray *)a;
+- (id) initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError **)error;
 
 @end

@@ -15,7 +15,7 @@
 
 @property (readonly) NSMutableArray * subTerms;
 
-+ (id) rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer;
-+ (id) groupTermWithSubTerms:(NSArray *)sub;
++ (id) rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
++ (id) groupTermWithSubTerms:(NSArray *)sub error:(NSError **)error;
 
 @end

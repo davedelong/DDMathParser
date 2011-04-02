@@ -20,20 +20,17 @@ typedef enum {
 
 }
 
-+ (id) expressionFromString:(NSString *)expressionString;
++ (id) expressionFromString:(NSString *)expressionString error:(NSError **)error;
 + (id) numberExpressionWithNumber:(NSNumber *)number;
-+ (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments;
++ (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError **)error;
 + (id) variableExpressionWithVariable:(NSString *)variable;
 
 - (DDExpressionType) expressionType;
 
-- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator;
-
-- (NSExpression *) expressionValue;
-- (NSExpression *) expressionValueForEvaluator:(DDMathEvaluator *)evaluator;
+- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error;
 
 - (DDExpression *) simplifiedExpression;
-- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator;
+- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error;
 
 #pragma mark Number methods
 - (NSNumber *) number;

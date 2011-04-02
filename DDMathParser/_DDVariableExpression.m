@@ -9,7 +9,7 @@
 #import "_DDVariableExpression.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
-
+#import "DDMathParserMacros.h"
 
 @implementation _DDVariableExpression
 
@@ -34,17 +34,19 @@
 	return self;
 }
 
-- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator {
+- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 	if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 	
 	id variableValue = [substitutions objectForKey:[self variable]];
 	if ([variableValue isKindOfClass:[DDExpression class]]) {
-		return [variableValue evaluateWithSubstitutions:substitutions evaluator:evaluator];
+		return [variableValue evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
 	}
 	if ([variableValue isKindOfClass:[NSNumber class]]) {
 		return variableValue;
 	}
-	[NSException raise:NSInvalidArgumentException format:@"invalid variable value: $%@ => %@", [self variable], variableValue];
+	if (error != nil) {
+		*error = ERR_EVAL(@"unable to evaluate expression: %@", self);
+	}
 	return nil;
 }
 

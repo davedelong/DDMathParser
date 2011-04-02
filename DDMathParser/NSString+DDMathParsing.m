@@ -16,14 +16,21 @@
 }
 
 - (NSNumber *) numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions {
-	NSNumber * returnValue = nil;
-	@try {
-		DDExpression * e = [DDExpression expressionFromString:self];
-		returnValue = [e evaluateWithSubstitutions:substitutions evaluator:nil];
+	NSError *error = nil;
+	NSNumber *returnValue = [self numberByEvaluatingStringWithSubstitutions:substitutions error:&error];
+	if (error != nil) {
+		NSLog(@"error: %@", error);
+		return nil;
 	}
-	@catch (NSException * e) {
-		NSLog(@"caught exception: %@", e);
-	}
+	return returnValue;
+}
+
+- (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
+	DDExpression * e = [DDExpression expressionFromString:self error:error];
+	if (error && *error) { return nil; }
+	NSNumber *returnValue = [e evaluateWithSubstitutions:substitutions evaluator:nil error:error];
+	if (error && *error) { return nil; }
+	
 	return returnValue;
 }
 

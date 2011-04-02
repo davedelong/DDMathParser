@@ -25,7 +25,7 @@
 	NSCharacterSet * allowedOperatorCharacters;
 }
 
-- (id) initWithString:(NSString *)expressionString;
+- (id) initWithString:(NSString *)expressionString error:(NSError **)error;
 
 - (NSArray *) tokens;
 

@@ -11,6 +11,17 @@
 @class DDExpression;
 @class DDMathEvaluator;
 
-typedef DDExpression* (^DDMathFunction)(NSArray *, NSDictionary *, DDMathEvaluator *);
+typedef DDExpression* (^DDMathFunction)(NSArray *, NSDictionary *, DDMathEvaluator *, NSError **);
 
 enum { DDMathFunctionUnlimitedArguments = -1 };
+
+#pragma mark Error Codes
+
+extern NSString * const DDMathParserErrorDomain;
+
+enum {
+    DDErrorCodeGeneric = -1,
+    DDErrorCodeInvalidArgument = 1,
+};
+
+typedef NSInteger DDErrorCode;

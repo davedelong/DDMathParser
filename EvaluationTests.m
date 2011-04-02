@@ -13,10 +13,10 @@
 @implementation EvaluationTests
 
 - (void) compareToNSExpression:(NSString *)string compareExpressions:(BOOL)compare {
-	DDExpression * d = [DDExpression expressionFromString:string];
+	DDExpression * d = [DDExpression expressionFromString:string error:nil];
 	NSExpression * e = [NSExpression expressionWithString:string];
 	
-	NSNumber * dn = [d evaluateWithSubstitutions:nil evaluator:nil];
+	NSNumber * dn = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	NSNumber * en = [e expressionValueWithObject:nil context:nil];
 	
 	NSLog(@"--------------------------------");
@@ -221,38 +221,38 @@
 }
 
 - (void) testFactorial {
-	DDExpression * d = [DDExpression expressionFromString:@"4!"];
-	NSNumber * n = [d evaluateWithSubstitutions:nil evaluator:nil];
+	DDExpression * d = [DDExpression expressionFromString:@"4!" error:nil];
+	NSNumber * n = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:24], @"invalid evaluation.  given: %@", n);
 	
-	d = [DDExpression expressionFromString:@"4.2!"];
-	n = [d evaluateWithSubstitutions:nil evaluator:nil];
+	d = [DDExpression expressionFromString:@"4.2!" error:nil];
+	n = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:24], @"invalid evaluation.  given: %@", n);
 	
-	d = [DDExpression expressionFromString:@"-4!"];
-	n = [d evaluateWithSubstitutions:nil evaluator:nil];
+	d = [DDExpression expressionFromString:@"-4!" error:nil];
+	n = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:-24], @"invalid evaluation.  given: %@", n);
 	
-	d = [DDExpression expressionFromString:@"(5-1)!"];
-	n = [d evaluateWithSubstitutions:nil evaluator:nil];
+	d = [DDExpression expressionFromString:@"(5-1)!" error:nil];
+	n = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:24], @"invalid evaluation.  given: %@", n);
 	
-	d = [DDExpression expressionFromString:@"-(5-1)!"];
-	n = [d evaluateWithSubstitutions:nil evaluator:nil];
+	d = [DDExpression expressionFromString:@"-(5-1)!" error:nil];
+	n = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:-24], @"invalid evaluation.  given: %@", n);
 	
-	d = [DDExpression expressionFromString:@"3!!"];
-	n = [d evaluateWithSubstitutions:nil evaluator:nil];
+	d = [DDExpression expressionFromString:@"3!!" error:nil];
+	n = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:720], @"invalid evaluation.  given: %@", n);
 	
-	d = [DDExpression expressionFromString:@"2!!!!!!!"];
-	n = [d evaluateWithSubstitutions:nil evaluator:nil];
+	d = [DDExpression expressionFromString:@"2!!!!!!!" error:nil];
+	n = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
 	STAssertEqualObjects(n, [NSNumber numberWithInteger:2], @"invalid evaluation.  given: %@", n);
 }
 
 - (void) testSimplification {
-	DDExpression * d = [[DDExpression expressionFromString:@"1 + 2 + 3"] simplifiedExpression];
-	DDExpression * t = [DDExpression expressionFromString:@"6"];
+	DDExpression * d = [[DDExpression expressionFromString:@"1 + 2 + 3" error:nil] simplifiedExpression];
+	DDExpression * t = [DDExpression expressionFromString:@"6" error:nil];
 	
 	STAssertEqualObjects(d, t, @"simplification failed");
 }

@@ -29,7 +29,7 @@
 	return self;
 }
 
-- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator { return [self number]; }
+- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error { return [self number]; }
 
 - (NSNumber *) number { return number; }
 

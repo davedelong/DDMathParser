@@ -11,15 +11,19 @@
 #import "DDMathEvaluator+Private.h"
 #import "_DDNumberExpression.h"
 #import "_DDVariableExpression.h"
+#import "DDMathParserMacros.h"
 
 @implementation _DDFunctionExpression
 
-- (id) initWithFunction:(NSString *)f arguments:(NSArray *)a {
+- (id) initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError **)error {
 	self = [super init];
 	if (self) {
 		for (id arg in a) {
 			if ([arg isKindOfClass:[DDExpression class]] == NO) {
-				[NSException raise:NSInvalidArgumentException format:@"function arguments must be DDExpression objects"];
+				if (error != nil) {
+					*error = ERR_EVAL(@"function arguments must be DDExpression objects");
+					*error = nil;
+				}
 				[self release];
 				return nil;
 			}
@@ -40,10 +44,11 @@
 - (NSString *) function { return [function lowercaseString]; }
 - (NSArray *) arguments { return arguments; }
 
-- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
+- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 	BOOL canSimplify = YES;
 	for (DDExpression * e in [self arguments]) {
-		DDExpression * a = [e simplifiedExpressionWithEvaluator:evaluator];
+		DDExpression * a = [e simplifiedExpressionWithEvaluator:evaluator error:error];
+		if (error && *error) { return nil; }
 		if ([a expressionType] != DDExpressionTypeNumber) {
 			canSimplify = NO;
 		}
@@ -53,7 +58,7 @@
 		if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 		
 		DDMathFunction mathFunction = [evaluator functionWithName:[self function]];
-		id result = mathFunction([self arguments], nil, evaluator);
+		id result = mathFunction([self arguments], nil, evaluator, error);
 		
 		if ([result isKindOfClass:[_DDNumberExpression class]]) {
 			return result;
@@ -65,17 +70,19 @@
 	return self;
 }
 
-- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator {
+- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 	if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 	
 	DDMathFunction mathFunction = [evaluator functionWithName:[self function]];
 	
 	if (mathFunction != nil) {
 		
-		id result = mathFunction([self arguments], substitutions, evaluator);
+		id result = mathFunction([self arguments], substitutions, evaluator, error);
+		if (error && *error) { return nil; }
 		
 		while ([result isKindOfClass:[_DDVariableExpression class]]) {
-			result = [result evaluateWithSubstitutions:substitutions evaluator:evaluator];
+			result = [result evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
+			if (error && *error) { return nil; }
 		}
 		
 		NSNumber * numberValue = nil;
@@ -84,34 +91,17 @@
 		} else if ([result isKindOfClass:[NSNumber class]]) {
 			numberValue = result;
 		} else {
-			[NSException raise:NSInvalidArgumentException format:@"invalid return type from %@ function", [self function]];
+			if (error != nil) {
+				*error = ERR_BADARG(@"invalid return type from %@ function", [self function]);
+			}
 			return nil;
 		}
 		return numberValue;
 	} else {
-		[evaluator functionExpressionFailedToResolve:self];
+		[evaluator functionExpressionFailedToResolve:self error:error];
 		return nil;
 	}
 	
-}
-
-- (NSExpression *) expressionValueForEvaluator:(DDMathEvaluator *)evaluator {
-	NSString * nsexpressionFunction = [evaluator nsexpressionFunctionWithName:[self function]];
-	NSMutableArray * expressionArguments = [NSMutableArray array];
-	for (DDExpression * argument in [self arguments]) {
-		[expressionArguments addObject:[argument expressionValueForEvaluator:evaluator]];
-	}
-	
-	if (nsexpressionFunction != nil) {
-		return [NSExpression expressionForFunction:nsexpressionFunction arguments:expressionArguments];
-	} else {
-		NSExpression * target = [NSExpression expressionForConstantValue:evaluator];
-		NSExpression * functionExpression = [NSExpression expressionForConstantValue:[self function]];
-		[expressionArguments insertObject:functionExpression atIndex:0];
-		
-		NSExpression * argumentsExpression = [NSExpression expressionForConstantValue:expressionArguments];
-		return [NSExpression expressionForFunction:target selectorName:@"performFunction:" arguments:[NSArray arrayWithObject:argumentsExpression]];
-	}
 }
 
 - (NSString *) description {

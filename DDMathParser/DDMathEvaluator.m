@@ -9,6 +9,7 @@
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
 #import "DDParser.h"
+#import "DDMathParserMacros.h"
 #import "DDExpression.h"
 #import "_DDFunctionUtilities.h"
 
@@ -75,15 +76,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	return [functions allKeys];
 }
 
-- (NSString *) nsexpressionFunctionWithName:(NSString *)functionName {
-	return nil;
-//	NSDictionary * map = [DDMathFunctionContainer nsexpressionFunctions];
-//	NSString * function = [map objectForKey:[functionName lowercaseString]];
-//	return function;
-}
-
-- (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression {
-	[NSException raise:NSInvalidArgumentException format:@"unknown function: %@", [functionExpression function]];
+- (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error {
+	if (error) {
+		*error = ERR_EVAL(@"unable to resolve function: %@", [functionExpression function]);
+	} else {
+		NSLog(@"unable to resolve function: %@", [functionExpression function]);
+	}
 }
 
 - (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName {
@@ -104,44 +102,23 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 #pragma mark Evaluation
 
 - (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)variables {
-	NSNumber * returnValue = nil;
-	@try {
-		DDParser * parser = [DDParser parserWithString:expressionString];
-		DDExpression * parsedExpression = [parser parsedExpression];
-		returnValue = [parsedExpression evaluateWithSubstitutions:variables evaluator:self];
-	}
-	@catch (NSException * e) {
-		NSLog(@"caught exception: %@", e);
-		returnValue = nil;
-	}
-	@finally {
-		return returnValue;
-	}
-}
-
-- (NSNumber *) evaluateFunction:(DDExpression *)expression withSubstitutions:(NSDictionary *)variables {
-	DDMathFunction function = [self functionWithName:[expression function]];
-	if (function == nil) {
-		[NSException raise:NSInvalidArgumentException format:@"unrecognized function: %@", [expression function]];
+	NSError *error = nil;
+	DDParser * parser = [DDParser parserWithString:expressionString error:&error];
+	if (error != nil) {
+		NSLog(@"error: %@", error);
 		return nil;
 	}
-	
-	DDExpression * evaluatedValue = function([expression arguments], variables, self);
-	if (evaluatedValue != nil && [evaluatedValue expressionType] == DDExpressionTypeNumber) {
-		return [evaluatedValue number];
+	DDExpression * parsedExpression = [parser parsedExpressionWithError:&error];
+	if (error != nil) {
+		NSLog(@"error: %@", error);
+		return nil;
 	}
-	
-	[NSException raise:NSInvalidArgumentException format:@"invalid function response: %@", evaluatedValue];
-	return nil;
-}
-
-- (id) performFunction:(NSArray *)parameters {
-	NSMutableArray * mutableParameters = [parameters mutableCopy];
-	NSString * functionName = [[mutableParameters objectAtIndex:0] constantValue];
-	[mutableParameters removeObjectAtIndex:0];
-	NSLog(@"stuff to %@: %@", functionName, mutableParameters);
-	[mutableParameters release];
-	return [NSNumber numberWithInt:0];
+	NSNumber *returnValue = [parsedExpression evaluateWithSubstitutions:variables evaluator:self error:&error];
+	if (error != nil) {
+		NSLog(@"error: %@", error);
+		return nil;
+	}
+	return returnValue;
 }
 
 #pragma mark Built-In Functions

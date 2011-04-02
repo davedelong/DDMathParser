@@ -62,22 +62,25 @@
 
 - (void) evaluate {
 	NSString * string = [inputField stringValue];
+	NSError *error = nil;
 	if ([string length] > 0) {
-		@try {
-			DDExpression * expression = [DDExpression expressionFromString:string];
+		DDExpression * expression = [DDExpression expressionFromString:string error:&error];
+		if (error == nil) {
 			NSLog(@"parsed: %@", expression);
 			[self updateVariablesWithExpression:expression];
-			NSNumber * result = [expression evaluateWithSubstitutions:variables evaluator:nil];
-			[answerField setTextColor:[NSColor blackColor]];
-			[answerField setStringValue:[result description]];
-		}
-		@catch (NSException * e) {
-			NSLog(@"caught: %@", e);
-			[answerField setTextColor:[NSColor redColor]];
+			NSNumber * result = [expression evaluateWithSubstitutions:variables evaluator:nil error:&error];
+			if (error == nil) {
+				[answerField setTextColor:[NSColor blackColor]];
+				[answerField setStringValue:[result description]];
+			}
 		}
 	} else {
 		[answerField setStringValue:@""];
 		[variables removeAllObjects];
+	}
+	if (error != nil) {
+		NSLog(@"error: %@", error);
+		[answerField setTextColor:[NSColor redColor]];
 	}
 	
 	[variableList reloadData];		

@@ -14,15 +14,15 @@
 
 - (void) testSimpleParsing {
 	
-	NSLog(@"%@", [DDExpression expressionFromString:@"1"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"1 + 2"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"1 + 2 + 3"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"1 + 2 - 3 + 4"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"-1 + 2 - 3 + 4"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"SUBTRACT(ADD(NEGATE(1),2),ADD(3,4))"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"1 + $a"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"2 ** 3 ** 2"]);
-	NSLog(@"%@", [DDExpression expressionFromString:@"ADD(1,2,3,$a)"]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"1" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"1 + 2" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"1 + 2 + 3" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"1 + 2 - 3 + 4" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"-1 + 2 - 3 + 4" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"SUBTRACT(ADD(NEGATE(1),2),ADD(3,4))" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"1 + $a" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"2 ** 3 ** 2" error:nil]);
+	NSLog(@"%@", [DDExpression expressionFromString:@"ADD(1,2,3,$a)" error:nil]);
 	
 }
 
