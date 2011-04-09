@@ -12,8 +12,8 @@ Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all th
 
 Registering new functions is easy.  You just need a block, a name, and the number of arguments the function accepts.  So for example:
 
-    DDMathFunction function = ^ DDExpression* (NSArray * args, NSDictionary * variables, DDMathEvaluator * evaluator) {
-      NSNumber * n = [[args objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator];
+    DDMathFunction function = ^ DDExpression* (NSArray *args, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+      NSNumber * n = [[args objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
       NSNumber * result = [NSNumber numberWithDouble:[n doubleValue] * 42.0f];
       return [DDExpression numberExpressionWithNumber:result];
     };
@@ -31,11 +31,11 @@ Functions are registered with a specific instance of `DDMathEvaluator`.  The sim
 
 If you don't know what the value of a particular term should be when the string is constructed, that's ok; simply use a variable:
 
-    NSString * math = @"6 * $a";
+    NSString *math = @"6 * $a";
     
 Then when you figure out what the value is supposed to be, you can pass it along in the substitution dictionary:
 
-    NSDictionary * variableSubstitutions = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:7] forKey:@"a"];
+    NSDictionary *variableSubstitutions = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:7] forKey:@"a"];
     NSLog(@"%@", [[DDMathEvaluator sharedMathEvaluator] evaluateString:math withSubstitutions:variableSubstitutions]); //logs "42"
     
 Variables are denoted in the source string as beginning with `$` and can contain numbers or letters.  They are case sensitive.  (`$a` is not the same as `$A`)
@@ -48,9 +48,10 @@ The exception to this is the power operator (`**`), which has its associativity 
 
 If you want this operator to be parsed with specific associativity, you can do so like this:
 
-    DDParser * parser = [DDParser parserWithString:@"2 ** 3 ** 2"];
+    DDParser *parser = [DDParser parserWithString:@"2 ** 3 ** 2"];
     [parser setPowerAssociativity:DDOperatorAssociativityRight];
-    DDExpression * e = [parser parsedExpression];
+    NSError *error = nil;
+    DDExpression *e = [parser parsedExpressionWithError:&error];
    
 All binary operators can have their associativity changed this way.  If you want to change the associativity of an operator for all future parsings, you can use the class methods on `DDParser` to do so.  For example:
 
@@ -89,7 +90,7 @@ In addition to the functions defined by the operators above, the following funct
 
 Functions that take > 1 parameter
 
-- `sum()` - returns a sum of the passed parameters
+- `sum()` - returns a sum of the passed parameters.  Can take 1 or more parameters.
 - `count()` - returns the number of passed parameters
 - `min()` - returns the minimum of the passed parameters
 - `max()` - returns the maximum of the passed parameters
@@ -153,7 +154,10 @@ You can create your own aliases as well.  If "`acotanh`" is too long to type for
 
 Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParser.h"`, and you're good to go.  A demo target is included as part of the project.  It shows how to evaluate a user-entered string, with support for variables.
 
-There are several ways to evaluate strings, depending on how much customization you want to do:
+There are several ways to evaluate strings, depending on how much customization you want to do.  Most of these options require an `NSError **` parameter, although some do not.
+
+- If you use one of the options that does *not* accept an `NSError **`, then any tokenization, parsing, or evaluation errors will be `NSLog`ged.
+- If you use one of the options that does accept an `NSError **`, then you *must* supply one.  Failing to do so could result in some unexpected behavior.
 
 ### NSString
 
@@ -163,36 +167,46 @@ Useful for the simplest evaluations (ie, no variables).  Uses the `[DDMathEvalua
 
 ### NSString with substitutions
 
-    NSDictionary * s = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:42] forKey:@"a"];
+    NSDictionary *s = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:42] forKey:@"a"];
     NSLog(@"%@", [@"1 + $a" numberByEvaluatingStringWithSubstitutions:s]);
+    
+Also:
+
+	NSDictionary *s = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:42] forKey:@"a"];
+	NSError *error = nil;
+	NSLog(@"%@", [@"1 + $a" numberByEvaluatingStringWithSubstitutions:s error:&error]);
     
 Useful for specifying variable substitutions.  Uses the default `[DDMathEvaluator sharedMathEvaluator]`.
     
 ### DDExpression
 
-	DDExpression * e = [DDExpression expressionFromString:@"1 + 2"];
+	NSError *error = nil;
+	DDExpression *e = [DDExpression expressionFromString:@"1 + 2" error:&error];
 	NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil]);
 	
 Useful for specifying variable substitutions or a custom evaluator.
 
 ### DDMathEvaluator
 
-    DDMathEvaluator * eval = [DDMathEvaluator sharedMathEvaluator];
+    DDMathEvaluator *eval = [DDMathEvaluator sharedMathEvaluator];
     NSLog(@"%@", [eval evaluateString:@"1 + 2" withSubstitutions:nil]);
     
 Useful for specifying variable substitutions or a custom evaluator.
 
 ### DDParser
 
-    DDParser * parser = [DDParser parserWithString:@"1 + 2"];
-    DDExpression * e = [parser parsedExpression];
-    NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil]);
+	NSError *error = nil;
+    DDParser *parser = [DDParser parserWithString:@"1 + 2" error:&error];
+    DDExpression *e = [parser parsedExpressionWithError:&error];
+    NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil error:&error]);
     
 Useful for specifying a custom parser or custom operator associativities, specifying variables, or specifying a custom evaluator.
 
 ## Compatibility
 
 `DDMathParser` requires blocks, so therefore is only compatible with iOS 4+ and Mac OS X 10.6+.
+
+Though it has not been tested, `DDMathParser` should be fully compatible with garbage collected applications.
 
 ## License
 
@@ -215,8 +229,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-## To Do:
-
-- Transform to an `NSError`-based API
-- Switch from using `NSNumber` to `NSDecimalNumber` (for higher precision); mostly implemented (except for trig/transcendental functions)

@@ -12,7 +12,7 @@
 
 @interface DDFunctionTerm ()
 
-- (void) groupParametersStartingAtIndex:(NSUInteger)index error:(NSError **)error;
+- (BOOL) groupParametersStartingAtIndex:(NSUInteger)index error:(NSError **)error;
 
 @end
 
@@ -38,8 +38,7 @@
 				DDMathStringToken * peek = [tokenizer peekNextToken];
 				if ([peek operatorType] == DDOperatorComma) {
 					[tokenizer nextToken]; //consume the comma
-					[self groupParametersStartingAtIndex:groupingIndex++ error:error];
-					if (error && *error) {
+					if (![self groupParametersStartingAtIndex:groupingIndex++ error:error]) {
 						[self release];
 						return nil;
 					}
@@ -53,10 +52,9 @@
 				}
 			}
 			
-			if (groupingIndex == 0 && [[self subTerms] count] > 0) {
-				//we added terms, but never grouped
-				[self groupParametersStartingAtIndex:groupingIndex error:error];
-				if (error && *error) {
+			while (groupingIndex < [[self subTerms] count]) {
+				//make sure everything gets grouped properly
+				if (![self groupParametersStartingAtIndex:groupingIndex++ error:error]) {
 					[self release];
 					return nil;
 				}
@@ -75,21 +73,21 @@
 	return self;
 }
 
-- (void) groupParametersStartingAtIndex:(NSUInteger)index error:(NSError **)error {
+- (BOOL) groupParametersStartingAtIndex:(NSUInteger)index error:(NSError **)error {
 	if ([[self subTerms] count] == 0) {
 		//we hit a comma
 		if (error) {
-			*error = ERR_EVAL(@"empty function parameter");
+			*error = ERR_GENERIC(@"empty function parameter");
 		}
-		return;
+		return NO;
 	}
 	NSRange groupingRange = NSMakeRange(index, [[self subTerms] count] - index);
 	
 	if (index >= [[self subTerms] count] || groupingRange.length <= 0) {
 		if (error) {
-			*error = ERR_EVAL(@"invalid comma placement");
+			*error = ERR_GENERIC(@"invalid comma placement");
 		}
-		return;
+		return NO;
 	}
 	
 	if (groupingRange.length == 1) {
@@ -97,29 +95,30 @@
 		//if it's already a group, then we don't need to do anything
 		DDTerm * parameterToGroup = [[self subTerms] objectAtIndex:groupingRange.location];
 		if ([parameterToGroup isKindOfClass:[DDGroupTerm class]]) {
-			return;
+			return YES;
 		}
 	}
 	
 	NSArray * sub = [[self subTerms] subarrayWithRange:groupingRange];
 	DDTerm * parameterGroup = [DDGroupTerm groupTermWithSubTerms:sub error:error];
 	if (error && *error) {
-		return;
+		return NO;
 	}
 	[[self subTerms] replaceObjectsInRange:groupingRange withObjectsFromArray:[NSArray arrayWithObject:parameterGroup]];
+	return YES;
 }
 
 - (NSString *) function {
 	return [tokenValue token];
 }
 
-- (void) resolveWithParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL) resolveWithParser:(DDParser *)parser error:(NSError **)error {
 	for (DDTerm *subTerm in [self subTerms]) {
-		[subTerm resolveWithParser:parser error:error];
-		if (error && *error) {
-			return;
+		if (![subTerm resolveWithParser:parser error:error]) {
+			return NO;
 		}
 	}
+	return YES;
 }
 
 - (NSString *) description {

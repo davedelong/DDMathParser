@@ -76,12 +76,13 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	return [functions allKeys];
 }
 
-- (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error {
+- (BOOL) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error {
 	if (error) {
-		*error = ERR_EVAL(@"unable to resolve function: %@", [functionExpression function]);
+		*error = ERR_GENERIC(@"unable to resolve function: %@", [functionExpression function]);
 	} else {
 		NSLog(@"unable to resolve function: %@", [functionExpression function]);
 	}
+	return NO;
 }
 
 - (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName {
@@ -103,22 +104,23 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 
 - (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)variables {
 	NSError *error = nil;
-	DDParser * parser = [DDParser parserWithString:expressionString error:&error];
-	if (error != nil) {
+	NSNumber *returnValue = [self evaluateString:expressionString withSubstitutions:variables error:&error];
+	if (!returnValue) {
 		NSLog(@"error: %@", error);
+	}
+	return returnValue;
+}
+
+- (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
+	DDParser * parser = [DDParser parserWithString:expressionString error:&error];
+	if (!parser) {
 		return nil;
 	}
 	DDExpression * parsedExpression = [parser parsedExpressionWithError:&error];
-	if (error != nil) {
-		NSLog(@"error: %@", error);
+	if (!parsedExpression) {
 		return nil;
 	}
-	NSNumber *returnValue = [parsedExpression evaluateWithSubstitutions:variables evaluator:self error:&error];
-	if (error != nil) {
-		NSLog(@"error: %@", error);
-		return nil;
-	}
-	return returnValue;
+	return [parsedExpression evaluateWithSubstitutions:variables evaluator:self error:&error];
 }
 
 #pragma mark Built-In Functions

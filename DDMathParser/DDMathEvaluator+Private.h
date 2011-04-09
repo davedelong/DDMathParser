@@ -14,6 +14,6 @@
 
 - (DDMathFunction) functionWithName:(NSString *)functionName;
 
-- (void) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error;
+- (BOOL) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error;
 
 @end

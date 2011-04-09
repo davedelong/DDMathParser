@@ -150,6 +150,12 @@ BOOL DDDecimalIsNegative(NSDecimal d) {
 	return (NSDecimalCompare(&d, &z) == NSOrderedAscending); //d < z
 }
 
+BOOL DDDecimalIsInteger(NSDecimal d) {
+	NSDecimal rounded = d;
+	NSDecimalRound(&rounded, &d, 0, NSRoundDown);
+	return (NSDecimalCompare(&rounded, &d) == NSOrderedSame);
+}
+
 NSDecimal DDDecimalAverage2(NSDecimal a, NSDecimal b) {
 	NSDecimal r;
 	NSDecimalAdd(&r, &a, &b, NSRoundBankers);
@@ -212,9 +218,23 @@ NSDecimal DDDecimalInverse(NSDecimal d) {
 }
 
 NSDecimal DDDecimalFactorial(NSDecimal d) {
-	double f = DDDoubleFromDecimal(d);
-	f = tgamma(f+1);
-	return DDDecimalFromDouble(f);
+	if (DDDecimalIsInteger(d)) {
+		NSDecimal one = DDDecimalOne();
+		NSDecimal final = one;
+		if (DDDecimalIsNegative(d)) {
+			final = DDDecimalNegativeOne();
+			NSDecimalMultiply(&d, &d, &final, NSRoundBankers);
+		}
+		while (NSDecimalCompare(&d, &one) == NSOrderedDescending) {
+			NSDecimalMultiply(&final, &final, &d, NSRoundBankers);
+			NSDecimalSubtract(&d, &d, &one, NSRoundBankers);
+		}
+		return final;
+	} else {
+		double f = DDDoubleFromDecimal(d);
+		f = tgamma(f+1);
+		return DDDecimalFromDouble(f);
+	}
 }
 
 #pragma mark Trig Functions

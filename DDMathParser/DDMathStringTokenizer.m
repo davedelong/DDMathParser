@@ -25,6 +25,7 @@
 @implementation DDMathStringTokenizer
 
 - (id) initWithString:(NSString *)expressionString error:(NSError **)error {
+	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
 		tokens = [[NSMutableArray alloc] init];
@@ -58,7 +59,7 @@
 					[token setOperatorPrecedence:DDPrecedenceSubtraction];
 				} else {
 					if (error != nil) {
-						*error = ERR_EVAL(@"unknown precedence for token: %@", token);
+						*error = ERR_GENERIC(@"unknown precedence for token: %@", token);
 					}
 					[self release];
 					return nil;
@@ -202,17 +203,25 @@
 	unichar character = [self _nextCharacter];
 	if (character == '\0') { return nil; }
 	
-	unichar decimalSeparator = [[[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator] characterAtIndex:0];
 	NSUInteger currentIndex = currentCharacterIndex;
 	
 	DDMathStringToken *token = nil;
-	if ((character >= '0' && character <= '9') || character == decimalSeparator) {
+	if ((character >= '0' && character <= '9') || character == '.') {
 		token = [self parsedNumber:character error:error];
-	} else if ((character >= 'a' && character <= 'z') ||
-		(character >= 'A' && character <= 'Z')) {
-		token = [self parsedFunction:character error:error];
-	} else if (character == '$') {
-		token = [self parsedVariable:character error:error];
+	}
+	if (token == nil) {
+		currentCharacterIndex = currentIndex;
+		if ((character >= 'a' && character <= 'z') || 
+			(character >= 'A' && character <= 'Z') || 
+			(character >= '0' && character <= '9')) {
+			token = [self parsedFunction:character error:error];
+		}
+	}
+	if (token == nil) {
+		currentCharacterIndex = currentIndex;
+		if (character == '$') {
+			token = [self parsedVariable:character error:error];
+		}
 	}
 	
 	if (token == nil) {
@@ -240,38 +249,22 @@
 
 - (DDMathStringToken *) parsedNumber:(unichar)firstCharacter error:(NSError **)error {
 	NSMutableString * n = [NSMutableString stringWithFormat:@"%C", firstCharacter];
-	NSNumber * parsedNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
+	NSNumber * parsedNumber = nil;
 	do {
 		unichar peek = [self _peekNextCharacter];
 		if (peek == '\0') { break; }
-		[n appendFormat:@"%C", peek];
-		NSNumber *thisNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
-		if (thisNumber != nil) {
-			//we found something!
-			//keep going
-			parsedNumber = thisNumber;
-			//consume the character
-			[self _nextCharacter];
+		//allowed characters: 0-9, e, .
+		unichar current = [self _currentCharacter];
+		if (([[self allowedNumberCharacters] characterIsMember:peek]) || 
+			((current == 'e' || current == 'E') && (peek == '-' || peek == '+'))) {
+			[n appendFormat:@"%C", [self _nextCharacter]];
 		} else {
-			//this didn't work
-			//try appending something to the string and see if it likes that
-			//this will handle "1e", "1e-", "1e+", ".", and similar
-			[n appendString:@"2"];
-			thisNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
-			//remove the "2"
-			[n replaceCharactersInRange:NSMakeRange([n length]-1, 1) withString:@""];
-			if (thisNumber != nil) {
-				//it worked
-				//remove the "2"
-				parsedNumber = thisNumber;
-				[self _nextCharacter];
-			} else {
-				//still couldn't parse. remove the last character that was appended
-				[n replaceCharactersInRange:NSMakeRange([n length]-1, 1) withString:@""];
-				break;
-			}
+			//the next character is an invalid one
+			break;
 		}
 	} while (1);
+
+	parsedNumber = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:n];
 	
 	if (parsedNumber == nil) {
 		if (error != nil) {
@@ -368,7 +361,9 @@
 		return [DDMathStringToken mathStringTokenWithToken:token type:DDTokenTypeOperator];
 	}
 	
-	*error = ERR_BADARG(@"%@ is not a valid operator", token);
+	if (error) {
+		*error = ERR_BADARG(@"%@ is not a valid operator", token);
+	}
 	return nil;
 }
 

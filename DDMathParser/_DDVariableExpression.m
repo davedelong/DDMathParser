@@ -45,7 +45,7 @@
 		return variableValue;
 	}
 	if (error != nil) {
-		*error = ERR_EVAL(@"unable to evaluate expression: %@", self);
+		*error = ERR_GENERIC(@"unable to evaluate expression: %@", self);
 	}
 	return nil;
 }

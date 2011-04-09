@@ -7,6 +7,7 @@
 //
 
 #import "DDParser.h"
+#import "DDMathParserMacros.h"
 #import "DDTerm.h"
 #import "DDGroupTerm.h"
 #import "DDParserTypes.h"
@@ -81,9 +82,14 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 }
 
 - (id) initWithString:(NSString *)string error:(NSError **)error {
+	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
 		tokenizer = [[DDMathStringTokenizer alloc] initWithString:string error:error];
+		if (!tokenizer) {
+			[self release];
+			return nil;
+		}
 		
 		bitwiseOrAssociativity = [[self class] defaultBitwiseOrAssociativity];
 		bitwiseXorAssociativity = [[self class] defaultBitwiseXorAssociativity];
@@ -124,16 +130,16 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 }
 
 - (DDExpression *) parsedExpressionWithError:(NSError **)error {
+	ERR_ASSERT(error);
 	[tokenizer reset]; //reset the token stream
 	
 	DDExpression *expression = nil;
 	
 	NSAutoreleasePool * parserPool = [[NSAutoreleasePool alloc] init];
 	DDTerm * rootTerm = [DDGroupTerm rootTermWithTokenizer:tokenizer error:error];
-	if (error && *error) { goto errorExit; }
+	if (!rootTerm) { goto errorExit; }
 	
-	[rootTerm resolveWithParser:self error:error];
-	if (error && *error) {
+	if (![rootTerm resolveWithParser:self error:error]) {
 		goto errorExit;
 	}
 	expression = [[rootTerm expressionWithError:error] retain];

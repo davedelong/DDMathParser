@@ -127,7 +127,14 @@
 	return indices;
 }
 
-- (void) reduceTermsAroundOperatorAtIndex:(NSUInteger)index error:(NSError **)error {
+#define CHECK_RANGE(_i,_f,...) if ((_i) > [terms count]) { \
+if (error) { \
+*error = ERR_GENERIC(_f, ##__VA_ARGS__); \
+} \
+return NO; \
+}
+
+- (BOOL) reduceTermsAroundOperatorAtIndex:(NSUInteger)index error:(NSError **)error {
 	NSMutableArray * terms = [self subTerms];
 	
 	DDOperatorTerm * operator = [terms objectAtIndex:index];
@@ -141,9 +148,10 @@
 		replacementRange.location = index - 1;
 		replacementRange.length = 2;
 		replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
-		if (error && *error) { return; }
+		if (error && *error) { return NO; }
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 	} else if ([operator operatorPrecedence] == DDPrecedenceUnary) {
+		CHECK_RANGE(index+2, @"no right operand to unary operator %@", [operator tokenValue]);
 		replacementRange.location = index;
 		replacementRange.length = 2;
 		if ([[operator tokenValue] operatorType] == DDOperatorUnaryPlus) {
@@ -151,23 +159,25 @@
 			replacement = [terms objectAtIndex:index+1];
 		} else {
 			replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
-			if (error && *error) { return; }
+			if (error && *error) { return NO; }
 			[[replacement subTerms] addObject:[terms objectAtIndex:index+1]];
 		}
 	} else {
 		replacementRange.location = index - 1;
 		replacementRange.length = 3;
 		replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
-		if (error && *error) { return; }
+		if (error && *error) { return NO; }
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 		
 		//special edge case where the right term of the power operator has 1+ unary operators
 		//those should be evaluated before the power, even though unary has lower precedence overall
 		
 		NSRange rightTermRange = NSMakeRange(index+1, 1);
+		CHECK_RANGE(NSMaxRange(rightTermRange), @"no right operand to binary operator %@", [operator tokenValue]);
 		DDTerm * rightTerm = [terms objectAtIndex:index+1];
 		while ([[rightTerm tokenValue] operatorPrecedence] == DDPrecedenceUnary) {
 			rightTermRange.length++;
+			CHECK_RANGE(NSMaxRange(rightTermRange), @"no right operand to unary operator");
 			//-1 because the end of the range points to the term *after* the unary operator
 			rightTerm = [terms objectAtIndex:(rightTermRange.location + rightTermRange.length - 1)];
 		}
@@ -175,7 +185,7 @@
 			//the right term has unary operators
 			NSArray * unaryExpressionTerms = [terms subarrayWithRange:rightTermRange];
 			rightTerm = [DDGroupTerm groupTermWithSubTerms:unaryExpressionTerms error:error];
-			if (error && *error) { return; }
+			if (error && *error) { return NO; }
 			//replace the unary expression with the new term (so that replacementRange is still valid)
 			[terms replaceObjectsInRange:rightTermRange withObjectsFromArray:[NSArray arrayWithObject:rightTerm]];
 		}
@@ -186,9 +196,10 @@
 	if (replacement != nil) {
 		[terms replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:replacement]];
 	}
+	return YES;
 }
 
-- (void) resolveWithParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL) resolveWithParser:(DDParser *)parser error:(NSError **)error {
 	while ([[self subTerms] count] > 1) {
 		/**
 		 steps:
@@ -214,23 +225,23 @@
 			}
 			
 			//we have our operator!
-			[self reduceTermsAroundOperatorAtIndex:index error:error];
-			if (error && *error) {
-				return;
+			if (![self reduceTermsAroundOperatorAtIndex:index error:error]) {
+				return NO;
 			}
 		} else {
 			//there are no more operators
 			//but there are 2 terms?
 			//BARF!
 			[NSException raise:NSGenericException format:@"invalid format: %@", [self subTerms]];
+			return NO;
 		}
 	}
 	for (DDTerm *subTerm in [self subTerms]) {
-		[subTerm resolveWithParser:parser error:error];
-		if (error && *error) {
-			return;
+		if (![subTerm resolveWithParser:parser error:error]) {
+			return NO;
 		}
 	}
+	return YES;
 }
 
 - (NSString *) description {

@@ -16,9 +16,7 @@ typedef enum {
 
 @class DDMathEvaluator;
 
-@interface DDExpression : NSObject {
-
-}
+@interface DDExpression : NSObject
 
 + (id) expressionFromString:(NSString *)expressionString error:(NSError **)error;
 + (id) numberExpressionWithNumber:(NSNumber *)number;

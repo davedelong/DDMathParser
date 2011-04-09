@@ -64,8 +64,8 @@
 	return [tokenValue token];
 }
 
-- (void) resolveWithParser:(DDParser *)parser error:(NSError **)error {
-	return;
+- (BOOL) resolveWithParser:(DDParser *)parser error:(NSError **)error {
+	return YES;
 }
 
 - (DDExpression *) expressionWithError:(NSError **)error {
@@ -75,7 +75,7 @@
 		return [DDExpression variableExpressionWithVariable:[[self tokenValue] token]];
 	}
 	if (error) {
-		*error = ERR_EVAL(@"can't convert %@ to expression", self);
+		*error = ERR_GENERIC(@"can't convert %@ to expression", self);
 	}
 	return nil;
 }

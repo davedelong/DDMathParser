@@ -25,7 +25,7 @@
 + (id) termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 - (id) initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 
-- (void) resolveWithParser:(DDParser *)parser error:(NSError **)error;
+- (BOOL) resolveWithParser:(DDParser *)parser error:(NSError **)error;
 
 - (DDExpression *) expressionWithError:(NSError **)error;
 

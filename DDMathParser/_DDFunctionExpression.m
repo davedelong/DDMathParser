@@ -21,7 +21,7 @@
 		for (id arg in a) {
 			if ([arg isKindOfClass:[DDExpression class]] == NO) {
 				if (error != nil) {
-					*error = ERR_EVAL(@"function arguments must be DDExpression objects");
+					*error = ERR_GENERIC(@"function arguments must be DDExpression objects");
 					*error = nil;
 				}
 				[self release];

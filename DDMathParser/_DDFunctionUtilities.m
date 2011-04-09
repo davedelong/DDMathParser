@@ -14,7 +14,7 @@
 #define REQUIRE_N_ARGS(__n) { \
 if ([arguments count] != __n) { \
 	if (error != nil) { \
-		*error = ERR_EVAL(@"%@ requires %d arguments", NSStringFromSelector(_cmd), __n); \
+		*error = ERR_GENERIC(@"%@ requires %d arguments", NSStringFromSelector(_cmd), __n); \
 	} \
 	return nil; \
 } \
@@ -23,7 +23,7 @@ if ([arguments count] != __n) { \
 #define REQUIRE_GTOE_N_ARGS(__n) { \
 if ([arguments count] < __n) { \
 	if (error != nil) { \
-		*error = ERR_EVAL(@"%@ requires at least %d arguments", NSStringFromSelector(_cmd), __n); \
+		*error = ERR_GENERIC(@"%@ requires at least %d arguments", NSStringFromSelector(_cmd), __n); \
 	} \
 	return nil; \
 } \
@@ -138,7 +138,7 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_ERROR;
-		NSNumber * result = [NSNumber numberWithDouble:tgamma([firstValue doubleValue]+1)];
+		NSNumber * result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalFactorial([firstValue decimalValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
@@ -235,7 +235,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) averageFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
-		REQUIRE_GTOE_N_ARGS(1);
+		REQUIRE_GTOE_N_ARGS(2);
 		DDMathFunction sumFunction = [_DDFunctionUtilities sumFunction];
 		DDExpression * sumExpression = sumFunction(arguments, variables, evaluator, error);
 		RETURN_IF_ERROR;
@@ -264,7 +264,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) countFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
-		REQUIRE_GTOE_N_ARGS(0);
+		REQUIRE_GTOE_N_ARGS(1);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithMantissa:[arguments count] exponent:0 isNegative:NO]];
 	};
 	return [[function copy] autorelease];
@@ -272,8 +272,8 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) minFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
-		REQUIRE_GTOE_N_ARGS(1);
-		NSDecimal result;
+		REQUIRE_GTOE_N_ARGS(2);
+		NSDecimal result = DDDecimalZero();
 		for (NSUInteger index = 0; index < [arguments count]; ++index) {
 			DDExpression *obj = [arguments objectAtIndex:index];
 			NSNumber *value = [obj evaluateWithSubstitutions:variables evaluator:evaluator error:error];
@@ -292,8 +292,8 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) maxFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
-		REQUIRE_GTOE_N_ARGS(1);
-		NSDecimal result;
+		REQUIRE_GTOE_N_ARGS(2);
+		NSDecimal result = DDDecimalZero();
 		for (NSUInteger index = 0; index < [arguments count]; ++index) {
 			DDExpression *obj = [arguments objectAtIndex:index];
 			NSNumber * value = [obj evaluateWithSubstitutions:variables evaluator:evaluator error:error];
@@ -312,7 +312,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) medianFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
-		REQUIRE_GTOE_N_ARGS(1);
+		REQUIRE_GTOE_N_ARGS(2);
 		NSMutableArray * evaluatedNumbers = [NSMutableArray array];
 		for (DDExpression * e in arguments) {
 			[evaluatedNumbers addObject:[e evaluateWithSubstitutions:variables evaluator:evaluator error:error]];
@@ -339,7 +339,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) stddevFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
-		REQUIRE_GTOE_N_ARGS(1);
+		REQUIRE_GTOE_N_ARGS(2);
 		DDMathFunction avgFunction = [_DDFunctionUtilities averageFunction];
 		DDExpression * avgExpression = avgFunction(arguments, variables, evaluator, error);
 		RETURN_IF_ERROR;
@@ -379,7 +379,7 @@ if ([arguments count] < __n) { \
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 		if ([arguments count] > 2) {
 			if (error != nil) {
-				*error = ERR_EVAL(@"random() may only have up to 2 arguments");
+				*error = ERR_GENERIC(@"random() may only have up to 2 arguments");
 			}
 			return nil;
 		}
@@ -404,7 +404,7 @@ if ([arguments count] < __n) { \
 			
 			if ([upperBound integerValue] <= [lowerBound integerValue]) {
 				if (error != nil) {
-					*error = ERR_EVAL(@"upper bound (%ld) of random() must be larger than lower bound (%ld)", [upperBound integerValue], [lowerBound integerValue]);
+					*error = ERR_GENERIC(@"upper bound (%ld) of random() must be larger than lower bound (%ld)", [upperBound integerValue], [lowerBound integerValue]);
 				}
 				return nil;
 			}
