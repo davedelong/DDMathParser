@@ -24,6 +24,7 @@ void listFunctions() {
 }
 
 int main (int argc, const char * argv[]) {
+#pragma unused(argc, argv)
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	
 	printf("Math Evaluator!\n");

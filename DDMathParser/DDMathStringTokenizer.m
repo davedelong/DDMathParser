@@ -149,7 +149,8 @@
 }
 
 - (DDMathStringToken *) currentToken {
-	if (currentTokenIndex >= [tokens count]) { return nil; }
+	NSInteger tokenCount = [tokens count];
+	if (currentTokenIndex >= tokenCount) { return nil; }
 	return [tokens objectAtIndex:currentTokenIndex];
 }
 
@@ -315,6 +316,7 @@
 }
 
 - (DDMathStringToken *) parsedVariable:(unichar)firstCharacter error:(NSError **)error {
+#pragma unused(firstCharacter)
 	//in this case, we *don't* use the firstCharacter (since it is $).  The $ is only to indicate that what follows is a variable
 	NSMutableString * v = [NSMutableString string];
 	while ([[self allowedVariableCharacters] characterIsMember:[self _peekNextCharacter]]) {

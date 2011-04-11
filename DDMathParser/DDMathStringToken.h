@@ -10,7 +10,10 @@
 #import "DDParserTypes.h"
 
 @interface DDMathStringToken : NSObject {
-
+	NSString *token;
+	DDTokenType tokenType;
+	DDOperator operatorType;
+	DDPrecedence operatorPrecedence;
 }
 
 + (id) mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type;

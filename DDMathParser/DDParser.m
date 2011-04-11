@@ -125,6 +125,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 			
 			//unary operators are right associative (factorial doesn't really count)
 		case DDOperatorBitwiseNot: return DDOperatorAssociativityRight;
+		default: return DDOperatorAssociativityLeft;
 	}
 	return DDOperatorAssociativityLeft;
 }

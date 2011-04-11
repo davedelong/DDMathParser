@@ -264,6 +264,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) countFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_GTOE_N_ARGS(1);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithMantissa:[arguments count] exponent:0 isNegative:NO]];
 	};
@@ -409,12 +410,12 @@ if ([arguments count] < __n) { \
 				return nil;
 			}
 			
-			NSInteger range = abs(([upperBound integerValue] - [lowerBound integerValue]) + 1);
+			long long range = llabs(([upperBound longLongValue] - [lowerBound longLongValue]) + 1);
 			random = random % range;
-			random += [lowerBound integerValue];
+			random += [lowerBound longLongValue];
 		}
 		
-		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithInteger:random]];
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithLongLong:random]];
 	};
 	return [[function copy] autorelease];
 }
@@ -807,6 +808,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) piFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalPi()]];
 		
@@ -816,6 +818,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) pi_2Function {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalPi_2()]];
 		
@@ -825,6 +828,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) pi_4Function {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalPi_4()]];
 		
@@ -834,6 +838,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) sqrt2Function {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalSqrt2()]];
 		
@@ -843,6 +848,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) eFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalE()]];
 		
@@ -852,6 +858,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) log2eFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLog2e()]];
 		
@@ -861,6 +868,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) log10eFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLog10e()]];
 		
@@ -870,6 +878,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) ln2Function {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLn2()]];
 		
@@ -879,6 +888,7 @@ if ([arguments count] < __n) { \
 
 + (DDMathFunction) ln10Function {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalLn10()]];
 		

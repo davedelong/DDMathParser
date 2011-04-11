@@ -43,6 +43,7 @@
 	return 0;
 }
 - (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error { 
+#pragma unused(substitutions, evaluator, error)
 	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)]; 
 	return nil; 
 }
@@ -56,6 +57,7 @@
 	return simplified;
 }
 - (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
+#pragma unused(evaluator, error)
 	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)]; 
 	return nil; 
 }

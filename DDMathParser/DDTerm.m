@@ -65,6 +65,7 @@
 }
 
 - (BOOL) resolveWithParser:(DDParser *)parser error:(NSError **)error {
+#pragma unused(parser, error)
 	return YES;
 }
 

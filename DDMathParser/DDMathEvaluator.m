@@ -102,9 +102,9 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 
 #pragma mark Evaluation
 
-- (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)variables {
+- (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions {
 	NSError *error = nil;
-	NSNumber *returnValue = [self evaluateString:expressionString withSubstitutions:variables error:&error];
+	NSNumber *returnValue = [self evaluateString:expressionString withSubstitutions:substitutions error:&error];
 	if (!returnValue) {
 		NSLog(@"error: %@", error);
 	}
@@ -112,15 +112,15 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
-	DDParser * parser = [DDParser parserWithString:expressionString error:&error];
+	DDParser * parser = [DDParser parserWithString:expressionString error:error];
 	if (!parser) {
 		return nil;
 	}
-	DDExpression * parsedExpression = [parser parsedExpressionWithError:&error];
+	DDExpression * parsedExpression = [parser parsedExpressionWithError:error];
 	if (!parsedExpression) {
 		return nil;
 	}
-	return [parsedExpression evaluateWithSubstitutions:variables evaluator:self error:&error];
+	return [parsedExpression evaluateWithSubstitutions:substitutions evaluator:self error:error];
 }
 
 #pragma mark Built-In Functions

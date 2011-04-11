@@ -26,14 +26,19 @@
 - (DDExpressionType) expressionType { return DDExpressionTypeNumber; }
 
 - (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
+#pragma unused(evaluator)
 	return self;
 }
 
-- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error { return [self number]; }
+- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
+#pragma unused(substitutions, evaluator, error)
+	return [self number];
+}
 
 - (NSNumber *) number { return number; }
 
 - (NSExpression *) expressionValueForEvaluator:(DDMathEvaluator *)evaluator {
+#pragma unused(evaluator)
 	return [NSExpression expressionForConstantValue:[self number]];
 }
 

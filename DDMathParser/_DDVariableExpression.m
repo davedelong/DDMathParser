@@ -31,6 +31,7 @@
 - (NSString *) variable { return variable; }
 
 - (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
+#pragma unused(evaluator)
 	return self;
 }
 
@@ -51,6 +52,7 @@
 }
 
 - (NSExpression *) expressionValueForEvaluator:(DDMathEvaluator *)evaluator {
+#pragma unused(evaluator)
 	return [NSExpression expressionForVariable:[self variable]];
 }
 
