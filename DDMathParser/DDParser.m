@@ -144,9 +144,6 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 		goto errorExit;
 	}
 	expression = [[rootTerm expressionWithError:error] retain];
-	if (error && *error) {
-		[expression release], expression = nil;
-	}
 	
 errorExit:
 	if (error && *error) {

@@ -44,7 +44,7 @@
 					}
 				} else {
 					DDTerm * t = [DDTerm termForTokenType:[peek tokenType] withTokenizer:tokenizer error:error];
-					if (error && *error) {
+					if (!t) {
 						[self release];
 						return nil;
 					}
@@ -101,7 +101,7 @@
 	
 	NSArray * sub = [[self subTerms] subarrayWithRange:groupingRange];
 	DDTerm * parameterGroup = [DDGroupTerm groupTermWithSubTerms:sub error:error];
-	if (error && *error) {
+	if (!parameterGroup) {
 		return NO;
 	}
 	[[self subTerms] replaceObjectsInRange:groupingRange withObjectsFromArray:[NSArray arrayWithObject:parameterGroup]];
@@ -129,12 +129,10 @@
 	NSMutableArray * parameters = [NSMutableArray array];
 	for (DDTerm * param in [self subTerms]) {
 		DDExpression * e = [param expressionWithError:error];
-		if (error && *error) {
+		if (!e) {
 			return nil;
 		}
-		if (e != nil) {
-			[parameters addObject:e];
-		}
+        [parameters addObject:e];
 	}
 	return [DDExpression functionExpressionWithFunction:[self function] arguments:parameters error:error];
 }

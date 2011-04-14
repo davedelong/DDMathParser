@@ -29,9 +29,6 @@
 + (id) functionTermWithName:(NSString *)function error:(NSError **)error {
 	DDMathStringToken * token = [DDMathStringToken mathStringTokenWithToken:function type:DDTokenTypeFunction];
 	DDFunctionTerm * f = [DDFunctionTerm groupTermWithSubTerms:[NSArray array] error:error];
-	if (error && *error) {
-		f = nil;
-	}
 	[f setTokenValue:token];
 	return f;
 }
@@ -44,12 +41,13 @@
 
 + (id) rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
 	DDGroupTerm * g = [DDGroupTerm termWithTokenizer:nil error:error];
-	if (error && *error) { return nil; }
+	if (!g) { return nil; }
 	
 	DDMathStringToken * t = nil;
 	while ((t = [tokenizer peekNextToken])) {
-		[[g subTerms] addObject:[DDTerm termForTokenType:[t tokenType] withTokenizer:tokenizer error:error]];
-		if (error && *error) { return nil; }
+        DDTerm *nextTerm = [DDTerm termForTokenType:[t tokenType] withTokenizer:tokenizer error:error];
+		if (!nextTerm) { return nil; }
+		[[g subTerms] addObject:nextTerm];
 	}
 	
 	return g;
@@ -57,10 +55,6 @@
 
 + (id) groupTermWithSubTerms:(NSArray *)sub error:(NSError **)error {
 	DDGroupTerm * g = [[self alloc] initWithTokenizer:nil error:error];
-	if (error && *error) {
-		[g release];
-		return nil;
-	}
 	[[g subTerms] addObjectsFromArray:sub];
 	return [g autorelease];
 }
@@ -79,7 +73,7 @@
 				if ([next operatorType] == DDOperatorParenthesisClose) { break; }
 				
 				DDTerm *nextTerm = [DDTerm termForTokenType:[next tokenType] withTokenizer:tokenizer error:error];
-				if (error && *error) {
+				if (!nextTerm) {
 					[self release];
 					return nil;
 				}
@@ -148,7 +142,7 @@ return NO; \
 		replacementRange.location = index - 1;
 		replacementRange.length = 2;
 		replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
-		if (error && *error) { return NO; }
+		if (!replacement) { return NO; }
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 	} else if ([operator operatorPrecedence] == DDPrecedenceUnary) {
 		CHECK_RANGE(index+2, @"no right operand to unary operator %@", [operator tokenValue]);
@@ -159,14 +153,14 @@ return NO; \
 			replacement = [terms objectAtIndex:index+1];
 		} else {
 			replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
-			if (error && *error) { return NO; }
+			if (!replacement) { return NO; }
 			[[replacement subTerms] addObject:[terms objectAtIndex:index+1]];
 		}
 	} else {
 		replacementRange.location = index - 1;
 		replacementRange.length = 3;
 		replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
-		if (error && *error) { return NO; }
+		if (!replacement) { return NO; }
 		[[replacement subTerms] addObject:[terms objectAtIndex:index-1]];
 		
 		//special edge case where the right term of the power operator has 1+ unary operators
@@ -185,7 +179,7 @@ return NO; \
 			//the right term has unary operators
 			NSArray * unaryExpressionTerms = [terms subarrayWithRange:rightTermRange];
 			rightTerm = [DDGroupTerm groupTermWithSubTerms:unaryExpressionTerms error:error];
-			if (error && *error) { return NO; }
+			if (!rightTerm) { return NO; }
 			//replace the unary expression with the new term (so that replacementRange is still valid)
 			[terms replaceObjectsInRange:rightTermRange withObjectsFromArray:[NSArray arrayWithObject:rightTerm]];
 		}

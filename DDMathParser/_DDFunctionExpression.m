@@ -48,7 +48,7 @@
 	BOOL canSimplify = YES;
 	for (DDExpression * e in [self arguments]) {
 		DDExpression * a = [e simplifiedExpressionWithEvaluator:evaluator error:error];
-		if (error && *error) { return nil; }
+		if (!a) { return nil; }
 		if ([a expressionType] != DDExpressionTypeNumber) {
 			canSimplify = NO;
 		}
@@ -78,11 +78,11 @@
 	if (mathFunction != nil) {
 		
 		id result = mathFunction([self arguments], substitutions, evaluator, error);
-		if (error && *error) { return nil; }
+		if (!result) { return nil; }
 		
 		while ([result isKindOfClass:[_DDVariableExpression class]]) {
 			result = [result evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
-			if (error && *error) { return nil; }
+			if (!result) { return nil; }
 		}
 		
 		NSNumber * numberValue = nil;

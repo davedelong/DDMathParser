@@ -27,11 +27,7 @@
 
 - (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
 	DDExpression * e = [DDExpression expressionFromString:self error:error];
-	if (error && *error) { return nil; }
-	NSNumber *returnValue = [e evaluateWithSubstitutions:substitutions evaluator:nil error:error];
-	if (error && *error) { return nil; }
-	
-	return returnValue;
+	return [e evaluateWithSubstitutions:substitutions evaluator:nil error:error];
 }
 
 @end
