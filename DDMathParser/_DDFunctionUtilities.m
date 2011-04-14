@@ -123,12 +123,10 @@ if ([arguments count] < __n) { \
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_ERROR;
 		
-		NSDecimal result;
 		NSDecimal a = [firstValue decimalValue];
-		NSDecimal nOne = DDDecimalNegativeOne();
-		NSDecimalMultiply(&result, &nOne, &a, NSRoundBankers);
+        DDDecimalNegate(&a);
 		
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:a]];
 	};
 	return [[function copy] autorelease];
 }
@@ -151,7 +149,10 @@ if ([arguments count] < __n) { \
 		RETURN_IF_ERROR;
 		NSNumber * exponent = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_ERROR;
-		NSNumber * power = [NSNumber numberWithDouble:pow([base doubleValue], [exponent doubleValue])];
+        NSDecimal result = DDDecimalOne();
+        NSDecimal baseDecimal = [base decimalValue];
+        NSDecimalPower(&result, &baseDecimal, [exponent unsignedIntegerValue], NSRoundBankers);
+        NSNumber *power = [NSDecimalNumber decimalNumberWithDecimal:result];
 		return [DDExpression numberExpressionWithNumber:power];
 	};
 	return [[function copy] autorelease];
@@ -455,7 +456,9 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
 		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_ERROR;
-		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:exp([n doubleValue])]];
+        NSDecimal e = DDDecimalE();
+        NSDecimalPower(&e, &e, [n unsignedIntegerValue], NSRoundBankers);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:e]];
 	};
 	return [[function copy] autorelease];
 }

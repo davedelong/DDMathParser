@@ -37,6 +37,8 @@ extern double DDDoubleFromDecimal(NSDecimal d);
 extern BOOL DDDecimalIsNegative(NSDecimal d);
 extern BOOL DDDecimalLessThanEpsilon(NSDecimal a, NSDecimal b);
 
+extern void DDDecimalNegate(NSDecimal *d);
+
 extern NSDecimal DDDecimalAverage2(NSDecimal a, NSDecimal b);
 extern NSDecimal DDDecimalMod(NSDecimal a, NSDecimal b);
 extern NSDecimal DDDecimalMod2Pi(NSDecimal a);
