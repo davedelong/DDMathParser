@@ -43,7 +43,7 @@ extern NSDecimal DDDecimalAverage2(NSDecimal a, NSDecimal b);
 extern NSDecimal DDDecimalMod(NSDecimal a, NSDecimal b);
 extern NSDecimal DDDecimalMod2Pi(NSDecimal a);
 extern NSDecimal DDDecimalAbsoluteValue(NSDecimal a);
-extern NSDecimal DDDecimalSqrt(const NSDecimal * d);
+extern NSDecimal DDDecimalSqrt(NSDecimal d);
 extern NSDecimal DDDecimalInverse(NSDecimal d);
 extern NSDecimal DDDecimalFactorial(NSDecimal d);
 

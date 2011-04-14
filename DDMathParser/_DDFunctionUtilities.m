@@ -357,7 +357,7 @@ if ([arguments count] < __n) { \
 		}
 		NSDecimal count = DDDecimalFromInteger([arguments count]);
 		NSDecimalDivide(&stddev, &stddev, &count, NSRoundBankers);
-		stddev = DDDecimalSqrt(&stddev);
+		stddev = DDDecimalSqrt(stddev);
 		
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:stddev]];
 	};
@@ -370,7 +370,7 @@ if ([arguments count] < __n) { \
 		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_ERROR;
 		NSDecimal number = [n decimalValue];
-		NSDecimal s = DDDecimalSqrt(&number);
+		NSDecimal s = DDDecimalSqrt(number);
 		
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:s]];
 	};

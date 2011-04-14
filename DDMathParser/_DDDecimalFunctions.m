@@ -200,17 +200,17 @@ BOOL DDDecimalLessThanEpsilon(NSDecimal a, NSDecimal b) {
 	return (NSDecimalCompare(&diff, &epsilon) == NSOrderedAscending);
 }
 
-NSDecimal DDDecimalSqrt(const NSDecimal * d) {
-	NSDecimal s = *d;
+NSDecimal DDDecimalSqrt(NSDecimal d) {
+	NSDecimal s = d;
 	s._exponent /= 2;
 	for (NSUInteger iterationCount = 0; iterationCount < 50; ++iterationCount) {
 		NSDecimal low;
-		NSDecimalDivide(&low, d, &s, NSRoundBankers);
+		NSDecimalDivide(&low, &d, &s, NSRoundBankers);
 		s = DDDecimalAverage2(low, s);
 		
 		NSDecimal square;
 		NSDecimalMultiply(&square, &s, &s, NSRoundBankers);
-		if (DDDecimalLessThanEpsilon(square, *d)) { break; }
+		if (DDDecimalLessThanEpsilon(square, d)) { break; }
 	};
 	return s;
 }
