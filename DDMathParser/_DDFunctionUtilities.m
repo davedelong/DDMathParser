@@ -214,7 +214,7 @@ if ([arguments count] < __n) { \
 		RETURN_IF_ERROR;
 		NSNumber * second = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_ERROR;
-		NSNumber * result = [NSNumber numberWithInteger:([first integerValue] >> [second integerValue])];
+		NSNumber * result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalRightShift([first decimalValue], [second decimalValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
@@ -227,7 +227,7 @@ if ([arguments count] < __n) { \
 		RETURN_IF_ERROR;
 		NSNumber * second = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_ERROR;
-		NSNumber * result = [NSNumber numberWithInteger:([first integerValue] << [second integerValue])];
+		NSNumber * result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalLeftShift([first decimalValue], [second decimalValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];

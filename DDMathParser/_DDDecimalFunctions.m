@@ -156,6 +156,11 @@ BOOL DDDecimalIsInteger(NSDecimal d) {
 	return (NSDecimalCompare(&rounded, &d) == NSOrderedSame);
 }
 
+void DDDecimalNegate(NSDecimal *d) {
+    NSDecimal nOne = DDDecimalNegativeOne();
+    NSDecimalMultiply(d, d, &nOne, NSRoundBankers);
+}
+
 NSDecimal DDDecimalAverage2(NSDecimal a, NSDecimal b) {
 	NSDecimal r;
 	NSDecimalAdd(&r, &a, &b, NSRoundBankers);
@@ -180,8 +185,7 @@ NSDecimal DDDecimalMod2Pi(NSDecimal a) {
 
 NSDecimal DDDecimalAbsoluteValue(NSDecimal a) {
 	if (DDDecimalIsNegative(a)) {
-		NSDecimal nOne = DDDecimalNegativeOne();
-		NSDecimalMultiply(&a, &a, &nOne, NSRoundBankers);
+        DDDecimalNegate(&a);
 	}
 	return a;
 }
@@ -222,8 +226,7 @@ NSDecimal DDDecimalFactorial(NSDecimal d) {
 		NSDecimal one = DDDecimalOne();
 		NSDecimal final = one;
 		if (DDDecimalIsNegative(d)) {
-			final = DDDecimalNegativeOne();
-			NSDecimalMultiply(&d, &d, &final, NSRoundBankers);
+            DDDecimalNegate(&d);
 		}
 		while (NSDecimalCompare(&d, &one) == NSOrderedDescending) {
 			NSDecimalMultiply(&final, &final, &d, NSRoundBankers);
@@ -235,6 +238,48 @@ NSDecimal DDDecimalFactorial(NSDecimal d) {
 		f = tgamma(f+1);
 		return DDDecimalFromDouble(f);
 	}
+}
+
+NSDecimal DDDecimalLeftShift(NSDecimal base, NSDecimal shift) {
+    NSDecimalRound(&shift, &shift, 0, NSRoundDown);
+    if (DDDecimalIsNegative(shift)) {
+        DDDecimalNegate(&shift);
+        return DDDecimalRightShift(base, shift);
+    }
+    
+    NSDecimal zero = DDDecimalZero();
+    NSDecimal one = DDDecimalOne();
+    NSDecimal two = DDDecimalTwo();
+    
+    while (NSDecimalCompare(&shift, &zero) == NSOrderedDescending) {
+        NSDecimalMultiply(&base, &base, &two, NSRoundBankers);
+        NSDecimalSubtract(&shift, &shift, &one, NSRoundBankers);
+    }
+    if (NSDecimalCompare(&base, &one) == NSOrderedAscending) {
+        return zero;
+    }
+    return base;
+}
+
+NSDecimal DDDecimalRightShift(NSDecimal base, NSDecimal shift) {
+    NSDecimalRound(&shift, &shift, 0, NSRoundDown);
+    if (DDDecimalIsNegative(shift)) {
+        DDDecimalNegate(&shift);
+        return DDDecimalLeftShift(base, shift);
+    }
+    
+    NSDecimal zero = DDDecimalZero();
+    NSDecimal one = DDDecimalOne();
+    NSDecimal two = DDDecimalTwo();
+    
+    while (NSDecimalCompare(&shift, &zero) == NSOrderedDescending) {
+        NSDecimalDivide(&base, &base, &two, NSRoundBankers);
+        NSDecimalSubtract(&shift, &shift, &one, NSRoundBankers);
+    }
+    if (NSDecimalCompare(&base, &one) == NSOrderedAscending) {
+        return zero;
+    }
+    return base;
 }
 
 #pragma mark Trig Functions

@@ -45,6 +45,9 @@ extern NSDecimal DDDecimalSqrt(const NSDecimal * d);
 extern NSDecimal DDDecimalInverse(NSDecimal d);
 extern NSDecimal DDDecimalFactorial(NSDecimal d);
 
+extern NSDecimal DDDecimalLeftShift(NSDecimal base, NSDecimal shift);
+extern NSDecimal DDDecimalRightShift(NSDecimal base, NSDecimal shift);
+
 #pragma mark Trig Functions
 extern NSDecimal DDDecimalSin(NSDecimal d);
 extern NSDecimal DDDecimalCos(NSDecimal d);
