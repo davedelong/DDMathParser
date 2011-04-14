@@ -41,10 +41,6 @@
 		
 		DDMathStringToken * token = nil;
 		while ((token = [self _nextTokenWithError:error])) {
-			if (error && *error) {
-				[self release];
-				return nil;
-			}
 			
 			//figure out if "-" and "+" are unary or binary
 			if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
@@ -121,6 +117,11 @@
 			[tokens addObject:token];
 		}
 		
+        if (error && *error) {
+            [self release];
+            return nil;
+        }
+        
 		[self reset];
 	}
 	return self;
