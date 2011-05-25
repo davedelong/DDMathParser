@@ -3,3 +3,6 @@ build
 **/*.perspective*
 **/*.mode*
 .DS_Store
+
+**/xcuserdata
+**/**/xcuserdata

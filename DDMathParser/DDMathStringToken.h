@@ -11,6 +11,7 @@
 
 @interface DDMathStringToken : NSObject {
 	NSString *token;
+    NSNumber *numberValue;
 	DDTokenType tokenType;
 	DDOperator operatorType;
 	DDPrecedence operatorPrecedence;

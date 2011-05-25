@@ -14,6 +14,7 @@
 
 - (void) dealloc {
 	[token release];
+    [numberValue release];
 	[super dealloc];
 }
 
@@ -101,13 +102,14 @@
 
 - (NSNumber *) numberValue {
 	if ([self tokenType] != DDTokenTypeNumber) { return nil; }
-	
-	NSNumber *n = [[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:[self token]];
-	if (n == nil) {
-		NSLog(@"supposedly invalid number: %@", [self token]);
-		return [NSNumber numberWithInt:0];
-	}
-	return n;
+	if (numberValue == nil) {
+        numberValue = [[[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:[self token]] retain];
+        if (numberValue == nil) {
+            NSLog(@"supposedly invalid number: %@", [self token]);
+            numberValue = [[NSNumber alloc] initWithInt:0];
+        }
+    }
+	return numberValue;
 }
 
 - (NSString *) description {

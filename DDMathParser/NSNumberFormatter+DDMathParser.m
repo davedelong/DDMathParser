@@ -12,16 +12,11 @@
 @implementation NSNumberFormatter (DDMathParser)
 
 + (id) numberFormatter_dd {
-	static NSNumberFormatter *f = nil;
-	static dispatch_once_t predicate;
-	dispatch_once(&predicate, ^{
-		f = [[NSNumberFormatter alloc] init];
-		
-		NSLocale *l = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-		[f setLocale:l];
-		[l release];
-	});
-	return f;
+	NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    NSLocale *l = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+    [f setLocale:l];
+    [l release];
+    return [f autorelease];
 }
 
 NSString *__names[] = {
