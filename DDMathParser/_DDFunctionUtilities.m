@@ -149,11 +149,21 @@ if ([arguments count] < __n) { \
 		RETURN_IF_NIL(base);
 		NSNumber * exponent = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(exponent);
-        NSDecimal result = DDDecimalOne();
-        NSDecimal baseDecimal = [base decimalValue];
-        NSDecimalPower(&result, &baseDecimal, [exponent unsignedIntegerValue], NSRoundBankers);
-        NSNumber *power = [NSDecimalNumber decimalNumberWithDecimal:result];
-		return [DDExpression numberExpressionWithNumber:power];
+        NSNumber *result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalPower([base decimalValue], [exponent decimalValue])];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) rootFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(2);
+		NSNumber * base = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		RETURN_IF_NIL(base);
+		NSNumber * root = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		RETURN_IF_NIL(root);
+        NSNumber *result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalNthRoot([base decimalValue], [root decimalValue])];
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }

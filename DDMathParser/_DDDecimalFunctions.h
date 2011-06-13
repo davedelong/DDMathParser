@@ -46,6 +46,8 @@ extern NSDecimal DDDecimalAbsoluteValue(NSDecimal a);
 extern NSDecimal DDDecimalSqrt(NSDecimal d);
 extern NSDecimal DDDecimalInverse(NSDecimal d);
 extern NSDecimal DDDecimalFactorial(NSDecimal d);
+extern NSDecimal DDDecimalPower(NSDecimal d, NSDecimal power);
+extern NSDecimal DDDecimalNthRoot(NSDecimal d, NSDecimal root);
 
 extern NSDecimal DDDecimalLeftShift(NSDecimal base, NSDecimal shift);
 extern NSDecimal DDDecimalRightShift(NSDecimal base, NSDecimal shift);

@@ -135,6 +135,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"mod",
 			@"factorial",
 			@"pow",
+            @"nthroot",
 			
 			//bitwise functions (2 parameters)
 			@"and",

@@ -135,6 +135,10 @@ NSDecimal DDDecimalFromDouble(double d) {
 
 #pragma mark Extraction
 
+NSUInteger DDUIntegerFromDecimal(NSDecimal d) {
+    return [[NSDecimalNumber decimalNumberWithDecimal:d] unsignedIntegerValue];
+}
+
 float DDFloatFromDecimal(NSDecimal d) {
 	return [[NSDecimalNumber decimalNumberWithDecimal:d] floatValue];
 }
@@ -211,8 +215,34 @@ NSDecimal DDDecimalSqrt(NSDecimal d) {
 		NSDecimal square;
 		NSDecimalMultiply(&square, &s, &s, NSRoundBankers);
 		if (DDDecimalLessThanEpsilon(square, d)) { break; }
-	};
+	}
 	return s;
+}
+
+NSDecimal DDDecimalNthRoot(NSDecimal d, NSDecimal root) {
+    // ((n-1)s + a/(s^(n-1)))/n
+    NSDecimal rootM1;
+    NSDecimal one = DDDecimalOne();
+    NSDecimalSubtract(&rootM1, &root, &one, NSRoundBankers);
+    
+    NSDecimal guess = d;
+    for (NSUInteger i = 0; i < 50; ++i) {
+        NSDecimal l;
+        NSDecimalMultiply(&l, &rootM1, &guess, NSRoundBankers);
+        
+        NSDecimal divisor = DDDecimalPower(guess, rootM1);
+        NSDecimal r;
+        NSDecimalDivide(&r, &d, &divisor, NSRoundBankers);
+        
+        NSDecimal numerator;
+        NSDecimalAdd(&numerator, &l, &r, NSRoundBankers);
+        
+        NSDecimalDivide(&guess, &numerator, &root, NSRoundBankers);
+        
+        NSDecimal power = DDDecimalPower(guess, root);
+        if (DDDecimalLessThanEpsilon(d, power)) { break; }
+    }
+    return guess;
 }
 
 NSDecimal DDDecimalInverse(NSDecimal d) {
@@ -238,6 +268,20 @@ NSDecimal DDDecimalFactorial(NSDecimal d) {
 		f = tgamma(f+1);
 		return DDDecimalFromDouble(f);
 	}
+}
+
+extern NSDecimal DDDecimalPower(NSDecimal d, NSDecimal power) {
+    NSDecimal r = DDDecimalOne();
+    if (DDDecimalIsInteger(power)) {
+        NSUInteger p = DDUIntegerFromDecimal(power);
+        NSDecimalPower(&r, &d, p, NSRoundBankers);
+    } else {
+        double base = DDDoubleFromDecimal(d);
+        double p = DDDoubleFromDecimal(power);
+        double result = pow(base, p);
+        r = DDDecimalFromDouble(result);
+    }
+    return r;
 }
 
 NSDecimal DDDecimalLeftShift(NSDecimal base, NSDecimal shift) {
