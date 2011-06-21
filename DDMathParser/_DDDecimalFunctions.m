@@ -184,7 +184,15 @@ NSDecimal DDDecimalMod(NSDecimal a, NSDecimal b) {
 }
 
 NSDecimal DDDecimalMod2Pi(NSDecimal a) {
-	return DDDecimalMod(a, DDDecimal2Pi());
+    // returns a number in the range of -π to π
+    NSDecimal pi = DDDecimalPi();
+    NSDecimal tpi = DDDecimal2Pi();
+	a = DDDecimalMod(a, tpi);
+    if (NSDecimalCompare(&a, &pi) == NSOrderedDescending) {
+        //a > pi
+        NSDecimalSubtract(&a, &a, &pi, NSRoundBankers);
+    }
+    return a;
 }
 
 NSDecimal DDDecimalAbsoluteValue(NSDecimal a) {
@@ -226,6 +234,7 @@ NSDecimal DDDecimalNthRoot(NSDecimal d, NSDecimal root) {
     NSDecimalSubtract(&rootM1, &root, &one, NSRoundBankers);
     
     NSDecimal guess = d;
+    // pick a big 'ol number
     for (NSUInteger i = 0; i < 50; ++i) {
         NSDecimal l;
         NSDecimalMultiply(&l, &rootM1, &guess, NSRoundBankers);
@@ -272,7 +281,13 @@ NSDecimal DDDecimalFactorial(NSDecimal d) {
 
 extern NSDecimal DDDecimalPower(NSDecimal d, NSDecimal power) {
     NSDecimal r = DDDecimalOne();
-    if (DDDecimalIsInteger(power)) {
+    NSDecimal zero = DDDecimalZero();
+    NSComparisonResult compareToZero = NSDecimalCompare(&zero, &power);
+    if (compareToZero == NSOrderedSame) {
+        return r;
+    }
+    if (DDDecimalIsInteger(power) && compareToZero == NSOrderedAscending) {
+        // we can only use the NSDecimal function for positive integers
         NSUInteger p = DDUIntegerFromDecimal(power);
         NSDecimalPower(&r, &d, p, NSRoundBankers);
     } else {
@@ -329,25 +344,64 @@ NSDecimal DDDecimalRightShift(NSDecimal base, NSDecimal shift) {
 #pragma mark Trig Functions
 NSDecimal DDDecimalSin(NSDecimal x) {
 	x = DDDecimalMod2Pi(x);
-	double d = DDDoubleFromDecimal(x);
-	d = sin(d);
-	return DDDecimalFromDouble(d);
+    
+    NSDecimal final = x;
+    BOOL shouldSubtract = YES;
+    for (NSInteger i = 3; i <= 51; i += 2) {
+        NSDecimal numerator;
+        NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        
+        NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
+        
+        NSDecimal term;
+        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        
+        if (shouldSubtract) {
+            NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
+        } else {
+            NSDecimalAdd(&final, &final, &term, NSRoundBankers);
+        }
+        
+        shouldSubtract = !shouldSubtract;
+    }
+    
+    return final;
 }
 
 NSDecimal DDDecimalCos(NSDecimal x) {
 	x = DDDecimalMod2Pi(x);
-	double d = DDDoubleFromDecimal(x);
-	d = cos(d);
-	return DDDecimalFromDouble(d);
+    
+    NSDecimal final = DDDecimalOne();
+    BOOL shouldSubtract = YES;
+    for (NSInteger i = 2; i <= 20; i += 2) {
+        NSDecimal numerator;
+        NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        
+        NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
+        
+        NSDecimal term;
+        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        
+        if (shouldSubtract) {
+            NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
+        } else {
+            NSDecimalAdd(&final, &final, &term, NSRoundBankers);
+        }
+        
+        shouldSubtract = !shouldSubtract;
+    }
+    
+    return final;
 	
 }
 
 NSDecimal DDDecimalTan(NSDecimal x) {
-	x = DDDecimalMod2Pi(x);
-	double d = DDDoubleFromDecimal(x);
-	d = tan(d);
-	return DDDecimalFromDouble(d);
-	
+    NSDecimal sin = DDDecimalSin(x);
+    NSDecimal cos = DDDecimalCos(x);
+    
+    NSDecimal tan;
+    NSDecimalDivide(&tan, &sin, &cos, NSRoundBankers);
+    return tan;
 }
 
 NSDecimal DDDecimalAsin(NSDecimal x) {

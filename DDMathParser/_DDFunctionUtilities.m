@@ -155,7 +155,7 @@ if ([arguments count] < __n) { \
 	return [[function copy] autorelease];
 }
 
-+ (DDMathFunction) rootFunction {
++ (DDMathFunction) nthrootFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 		REQUIRE_N_ARGS(2);
 		NSNumber * base = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
