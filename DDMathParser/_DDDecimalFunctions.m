@@ -10,6 +10,14 @@
 
 #pragma mark Constants
 
+NSDecimal DDDecimalNAN() {
+    static NSDecimalNumber * _nan = nil;
+    if (_nan == nil) {
+        _nan = [[NSDecimalNumber notANumber] retain];
+    }
+    return [_nan decimalValue];
+}
+
 NSDecimal DDDecimalNegativeOne() {
 	static NSDecimalNumber * _minusOne = nil;
 	if (_minusOne == nil) {
@@ -343,6 +351,7 @@ NSDecimal DDDecimalRightShift(NSDecimal base, NSDecimal shift) {
 
 #pragma mark Trig Functions
 NSDecimal DDDecimalSin(NSDecimal x) {
+    // from: http://en.wikipedia.org/wiki/Cotangent#Series_definitions
 	x = DDDecimalMod2Pi(x);
     
     NSDecimal final = x;
@@ -369,6 +378,7 @@ NSDecimal DDDecimalSin(NSDecimal x) {
 }
 
 NSDecimal DDDecimalCos(NSDecimal x) {
+    // from: http://en.wikipedia.org/wiki/Cotangent#Series_definitions
 	x = DDDecimalMod2Pi(x);
     
     NSDecimal final = DDDecimalOne();
@@ -396,6 +406,7 @@ NSDecimal DDDecimalCos(NSDecimal x) {
 }
 
 NSDecimal DDDecimalTan(NSDecimal x) {
+    // tan(x) = sin(x) / cos(x)
     NSDecimal sin = DDDecimalSin(x);
     NSDecimal cos = DDDecimalCos(x);
     
@@ -404,22 +415,101 @@ NSDecimal DDDecimalTan(NSDecimal x) {
     return tan;
 }
 
-NSDecimal DDDecimalAsin(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = asin(d);
-	return DDDecimalFromDouble(d);
+NSDecimal DDDecimalCsc(NSDecimal d) {
+    // csc(x) = 1/sin(x)
+    return DDDecimalInverse(DDDecimalSin(d));
 }
 
-NSDecimal DDDecimalAcos(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = acos(d);
-	return DDDecimalFromDouble(d);	
+NSDecimal DDDecimalSec(NSDecimal d) {
+    // sec(x) = 1/cos(x)
+    return DDDecimalInverse(DDDecimalCos(d));
+}
+
+NSDecimal DDDecimalCot(NSDecimal d) {
+    // cot(x) = 1/tan(x)
+    return DDDecimalInverse(DDDecimalTan(d));
+}
+
+NSDecimal DDDecimalAsin(NSDecimal x) {
+    // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
+    NSDecimal one = DDDecimalOne();
+    NSDecimal absX = DDDecimalAbsoluteValue(x);
+    if (NSDecimalCompare(&one, &absX) == NSOrderedAscending) {
+        return DDDecimalNAN();
+    }
+    
+    NSDecimal z = x;
+    NSDecimal fraction = DDDecimalOne();
+    for (NSInteger n = 1; n < 20;) {
+        NSDecimal numerator = DDDecimalFromInteger(n);
+        NSDecimalMultiply(&fraction, &fraction, &numerator, NSRoundBankers);
+        NSDecimal denominator = DDDecimalFromInteger(++n);
+        NSDecimalDivide(&fraction, &fraction, &denominator, NSRoundBankers);
+        
+        denominator = DDDecimalFromInteger(++n);
+        NSDecimalPower(&numerator, &x, n, NSRoundBankers);
+        NSDecimal zTerm;
+        NSDecimalDivide(&zTerm, &numerator, &denominator, NSRoundBankers);
+        
+        NSDecimalMultiply(&zTerm, &fraction, &zTerm, NSRoundBankers);
+        
+        NSDecimalAdd(&z, &z, &zTerm, NSRoundBankers);
+    }
+    
+    return z;
+}
+
+NSDecimal DDDecimalAcos(NSDecimal d) {
+    // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
+    NSDecimal halfPi = DDDecimalPi_2();
+    d = DDDecimalAsin(d);
+    NSDecimalSubtract(&d, &halfPi, &d, NSRoundBankers);
+    return d;
 }
 
 NSDecimal DDDecimalAtan(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = atan(d);
-	return DDDecimalFromDouble(d);
+    // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
+    NSDecimal z = x;
+    BOOL shouldSubtract = YES;
+    for (NSInteger n = 3; n < 20; n += 2) {
+        NSDecimal numerator;
+        NSDecimalPower(&numerator, &x, n, NSRoundBankers);
+        NSDecimal denominator = DDDecimalFromInteger(n);
+        
+        NSDecimal term;
+        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        if (shouldSubtract) {
+            NSDecimalSubtract(&z, &z, &term, NSRoundBankers);
+        } else {
+            NSDecimalAdd(&z, &z, &term, NSRoundBankers);
+        }
+        shouldSubtract = !shouldSubtract;
+    }
+    
+    return z;
+}
+
+
+NSDecimal DDDecimalAcsc(NSDecimal d) {
+    // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
+    NSDecimal halfPi = DDDecimalPi_2();
+    d = DDDecimalAsec(d);
+    NSDecimalSubtract(&d, &halfPi, &d, NSRoundBankers);
+    return d;
+}
+
+NSDecimal DDDecimalAsec(NSDecimal d) {
+    // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
+    d = DDDecimalInverse(d);
+    return DDDecimalAcos(d);
+}
+
+NSDecimal DDDecimalAcot(NSDecimal d) {
+    //from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
+    NSDecimal halfPi = DDDecimalPi_2();
+    d = DDDecimalAtan(d);
+    NSDecimalSubtract(&d, &halfPi, &d, NSRoundBankers);
+    return d;    
 }
 
 NSDecimal DDDecimalSinh(NSDecimal x) {

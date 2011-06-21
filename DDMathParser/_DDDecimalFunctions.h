@@ -56,12 +56,23 @@ extern NSDecimal DDDecimalRightShift(NSDecimal base, NSDecimal shift);
 extern NSDecimal DDDecimalSin(NSDecimal d);
 extern NSDecimal DDDecimalCos(NSDecimal d);
 extern NSDecimal DDDecimalTan(NSDecimal d);
+
+extern NSDecimal DDDecimalCsc(NSDecimal d);
+extern NSDecimal DDDecimalSec(NSDecimal d);
+extern NSDecimal DDDecimalCot(NSDecimal d);
+
 extern NSDecimal DDDecimalAsin(NSDecimal d);
 extern NSDecimal DDDecimalAcos(NSDecimal d);
 extern NSDecimal DDDecimalAtan(NSDecimal d);
+
+extern NSDecimal DDDecimalAcsc(NSDecimal d);
+extern NSDecimal DDDecimalAsec(NSDecimal d);
+extern NSDecimal DDDecimalAcot(NSDecimal d);
+
 extern NSDecimal DDDecimalSinh(NSDecimal d);
 extern NSDecimal DDDecimalCosh(NSDecimal d);
 extern NSDecimal DDDecimalTanh(NSDecimal d);
+
 extern NSDecimal DDDecimalAsinh(NSDecimal d);
 extern NSDecimal DDDecimalAcosh(NSDecimal d);
 extern NSDecimal DDDecimalAtanh(NSDecimal d);
