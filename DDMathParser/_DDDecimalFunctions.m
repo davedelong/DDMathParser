@@ -513,21 +513,66 @@ NSDecimal DDDecimalAcot(NSDecimal d) {
 }
 
 NSDecimal DDDecimalSinh(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = sinh(d);
-	return DDDecimalFromDouble(d);
+    // from: http://en.wikipedia.org/wiki/Hyperbolic_sine#Taylor_series_expressions
+    
+    NSDecimal final = x;
+    for (NSInteger i = 3; i <= 51; i += 2) {
+        NSDecimal numerator;
+        NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        
+        NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
+        
+        NSDecimal term;
+        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        
+        NSDecimalAdd(&final, &final, &term, NSRoundBankers);
+    }
+    
+    return final;
 }
 
 NSDecimal DDDecimalCosh(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = cosh(d);
-	return DDDecimalFromDouble(d);
+    // from: http://en.wikipedia.org/wiki/Hyperbolic_sine#Taylor_series_expressions
+    
+    NSDecimal final = DDDecimalOne();
+    for (NSInteger i = 2; i <= 20; i += 2) {
+        NSDecimal numerator;
+        NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        
+        NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
+        
+        NSDecimal term;
+        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        
+        NSDecimalAdd(&final, &final, &term, NSRoundBankers);
+    }
+    
+    return final;
 }
 
 NSDecimal DDDecimalTanh(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = tanh(d);
-	return DDDecimalFromDouble(d);
+    // tanh(x) = sinh(x) / cosh(x)
+    NSDecimal sinh = DDDecimalSinh(x);
+    NSDecimal cosh = DDDecimalCosh(x);
+    
+    NSDecimal tanh;
+    NSDecimalDivide(&tanh, &sinh, &cosh, NSRoundBankers);
+    return tanh;
+}
+
+NSDecimal DDDecimalCsch(NSDecimal x) {
+    // csch(x) = 1/sinh(x)
+    return DDDecimalInverse(DDDecimalSinh(x));
+}
+
+NSDecimal DDDecimalSech(NSDecimal x) {
+    // sech(x) = 1/cosh(x)
+    return DDDecimalInverse(DDDecimalCosh(x));
+}
+
+NSDecimal DDDecimalCoth(NSDecimal x) {
+    // coth(x) = 1/tanh(x)
+    return DDDecimalInverse(DDDecimalTanh(x));
 }
 
 NSDecimal DDDecimalAsinh(NSDecimal x) {
