@@ -21,6 +21,14 @@
 	return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    return [self initWithVariable:[aDecoder decodeObjectForKey:@"variable"]];
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:[self variable] forKey:@"variable"];
+}
+
 - (void) dealloc {
 	[variable release];
 	[super dealloc];

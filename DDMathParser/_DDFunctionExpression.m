@@ -34,6 +34,18 @@
 	}
 	return self;
 }
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    NSString *f = [aDecoder decodeObjectForKey:@"function"];
+    NSArray *a = [aDecoder decodeObjectForKey:@"arguments"];
+    return [self initWithFunction:f arguments:a error:NULL];
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:[self function] forKey:@"function"];
+    [aCoder encodeObject:[self arguments] forKey:@"arguments"];
+}
+
 - (void) dealloc {
 	[function release];
 	[arguments release];

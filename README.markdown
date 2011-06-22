@@ -98,6 +98,7 @@ Functions that take > 1 parameter
 - `stddev()` - returns the standard deviation of the passed parameters
 - `average()` - returns the average of the passed parameters
 - `random()` - returns a random integer.  Can take 0, 1, or 2 parameters.  The first parameter (if given) is the lower bound of the random integer.  The second parameter (if given) is the upper bound of the random integer.
+- `nthroot()` - returns the n<sup>th</sup> root of a number.  For example, `nthroot(27,3)` returns the cube root of 27, or 3.
 
 Functions that take 1 parameter:
 
@@ -201,6 +202,16 @@ Useful for specifying variable substitutions or a custom evaluator.
     NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil error:&error]);
     
 Useful for specifying a custom parser or custom operator associativities, specifying variables, or specifying a custom evaluator.
+
+## Precision
+
+`DDMathParser` strives to be as precise as reasonable, often at the cost of performance.  Almost all of the functions used in expression evaluation are implemented in terms of `NSDecimal` structs, with a couple of exceptions:
+
+- Raising a number to a negative or non-integral power
+- Taking the factorial of a negative or non-integral number
+- Logarithmic functions: `log`, `log2`, `ln`, `exp`, etc
+
+In these cases, the numbers are converted to `doubles` and then are computed with the built-in functions.  It is conceivable that this may change in the future.  All other functions, including square- and nth-roots, the trigonometric functions, standard deviation, etc, are all implemented with NSDecimal functions.
 
 ## Compatibility
 

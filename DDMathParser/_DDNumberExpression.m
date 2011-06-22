@@ -18,6 +18,15 @@
 	}
 	return self;
 }
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    return [self initWithNumber:[aDecoder decodeObjectForKey:@"number"]];
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:[self number] forKey:@"number"];
+}
+
 - (void) dealloc {
 	[number release];
 	[super dealloc];

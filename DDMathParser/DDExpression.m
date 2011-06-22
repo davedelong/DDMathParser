@@ -94,4 +94,14 @@
 	return NO;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+#pragma unused(aDecoder)
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+#pragma unused(aCoder)
+    return;
+}
+
 @end
