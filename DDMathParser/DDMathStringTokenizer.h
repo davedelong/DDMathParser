@@ -17,8 +17,6 @@
 	NSMutableArray * tokens;
 	NSInteger currentTokenIndex;
 	
-	NSNumberFormatter * numberFormatter;
-	
 	NSCharacterSet * allowedNumberCharacters;
 	NSCharacterSet * allowedVariableCharacters;
 	NSCharacterSet * allowedFunctionCharacters;

@@ -26,6 +26,24 @@ void listFunctions() {
 int main (int argc, const char * argv[]) {
 #pragma unused(argc, argv)
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    
+    NSArray *strings = [NSArray arrayWithObjects:
+                        @"sin(dtor(45))",
+                        @"1+2+3+4+5+6+7+8+9+10",
+                        @"1*2*3*4*5*6*7*8*9*10",
+                        @"cos(pi_2())",
+                        @"45.7!",
+                        @"45!",
+                        @"2**3**2**3**2",
+                        nil];
+    
+    for (NSString *s in strings) {
+        NSError *e = nil;
+        NSNumber *n = [s numberByEvaluatingStringWithSubstitutions:nil error:&e];
+        NSLog(@"================");
+        NSLog(@"%@ = ", s);
+        NSLog(@"\t%@", n);
+    }
 	
 	printf("Math Evaluator!\n");
 	printf("\ttype a mathematical expression to evaluate it.\n");

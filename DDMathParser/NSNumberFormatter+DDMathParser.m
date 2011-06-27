@@ -11,38 +11,27 @@
 
 @implementation NSNumberFormatter (DDMathParser)
 
-+ (id) numberFormatter_dd {
-	NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-    NSLocale *l = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    [f setLocale:l];
-    [l release];
-    return [f autorelease];
-}
-
-NSString *__names[] = {
-	@"none",
-	@"decimal",
-	@"currency",
-	@"percent",
-	@"scientific",
-	@"spell out"
-};
-
-- (NSNumber *) anyNumberFromString_dd:(NSString *)string {
-	NSNumber * parsedNumber = nil;
-	NSNumberFormatterStyle originalStyle = [self numberStyle];
-	
-	for (int i = NSNumberFormatterNoStyle; i < NSNumberFormatterSpellOutStyle; ++i) {
-		[self setNumberStyle:i];
-		parsedNumber = [self numberFromString:string];
-		if (parsedNumber != nil) {
-//			NSLog(@"parsed %@ as %@ (%@)", string, parsedNumber, __names[i]);
-			break;
-		}
-	}
-	
-	[self setNumberStyle:originalStyle];
-	return parsedNumber;
++ (NSNumber *)anyNumberFromString_dd:(NSString *)string {
+    static dispatch_once_t onceToken;
+    static NSNumberFormatter *formatters[5] = { NULL };
+    static int numberOfFormatters = sizeof(formatters)/sizeof(formatters[0]);
+    dispatch_once(&onceToken, ^{
+        NSLocale *l = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        
+        for (int i = 0; i < numberOfFormatters; ++i) {
+            formatters[i] = [[NSNumberFormatter alloc] init];
+            [formatters[i] setLocale:l];
+            [formatters[i] setNumberStyle:i];
+        }
+        
+        [l release];
+    });
+    
+    for (int i = 0; i < numberOfFormatters; ++i) {
+        NSNumber *n = [formatters[i] numberFromString:string];
+        if (n != nil) { return n; }
+    }
+    return nil;
 }
 
 @end

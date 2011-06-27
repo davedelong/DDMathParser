@@ -37,7 +37,6 @@
 		expressionString = [t componentsJoinedByString:@""];
 		
 		sourceString = [expressionString retain];
-		numberFormatter = [[NSNumberFormatter numberFormatter_dd] retain];
 		
 		DDMathStringToken * token = nil;
 		while ((token = [self _nextTokenWithError:error])) {
@@ -129,7 +128,6 @@
 
 - (void) dealloc {
 	[sourceString release];
-	[numberFormatter release];
 	[tokens release];
 	
 	[allowedFunctionCharacters release];
@@ -266,7 +264,7 @@
 		}
 	} while (1);
 
-	parsedNumber = [numberFormatter anyNumberFromString_dd:n];
+	parsedNumber = [NSNumberFormatter anyNumberFromString_dd:n];
 	
 	if (parsedNumber == nil) {
 		if (error != nil) {

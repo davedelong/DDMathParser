@@ -103,7 +103,7 @@
 - (NSNumber *) numberValue {
 	if ([self tokenType] != DDTokenTypeNumber) { return nil; }
 	if (numberValue == nil) {
-        numberValue = [[[NSNumberFormatter numberFormatter_dd] anyNumberFromString_dd:[self token]] retain];
+        numberValue = [[NSNumberFormatter anyNumberFromString_dd:[self token]] retain];
         if (numberValue == nil) {
             NSLog(@"supposedly invalid number: %@", [self token]);
             numberValue = [[NSNumber alloc] initWithInt:0];

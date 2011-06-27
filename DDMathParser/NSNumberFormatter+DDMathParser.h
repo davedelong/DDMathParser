@@ -11,8 +11,6 @@
 
 @interface NSNumberFormatter (DDMathParser)
 
-+ (id) numberFormatter_dd;
-
-- (NSNumber *) anyNumberFromString_dd:(NSString *)string;
++ (NSNumber *)anyNumberFromString_dd:(NSString *)string;
 
 @end

@@ -18,6 +18,14 @@ NSDecimal DDDecimalNAN() {
     return [_nan decimalValue];
 }
 
+NSDecimal DDDecimalEpsilon() {
+    static NSDecimalNumber *_epsilon = nil;
+    if (_epsilon == nil) {
+        _epsilon = [[NSDecimalNumber alloc] initWithMantissa:1 exponent:-64 isNegative:NO];
+    }
+    return [_epsilon decimalValue];
+}
+
 NSDecimal DDDecimalNegativeOne() {
 	static NSDecimalNumber * _minusOne = nil;
 	if (_minusOne == nil) {
@@ -210,9 +218,8 @@ NSDecimal DDDecimalAbsoluteValue(NSDecimal a) {
 	return a;
 }
 
-BOOL DDDecimalLessThanEpsilon(NSDecimal a, NSDecimal b) {
-	NSDecimal epsilon = DDDecimalOne();
-	NSDecimalMultiplyByPowerOf10(&epsilon, &epsilon, -64, NSRoundBankers);
+BOOL DDDecimalIsProbablyEqual(NSDecimal a, NSDecimal b) {
+    NSDecimal epsilon = DDDecimalEpsilon();
 	
 	NSDecimal diff;
 	NSDecimalSubtract(&diff, &a, &b, NSRoundBankers);
@@ -230,7 +237,7 @@ NSDecimal DDDecimalSqrt(NSDecimal d) {
 		
 		NSDecimal square;
 		NSDecimalMultiply(&square, &s, &s, NSRoundBankers);
-		if (DDDecimalLessThanEpsilon(square, d)) { break; }
+		if (DDDecimalIsProbablyEqual(square, d)) { break; }
 	}
 	return s;
 }
@@ -257,7 +264,7 @@ NSDecimal DDDecimalNthRoot(NSDecimal d, NSDecimal root) {
         NSDecimalDivide(&guess, &numerator, &root, NSRoundBankers);
         
         NSDecimal power = DDDecimalPower(guess, root);
-        if (DDDecimalLessThanEpsilon(d, power)) { break; }
+        if (DDDecimalIsProbablyEqual(d, power)) { break; }
     }
     return guess;
 }
@@ -576,19 +583,81 @@ NSDecimal DDDecimalCoth(NSDecimal x) {
 }
 
 NSDecimal DDDecimalAsinh(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = asinh(d);
-	return DDDecimalFromDouble(d);
+    // from: http://en.wikipedia.org/wiki/Inverse_hyperbolic_function#Series_expansions
+    NSDecimal one = DDDecimalOne();
+    NSDecimal absX = DDDecimalAbsoluteValue(x);
+    if (NSDecimalCompare(&one, &absX) == NSOrderedAscending) {
+        return DDDecimalNAN();
+    }
+    
+    BOOL shouldSubtract = YES;
+    
+    NSDecimal z = x;
+    NSDecimal fraction = DDDecimalOne();
+    for (NSInteger n = 1; n < 20;) {
+        NSDecimal numerator = DDDecimalFromInteger(n);
+        NSDecimalMultiply(&fraction, &fraction, &numerator, NSRoundBankers);
+        NSDecimal denominator = DDDecimalFromInteger(++n);
+        NSDecimalDivide(&fraction, &fraction, &denominator, NSRoundBankers);
+        
+        denominator = DDDecimalFromInteger(++n);
+        NSDecimalPower(&numerator, &x, n, NSRoundBankers);
+        NSDecimal zTerm;
+        NSDecimalDivide(&zTerm, &numerator, &denominator, NSRoundBankers);
+        
+        NSDecimalMultiply(&zTerm, &fraction, &zTerm, NSRoundBankers);
+        
+        if (shouldSubtract) {
+            NSDecimalSubtract(&z, &z, &zTerm, NSRoundBankers);
+        } else {
+            NSDecimalAdd(&z, &z, &zTerm, NSRoundBankers);
+        }
+        
+        shouldSubtract = !shouldSubtract;
+    }
+    
+    return z;
 }
 
 NSDecimal DDDecimalAcosh(NSDecimal x) {
+    //TODO: arccosh
 	double d = DDDoubleFromDecimal(x);
 	d = acosh(d);
 	return DDDecimalFromDouble(d);
 }
 
 NSDecimal DDDecimalAtanh(NSDecimal x) {
-	double d = DDDoubleFromDecimal(x);
-	d = atanh(d);
-	return DDDecimalFromDouble(d);
+    // from: http://en.wikipedia.org/wiki/Inverse_hyperbolic_function#Series_expansions
+    NSDecimal one = DDDecimalOne();
+    NSDecimal absX = DDDecimalAbsoluteValue(x);
+    if (NSDecimalCompare(&one, &absX) == NSOrderedAscending) {
+        return DDDecimalNAN();
+    }
+    
+    NSDecimal z = x;
+    for (NSInteger n = 3; n < 20; n += 2) {
+        NSDecimal numerator;
+        NSDecimalPower(&numerator, &x, n, NSRoundBankers);
+        NSDecimal denominator = DDDecimalFromInteger(n);
+        
+        NSDecimal term;
+        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        NSDecimalAdd(&z, &z, &term, NSRoundBankers);
+    }
+    
+    return z;
 }
+
+//NSDecimal DDDecimalAcsch(NSDecimal d) {
+//    //TODO: arccsch
+//    
+//}
+//
+//NSDecimal DDDecimalAsech(NSDecimal d) {
+//    //TODO: arcsech
+//}
+//
+//NSDecimal DDDecimalAcoth(NSDecimal d) {
+//    //TODO: arccotanh
+//}
+

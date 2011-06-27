@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSDecimal DDDecimalNAN();
+extern NSDecimal DDDecimalEpsilon();
 extern NSDecimal DDDecimalNegativeOne();
 extern NSDecimal DDDecimalZero();
 extern NSDecimal DDDecimalOne();
@@ -35,7 +37,7 @@ extern double DDDoubleFromDecimal(NSDecimal d);
 
 #pragma mark Utility Functions
 extern BOOL DDDecimalIsNegative(NSDecimal d);
-extern BOOL DDDecimalLessThanEpsilon(NSDecimal a, NSDecimal b);
+extern BOOL DDDecimalIsProbablyEqual(NSDecimal a, NSDecimal b);
 
 extern void DDDecimalNegate(NSDecimal *d);
 
@@ -73,10 +75,14 @@ extern NSDecimal DDDecimalSinh(NSDecimal d);
 extern NSDecimal DDDecimalCosh(NSDecimal d);
 extern NSDecimal DDDecimalTanh(NSDecimal d);
 
-extern NSDecimal DDDecimalCsch(NSDecimal x);
-extern NSDecimal DDDecimalSech(NSDecimal x);
-extern NSDecimal DDDecimalCoth(NSDecimal x);
+extern NSDecimal DDDecimalCsch(NSDecimal d);
+extern NSDecimal DDDecimalSech(NSDecimal d);
+extern NSDecimal DDDecimalCoth(NSDecimal d);
 
 extern NSDecimal DDDecimalAsinh(NSDecimal d);
 extern NSDecimal DDDecimalAcosh(NSDecimal d);
 extern NSDecimal DDDecimalAtanh(NSDecimal d);
+
+//extern NSDecimal DDDecimalAcsch(NSDecimal d);
+//extern NSDecimal DDDecimalAsech(NSDecimal d);
+//extern NSDecimal DDDecimalAcoth(NSDecimal d);
