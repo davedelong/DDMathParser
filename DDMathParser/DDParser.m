@@ -11,6 +11,7 @@
 #import "DDTerm.h"
 #import "DDGroupTerm.h"
 #import "DDParserTypes.h"
+#import "DDMathParserTokenizer.h"
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
@@ -85,7 +86,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
-		tokenizer = [[DDMathStringTokenizer alloc] initWithString:string error:error];
+		tokenizer = [[DDMathParserTokenizer alloc] initWithString:string error:error];
 		if (!tokenizer) {
 			[self release];
 			return nil;
