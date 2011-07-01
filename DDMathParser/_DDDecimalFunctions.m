@@ -229,7 +229,7 @@ BOOL DDDecimalIsProbablyEqual(NSDecimal a, NSDecimal b) {
 
 NSDecimal DDDecimalSqrt(NSDecimal d) {
 	NSDecimal s = d;
-	s._exponent /= 2;
+    if (s._exponent > 2) { s._exponent /= 2; }
 	for (NSUInteger iterationCount = 0; iterationCount < 50; ++iterationCount) {
 		NSDecimal low;
 		NSDecimalDivide(&low, &d, &s, NSRoundBankers);
