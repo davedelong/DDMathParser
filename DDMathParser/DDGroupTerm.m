@@ -157,6 +157,14 @@ return NO; \
 			[[replacement subTerms] addObject:[terms objectAtIndex:index+1]];
 		}
 	} else {
+		CHECK_RANGE(index+2, @"no right operand to binary operator %@", [operator tokenValue]);
+        if (index == 0) {
+            // this is a binary operator, but it's at the first/last index, which means there's no left/right term
+            if (error) {
+                *error = ERR_GENERIC(@"no left operand to binary operator %@", [operator tokenValue]);
+            }
+            return NO;
+        }
 		replacementRange.location = index - 1;
 		replacementRange.length = 3;
 		replacement = [DDFunctionTerm functionTermWithName:functionName error:error];
