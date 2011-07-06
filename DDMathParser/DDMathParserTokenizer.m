@@ -257,8 +257,8 @@
     if ([self _peekNextCharacter] == 'e' || [self _peekNextCharacter] == 'E') {
         _characterIndex++;
         
-        // there might any number of "-" or "+" characters preceding the exponent
-        while ([self _peekNextCharacter] == '-' || [self _peekNextCharacter] == '+') {
+        // there might a "-" or "+" character preceding the exponent
+        if ([self _peekNextCharacter] == '-' || [self _peekNextCharacter] == '+') {
             _characterIndex++;
         }
         
@@ -268,7 +268,7 @@
         }
         
         if (_characterIndex == indexAtExponentDigits) {
-            // we didn't read any digits following the "e"
+            // we didn't read any digits following the "e" or the "-"/"+"
             // therefore the entire exponent range is invalid
             // reset to just before we saw the "e"
             _characterIndex = indexBeforeE;
