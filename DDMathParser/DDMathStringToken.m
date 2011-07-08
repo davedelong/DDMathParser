@@ -7,7 +7,6 @@
 //
 
 #import "DDMathStringToken.h"
-#import "NSNumberFormatter+DDMathParser.h"
 
 @implementation DDMathStringToken
 @synthesize token, tokenType, operatorType, operatorPrecedence;
@@ -103,7 +102,7 @@
 - (NSNumber *) numberValue {
 	if ([self tokenType] != DDTokenTypeNumber) { return nil; }
 	if (numberValue == nil) {
-        numberValue = [[NSNumberFormatter anyNumberFromString_dd:[self token]] retain];
+        numberValue = [[NSDecimalNumber alloc] initWithString:[self token]];
         if (numberValue == nil) {
             NSLog(@"supposedly invalid number: %@", [self token]);
             numberValue = [[NSNumber alloc] initWithInt:0];
