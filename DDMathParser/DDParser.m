@@ -12,6 +12,7 @@
 #import "DDGroupTerm.h"
 #import "DDParserTypes.h"
 #import "DDMathStringTokenizer.h"
+#import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
 

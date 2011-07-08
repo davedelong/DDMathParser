@@ -1,9 +1,9 @@
 //
-//  DDMathStringTokenizer.h
+//  DDMathParserTokenizer.h
 //  DDMathParser
 //
-//  Created by Dave DeLong on 11/11/10.
-//  Copyright 2010 Home. All rights reserved.
+//  Created by Dave DeLong on 6/28/11.
+//  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,27 +11,30 @@
 @class DDMathStringToken;
 
 @interface DDMathStringTokenizer : NSObject {
-	NSString * sourceString;
-	NSUInteger currentCharacterIndex;
-	
-	NSMutableArray * tokens;
-	NSInteger currentTokenIndex;
-	
-	NSCharacterSet * allowedNumberCharacters;
-	NSCharacterSet * allowedVariableCharacters;
-	NSCharacterSet * allowedFunctionCharacters;
-	NSCharacterSet * allowedOperatorCharacters;
+    unichar *_characters;
+    NSUInteger _length;
+    NSUInteger _characterIndex;
+    
+    NSArray *_tokens;
+    NSUInteger _tokenIndex;
+    
 }
 
-- (id) initWithString:(NSString *)expressionString error:(NSError **)error;
+- (id)initWithString:(NSString *)expressionString error:(NSError **)error;
 
-- (NSArray *) tokens;
+- (NSArray *)tokens;
 
-- (DDMathStringToken *) nextToken;
-- (DDMathStringToken *) currentToken;
-- (DDMathStringToken *) peekNextToken;
-- (DDMathStringToken *) previousToken;
-- (void) reset;
+- (DDMathStringToken *)nextToken;
+- (DDMathStringToken *)currentToken;
+- (DDMathStringToken *)peekNextToken;
+- (DDMathStringToken *)previousToken;
 
+- (void)reset;
+
+// methods overridable by subclasses
+- (void)didParseToken:(DDMathStringToken *)token;
+
+// methods that can be used by subclasses
+- (void)appendToken:(DDMathStringToken *)token;
 
 @end
