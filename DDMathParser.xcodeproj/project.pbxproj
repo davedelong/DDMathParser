@@ -16,9 +16,9 @@
 		5508992212BCAD5C00BBC2D9 /* DDOperatorTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 5508992112BCAD5C00BBC2D9 /* DDOperatorTerm.m */; };
 		5508992312BCAD5C00BBC2D9 /* DDOperatorTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 5508992112BCAD5C00BBC2D9 /* DDOperatorTerm.m */; };
 		5508992412BCAD5C00BBC2D9 /* DDOperatorTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 5508992112BCAD5C00BBC2D9 /* DDOperatorTerm.m */; };
-		550C416813BA8BCA00A041BC /* DDMathParserTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathParserTokenizer.m */; };
-		550C416913BA8BCA00A041BC /* DDMathParserTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathParserTokenizer.m */; };
-		550C416A13BA8BCA00A041BC /* DDMathParserTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathParserTokenizer.m */; };
+		550C416813BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
+		550C416913BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
+		550C416A13BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
 		5514EF161347EBA10010B9D8 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
 		5514EF171347EBA20010B9D8 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
 		5514EF181347EBB00010B9D8 /* NSNumberFormatter+DDMathParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55DDAB2A134044680088A170 /* NSNumberFormatter+DDMathParser.m */; };
@@ -93,8 +93,8 @@
 		5508991C12BCA4F000BBC2D9 /* DDFunctionTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFunctionTerm.m; sourceTree = "<group>"; };
 		5508992012BCAD5C00BBC2D9 /* DDOperatorTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDOperatorTerm.h; sourceTree = "<group>"; };
 		5508992112BCAD5C00BBC2D9 /* DDOperatorTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDOperatorTerm.m; sourceTree = "<group>"; };
-		550C416613BA8BCA00A041BC /* DDMathParserTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathParserTokenizer.h; sourceTree = "<group>"; };
-		550C416713BA8BCA00A041BC /* DDMathParserTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathParserTokenizer.m; sourceTree = "<group>"; };
+		550C416613BA8BCA00A041BC /* DDMathStringTokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DDMathStringTokenizer.h; sourceTree = "<group>"; };
+		550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathStringTokenizer.m; sourceTree = "<group>"; };
 		5514EE291347CE9B0010B9D8 /* DDMathParserMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMathParserMacros.h; path = DDMathParser/DDMathParserMacros.h; sourceTree = "<group>"; };
 		552532B512C1C92D00A942A7 /* _DDFunctionUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDFunctionUtilities.h; sourceTree = "<group>"; };
 		552532B612C1C92D00A942A7 /* _DDFunctionUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDFunctionUtilities.m; sourceTree = "<group>"; };
@@ -256,8 +256,8 @@
 		5570E4E412AABEF3002FE945 /* Tokens */ = {
 			isa = PBXGroup;
 			children = (
-				550C416613BA8BCA00A041BC /* DDMathParserTokenizer.h */,
-				550C416713BA8BCA00A041BC /* DDMathParserTokenizer.m */,
+				550C416613BA8BCA00A041BC /* DDMathStringTokenizer.h */,
+				550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */,
 				55F795E11293175B00EF2716 /* DDMathStringToken.h */,
 				55F795E21293175B00EF2716 /* DDMathStringToken.m */,
 			);
@@ -449,7 +449,7 @@
 				559E92A912C521CF00942099 /* _DDDecimalFunctions.m in Sources */,
 				5514EF171347EBA20010B9D8 /* DDTypes.m in Sources */,
 				5514EF191347EBB10010B9D8 /* NSNumberFormatter+DDMathParser.m in Sources */,
-				550C416A13BA8BCA00A041BC /* DDMathParserTokenizer.m in Sources */,
+				550C416A13BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,7 +477,7 @@
 				559E92AA12C521CF00942099 /* _DDDecimalFunctions.m in Sources */,
 				5514EF161347EBA10010B9D8 /* DDTypes.m in Sources */,
 				5514EF181347EBB00010B9D8 /* NSNumberFormatter+DDMathParser.m in Sources */,
-				550C416913BA8BCA00A041BC /* DDMathParserTokenizer.m in Sources */,
+				550C416913BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,7 +502,7 @@
 				559E92A812C521CF00942099 /* _DDDecimalFunctions.m in Sources */,
 				5526E9E11310EF880018B4C9 /* DDTypes.m in Sources */,
 				55DDAB2B134044680088A170 /* NSNumberFormatter+DDMathParser.m in Sources */,
-				550C416813BA8BCA00A041BC /* DDMathParserTokenizer.m in Sources */,
+				550C416813BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

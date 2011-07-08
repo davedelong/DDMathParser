@@ -6,13 +6,13 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "DDMathParserTokenizer.h"
+#import "DDMathStringTokenizer.h"
 #import "DDMathParserMacros.h"
 #import "DDMathStringToken.h"
 
 #define DD_IS_DIGIT(_c) ((_c) >= '0' && (_c) <= '9')
 
-@interface DDMathParserTokenizer ()
+@interface DDMathStringTokenizer ()
 
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error;
 
@@ -30,7 +30,7 @@
 
 @end
 
-@implementation DDMathParserTokenizer
+@implementation DDMathStringTokenizer
 
 + (NSCharacterSet *)_operatorCharacterSet {
     static dispatch_once_t onceToken;
