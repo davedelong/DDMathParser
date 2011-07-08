@@ -24,11 +24,17 @@
 
 - (NSArray *)tokens;
 
-- (DDMathStringToken *) nextToken;
-- (DDMathStringToken *) currentToken;
-- (DDMathStringToken *) peekNextToken;
-- (DDMathStringToken *) previousToken;
+- (DDMathStringToken *)nextToken;
+- (DDMathStringToken *)currentToken;
+- (DDMathStringToken *)peekNextToken;
+- (DDMathStringToken *)previousToken;
 
 - (void)reset;
+
+// methods overridable by subclasses
+- (void)didParseToken:(DDMathStringToken *)token;
+
+// methods that can be used by subclasses
+- (void)appendToken:(DDMathStringToken *)token;
 
 @end
