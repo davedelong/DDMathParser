@@ -13,8 +13,6 @@
 
 typedef DDExpression* (^DDMathFunction)(NSArray *, NSDictionary *, DDMathEvaluator *, NSError **);
 
-enum { DDMathFunctionUnlimitedArguments = -1 };
-
 #pragma mark Error Codes
 
 extern NSString * const DDMathParserErrorDomain;
