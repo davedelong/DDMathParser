@@ -54,6 +54,20 @@
     return _functionSet;
 }
 
++ (NSCharacterSet *)_singleCharacterFunctionCharacterSet {
+    static dispatch_once_t onceToken;
+    static NSCharacterSet *_singleCharFunctionSet = nil;
+    dispatch_once(&onceToken, ^{
+        NSString *singleChars = [NSString stringWithFormat:@"\u03C0\u03D5"];
+        _singleCharFunctionSet = [[NSCharacterSet characterSetWithCharactersInString:singleChars] retain];
+    });
+    return _singleCharFunctionSet;
+}
+
++ (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error {
+    return [[[self alloc] initWithString:expressionString error:error] autorelease];
+}
+
 - (id)initWithString:(NSString *)expressionString error:(NSError **)error {
 	ERR_ASSERT(error);
     self = [super init];
@@ -82,6 +96,8 @@
 		
         if (error && *error) {
             [self release], self = nil;
+        } else {
+            [self didParseToken:nil];
         }
     }
     
@@ -249,7 +265,7 @@
         token = [self _parseNumberWithError:error];
     }
     
-    if (token == nil && ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') || DD_IS_DIGIT(next))) {
+    if (token == nil) {
         token = [self _parseFunctionWithError:error];
     }
     
@@ -319,10 +335,16 @@
     NSUInteger start = _characterIndex;
     NSUInteger length = 0;
     
-    NSCharacterSet *functionSet = [[self class] _functionCharacterSet];
-    while ([functionSet characterIsMember:[self _peekNextCharacter]]) {
+    NSCharacterSet *singleCharacterFunctions = [[self class] _singleCharacterFunctionCharacterSet];
+    if ([singleCharacterFunctions characterIsMember:[self _peekNextCharacter]]) {
         length++;
         _characterIndex++;
+    } else {    
+        NSCharacterSet *functionSet = [[self class] _functionCharacterSet];
+        while ([functionSet characterIsMember:[self _peekNextCharacter]]) {
+            length++;
+            _characterIndex++;
+        }
     }
     
     if (length > 0) {

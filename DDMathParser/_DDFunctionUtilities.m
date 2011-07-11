@@ -841,6 +841,16 @@ if ([arguments count] < __n) { \
 
 #pragma mark Constant Functions
 
++ (DDMathFunction) phiFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimalPhi()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
 + (DDMathFunction) piFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 #pragma unused(variables, evaluator)

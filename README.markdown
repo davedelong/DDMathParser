@@ -129,7 +129,8 @@ Functions that take 1 parameter:
 
 Functions that take no parameters:
 
-- `pi()` - returns the value of π
+- `phi()` - returns the value of ϕ (the Golden Ratio).  Also recognized as `ϕ()`
+- `pi()` - returns the value of π.  Also recognized as `π()`
 - `pi_2()` - returns the value of π/2
 - `pi_4()` - returns the value of π/4
 - `sqrt2()` - returns the value of the square root of 2
@@ -202,6 +203,16 @@ Useful for specifying variable substitutions or a custom evaluator.
     NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil error:&error]);
     
 Useful for specifying a custom parser or custom operator associativities, specifying variables, or specifying a custom evaluator.
+
+### DDMathStringTokenizer
+
+    NSError *error = nil;
+    DDMathStringTokenizer *t = [DDMathStringTokenizer tokenizerWithString:@"1 + 2" error:&error];
+    DDParser *parser = [DDParser parserWithTokenizer:t error:&error];
+    DDExpression *e = [parser parsedExpressionWithError:&error];
+    NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil error:&error]);
+    
+Useful for specifying a custom tokenizer.  An example of a custom tokenizer is included in the source.  It shows how to recognize certain functions without parentheses (e, pi, etc).
 
 ## Precision
 

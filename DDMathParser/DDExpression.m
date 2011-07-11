@@ -19,8 +19,13 @@
 
 @implementation DDExpression
 
++ (id) expressionWithParser:(DDParser *)parser error:(NSError **)error {
+    return [parser parsedExpressionWithError:error];
+}
+
 + (id) expressionFromString:(NSString *)expressionString error:(NSError **)error {
-	return [[DDParser parserWithString:expressionString error:error] parsedExpressionWithError:error];
+    DDParser *parser = [DDParser parserWithString:expressionString error:error];
+    return [self expressionWithParser:parser error:error];
 }
 
 + (id) numberExpressionWithNumber:(NSNumber *)number {

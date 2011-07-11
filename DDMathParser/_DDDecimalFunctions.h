@@ -15,6 +15,7 @@ extern NSDecimal DDDecimalZero();
 extern NSDecimal DDDecimalOne();
 extern NSDecimal DDDecimalTwo();
 
+extern NSDecimal DDDecimalPhi();
 extern NSDecimal DDDecimalPi();
 extern NSDecimal DDDecimal2Pi();
 extern NSDecimal DDDecimalPi_2();

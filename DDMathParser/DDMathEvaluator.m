@@ -201,6 +201,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"pi",
 			@"pi_2",
 			@"pi_4",
+            @"phi",
 			@"sqrt2",
 			@"e",
 			@"log2e",
@@ -216,6 +217,8 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"average", @"avg",
 			@"average", @"mean",
 			@"floor", @"trunc",
+            @"pi", @"\u03C0", // π
+            @"phi", @"\u03D5", // ϕ
 			nil];
 }
 

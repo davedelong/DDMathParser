@@ -1,18 +1,19 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
+#import "ConstantRecognizer.h"
 
 NSString* readLine() {
-	NSMutableString * str = [NSMutableString string];
-	char nextChar = '\0';
-	do {
-		nextChar = getchar();
-		if (nextChar != '\0' && [[NSCharacterSet newlineCharacterSet] characterIsMember:nextChar] == NO) {
-			[str appendFormat:@"%C", nextChar];
-		} else {
-			break;
-		}
-	} while (1);
-	return str;
+    
+    NSMutableData *data = [NSMutableData data];
+    
+    do {
+        char c = getchar();
+        [data appendBytes:&c length:1];
+        if (c == '\r' || c == '\n') { break; }
+        
+    } while (1);
+    
+	return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
 }
 
 void listFunctions() {
@@ -26,24 +27,6 @@ void listFunctions() {
 int main (int argc, const char * argv[]) {
 #pragma unused(argc, argv)
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    
-    NSArray *strings = [NSArray arrayWithObjects:
-                        @"sin(dtor(45))",
-                        @"1+2+3+4+5+6+7+8+9+10",
-                        @"1*2*3*4*5*6*7*8*9*10",
-                        @"cos(pi_2())",
-                        @"45.7!",
-                        @"45!",
-                        @"2**3**2**3**2",
-                        nil];
-    
-    for (NSString *s in strings) {
-        NSError *e = nil;
-        NSNumber *n = [s numberByEvaluatingStringWithSubstitutions:nil error:&e];
-        NSLog(@"================");
-        NSLog(@"%@ = ", s);
-        NSLog(@"\t%@", n);
-    }
 	
 	printf("Math Evaluator!\n");
 	printf("\ttype a mathematical expression to evaluate it.\n");
@@ -58,7 +41,12 @@ int main (int argc, const char * argv[]) {
 		if ([line isEqual:@"exit"]) { break; }
 		if ([line isEqual:@"list"]) { listFunctions(); continue; }
 		
-		NSNumber * value = [line numberByEvaluatingString];
+        NSError *error = nil;
+        DDMathStringTokenizer *tokenizer = [[ConstantRecognizer alloc] initWithString:line error:&error];
+        DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
+        DDExpression *expression = [DDExpression expressionWithParser:parser error:&error];
+        NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
+        
 		printf("\t%s = %s\n", [line UTF8String], [[value description] UTF8String]);
 
 	} while (1);

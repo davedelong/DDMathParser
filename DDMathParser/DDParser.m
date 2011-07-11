@@ -78,15 +78,25 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 + (DDOperatorAssociativity) defaultPowerAssociativity { return defaultPowerAssociativity; }
 + (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { defaultPowerAssociativity = newAssociativity; }
 
+
 + (id) parserWithString:(NSString *)string error:(NSError **)error {
-	return [[[self alloc] initWithString:string error:error] autorelease];
+    return [[[self alloc] initWithString:string error:error] autorelease];
 }
 
 - (id) initWithString:(NSString *)string error:(NSError **)error {
+    DDMathStringTokenizer *t = [DDMathStringTokenizer tokenizerWithString:string error:error];
+    return [self initWithTokenizer:t error:error];
+}
+
++ (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+	return [[[self alloc] initWithTokenizer:tokenizer error:error] autorelease];
+}
+
+- (id)initWithTokenizer:(DDMathStringTokenizer *)t error:(NSError **)error {
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
-		tokenizer = [[DDMathStringTokenizer alloc] initWithString:string error:error];
+		tokenizer = [t retain];
 		if (!tokenizer) {
 			[self release];
 			return nil;

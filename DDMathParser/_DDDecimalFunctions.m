@@ -54,6 +54,14 @@ NSDecimal DDDecimalTwo() {
 	return [_two decimalValue];
 }
 
+NSDecimal DDDecimalPhi() {
+    static NSDecimalNumber *_phi = nil;
+    if (_phi == nil) {
+        _phi = [[NSDecimalNumber alloc] initWithString:@"1.61803398874989484820458683436563811772030917980576286213544862270526046281890"];
+    }
+    return [_phi decimalValue];
+}
+
 NSDecimal DDDecimalPi() {
 	static NSDecimalNumber * _pi = nil;
 	if (_pi == nil) {

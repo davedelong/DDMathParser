@@ -14,11 +14,13 @@ typedef enum {
 	DDExpressionTypeVariable = 2
 } DDExpressionType;
 
-@class DDMathEvaluator;
+@class DDMathEvaluator, DDParser;
 
 @interface DDExpression : NSObject <NSCoding>
 
 + (id) expressionFromString:(NSString *)expressionString error:(NSError **)error;
++ (id) expressionWithParser:(DDParser *)parser error:(NSError **)error;
+
 + (id) numberExpressionWithNumber:(NSNumber *)number;
 + (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError **)error;
 + (id) variableExpressionWithVariable:(NSString *)variable;
