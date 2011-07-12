@@ -47,7 +47,11 @@ int main (int argc, const char * argv[]) {
         DDExpression *expression = [DDExpression expressionWithParser:parser error:&error];
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
         
-		printf("\t%s = %s\n", [line UTF8String], [[value description] UTF8String]);
+        if (value == nil) {
+            printf("\tERROR: %s\n", [[error description] UTF8String]);
+        } else {
+            printf("\t%s = %s\n", [line UTF8String], [[value description] UTF8String]);
+        }
 
 	} while (1);
 

@@ -217,14 +217,7 @@
 			children = (
 				55E2FCB5129DC90400CD6023 /* DDParser.h */,
 				55E2FCB6129DC90400CD6023 /* DDParser.m */,
-				55325A0412A8C34E00DE9EB0 /* DDTerm.h */,
-				55325A0512A8C34E00DE9EB0 /* DDTerm.m */,
-				5508991612BCA4D300BBC2D9 /* DDGroupTerm.h */,
-				5508991712BCA4D300BBC2D9 /* DDGroupTerm.m */,
-				5508991B12BCA4F000BBC2D9 /* DDFunctionTerm.h */,
-				5508991C12BCA4F000BBC2D9 /* DDFunctionTerm.m */,
-				5508992012BCAD5C00BBC2D9 /* DDOperatorTerm.h */,
-				5508992112BCAD5C00BBC2D9 /* DDOperatorTerm.m */,
+				5565122613CAB1D7004B7C67 /* Terms */,
 			);
 			name = "Precedence Parser";
 			sourceTree = "<group>";
@@ -259,6 +252,21 @@
 				553CC9C813C6AECA00A81B05 /* ConstantRecognizer.m */,
 			);
 			name = "Command line demo";
+			sourceTree = "<group>";
+		};
+		5565122613CAB1D7004B7C67 /* Terms */ = {
+			isa = PBXGroup;
+			children = (
+				55325A0412A8C34E00DE9EB0 /* DDTerm.h */,
+				55325A0512A8C34E00DE9EB0 /* DDTerm.m */,
+				5508991612BCA4D300BBC2D9 /* DDGroupTerm.h */,
+				5508991712BCA4D300BBC2D9 /* DDGroupTerm.m */,
+				5508991B12BCA4F000BBC2D9 /* DDFunctionTerm.h */,
+				5508991C12BCA4F000BBC2D9 /* DDFunctionTerm.m */,
+				5508992012BCAD5C00BBC2D9 /* DDOperatorTerm.h */,
+				5508992112BCAD5C00BBC2D9 /* DDOperatorTerm.m */,
+			);
+			name = Terms;
 			sourceTree = "<group>";
 		};
 		5570E4E412AABEF3002FE945 /* Tokens */ = {
