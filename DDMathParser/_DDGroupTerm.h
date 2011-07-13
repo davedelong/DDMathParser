@@ -11,4 +11,7 @@
 
 @property (nonatomic,readonly) NSMutableArray *subterms;
 
+- (id)_initWithSubterms:(NSArray *)terms error:(NSError **)error;
+- (void)_setSubterms:(NSArray *)newTerms;
+
 @end

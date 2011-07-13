@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class DDMathStringToken;
 @class DDMathStringTokenizer;
 @class DDParser;
 
 typedef enum {
     DDParserTermTypeNumber = 1,
     DDParserTermTypeVariable,
+    DDParserTermTypeOperator,
     DDParserTermTypeFunction,
     DDParserTermTypeGroup
 } DDParserTermType;
@@ -25,7 +27,10 @@ typedef enum {
 @property (nonatomic,readonly) DDMathStringToken *token;
 
 + (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
+
 + (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
+
+- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error;
 
