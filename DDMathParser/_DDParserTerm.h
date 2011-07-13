@@ -1,0 +1,32 @@
+//
+//  _DDParserTerm.h
+//  DDMathParser
+//
+//  Created by Dave DeLong on 7/11/11.
+//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@class DDMathStringTokenizer;
+@class DDParser;
+
+typedef enum {
+    DDParserTermTypeNumber = 1,
+    DDParserTermTypeVariable,
+    DDParserTermTypeFunction,
+    DDParserTermTypeGroup
+} DDParserTermType;
+
+@interface _DDParserTerm : NSObject
+
+@property (nonatomic,getter=isResolved) BOOL resolved;
+@property (nonatomic,readonly) DDParserTermType type;
+@property (nonatomic,readonly) DDMathStringToken *token;
+
++ (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
++ (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
+
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error;
+
+@end
