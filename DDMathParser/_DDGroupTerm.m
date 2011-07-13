@@ -11,6 +11,8 @@
 #import "DDMathStringToken.h"
 #import "DDMathParserMacros.h"
 
+#import "_DDOperatorTerm.h"
+
 @implementation _DDGroupTerm
 @synthesize subterms;
 
@@ -63,5 +65,32 @@
 }
 
 - (DDParserTermType)type { return DDParserTermTypeGroup; }
+
+#pragma mark - Resolution
+
+- (NSIndexSet *) indicesOfOperatorsWithHighestPrecedence {
+	NSMutableIndexSet * indices = [NSMutableIndexSet indexSet];
+	__block DDPrecedence currentPrecedence = DDPrecedenceUnknown;
+    [[self subterms] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+#pragma unused(stop)
+        _DDParserTerm *term = obj;
+        if ([term type] == DDParserTermTypeOperator) {
+            if ([(_DDOperatorTerm *)term operatorPrecedence] > currentPrecedence) {
+                currentPrecedence = [(_DDOperatorTerm *)term operatorPrecedence];
+                [indices removeAllIndexes];
+                [indices addIndex:idx];
+            } else if ([(_DDOperatorTerm *)term operatorPrecedence] == currentPrecedence) {
+                [indices addIndex:idx];
+            }
+        }
+    }];
+	return indices;
+}
+
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
+    if ([self isResolved]) { return YES; }
+    
+    //TODO: do the magic
+}
 
 @end

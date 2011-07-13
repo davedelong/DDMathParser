@@ -27,9 +27,7 @@ typedef enum {
 @property (nonatomic,readonly) DDMathStringToken *token;
 
 + (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
-
 + (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
-
 - (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error;

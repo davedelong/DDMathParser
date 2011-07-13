@@ -12,5 +12,6 @@
 @interface _DDOperatorTerm : _DDParserTerm
 
 @property (nonatomic,readonly) DDOperator operatorType;
+@property (nonatomic,readonly) DDPrecedence operatorPrecedence;
 
 @end

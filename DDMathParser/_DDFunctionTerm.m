@@ -50,6 +50,20 @@
     [functionName release];
     [super dealloc];
 }
+
 - (DDParserTermType)type { return DDParserTermTypeFunction; }
+
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
+    if ([self isResolved]) { return YES; }
+    
+    for (_DDParserTerm *term in [self subterms]) {
+        if (![term resolveWithParser:parser error:error]) {
+            return NO;
+        }
+    }
+    
+    [self setResolved:YES];
+    return YES;
+}
 
 @end

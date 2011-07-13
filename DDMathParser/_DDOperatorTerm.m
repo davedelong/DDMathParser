@@ -11,18 +11,14 @@
 
 @implementation _DDOperatorTerm
 
+- (DDParserTermType)type { return DDParserTermTypeOperator; }
+
 - (DDOperator)operatorType {
     return [[self token] operatorType];
 }
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
+- (DDPrecedence)operatorPrecedence {
+    return [[self token] operatorPrecedence];
 }
 
 @end

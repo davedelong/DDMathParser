@@ -10,14 +10,11 @@
 
 @implementation _DDVariableTerm
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
+- (DDParserTermType)type { return DDParserTermTypeVariable; }
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
+#pragma unused(parser, error)
+    [self setResolved:YES];
+    return YES;
 }
 
 @end
