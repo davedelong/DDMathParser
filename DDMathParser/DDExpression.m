@@ -10,7 +10,6 @@
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
 #import "DDParser.h"
-#import "DDParser.h"
 
 #import "_DDNumberExpression.h"
 #import "_DDFunctionExpression.h"
@@ -19,13 +18,9 @@
 
 @implementation DDExpression
 
-+ (id) expressionWithParser:(DDParser *)parser error:(NSError **)error {
-    return [parser parsedExpressionWithError:error];
-}
-
 + (id) expressionFromString:(NSString *)expressionString error:(NSError **)error {
     DDParser *parser = [DDParser parserWithString:expressionString error:error];
-    return [self expressionWithParser:parser error:error];
+    return [parser parsedExpressionWithError:error];
 }
 
 + (id) numberExpressionWithNumber:(NSNumber *)number {
