@@ -66,7 +66,7 @@
             _DDGroupTerm *parameterGroup = [[_DDGroupTerm alloc] _initWithSubterms:lastParameters error:error];
             [newSubterms addObject:parameterGroup];
             [parameterGroup release];
-        } else {
+        } else if (rangeOfLastParameter.length == 1) {
             [newSubterms addObject:[[self subterms] objectAtIndex:rangeOfLastParameter.location]];
         }
         

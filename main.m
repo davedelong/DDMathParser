@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
 #import "ConstantRecognizer.h"
-#import "_DDParserTerm.h"
 
 NSString* readLine() {
     
@@ -9,12 +8,12 @@ NSString* readLine() {
     
     do {
         char c = getchar();
-        [data appendBytes:&c length:1];
         if (c == '\r' || c == '\n') { break; }
+        [data appendBytes:&c length:1];
         
     } while (1);
     
-	return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
 }
 
 void listFunctions() {
@@ -47,23 +46,13 @@ int main (int argc, const char * argv[]) {
         NSError *error = nil;
         DDMathStringTokenizer *tokenizer = [[ConstantRecognizer alloc] initWithString:line error:&error];
         DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
-        
-        _DDParserTerm *term = [_DDParserTerm rootTermWithTokenizer:tokenizer error:&error];
-        NSLog(@"before: %@", term);
-        [term resolveWithParser:parser error:&error];
-        NSLog(@"after: %@", term);
-        DDExpression *newExpression = [term expressionWithError:&error];
-        NSLog(@"exp: %@", newExpression);
-        NSNumber *newValue = [newExpression evaluateWithSubstitutions:nil evaluator:nil error:&error];
-        NSLog(@"val: %@", newValue);
-        
-        DDExpression *expression = [DDExpression expressionWithParser:parser error:&error];
+        DDExpression *expression = [parser parsedExpressionWithError:&error];
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
         
         if (value == nil) {
             printf("\tERROR: %s\n", [[error description] UTF8String]);
         } else {
-            printf("\t%s = %s\n", [line UTF8String], [[value description] UTF8String]);
+            printf("\t%s = %s\n", [[expression description] UTF8String], [[value description] UTF8String]);
         }
 
 	} while (1);
