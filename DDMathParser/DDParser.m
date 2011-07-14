@@ -122,6 +122,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 
 - (DDOperatorAssociativity) associativityForOperator:(DDOperator)operatorType {
 	switch (operatorType) {
+        // binary operators can have customizable associativity
 		case DDOperatorBitwiseOr: return bitwiseOrAssociativity;
 		case DDOperatorBitwiseXor: return bitwiseXorAssociativity;
 		case DDOperatorBitwiseAnd: return bitwiseAndAssociativity;
@@ -134,8 +135,14 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 		case DDOperatorModulo: return modAssociativity;
 		case DDOperatorPower: return powerAssociativity;
 			
-			//unary operators are right associative (factorial doesn't really count)
+        // unary operators are always right associative (except for factorial)
+        case DDOperatorUnaryPlus:
+        case DDOperatorUnaryMinus:
 		case DDOperatorBitwiseNot: return DDOperatorAssociativityRight;
+            
+        // factorial is always left associative
+        case DDOperatorFactorial: return DDOperatorAssociativityLeft;
+            
 		default: return DDOperatorAssociativityLeft;
 	}
 	return DDOperatorAssociativityLeft;

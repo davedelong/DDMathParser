@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
 #import "ConstantRecognizer.h"
+#import "_DDParserTerm.h"
 
 NSString* readLine() {
     
@@ -33,6 +34,8 @@ int main (int argc, const char * argv[]) {
 	printf("\nStandard operators available: + - * / %% ! & | ~ ^ << >>\n");
 	printf("\nType \"list\" to show available functions\n");
 	printf("Type \"exit\" to quit\n");
+    
+    [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
 	
 	NSString * line = nil;
 	do {
@@ -44,6 +47,16 @@ int main (int argc, const char * argv[]) {
         NSError *error = nil;
         DDMathStringTokenizer *tokenizer = [[ConstantRecognizer alloc] initWithString:line error:&error];
         DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
+        
+        _DDParserTerm *term = [_DDParserTerm rootTermWithTokenizer:tokenizer error:&error];
+        NSLog(@"before: %@", term);
+        [term resolveWithParser:parser error:&error];
+        NSLog(@"after: %@", term);
+        DDExpression *newExpression = [term expressionWithError:&error];
+        NSLog(@"exp: %@", newExpression);
+        NSNumber *newValue = [newExpression evaluateWithSubstitutions:nil evaluator:nil error:&error];
+        NSLog(@"val: %@", newValue);
+        
         DDExpression *expression = [DDExpression expressionWithParser:parser error:&error];
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
         

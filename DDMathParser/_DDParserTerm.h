@@ -11,6 +11,7 @@
 @class DDMathStringToken;
 @class DDMathStringTokenizer;
 @class DDParser;
+@class DDExpression;
 
 typedef enum {
     DDParserTermTypeNumber = 1,
@@ -31,5 +32,6 @@ typedef enum {
 - (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error;
+- (DDExpression *)expressionWithError:(NSError **)error;
 
 @end

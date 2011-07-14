@@ -13,5 +13,7 @@
 
 @property (nonatomic,readonly) DDOperator operatorType;
 @property (nonatomic,readonly) DDPrecedence operatorPrecedence;
+@property (nonatomic,readonly) DDOperatorArity operatorArity;
+@property (nonatomic,readonly) NSString *operatorFunction;
 
 @end

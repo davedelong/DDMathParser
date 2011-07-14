@@ -7,6 +7,9 @@
 //
 
 #import "_DDVariableTerm.h"
+#import "DDMathParserMacros.h"
+#import "DDMathStringToken.h"
+#import "DDExpression.h"
 
 @implementation _DDVariableTerm
 
@@ -15,6 +18,14 @@
 #pragma unused(parser, error)
     [self setResolved:YES];
     return YES;
+}
+- (NSString *)description {
+    return [NSString stringWithFormat:@"$%@", [[self token] token]];
+}
+
+- (DDExpression *)expressionWithError:(NSError **)error {
+    ERR_ASSERT(error);
+    return [DDExpression variableExpressionWithVariable:[[self token] token]];
 }
 
 @end

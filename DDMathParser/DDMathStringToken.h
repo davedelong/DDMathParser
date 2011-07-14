@@ -19,10 +19,11 @@
 
 + (id) mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type;
 
-@property (readonly) NSString * token;
-@property (readonly) DDTokenType tokenType;
-@property (readonly) DDOperator operatorType;
-@property DDPrecedence operatorPrecedence;
+@property (nonatomic,readonly) NSString * token;
+@property (nonatomic,readonly) DDTokenType tokenType;
+@property (nonatomic,readonly) DDOperator operatorType;
+@property (nonatomic,readonly) DDOperatorArity operatorArity;
+@property (nonatomic) DDPrecedence operatorPrecedence;
 
 - (NSNumber *) numberValue;
 

@@ -7,6 +7,9 @@
 //
 
 #import "_DDNumberTerm.h"
+#import "DDMathStringToken.h"
+#import "DDExpression.h"
+#import "DDMathParserMacros.h"
 
 @implementation _DDNumberTerm
 
@@ -15,6 +18,14 @@
 #pragma unused(parser, error)
     [self setResolved:YES];
     return YES;
+}
+- (NSString *)description {
+    return [[self token] description];
+}
+
+- (DDExpression *)expressionWithError:(NSError **)error {
+    ERR_ASSERT(error);
+    return [DDExpression numberExpressionWithNumber:[[self token] numberValue]];
 }
 
 @end

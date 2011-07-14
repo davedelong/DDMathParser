@@ -44,6 +44,13 @@ typedef enum {
 	DDOperatorUnaryPlus
 } DDOperator;
 
+typedef enum {
+    DDOperatorArityUnknown = 0,
+    
+    DDOperatorArityUnary,
+    DDOperatorArityBinary
+} DDOperatorArity;
+
 enum {
 	DDPrecedenceBitwiseOr = 0,
 	DDPrecedenceBitwiseXor,

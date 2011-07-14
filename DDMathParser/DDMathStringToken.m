@@ -9,7 +9,7 @@
 #import "DDMathStringToken.h"
 
 @implementation DDMathStringToken
-@synthesize token, tokenType, operatorType, operatorPrecedence;
+@synthesize token, tokenType, operatorType, operatorPrecedence, operatorArity;
 
 - (void) dealloc {
 	[token release];
@@ -24,27 +24,33 @@
 		tokenType = type;
 		operatorType = DDOperatorInvalid;
 		operatorPrecedence = DDPrecedenceNone;
+        operatorArity = DDOperatorArityUnknown;
 		
 		if (tokenType == DDTokenTypeOperator) {
 			if ([token isEqual:@"|"]) {
 				operatorType = DDOperatorBitwiseOr;
 				operatorPrecedence = DDPrecedenceBitwiseOr;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"^"]) {
 				operatorType = DDOperatorBitwiseXor; 
 				operatorPrecedence = DDPrecedenceBitwiseXor;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"&"]) {
 				operatorType = DDOperatorBitwiseAnd;
 				operatorPrecedence = DDPrecedenceBitwiseAnd;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"<<"]) {
 				operatorType = DDOperatorLeftShift;
 				operatorPrecedence = DDPrecedenceLeftShift;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@">>"]) {
 				operatorType = DDOperatorRightShift;
 				operatorPrecedence = DDPrecedenceRightShift;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"-"]) {
 				operatorType = DDOperatorMinus;
@@ -57,26 +63,32 @@
 			if ([token isEqual:@"/"]) {
 				operatorType = DDOperatorDivide;
 				operatorPrecedence = DDPrecedenceDivision;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"*"]) {
 				operatorType = DDOperatorMultiply;
 				operatorPrecedence = DDPrecedenceMultiplication;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"%"]) {
 				operatorType = DDOperatorModulo;
 				operatorPrecedence = DDPrecedenceModulo;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"~"]) {
 				operatorType = DDOperatorBitwiseNot;
 				operatorPrecedence = DDPrecedenceUnary;
+                operatorArity = DDOperatorArityUnary;
 			}
 			if ([token isEqual:@"!"]) {
 				operatorType = DDOperatorFactorial;
 				operatorPrecedence = DDPrecedenceFactorial;
+                operatorArity = DDOperatorArityUnary;
 			}
 			if ([token isEqual:@"**"]) {
 				operatorType = DDOperatorPower;
 				operatorPrecedence = DDPrecedencePower;
+                operatorArity = DDOperatorArityBinary;
 			}
 			if ([token isEqual:@"("]) {
 				operatorType = DDOperatorParenthesisOpen;
@@ -126,6 +138,17 @@
 		if (operatorType == DDOperatorMinus) { return DDOperatorUnaryMinus; }
 	}
 	return operatorType;
+}
+
+- (void)setOperatorPrecedence:(DDPrecedence)precedence {
+    if (operatorArity == DDOperatorArityUnknown) {
+        if (precedence == DDPrecedenceUnary || precedence == DDPrecedenceFactorial) {
+            operatorArity = DDOperatorArityUnary;
+        } else if (precedence != DDPrecedenceNone) {
+            operatorArity = DDOperatorArityBinary;
+        }
+    }
+    operatorPrecedence = precedence;
 }
 
 @end

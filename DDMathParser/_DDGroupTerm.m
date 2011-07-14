@@ -11,7 +11,18 @@
 #import "DDMathStringToken.h"
 #import "DDMathParserMacros.h"
 
+#import "DDParser.h"
 #import "_DDOperatorTerm.h"
+#import "_DDFunctionTerm.h"
+
+@interface _DDGroupTerm ()
+
+- (NSIndexSet *)_indicesOfOperatorsWithHighestPrecedence;
+- (BOOL)_reduceTermsAroundOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error;
+- (BOOL)_reduceBinaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error;
+- (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error;
+
+@end
 
 @implementation _DDGroupTerm
 @synthesize subterms;
@@ -66,9 +77,56 @@
 
 - (DDParserTermType)type { return DDParserTermTypeGroup; }
 
+- (NSString *)description {
+    NSArray *descriptions = [[self subterms] valueForKey:@"description"];
+    NSString *description = [descriptions componentsJoinedByString:@""];
+    return [NSString stringWithFormat:@"(%@)", description];
+}
+
 #pragma mark - Resolution
 
-- (NSIndexSet *) indicesOfOperatorsWithHighestPrecedence {
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
+    if ([self isResolved]) { return YES; }
+    
+    while ([[self subterms] count] > 1) {
+        NSIndexSet *operatorIndices = [self _indicesOfOperatorsWithHighestPrecedence];
+        if ([operatorIndices count] > 0) {
+            NSUInteger index = [operatorIndices firstIndex];
+            if ([operatorIndices count] > 1) {
+                // we have more than one index
+                // use a different index if the operator is right associative
+                _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
+                
+                if ([parser associativityForOperator:[operatorTerm operatorType]] == DDOperatorAssociativityRight) {
+                    index = [operatorIndices lastIndex];
+                }
+            }
+            
+            // we have the index for the next operator
+            if (![self _reduceTermsAroundOperatorAtIndex:index withParser:parser error:error]) {
+                return NO;
+            }
+            
+        } else {
+            // more than one term is left
+            // but there are no more operators
+            *error = ERR_BADARG(@"invalid format: %@", self);
+            return NO;
+        }
+    }
+    
+    if ([[self subterms] count] > 0) {
+        _DDParserTerm *subterm = [[self subterms] objectAtIndex:0];
+        if (![subterm resolveWithParser:parser error:error]) {
+            return NO;
+        }
+    }
+    
+    [self setResolved:YES];
+    return YES;
+}
+
+- (NSIndexSet *)_indicesOfOperatorsWithHighestPrecedence {
 	NSMutableIndexSet * indices = [NSMutableIndexSet indexSet];
 	__block DDPrecedence currentPrecedence = DDPrecedenceUnknown;
     [[self subterms] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -87,10 +145,115 @@
 	return indices;
 }
 
-- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
-    if ([self isResolved]) { return YES; }
+- (BOOL)_reduceTermsAroundOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+    _DDOperatorTerm *operator = [[self subterms] objectAtIndex:index];
     
-    //TODO: do the magic
+    if ([operator operatorArity] == DDOperatorArityBinary) {
+        return [self _reduceBinaryOperatorAtIndex:index withParser:parser error:error];
+    } else if ([operator operatorArity] == DDOperatorArityUnary) {
+        return [self _reduceUnaryOperatorAtIndex:index withParser:parser error:error];
+    }
+    
+    *error = ERR_BADARG(@"unknown arity for operator: %@", operator);
+    return NO;
+}
+
+- (BOOL)_reduceBinaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+#pragma unused(parser)
+    _DDOperatorTerm *operator = [[self subterms] objectAtIndex:index];
+    
+    if (index == 0) {
+        *error = ERR_BADARG(@"no left operand to binary %@", operator);
+        return NO;
+    }
+    if (index == [[self subterms] count] - 1) {
+        *error = ERR_BADARG(@"no right operand to binary %@", operator);
+        return NO;
+    }
+    
+    NSRange replacementRange = NSMakeRange(index-1, 3);
+    
+    _DDParserTerm *leftOperand = [[self subterms] objectAtIndex:index-1];
+    _DDParserTerm *rightmostOperand = [[self subterms] objectAtIndex:index+1];
+    
+    NSRange rightOperandRange = NSMakeRange(index+1, 1);
+    while ([rightmostOperand type] == DDParserTermTypeOperator && [(_DDOperatorTerm *)rightmostOperand operatorArity] == DDOperatorArityUnary) {
+        // this should really only happen when operator is the power operator and the exponent has 1+ negations
+        rightOperandRange.length++;
+        if (NSMaxRange(rightOperandRange)-1 >= [[self subterms] count]) {
+            *error = ERR_BADARG(@"no right operand to unary %@", rightmostOperand);
+            return NO;
+        }
+        rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(rightOperandRange)-1];
+    }
+    
+    if (rightOperandRange.length > 1) {
+        NSArray *rightOperands = [[self subterms] subarrayWithRange:rightOperandRange];
+        _DDGroupTerm *group = [[_DDGroupTerm alloc] _initWithSubterms:rightOperands error:error];
+        [[self subterms] replaceObjectsInRange:rightOperandRange withObjectsFromArray:[NSArray arrayWithObject:group]];
+        [group release];
+        
+        rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(replacementRange)-1];
+    }
+    
+    NSArray *parameters = [NSArray arrayWithObjects:leftOperand, rightmostOperand, nil];
+    _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
+    
+    [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
+    [function release];
+    
+    return YES;
+}
+
+- (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+    _DDOperatorTerm *operator = [[self subterms] objectAtIndex:index];
+    DDOperatorAssociativity associativity = [parser associativityForOperator:[operator operatorType]];
+    
+    NSRange replacementRange = NSMakeRange(0, 0);
+    _DDParserTerm *parameter = nil;
+    
+    if (associativity == DDOperatorAssociativityRight) {
+        // right associative unary operator (negate, not)
+        if (index == [[self subterms] count] - 1) {
+            *error = ERR_BADARG(@"no right operand to unary %@", operator);
+            return NO;
+        }
+        
+        parameter = [[self subterms] objectAtIndex:index+1];
+        replacementRange = NSMakeRange(index, 2);
+        
+    } else {
+        // left associative unary operator (factorial)
+        if (index == 0) {
+            *error = ERR_BADARG(@"no left operand to unary %@", operator);
+            return NO;
+        }
+        
+        parameter = [[self subterms] objectAtIndex:index-1];
+        replacementRange = NSMakeRange(index-1, 2);
+        
+    }
+    
+    NSArray *parameters = [NSArray arrayWithObject:parameter];
+    _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
+    
+    [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
+    
+    [function release];
+    
+    return YES;
+}
+
+#pragma mark - Expressions
+
+- (DDExpression *)expressionWithError:(NSError **)error {
+    ERR_ASSERT(error);
+    if ([[self subterms] count] == 1) {
+        _DDParserTerm *term = [[self subterms] objectAtIndex:0];
+        return [term expressionWithError:error];
+    }
+    *error = ERR_GENERIC(@"Unable to create expression from term: %@", self);
+    return nil;
 }
 
 @end

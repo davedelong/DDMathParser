@@ -21,4 +21,43 @@
     return [[self token] operatorPrecedence];
 }
 
+- (DDOperatorArity)operatorArity {
+    return [[self token] operatorArity];
+}
+
+- (NSString *)operatorFunction {
+    
+    static NSDictionary *operatorNames = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+		operatorNames = [[NSDictionary alloc] initWithObjectsAndKeys:
+						 @"or", @"|",
+						 @"xor", @"^", 
+						 @"and", @"&", 
+						 @"lshift", @"<<", 
+						 @"rshift", @">>", 
+						 @"subtract", @"-",
+						 @"add", @"+", 
+						 @"divide", @"/", 
+						 @"multiply", @"*", 
+						 @"mod", @"%", 
+						 @"not", @"~", 
+						 @"factorial", @"!", 
+						 @"pow", @"**", 
+						 nil];
+    });
+	
+	NSString * function = [operatorNames objectForKey:[[self token] token]];
+	if ([self operatorPrecedence] == DDPrecedenceUnary) {
+		if ([[[self token] token] isEqual:@"-"]) { return @"negate"; }
+		if ([[[self token] token] isEqual:@"+"]) { return @""; }
+	}
+    
+    return function;
+}
+
+- (NSString *)description {
+    return [[self token] token];
+}
+
 @end
