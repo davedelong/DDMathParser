@@ -48,6 +48,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 			[self setDefaultPowerAssociativity:DDOperatorAssociativityRight];
 		}
 	}
+    [super initialize];
 }
 
 + (DDOperatorAssociativity) defaultBitwiseOrAssociativity { return defaultBitwiseOrAssociativity; }
