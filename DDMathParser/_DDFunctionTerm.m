@@ -71,6 +71,8 @@
         }
         
         [self _setSubterms:newSubterms];
+    } else {
+        *error = ERR_BADARG(@"missing parentheses after function \"%@\"", token);
     }
     return self;
 }

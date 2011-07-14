@@ -63,10 +63,6 @@
             term = [[_DDFunctionTerm alloc] _initWithTokenizer:tokenizer error:error];
         }
         
-        if (term == nil) {
-            *error = ERR_GENERIC(@"invalid token: %@", next);
-        }
-        
         return [term autorelease];
     } else {
         *error = ERR_GENERIC(@"can't create a term with a nil token");
