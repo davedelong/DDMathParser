@@ -159,7 +159,7 @@ Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathPars
 There are several ways to evaluate strings, depending on how much customization you want to do.  Most of these options require an `NSError **` parameter, although some do not.
 
 - If you use one of the options that does *not* accept an `NSError **`, then any tokenization, parsing, or evaluation errors will be `NSLog`ged.
-- If you use one of the options that does accept an `NSError **`, then you *must* supply one.  Failing to do so could result in some unexpected behavior.
+- If you use one of the options that does accept an `NSError **`, then you *must* supply one.  Failing to do so will probably result in a crash.
 
 ### NSString
 
@@ -228,11 +228,13 @@ In these cases, the numbers are converted to `doubles` and then are computed wit
 
 `DDMathParser` requires blocks, so therefore is only compatible with iOS 4+ and Mac OS X 10.6+.
 
+`DDMathParser` requires the [Clang](http://clang.llvm.org/) compiler.
+
 Though it has not been tested, `DDMathParser` should be fully compatible with garbage collected applications.
 
 ## License
 
-Copyright (c) 2011 Dave DeLong
+Copyright (c) 2010-2011 Dave DeLong
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
