@@ -12,9 +12,7 @@
 @class DDMathEvaluator;
 @class DDExpression;
 
-@interface DDMathEvaluator : NSObject {
-	NSMutableDictionary * functions;
-}
+@interface DDMathEvaluator : NSObject
 
 + (id) sharedMathEvaluator;
 

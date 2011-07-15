@@ -12,31 +12,38 @@
 #import "DDMathParserMacros.h"
 #import "DDExpression.h"
 #import "_DDFunctionUtilities.h"
+#import "_DDFunctionContainer.h"
 
 @interface DDMathEvaluator ()
 
-- (NSSet *) _standardFunctions;
-- (NSDictionary *) _standardAliases;
++ (NSSet *) _standardFunctions;
++ (NSDictionary *) _standardAliases;
++ (NSSet *)_standardNames;
 - (void) _registerStandardFunctions;
 
 @end
 
 
-@implementation DDMathEvaluator
+@implementation DDMathEvaluator {
+    NSMutableArray *functions;
+	NSMutableDictionary * functionMap;
+}
 
 static DDMathEvaluator * _sharedEvaluator = nil;
 
 + (id) sharedMathEvaluator {
-	if (_sharedEvaluator == nil) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
 		_sharedEvaluator = [[DDMathEvaluator alloc] init];
-	}
+    });
 	return _sharedEvaluator;
 }
 
 - (id) init {
 	self = [super init];
 	if (self) {
-		functions = [[NSMutableDictionary alloc] init];
+		functions = [[NSMutableArray alloc] init];
+        functionMap = [[NSMutableDictionary alloc] init];
 		[self _registerStandardFunctions];
 	}
 	return self;
@@ -47,33 +54,46 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 		_sharedEvaluator = nil;
 	}
 	[functions release];
+    [functionMap release];
 	[super dealloc];
 }
 
+#pragma mark - Functions
+
 - (BOOL) registerFunction:(DDMathFunction)function forName:(NSString *)functionName {
+    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
+    
 	if ([self functionWithName:functionName] != nil) { return NO; }
-	if ([[self _standardFunctions] containsObject:[functionName lowercaseString]]) { return NO; }
-	
-	function = Block_copy(function);
-	[functions setObject:function forKey:[functionName lowercaseString]];
-	Block_release(function);
+	if ([[[self class] _standardNames] containsObject:name]) { return NO; }
+    
+    _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:name];
+    [functions addObject:container];
+    [functionMap setObject:container forKey:name];
+    [container release];
 	
 	return YES;
 }
 
 - (void) unregisterFunctionWithName:(NSString *)functionName {
+    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
 	//can't unregister built-in functions
-	if ([[self _standardFunctions] containsObject:[functionName lowercaseString]]) { return; }
+	if ([[[self class] _standardNames] containsObject:name]) { return; }
 	
-	[functions removeObjectForKey:[functionName lowercaseString]];
+    _DDFunctionContainer *container = [self functionWithName:functionName];
+    for (NSString *alias in [container aliases]) {
+        [functionMap removeObjectForKey:name];
+    }
+    [functions removeObject:container];
 }
 
 - (DDMathFunction) functionWithName:(NSString *)functionName {
-	return [functions objectForKey:[functionName lowercaseString]];
+    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
+    _DDFunctionContainer *container = [functionMap objectForKey:name];
+    return [container function];
 }
 
 - (NSArray *) registeredFunctions {
-	return [functions allKeys];
+	return [functionMap allKeys];
 }
 
 - (BOOL) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error {
@@ -89,15 +109,21 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	//we can't add an alias for a function that already exists
 	DDMathFunction function = [self functionWithName:alias];
 	if (function != nil) { return NO; }
-	
-	function = [self functionWithName:functionName];
-	return [self registerFunction:function forName:alias];
+    
+    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
+    _DDFunctionContainer *container = [functionMap objectForKey:name];
+    alias = [_DDFunctionContainer normalizedAlias:alias];
+    [container addAlias:alias];
+    [functionMap setObject:container forKey:alias];
+    
+    return YES;
 }
 
 - (void) removeAlias:(NSString *)alias {
+    alias = [_DDFunctionContainer normalizedAlias:alias];
 	//you can't unregister a standard alias (like "avg")
-	if ([[self _standardAliases] objectForKey:[alias lowercaseString]] != nil) { return; }
-	[self unregisterFunctionWithName:alias];
+	if ([[[self class] _standardNames] containsObject:alias]) { return; }
+    [self unregisterFunctionWithName:alias];
 }
 
 #pragma mark Evaluation
@@ -125,8 +151,11 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 
 #pragma mark Built-In Functions
 
-- (NSSet *) _standardFunctions {
-	return [NSSet setWithObjects:
++ (NSSet *) _standardFunctions {
+    static dispatch_once_t onceToken;
+    static NSSet *standardFunctions = nil;
+    dispatch_once(&onceToken, ^{
+        standardFunctions = [[NSSet alloc] initWithObjects:
 			//arithmetic functions (2 parameters)
 			@"add",
 			@"subtract",
@@ -209,37 +238,59 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 			@"ln2",
 			@"ln10",
 			nil];
-	
+    });
+	return standardFunctions;
 }
 
-- (NSDictionary *) _standardAliases {
-	return [NSDictionary dictionaryWithObjectsAndKeys:
++ (NSDictionary *) _standardAliases {
+    static dispatch_once_t onceToken;
+    static NSDictionary *standardAliases = nil;
+    dispatch_once(&onceToken, ^{
+        standardAliases = [[NSDictionary alloc] initWithObjectsAndKeys:
 			@"average", @"avg",
 			@"average", @"mean",
 			@"floor", @"trunc",
             @"pi", @"\u03C0", // π
             @"phi", @"\u03D5", // ϕ
 			nil];
+    });
+    return standardAliases;
+}
+
++ (NSSet *)_standardNames {
+    static dispatch_once_t onceToken;
+    static NSSet *names = nil;
+    dispatch_once(&onceToken, ^{
+        NSSet *functions = [self _standardFunctions];
+        NSDictionary *aliases = [self _standardAliases];
+        NSMutableSet *both = [NSMutableSet setWithSet:functions];
+        [both addObjectsFromArray:[aliases allKeys]];
+        names = [both copy];
+    });
+    return names;
 }
 
 - (void) _registerStandardFunctions {
-	for (NSString * functionName in [self _standardFunctions]) {
+	for (NSString *functionName in [[self class] _standardFunctions]) {
 		
-		NSString * methodName = [NSString stringWithFormat:@"%@Function", [functionName lowercaseString]];
+		NSString *methodName = [NSString stringWithFormat:@"%@Function", functionName];
 		SEL methodSelector = NSSelectorFromString(methodName);
 		if ([_DDFunctionUtilities respondsToSelector:methodSelector]) {
 			DDMathFunction function = [_DDFunctionUtilities performSelector:methodSelector];
 			if (function != nil) {
-				[functions setObject:function forKey:[functionName lowercaseString]];
+                _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:functionName];
+                [functions addObject:container];
+                [functionMap setObject:container forKey:functionName];
+                [container release];
 			} else {
 				NSLog(@"error registering function: %@", functionName);
 			}
 		}
 	}
 	
-	NSDictionary * aliases = [self _standardAliases];
-	for (NSString * alias in aliases) {
-		NSString * function = [aliases objectForKey:alias];
+	NSDictionary *aliases = [[self class] _standardAliases];
+	for (NSString *alias in aliases) {
+		NSString *function = [aliases objectForKey:alias];
 		(void)[self addAlias:alias forFunctionName:function];
 	}
 }

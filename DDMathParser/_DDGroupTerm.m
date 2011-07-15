@@ -42,6 +42,7 @@
 }
 
 - (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+    ERR_ASSERT(error);
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {
         NSMutableArray *terms = [NSMutableArray array];
@@ -87,6 +88,7 @@
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
     if ([self isResolved]) { return YES; }
+    ERR_ASSERT(error);
     
     while ([[self subterms] count] > 1) {
         NSIndexSet *operatorIndices = [self _indicesOfOperatorsWithHighestPrecedence];
@@ -146,6 +148,7 @@
 }
 
 - (BOOL)_reduceTermsAroundOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+    ERR_ASSERT(error);
     _DDOperatorTerm *operator = [[self subterms] objectAtIndex:index];
     
     if ([operator operatorArity] == DDOperatorArityBinary) {
@@ -159,6 +162,7 @@
 }
 
 - (BOOL)_reduceBinaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+    ERR_ASSERT(error);
 #pragma unused(parser)
     _DDOperatorTerm *operator = [[self subterms] objectAtIndex:index];
     
@@ -206,10 +210,11 @@
 }
 
 - (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+    ERR_ASSERT(error);
     _DDOperatorTerm *operator = [[self subterms] objectAtIndex:index];
     DDOperatorAssociativity associativity = [parser associativityForOperator:[operator operatorType]];
     
-    NSRange replacementRange = NSMakeRange(0, 0);
+    NSRange replacementRange;
     _DDParserTerm *parameter = nil;
     
     if (associativity == DDOperatorAssociativityRight) {

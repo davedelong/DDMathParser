@@ -257,6 +257,7 @@
 }
 
 - (DDMathStringToken *)_nextTokenWithError:(NSError **)error {
+    ERR_ASSERT(error);
     unichar next = [self _peekNextCharacter];
     if (next == '\0') { return nil; }
     
@@ -284,6 +285,7 @@
 }
 
 - (DDMathStringToken *)_parseNumberWithError:(NSError **)error {
+    ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     
     while (DD_IS_DIGIT([self _peekNextCharacter])) {
@@ -332,6 +334,7 @@
 }
 
 - (DDMathStringToken *)_parseFunctionWithError:(NSError **)error {
+    ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     NSUInteger length = 0;
     
@@ -358,6 +361,7 @@
 }
 
 - (DDMathStringToken *)_parseVariableWithError:(NSError **)error {
+    ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     _characterIndex++; // consume the $
     DDMathStringToken *token = [self _parseFunctionWithError:error];
@@ -372,6 +376,7 @@
 }
 
 - (DDMathStringToken *)_parseOperatorWithError:(NSError **)error {
+    ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     NSUInteger length = 1;
     

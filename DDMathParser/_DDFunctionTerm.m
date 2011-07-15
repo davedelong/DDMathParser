@@ -26,6 +26,7 @@
 }
 
 - (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+    ERR_ASSERT(error);
     DDMathStringToken *token = [tokenizer nextToken];
     
     self = [super _initWithTokenizer:tokenizer error:error];

@@ -48,6 +48,7 @@ int main (int argc, const char * argv[]) {
         DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
         DDExpression *expression = [parser parsedExpressionWithError:&error];
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
+        [tokenizer release];
         
         if (value == nil) {
             printf("\tERROR: %s\n", [[error description] UTF8String]);

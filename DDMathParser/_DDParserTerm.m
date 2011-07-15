@@ -95,6 +95,7 @@
 }
 
 - (DDExpression *)expressionWithError:(NSError **)error {
+    ERR_ASSERT(error);
     *error = ERR_GENERIC(@"Subclasses must override the -%@ method", NSStringFromSelector(_cmd));
     return nil;
 }
