@@ -24,10 +24,10 @@
 @end
 
 
-@implementation DDMathEvaluator {
-    NSMutableArray *functions;
-	NSMutableDictionary * functionMap;
-}
+@implementation DDMathEvaluator
+
+NSMutableArray *functions;
+NSMutableDictionary * functionMap;
 
 static DDMathEvaluator * _sharedEvaluator = nil;
 
@@ -79,11 +79,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	//can't unregister built-in functions
 	if ([[[self class] _standardNames] containsObject:name]) { return; }
 	
-    _DDFunctionContainer *container = [self functionWithName:functionName];
+    _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:[self functionWithName:functionName] name:functionName];
     for (NSString *alias in [container aliases]) {
         [functionMap removeObjectForKey:name];
     }
     [functions removeObject:container];
+    [container release];
 }
 
 - (DDMathFunction) functionWithName:(NSString *)functionName {

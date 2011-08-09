@@ -8,24 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSDecimal DDDecimalNAN();
-extern NSDecimal DDDecimalEpsilon();
-extern NSDecimal DDDecimalNegativeOne();
-extern NSDecimal DDDecimalZero();
-extern NSDecimal DDDecimalOne();
-extern NSDecimal DDDecimalTwo();
+extern NSDecimal DDDecimalNAN(void);
+extern NSDecimal DDDecimalEpsilon(void);
+extern NSDecimal DDDecimalNegativeOne(void);
+extern NSDecimal DDDecimalZero(void);
+extern NSDecimal DDDecimalOne(void);
+extern NSDecimal DDDecimalTwo(void);
 
-extern NSDecimal DDDecimalPhi();
-extern NSDecimal DDDecimalPi();
-extern NSDecimal DDDecimal2Pi();
-extern NSDecimal DDDecimalPi_2();
-extern NSDecimal DDDecimalPi_4();
-extern NSDecimal DDDecimalSqrt2();
-extern NSDecimal DDDecimalE();
-extern NSDecimal DDDecimalLog2e();
-extern NSDecimal DDDecimalLog10e();
-extern NSDecimal DDDecimalLn2();
-extern NSDecimal DDDecimalLn10();
+extern NSDecimal DDDecimalPhi(void);
+extern NSDecimal DDDecimalPi(void);
+extern NSDecimal DDDecimal2Pi(void);
+extern NSDecimal DDDecimalPi_2(void);
+extern NSDecimal DDDecimalPi_4(void);
+extern NSDecimal DDDecimalSqrt2(void);
+extern NSDecimal DDDecimalE(void);
+extern NSDecimal DDDecimalLog2e(void);
+extern NSDecimal DDDecimalLog10e(void);
+extern NSDecimal DDDecimalLn2(void);
+extern NSDecimal DDDecimalLn10(void);
 
 #pragma mark Decimal Creation
 extern NSDecimal DDDecimalFromInteger(NSInteger i);
@@ -35,8 +35,10 @@ extern NSDecimal DDDecimalFromDouble(double d);
 
 extern float DDFloatFromDecimal(NSDecimal d);
 extern double DDDoubleFromDecimal(NSDecimal d);
+NSUInteger DDUIntegerFromDecimal(NSDecimal d);
 
 #pragma mark Utility Functions
+BOOL DDDecimalIsInteger(NSDecimal d);
 extern BOOL DDDecimalIsNegative(NSDecimal d);
 extern BOOL DDDecimalIsProbablyEqual(NSDecimal a, NSDecimal b);
 
