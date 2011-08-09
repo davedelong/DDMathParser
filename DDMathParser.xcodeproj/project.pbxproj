@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1107D01613F19922005F9366 /* _DDParserTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 557067B713CC0D19004CB1B2 /* _DDParserTerm.m */; };
+		1107D01813F19922005F9366 /* _DDGroupTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293613CD4276005203F1 /* _DDGroupTerm.m */; };
+		1107D01A13F19922005F9366 /* _DDFunctionTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293913CD42A8005203F1 /* _DDFunctionTerm.m */; };
+		1107D01C13F19922005F9366 /* _DDNumberTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293C13CD42F4005203F1 /* _DDNumberTerm.m */; };
+		1107D01E13F19922005F9366 /* _DDVariableTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293F13CD42FE005203F1 /* _DDVariableTerm.m */; };
+		1107D02013F19922005F9366 /* _DDOperatorTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 551EA4B713CD657400302C67 /* _DDOperatorTerm.m */; };
+		1107D02613F19922005F9366 /* _DDFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 551EA4C413CF415100302C67 /* _DDFunctionContainer.m */; };
+		1107D02E13F19A70005F9366 /* _DDParserTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 557067B713CC0D19004CB1B2 /* _DDParserTerm.m */; };
+		1107D02F13F19A70005F9366 /* _DDGroupTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293613CD4276005203F1 /* _DDGroupTerm.m */; };
+		1107D03013F19A70005F9366 /* _DDFunctionTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293913CD42A8005203F1 /* _DDFunctionTerm.m */; };
+		1107D03113F19A70005F9366 /* _DDNumberTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293C13CD42F4005203F1 /* _DDNumberTerm.m */; };
+		1107D03213F19A70005F9366 /* _DDVariableTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293F13CD42FE005203F1 /* _DDVariableTerm.m */; };
+		1107D03313F19A70005F9366 /* _DDOperatorTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 551EA4B713CD657400302C67 /* _DDOperatorTerm.m */; };
+		1107D03413F19A70005F9366 /* _DDFunctionContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 551EA4C413CF415100302C67 /* _DDFunctionContainer.m */; };
 		550C416813BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
 		550C416913BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
 		550C416A13BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
@@ -455,6 +469,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1107D01613F19922005F9366 /* _DDParserTerm.m in Sources */,
+				1107D01813F19922005F9366 /* _DDGroupTerm.m in Sources */,
+				1107D01A13F19922005F9366 /* _DDFunctionTerm.m in Sources */,
+				1107D01C13F19922005F9366 /* _DDNumberTerm.m in Sources */,
+				1107D01E13F19922005F9366 /* _DDVariableTerm.m in Sources */,
+				1107D02013F19922005F9366 /* _DDOperatorTerm.m in Sources */,
+				1107D02613F19922005F9366 /* _DDFunctionContainer.m in Sources */,
 				5537E36012AB20F30000CFED /* DDParser.m in Sources */,
 				5537E36412AB20F30000CFED /* DDMathStringToken.m in Sources */,
 				5537E36512AB20F30000CFED /* NSString+DDMathParsing.m in Sources */,
@@ -476,6 +497,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1107D02E13F19A70005F9366 /* _DDParserTerm.m in Sources */,
+				1107D02F13F19A70005F9366 /* _DDGroupTerm.m in Sources */,
+				1107D03013F19A70005F9366 /* _DDFunctionTerm.m in Sources */,
+				1107D03113F19A70005F9366 /* _DDNumberTerm.m in Sources */,
+				1107D03213F19A70005F9366 /* _DDVariableTerm.m in Sources */,
+				1107D03313F19A70005F9366 /* _DDOperatorTerm.m in Sources */,
+				1107D03413F19A70005F9366 /* _DDFunctionContainer.m in Sources */,
 				55BFA9B0128CDE7600A80228 /* ParserTests.m in Sources */,
 				55F795E31293175B00EF2716 /* DDMathStringToken.m in Sources */,
 				55F795F21293235A00EF2716 /* TokenizerTests.m in Sources */,
@@ -560,17 +588,18 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -583,17 +612,18 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				SDKROOT = macosx;

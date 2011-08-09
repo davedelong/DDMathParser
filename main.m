@@ -2,6 +2,9 @@
 #import "DDMathParser.h"
 #import "ConstantRecognizer.h"
 
+NSString* readLine(void);
+void listFunctions(void);
+
 NSString* readLine() {
     
     NSMutableData *data = [NSMutableData data];
