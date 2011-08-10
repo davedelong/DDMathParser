@@ -214,7 +214,7 @@ NSDecimal DDDecimalMod2Pi(NSDecimal a) {
 	a = DDDecimalMod(a, tpi);
     if (NSDecimalCompare(&a, &pi) == NSOrderedDescending) {
         //a > pi
-        NSDecimalSubtract(&a, &a, &pi, NSRoundBankers);
+        NSDecimalSubtract(&a, &a, &tpi, NSRoundBankers);
     }
     return a;
 }
