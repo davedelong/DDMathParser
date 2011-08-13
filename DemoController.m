@@ -9,6 +9,12 @@
 #import "DemoController.h"
 #import "DDMathParser.h"
 
+@interface DemoController()
+
+- (void) textChanged:(NSNotification *)note;
+
+@end
+
 @implementation DemoController
 @synthesize inputField;
 @synthesize answerField;
