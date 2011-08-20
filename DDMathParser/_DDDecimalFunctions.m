@@ -380,6 +380,8 @@ NSDecimal DDDecimalSin(NSDecimal x) {
         NSDecimal term;
         NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
         
+        if (NSDecimalIsNotANumber(&term)) { break; }
+        
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
         } else {
@@ -406,6 +408,8 @@ NSDecimal DDDecimalCos(NSDecimal x) {
         
         NSDecimal term;
         NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        
+        if (NSDecimalIsNotANumber(&term)) { break; }
         
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
