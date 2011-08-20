@@ -291,8 +291,12 @@ NSDecimal DDDecimalFactorial(NSDecimal d) {
             DDDecimalNegate(&d);
 		}
 		while (NSDecimalCompare(&d, &one) == NSOrderedDescending) {
-			NSDecimalMultiply(&final, &final, &d, NSRoundBankers);
+			NSCalculationError e = NSDecimalMultiply(&final, &final, &d, NSRoundBankers);
 			NSDecimalSubtract(&d, &d, &one, NSRoundBankers);
+            
+            if (e == NSCalculationOverflow) {
+                return DDDecimalNAN();
+            }
 		}
 		return final;
 	} else {
