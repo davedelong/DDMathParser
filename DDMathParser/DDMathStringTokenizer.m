@@ -117,7 +117,9 @@
     if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
         if (previousToken == nil) {
             [token setOperatorPrecedence:DDPrecedenceUnary];
-        } else if ([previousToken tokenType] == DDTokenTypeOperator && [previousToken operatorType] != DDOperatorParenthesisClose) {
+        } else if ([previousToken tokenType] == DDTokenTypeOperator && 
+                   [previousToken operatorType] != DDOperatorParenthesisClose && 
+                   [previousToken operatorType] != DDOperatorFactorial) {
             [token setOperatorPrecedence:DDPrecedenceUnary];
         } else if ([[token token] isEqual:@"+"]) {
             [token setOperatorPrecedence:DDPrecedenceAddition];
