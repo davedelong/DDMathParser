@@ -382,9 +382,10 @@ NSDecimal DDDecimalSin(NSDecimal x) {
         NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
         
         NSDecimal term;
-        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
-        
-        if (NSDecimalIsNotANumber(&term)) { break; }
+        NSCalculationError e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        if (e == NSCalculationOverflow || e == NSCalculationUnderflow) {
+            break;
+        }
         
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
@@ -411,9 +412,10 @@ NSDecimal DDDecimalCos(NSDecimal x) {
         NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
         
         NSDecimal term;
-        NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
-        
-        if (NSDecimalIsNotANumber(&term)) { break; }
+        NSCalculationError e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        if (e == NSCalculationOverflow || e == NSCalculationUnderflow) {
+            break;
+        }
         
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
