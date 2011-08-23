@@ -469,8 +469,8 @@ if ([arguments count] < __n) { \
 		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(n);
         NSDecimal e = DDDecimalE();
-        NSDecimalPower(&e, &e, [n unsignedIntegerValue], NSRoundBankers);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:e]];
+        NSDecimal result = DDDecimalPower(e, [n decimalValue]);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
 	};
 	return [[function copy] autorelease];
 }
