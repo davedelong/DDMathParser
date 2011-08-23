@@ -375,17 +375,17 @@ NSDecimal DDDecimalSin(NSDecimal x) {
     
     NSDecimal final = x;
     BOOL shouldSubtract = YES;
+    NSCalculationError e = NSCalculationNoError;
     for (NSInteger i = 3; i <= 51; i += 2) {
         NSDecimal numerator;
-        NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        e = NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        if (e != NSCalculationNoError) { break; }
         
         NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
         
         NSDecimal term;
-        NSCalculationError e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
-        if (e == NSCalculationOverflow || e == NSCalculationUnderflow) {
-            break;
-        }
+        e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        if (e != NSCalculationNoError) { break; }
         
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
@@ -405,17 +405,17 @@ NSDecimal DDDecimalCos(NSDecimal x) {
     
     NSDecimal final = DDDecimalOne();
     BOOL shouldSubtract = YES;
+    NSCalculationError e = NSCalculationNoError;
     for (NSInteger i = 2; i <= 20; i += 2) {
         NSDecimal numerator;
-        NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        e = NSDecimalPower(&numerator, &x, i, NSRoundBankers);
+        if (e != NSCalculationNoError) { break; }
         
         NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
         
         NSDecimal term;
-        NSCalculationError e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
-        if (e == NSCalculationOverflow || e == NSCalculationUnderflow) {
-            break;
-        }
+        e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
+        if (e != NSCalculationNoError) { break; }
         
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
