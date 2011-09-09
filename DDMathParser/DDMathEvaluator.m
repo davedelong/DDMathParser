@@ -20,6 +20,7 @@
 + (NSDictionary *) _standardAliases;
 + (NSSet *)_standardNames;
 - (void) _registerStandardFunctions;
+- (_DDFunctionContainer *)functionContainerWithName:(NSString *)functionName;
 
 @end
 
@@ -79,16 +80,21 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	//can't unregister built-in functions
 	if ([[[self class] _standardNames] containsObject:name]) { return; }
 	
-    _DDFunctionContainer *container = [self functionWithName:functionName];
+    _DDFunctionContainer *container = [self functionContainerWithName:functionName];
     for (NSString *alias in [container aliases]) {
         [functionMap removeObjectForKey:name];
     }
     [functions removeObject:container];
 }
 
-- (DDMathFunction) functionWithName:(NSString *)functionName {
+- (_DDFunctionContainer *)functionContainerWithName:(NSString *)functionName {
     NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
     _DDFunctionContainer *container = [functionMap objectForKey:name];
+    return container;
+}
+
+- (DDMathFunction) functionWithName:(NSString *)functionName {
+    _DDFunctionContainer *container = [self functionContainerWithName:functionName];
     return [container function];
 }
 
@@ -110,8 +116,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	DDMathFunction function = [self functionWithName:alias];
 	if (function != nil) { return NO; }
     
-    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
-    _DDFunctionContainer *container = [functionMap objectForKey:name];
+    _DDFunctionContainer *container = [self functionContainerWithName:functionName];
     alias = [_DDFunctionContainer normalizedAlias:alias];
     [container addAlias:alias];
     [functionMap setObject:container forKey:alias];
