@@ -16,6 +16,13 @@
 - (id) initWithVariable:(NSString *)v {
 	self = [super init];
 	if (self) {
+        if ([v hasPrefix:@"$"]) {
+            v = [v substringFromIndex:1];
+        }
+        if ([v length] == 0) {
+            [self release];
+            return nil;
+        }
 		variable = [v copy];
 	}
 	return self;
