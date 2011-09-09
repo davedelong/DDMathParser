@@ -2,9 +2,9 @@
 
 You have an `NSString`.  You want an `NSNumber`.  Previously, you would have to rely on [abusing `NSPredicate`](http://tumblr.com/xqopow93r) to turn your string into an `NSExpression` that you could then evaluate.  However, this has a major flaw:  extending it to support functions that aren't built-in to `NSExpression` provided for some awkward syntax.  So if you really need `sin()`, you have to jump through some intricate hoops to get it.
 
-You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This, however, isn't extensible at all.  So if you really needed a `stddev()` function, you're out of luck.
+You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This, however, isn't extensible at all.  So if you really need a `stddev()` or `nthroot()`, function, you're out of luck.
 
-Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all the ways that matter (in fact, it actually uses `NSExpression` to evaluate many of its built-in functions), but with the major addition that you can define new functions as you need.
+Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all the ways that matter, but with the major addition that you can define new functions as you need.
 
 ## Features
 
@@ -216,19 +216,17 @@ Useful for specifying a custom tokenizer.  An example of a custom tokenizer is i
 
 ## Precision
 
-`DDMathParser` strives to be as precise as reasonable, often at the cost of performance.  Almost all of the functions used in expression evaluation are implemented in terms of `NSDecimal` structs, with a couple of exceptions:
+There are two modes of operation: a low precision mode (the default) and a high precision mode.
 
-- Raising a number to a negative or non-integral power
-- Taking the factorial of a negative or non-integral number
-- Logarithmic functions: `log`, `log2`, `ln`, `exp`, etc
+Low precision mode is faster than high precision mode, as it is using native functions for the mathematical operations.
 
-In these cases, the numbers are converted to `doubles` and then are computed with the built-in functions.  It is conceivable that this may change in the future.  All other functions, including square- and nth-roots, the trigonometric functions, standard deviation, etc, are all implemented with NSDecimal functions.
+High precision mode is implemented in terms of `NSDecimal` structs (with a couple of exceptions.  Unfortunately, testing has revealed that it's not as accurate as initially hoped (particularly the trigonometric functions), and so it is recommended that you *do not use* the high precision mode.
 
 ## Compatibility
 
 `DDMathParser` requires blocks, so therefore is only compatible with iOS 4+ and Mac OS X 10.6+.
 
-`DDMathParser` requires the [Clang](http://clang.llvm.org/) compiler.
+`DDMathParser` prefers the [LLVM 3.0](http://clang.llvm.org/) compiler, but will compile with LLVM-GCC 4.2.
 
 Though it has not been tested, `DDMathParser` should be fully compatible with garbage collected applications.
 

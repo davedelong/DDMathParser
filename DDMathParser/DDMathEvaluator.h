@@ -12,7 +12,10 @@
 @class DDMathEvaluator;
 @class DDExpression;
 
-@interface DDMathEvaluator : NSObject
+@interface DDMathEvaluator : NSObject {
+    NSMutableArray *functions;
+	NSMutableDictionary * functionMap;
+}
 
 @property (nonatomic, assign) BOOL usesHighPrecisionFunctions; // default is NO
 

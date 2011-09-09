@@ -25,10 +25,7 @@
 @end
 
 
-@implementation DDMathEvaluator {
-    NSMutableArray *functions;
-	NSMutableDictionary * functionMap;
-}
+@implementation DDMathEvaluator
 
 static DDMathEvaluator * _sharedEvaluator = nil;
 
