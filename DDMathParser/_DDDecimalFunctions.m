@@ -8,6 +8,8 @@
 
 #import "_DDDecimalFunctions.h"
 
+#define IS_FATAL(_e) ((_e) == NSCalculationUnderflow || (_e) == NSCalculationOverflow || (_e) == NSCalculationDivideByZero)
+
 #pragma mark Constants
 
 NSDecimal DDDecimalNAN() {
@@ -379,13 +381,13 @@ NSDecimal DDDecimalSin(NSDecimal x) {
     for (NSInteger i = 3; i <= 51; i += 2) {
         NSDecimal numerator;
         e = NSDecimalPower(&numerator, &x, i, NSRoundBankers);
-        if (e != NSCalculationNoError) { break; }
+        if (IS_FATAL(e)) { break; }
         
         NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
         
         NSDecimal term;
         e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
-        if (e != NSCalculationNoError) { break; }
+        if (IS_FATAL(e)) { break; }
         
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
@@ -409,13 +411,13 @@ NSDecimal DDDecimalCos(NSDecimal x) {
     for (NSInteger i = 2; i <= 20; i += 2) {
         NSDecimal numerator;
         e = NSDecimalPower(&numerator, &x, i, NSRoundBankers);
-        if (e != NSCalculationNoError) { break; }
+        if (IS_FATAL(e)) { break; }
         
         NSDecimal denominator = DDDecimalFactorial(DDDecimalFromInteger(i));
         
         NSDecimal term;
         e = NSDecimalDivide(&term, &numerator, &denominator, NSRoundBankers);
-        if (e != NSCalculationNoError) { break; }
+        if (IS_FATAL(e)) { break; }
         
         if (shouldSubtract) {
             NSDecimalSubtract(&final, &final, &term, NSRoundBankers);
