@@ -32,6 +32,8 @@
 
 static DDMathEvaluator * _sharedEvaluator = nil;
 
+@synthesize usesHighPrecisionFunctions;
+
 + (id) sharedMathEvaluator {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -46,6 +48,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 		functions = [[NSMutableArray alloc] init];
         functionMap = [[NSMutableDictionary alloc] init];
 		[self _registerStandardFunctions];
+        [self setUsesHighPrecisionFunctions:NO];
 	}
 	return self;
 }

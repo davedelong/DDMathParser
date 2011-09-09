@@ -10,6 +10,7 @@
 #import "_DDDecimalFunctions.h"
 #import "DDExpression.h"
 #import "DDMathParserMacros.h"
+#import "DDMathEvaluator.h"
 
 #define REQUIRE_N_ARGS(__n) { \
 if ([arguments count] != __n) { \
@@ -31,6 +32,8 @@ if ([arguments count] < __n) { \
 
 #define RETURN_IF_NIL(_n) if ((_n) == nil) { return nil; }
 
+#define HIGH_PRECISION ([evaluator usesHighPrecisionFunctions])
+
 @implementation _DDFunctionUtilities
 
 + (DDMathFunction) addFunction {
@@ -42,11 +45,17 @@ if ([arguments count] < __n) { \
 		NSNumber * secondValue = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(secondValue);
 		
-		NSDecimal result;
-		NSDecimal lhs = [firstValue decimalValue];
-		NSDecimal rhs = [secondValue decimalValue];
-		NSDecimalAdd(&result, &lhs, &rhs, NSRoundBankers);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal r;
+            NSDecimal lhs = [firstValue decimalValue];
+            NSDecimal rhs = [secondValue decimalValue];
+            NSDecimalAdd(&r, &lhs, &rhs, NSRoundBankers);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:[firstValue doubleValue] + [secondValue doubleValue]];
+        }
+        return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -59,11 +68,17 @@ if ([arguments count] < __n) { \
 		NSNumber * secondValue = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(secondValue);
 		
-		NSDecimal result;
-		NSDecimal lhs = [firstValue decimalValue];
-		NSDecimal rhs = [secondValue decimalValue];
-		NSDecimalSubtract(&result, &lhs, &rhs, NSRoundBankers);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal r;
+            NSDecimal lhs = [firstValue decimalValue];
+            NSDecimal rhs = [secondValue decimalValue];
+            NSDecimalSubtract(&r, &lhs, &rhs, NSRoundBankers);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:[firstValue doubleValue] - [secondValue doubleValue]];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -76,11 +91,17 @@ if ([arguments count] < __n) { \
 		NSNumber * secondValue = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(secondValue);
 		
-		NSDecimal result;
-		NSDecimal lhs = [firstValue decimalValue];
-		NSDecimal rhs = [secondValue decimalValue];
-		NSDecimalMultiply(&result, &lhs, &rhs, NSRoundBankers);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal r;
+            NSDecimal lhs = [firstValue decimalValue];
+            NSDecimal rhs = [secondValue decimalValue];
+            NSDecimalMultiply(&r, &lhs, &rhs, NSRoundBankers);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:[firstValue doubleValue] * [secondValue doubleValue]];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -93,11 +114,17 @@ if ([arguments count] < __n) { \
 		NSNumber * secondValue = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(secondValue);
 		
-		NSDecimal result;
-		NSDecimal lhs = [firstValue decimalValue];
-		NSDecimal rhs = [secondValue decimalValue];
-		NSDecimalDivide(&result, &lhs, &rhs, NSRoundBankers);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal r;
+            NSDecimal lhs = [firstValue decimalValue];
+            NSDecimal rhs = [secondValue decimalValue];
+            NSDecimalDivide(&r, &lhs, &rhs, NSRoundBankers);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:[firstValue doubleValue] / [secondValue doubleValue]];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -110,9 +137,14 @@ if ([arguments count] < __n) { \
 		NSNumber * secondValue = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(secondValue);
 		
-		NSDecimal result = DDDecimalMod([firstValue decimalValue], [secondValue decimalValue]);
-		
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal r = DDDecimalMod([firstValue decimalValue], [secondValue decimalValue]);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:fmod([firstValue doubleValue], [secondValue doubleValue])];
+        }
+        return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -123,10 +155,16 @@ if ([arguments count] < __n) { \
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(firstValue);
 		
-		NSDecimal a = [firstValue decimalValue];
-        DDDecimalNegate(&a);
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal a = [firstValue decimalValue];
+            DDDecimalNegate(&a);
+            result = [NSDecimalNumber decimalNumberWithDecimal:a];
+        } else {
+            result = [NSNumber numberWithDouble:-1 * [firstValue doubleValue]];
+        }
 		
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:a]];
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -136,8 +174,15 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
 		NSNumber * firstValue = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(firstValue);
-		NSNumber * result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalFactorial([firstValue decimalValue])];
-		return [DDExpression numberExpressionWithNumber:result];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalFactorial([firstValue decimalValue])];
+            return [DDExpression numberExpressionWithNumber:result];
+        } else {
+            result = [NSNumber numberWithDouble:tgamma([firstValue doubleValue]+1)];
+        }
+        return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -149,7 +194,13 @@ if ([arguments count] < __n) { \
 		RETURN_IF_NIL(base);
 		NSNumber * exponent = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(exponent);
-        NSNumber *result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalPower([base decimalValue], [exponent decimalValue])];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalPower([base decimalValue], [exponent decimalValue])];
+        } else {
+            result = [NSNumber numberWithDouble:pow([base doubleValue], [exponent doubleValue])];
+        }
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
@@ -162,7 +213,13 @@ if ([arguments count] < __n) { \
 		RETURN_IF_NIL(base);
 		NSNumber * root = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(root);
-        NSNumber *result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalNthRoot([base decimalValue], [root decimalValue])];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalNthRoot([base decimalValue], [root decimalValue])];
+        } else {
+            result = [NSNumber numberWithDouble:pow([base doubleValue], 1/[root doubleValue])];
+        }
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
@@ -225,7 +282,13 @@ if ([arguments count] < __n) { \
 		RETURN_IF_NIL(first);
 		NSNumber * second = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(second);
-		NSNumber * result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalRightShift([first decimalValue], [second decimalValue])];
+        
+		NSNumber * result = nil;
+        if (HIGH_PRECISION) {
+            result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalRightShift([first decimalValue], [second decimalValue])];
+        } else {
+            result = [NSNumber numberWithInteger:[first integerValue] >> [second integerValue]];
+        }
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
@@ -238,7 +301,13 @@ if ([arguments count] < __n) { \
 		RETURN_IF_NIL(first);
 		NSNumber * second = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(second);
-		NSNumber * result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalLeftShift([first decimalValue], [second decimalValue])];
+        
+		NSNumber * result = nil;
+        if (HIGH_PRECISION) {
+            result = [NSDecimalNumber decimalNumberWithDecimal:DDDecimalLeftShift([first decimalValue], [second decimalValue])];
+        } else {
+            result = [NSNumber numberWithInteger:[first integerValue] << [second integerValue]];
+        }
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
@@ -250,9 +319,16 @@ if ([arguments count] < __n) { \
 		DDMathFunction sumFunction = [_DDFunctionUtilities sumFunction];
 		DDExpression * sumExpression = sumFunction(arguments, variables, evaluator, error);
 		RETURN_IF_NIL(sumExpression);
-		NSDecimalNumber * sum = (NSDecimalNumber *)[sumExpression number];
-		NSDecimalNumber * count = [NSDecimalNumber decimalNumberWithMantissa:[arguments count] exponent:0 isNegative:NO];
-		NSDecimalNumber * avg = [sum decimalNumberByDividingBy:count];
+        
+        NSNumber *avg = nil;
+        if (HIGH_PRECISION) {
+            NSDecimalNumber * sum = (NSDecimalNumber *)[sumExpression number];
+            NSDecimalNumber * count = [NSDecimalNumber decimalNumberWithMantissa:[arguments count] exponent:0 isNegative:NO];
+            avg = [sum decimalNumberByDividingBy:count];
+        } else {
+            double sum = [[sumExpression number] doubleValue];
+            avg = [NSNumber numberWithDouble:sum / [arguments count]];
+        }
 		return [DDExpression numberExpressionWithNumber:avg];
 	};
 	return [[function copy] autorelease];	
@@ -261,14 +337,29 @@ if ([arguments count] < __n) { \
 + (DDMathFunction) sumFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 		REQUIRE_GTOE_N_ARGS(1);
-		NSDecimal result = [[NSDecimalNumber zero] decimalValue];
-		for (DDExpression * argument in arguments) {
-			NSNumber * value = [argument evaluateWithSubstitutions:variables evaluator:evaluator error:error];
-			RETURN_IF_NIL(value);
-			NSDecimal number = [value decimalValue];
-			NSDecimalAdd(&result, &result, &number, NSRoundBankers);
+		NSMutableArray * evaluatedNumbers = [NSMutableArray array];
+		for (DDExpression * e in arguments) {
+            NSNumber *n = [e evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+            RETURN_IF_NIL(n);
+			[evaluatedNumbers addObject:n];
 		}
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal r = [[NSDecimalNumber zero] decimalValue];
+            for (NSNumber *value in arguments) {
+                NSDecimal number = [value decimalValue];
+                NSDecimalAdd(&r, &r, &number, NSRoundBankers);
+            }
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            double sum = 0;
+            for (NSNumber *value in arguments) {
+                sum += [value doubleValue];
+            }
+            result = [NSNumber numberWithDouble:sum];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -339,11 +430,17 @@ if ([arguments count] < __n) { \
 			median = [evaluatedNumbers objectAtIndex:index];
 		} else {
 			NSUInteger lowIndex = floor([evaluatedNumbers count] / 2);
-			NSUInteger highIndex = floor([evaluatedNumbers count] / 2);
-			NSDecimal lowDecimal = [[evaluatedNumbers objectAtIndex:lowIndex] decimalValue];
-			NSDecimal highDecimal = [[evaluatedNumbers objectAtIndex:highIndex] decimalValue];
-			NSDecimal result = DDDecimalAverage2(lowDecimal, highDecimal);
-			median = [NSDecimalNumber decimalNumberWithDecimal:result];
+			NSUInteger highIndex = ceil([evaluatedNumbers count] / 2);
+            if (HIGH_PRECISION) {
+                NSDecimal lowDecimal = [[evaluatedNumbers objectAtIndex:lowIndex] decimalValue];
+                NSDecimal highDecimal = [[evaluatedNumbers objectAtIndex:highIndex] decimalValue];
+                NSDecimal result = DDDecimalAverage2(lowDecimal, highDecimal);
+                median = [NSDecimalNumber decimalNumberWithDecimal:result];
+            } else {
+                NSNumber *low = [evaluatedNumbers objectAtIndex:lowIndex];
+                NSNumber *high = [evaluatedNumbers objectAtIndex:highIndex];
+                median = [NSNumber numberWithDouble:([low doubleValue] + [high doubleValue])/2];
+            }
 		}
 		return [DDExpression numberExpressionWithNumber:median];
 	};
@@ -356,22 +453,40 @@ if ([arguments count] < __n) { \
 		DDMathFunction avgFunction = [_DDFunctionUtilities averageFunction];
 		DDExpression * avgExpression = avgFunction(arguments, variables, evaluator, error);
 		RETURN_IF_NIL(avgExpression);
-		NSDecimal avg = [[avgExpression number] decimalValue];
-		NSDecimal stddev = DDDecimalZero();
-		for (DDExpression * arg in arguments) {
-            NSNumber *argValue = [arg evaluateWithSubstitutions:variables evaluator:evaluator error:error];
-            RETURN_IF_NIL(argValue);
-			NSDecimal n = [argValue decimalValue];
-			NSDecimal diff;
-			NSDecimalSubtract(&diff, &avg, &n, NSRoundBankers);
-			NSDecimalMultiply(&diff, &diff, &diff, NSRoundBankers);
-			NSDecimalAdd(&stddev, &stddev, &diff, NSRoundBankers);
-		}
-		NSDecimal count = DDDecimalFromInteger([arguments count]);
-		NSDecimalDivide(&stddev, &stddev, &count, NSRoundBankers);
-		stddev = DDDecimalSqrt(stddev);
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal avg = [[avgExpression number] decimalValue];
+            NSDecimal stddev = DDDecimalZero();
+            for (DDExpression * arg in arguments) {
+                NSNumber *argValue = [arg evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+                RETURN_IF_NIL(argValue);
+                NSDecimal n = [argValue decimalValue];
+                NSDecimal diff;
+                NSDecimalSubtract(&diff, &avg, &n, NSRoundBankers);
+                NSDecimalMultiply(&diff, &diff, &diff, NSRoundBankers);
+                NSDecimalAdd(&stddev, &stddev, &diff, NSRoundBankers);
+            }
+            NSDecimal count = DDDecimalFromInteger([arguments count]);
+            NSDecimalDivide(&stddev, &stddev, &count, NSRoundBankers);
+            stddev = DDDecimalSqrt(stddev);
+            result = [NSDecimalNumber decimalNumberWithDecimal:stddev];
+        } else {
+            double avg = [[avgExpression number] doubleValue];
+            double stddev = 0;
+            for (DDExpression *arg in arguments) {
+                NSNumber *argValue = [arg evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+                RETURN_IF_NIL(argValue);
+                double diff = avg - [argValue doubleValue];
+                diff = diff * diff;
+                stddev += diff;
+            }
+            stddev /= [arguments count];
+            stddev = sqrt(stddev);
+            result = [NSNumber numberWithDouble:stddev];
+        }
 		
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:stddev]];
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -381,10 +496,17 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
 		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(n);
-		NSDecimal number = [n decimalValue];
-		NSDecimal s = DDDecimalSqrt(number);
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal number = [n decimalValue];
+            NSDecimal s = DDDecimalSqrt(number);
+            result = [NSDecimalNumber decimalNumberWithDecimal:s];
+        } else {
+            result = [NSNumber numberWithDouble:sqrt([n doubleValue])];
+        }
 		
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:s]];
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -468,9 +590,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
 		NSNumber * n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		RETURN_IF_NIL(n);
-        NSDecimal e = DDDecimalE();
-        NSDecimal result = DDDecimalPower(e, [n decimalValue]);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:result]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal e = DDDecimalE();
+            NSDecimal r = DDDecimalPower(e, [n decimalValue]);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:exp([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -480,9 +609,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal ceil = [n decimalValue];
-		NSDecimalRound(&ceil, &ceil, 0, NSRoundUp);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:ceil]];
+
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal ceil = [n decimalValue];
+            NSDecimalRound(&ceil, &ceil, 0, NSRoundUp);
+            result = [NSDecimalNumber decimalNumberWithDecimal:ceil];
+        } else {
+            result = [NSNumber numberWithDouble:ceil([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -492,9 +628,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-		NSDecimal abs = [n decimalValue];
-		abs = DDDecimalAbsoluteValue(abs);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:abs]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal abs = [n decimalValue];
+            abs = DDDecimalAbsoluteValue(abs);
+            result = [NSDecimalNumber decimalNumberWithDecimal:abs];
+        } else {
+            result = [NSNumber numberWithLongLong:llabs([n longLongValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -504,9 +647,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		NSDecimalRound(&num, &num, 0, NSRoundDown);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            NSDecimalRound(&num, &num, 0, NSRoundDown);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:floor([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -516,9 +666,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalSin(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalSin(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:sin([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -528,9 +685,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalCos(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalCos(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:cos([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -540,9 +704,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalTan(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalTan(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:tan([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -552,9 +723,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAsin(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAsin(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:asin([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -564,9 +742,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAcos(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAcos(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:acos([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -576,9 +761,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAtan(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAtan(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:atan([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -588,9 +780,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalSinh(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalSinh(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:sinh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -600,9 +799,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalCosh(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalCosh(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:cosh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -612,9 +818,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalTanh(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalTanh(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:tanh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -624,9 +837,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAsinh(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAsinh(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:asinh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -636,9 +856,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAcosh(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAcosh(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:acosh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -648,9 +875,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAtanh(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAtanh(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:atanh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -660,9 +894,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalCsc(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalCsc(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/sin([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -672,9 +913,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalSec(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalSec(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/cos([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -684,9 +932,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalCot(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalCot(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/tan([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -696,9 +951,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAcsc(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAcsc(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/asin([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -708,9 +970,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAsec(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAsec(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/acos([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -720,9 +989,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAcot(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAcot(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/atan([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -732,9 +1008,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalCsch(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalCsch(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/sinh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -744,9 +1027,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalSech(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalSech(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/cosh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -756,9 +1046,16 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalCoth(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalCoth(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/tanh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -768,10 +1065,17 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAsinh(num);
-		num = DDDecimalInverse(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAsinh(num);
+            num = DDDecimalInverse(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/sinh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -781,10 +1085,17 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAcosh(num);
-		num = DDDecimalInverse(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAcosh(num);
+            num = DDDecimalInverse(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/cosh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -794,10 +1105,17 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		num = DDDecimalAtanh(num);
-		num = DDDecimalInverse(num);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:num]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            num = DDDecimalAtanh(num);
+            num = DDDecimalInverse(num);
+            result = [NSDecimalNumber decimalNumberWithDecimal:num];
+        } else {
+            result = [NSNumber numberWithDouble:1/atanh([n doubleValue])];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -807,15 +1125,22 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		NSDecimal tsz = DDDecimalFromInteger(360);
-		NSDecimal tpi = DDDecimal2Pi();
-		
-		num = DDDecimalMod(num, tsz);
-		NSDecimal r;
-		NSDecimalDivide(&r, &num, &tsz, NSRoundBankers);
-		NSDecimalMultiply(&r, &r, &tpi, NSRoundBankers);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:r]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            NSDecimal tsz = DDDecimalFromInteger(360);
+            NSDecimal tpi = DDDecimal2Pi();
+            
+            num = DDDecimalMod(num, tsz);
+            NSDecimal r;
+            NSDecimalDivide(&r, &num, &tsz, NSRoundBankers);
+            NSDecimalMultiply(&r, &r, &tpi, NSRoundBankers);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:[n doubleValue]/180 * M_PI];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return [[function copy] autorelease];
 }
@@ -825,15 +1150,22 @@ if ([arguments count] < __n) { \
 		REQUIRE_N_ARGS(1);
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
-        NSDecimal num = [n decimalValue];
-		NSDecimal tsz = DDDecimalFromInteger(360);
-		NSDecimal tpi = DDDecimal2Pi();
-		
-		num = DDDecimalMod2Pi(num);
-		NSDecimal r;
-		NSDecimalDivide(&r, &num, &tpi, NSRoundBankers);
-		NSDecimalMultiply(&r, &r, &tsz, NSRoundBankers);
-		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:r]];
+        
+        NSNumber *result = nil;
+        if (HIGH_PRECISION) {
+            NSDecimal num = [n decimalValue];
+            NSDecimal tsz = DDDecimalFromInteger(360);
+            NSDecimal tpi = DDDecimal2Pi();
+            
+            num = DDDecimalMod2Pi(num);
+            NSDecimal r;
+            NSDecimalDivide(&r, &num, &tpi, NSRoundBankers);
+            NSDecimalMultiply(&r, &r, &tsz, NSRoundBankers);
+            result = [NSDecimalNumber decimalNumberWithDecimal:r];
+        } else {
+            result = [NSNumber numberWithDouble:[n doubleValue] / M_PI * 180];
+        }
+		return [DDExpression numberExpressionWithNumber:result];
 		
 	};
 	return [[function copy] autorelease];

@@ -14,6 +14,8 @@
 
 @interface DDMathEvaluator : NSObject
 
+@property (nonatomic, assign) BOOL usesHighPrecisionFunctions; // default is NO
+
 + (id) sharedMathEvaluator;
 
 - (BOOL) registerFunction:(DDMathFunction)function forName:(NSString *)functionName;
