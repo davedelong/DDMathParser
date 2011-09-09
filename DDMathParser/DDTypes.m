@@ -9,3 +9,5 @@
 #import "DDTypes.h"
 
 NSString * const DDMathParserErrorDomain = @"com.davedelong.ddmathparser";
+
+NSString * const DDUnknownFunctionKey = @"com.davedelong.ddmathparser.Function";

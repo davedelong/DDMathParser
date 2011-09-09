@@ -17,6 +17,8 @@ typedef DDExpression* (^DDMathFunction)(NSArray *, NSDictionary *, DDMathEvaluat
 
 extern NSString * const DDMathParserErrorDomain;
 
+extern NSString * const DDUnknownFunctionKey;
+
 enum {
     DDErrorCodeGeneric = -1,
     DDErrorCodeInvalidArgument = 1,

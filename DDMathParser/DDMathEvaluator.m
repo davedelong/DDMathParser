@@ -103,10 +103,11 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (BOOL) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error {
+    NSString *functionName = [functionExpression function];
 	if (error) {
-		*error = ERR_GENERIC(@"unable to resolve function: %@", [functionExpression function]);
+        *error = ERR_FUNCTION(functionName, @"unable to resolve function: %@", functionName);
 	} else {
-		NSLog(@"unable to resolve function: %@", [functionExpression function]);
+		NSLog(@"unable to resolve function: %@", functionName);
 	}
 	return NO;
 }

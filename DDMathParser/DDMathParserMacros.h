@@ -18,6 +18,10 @@
 #define ERR_GENERIC(_f,...) ([NSError errorWithDomain:DDMathParserErrorDomain code:DDErrorCodeGeneric userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:(_f), ##__VA_ARGS__] forKey:NSLocalizedDescriptionKey]])
 #endif
 
+#ifndef ERR_FUNCTION
+#define ERR_FUNCTION(_func, _f,...) ([NSError errorWithDomain:DDMathParserErrorDomain code:DDErrorCodeGeneric userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:(_f), ##__VA_ARGS__], NSLocalizedDescriptionKey, (_func), DDUnknownFunctionKey, nil]])
+#endif
+
 #ifndef ERR_ASSERT
 #define ERR_ASSERT(_e) NSAssert((_e) != nil, @"NULL out error")
 #endif
