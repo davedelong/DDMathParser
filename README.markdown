@@ -126,7 +126,7 @@ Functions that take no parameters:
 - `pi()` - returns the value of π.  Also recognized as `π()`
 - `pi_2()` - returns the value of π/2
 - `pi_4()` - returns the value of π/4
-- `tau()` - returns the value of τ
+- `tau()` - returns the value of τ.  Also recognized as `τ()`
 - `sqrt2()` - returns the value of the square root of 2
 - `e()` - returns the value of e
 - `log2e()` - returns the value of the log base 2 of e
@@ -207,14 +207,6 @@ Useful for specifying a custom parser or custom operator associativities, specif
     NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil error:&error]);
     
 Useful for specifying a custom tokenizer.  An example of a custom tokenizer is included in the source.  It shows how to recognize certain functions without parentheses (e, pi, etc).
-
-## Precision
-
-There are two modes of operation: a low precision mode (the default) and a high precision mode.
-
-Low precision mode is faster than high precision mode, as it is using native functions for the mathematical operations.
-
-High precision mode is implemented in terms of `NSDecimal` structs (with a couple of exceptions.  Unfortunately, testing has revealed that it's not as accurate as initially hoped (particularly the trigonometric functions), and so it is recommended that you *do not use* the high precision mode.
 
 ## Compatibility
 
