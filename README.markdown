@@ -2,7 +2,7 @@
 
 You have an `NSString`.  You want an `NSNumber`.  Previously, you would have to rely on [abusing `NSPredicate`](http://tumblr.com/xqopow93r) to turn your string into an `NSExpression` that you could then evaluate.  However, this has a major flaw:  extending it to support functions that aren't built-in to `NSExpression` provided for some awkward syntax.  So if you really need `sin()`, you have to jump through some intricate hoops to get it.
 
-You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This, however, isn't extensible at all.  So if you really need a `stddev()` or `nthroot()`, function, you're out of luck.
+You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This, however, isn't extensible at all.  So if you really need `stddev()` or `nthroot()` functions, you're out of luck.
 
 Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all the ways that matter, but with the major addition that you can define new functions as you need.
 
@@ -110,19 +110,12 @@ Functions that take 1 parameter:
 - `ceil()` - returns the passed parameter rounded up
 - `floor()` - returns the passed parameter rounded down
 
-- `sin()` - returns the sine of the passed parameter (in radians)
-- `cos()` - returns the cosine of the passed parameter (in radians)
-- `tan()` - returns the tangent of the passed parameter (in radians)
-- `asin()` - returns (in radians) the arcsine of the passed parameter
-- `acos()` - returns (in radians) the arccosine of the passed parameter
-- `atan()` - returns (in radians) the arctangent of the passed parameter
-- `sinh()` - returns the hyperbolic sine of the passed parameter
-- `cosh()` - returns the hyperbolic cosine of the passed parameter
-- `tanh()` - returns the hyperbolic tangent of the passed parameter
-- `asinh()` - returns the hyperbolic arcsine of the passed parameter
-- `acosh()` - returns the hyperbolic arccosine of the passed parameter
-- `atanh()` - returns the hyperbolic arctangent of the passed parameter
-- all the inverses of the above trigonometric functions (`csc`, `sec`, `cotan`, `acsc`, `asec`, `acotan`, `csch`, `sech`, `cotanh`, `acsch`, `asech`, `acotanh`)
+- The trigonometric functions:
+ - `sin()`, `cos()`, `tan()`
+ - Their inverses (`asin`, `acos`, `atan`)
+ - Their reciprocals (`csc`, `sec`, `cotan`)
+ - The reciprocals of the inverses (`acsc`, `asec`, `acotan`)
+ - The hyperbolic variations of all the above functions (`sinh`, `cosh`, `tanh`, `asinh`, `acosh`, `atanh`, `csch`, `sech`, `cotanh`, `acsch`, `asech`, `acotanh`)
 
 - `dtor()` - converts the passed parameter from degrees to radians
 - `rtod()` - converts the passed parameter from radians to degrees
@@ -133,6 +126,7 @@ Functions that take no parameters:
 - `pi()` - returns the value of π.  Also recognized as `π()`
 - `pi_2()` - returns the value of π/2
 - `pi_4()` - returns the value of π/4
+- `tau()` - returns the value of τ
 - `sqrt2()` - returns the value of the square root of 2
 - `e()` - returns the value of e
 - `log2e()` - returns the value of the log base 2 of e

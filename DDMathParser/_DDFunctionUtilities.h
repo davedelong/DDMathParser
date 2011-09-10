@@ -77,6 +77,7 @@
 + (DDMathFunction) piFunction;
 + (DDMathFunction) pi_2Function;
 + (DDMathFunction) pi_4Function;
++ (DDMathFunction) tauFunction;
 + (DDMathFunction) sqrt2Function;
 + (DDMathFunction) eFunction;
 + (DDMathFunction) log2eFunction;

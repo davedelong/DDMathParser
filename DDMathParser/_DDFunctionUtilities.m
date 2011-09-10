@@ -1213,6 +1213,16 @@ if ([arguments count] < __n) { \
 	return [[function copy] autorelease];
 }
 
++ (DDMathFunction) tauFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(0);
+		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithDecimal:DDDecimal2Pi()]];
+		
+	};
+	return [[function copy] autorelease];
+}
+
 + (DDMathFunction) sqrt2Function {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 #pragma unused(variables, evaluator)

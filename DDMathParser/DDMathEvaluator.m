@@ -162,88 +162,89 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     static NSSet *standardFunctions = nil;
     dispatch_once(&onceToken, ^{
         standardFunctions = [[NSSet alloc] initWithObjects:
-			//arithmetic functions (2 parameters)
-			@"add",
-			@"subtract",
-			@"multiply",
-			@"divide",
-			@"mod",
-			@"factorial",
-			@"pow",
-            @"nthroot",
-			
-			//bitwise functions (2 parameters)
-			@"and",
-			@"or",
-			@"xor",
-			@"rshift",
-			@"lshift",
-			
-			//functions that take > 0 parameters
-			@"average",
-			@"sum",
-			@"count",
-			@"min",
-			@"max",
-			@"median",
-			@"stddev",
-			@"random",
-			
-			//functions that take 1 parameter
-			@"negate",
-			@"not",
-			@"sqrt",
-			@"log",
-			@"ln",
-			@"log2",
-			@"exp",
-			@"ceil",
-			@"trunc",
-			@"floor",
-			@"abs",
-			
-			//trig functions
-			@"sin",
-			@"cos",
-			@"tan",
-			@"asin",
-			@"acos",
-			@"atan",
-			@"dtor",
-			@"rtod",
-			@"sinh",
-			@"cosh",
-			@"tanh",
-			@"asinh",
-			@"acosh",
-			@"atanh",
-			
-			//trig inverse functions
-			@"csc",
-			@"sec",
-			@"cotan",
-			@"acsc",
-			@"asec",
-			@"acotan",
-			@"csch",
-			@"sech",
-			@"cotanh",
-			@"acsch",
-			@"asech",
-			@"acotanh",
-			
-			//functions that take 0 parameters
-			@"pi",
-			@"pi_2",
-			@"pi_4",
-            @"phi",
-			@"sqrt2",
-			@"e",
-			@"log2e",
-			@"log10e",
-			@"ln2",
-			@"ln10",
-			nil];
+                             //arithmetic functions (2 parameters)
+                             @"add",
+                             @"subtract",
+                             @"multiply",
+                             @"divide",
+                             @"mod",
+                             @"factorial",
+                             @"pow",
+                             @"nthroot",
+                             
+                             //bitwise functions (2 parameters)
+                             @"and",
+                             @"or",
+                             @"xor",
+                             @"rshift",
+                             @"lshift",
+                             
+                             //functions that take > 0 parameters
+                             @"average",
+                             @"sum",
+                             @"count",
+                             @"min",
+                             @"max",
+                             @"median",
+                             @"stddev",
+                             @"random",
+                             
+                             //functions that take 1 parameter
+                             @"negate",
+                             @"not",
+                             @"sqrt",
+                             @"log",
+                             @"ln",
+                             @"log2",
+                             @"exp",
+                             @"ceil",
+                             @"trunc",
+                             @"floor",
+                             @"abs",
+                             
+                             //trig functions
+                             @"sin",
+                             @"cos",
+                             @"tan",
+                             @"asin",
+                             @"acos",
+                             @"atan",
+                             @"dtor",
+                             @"rtod",
+                             @"sinh",
+                             @"cosh",
+                             @"tanh",
+                             @"asinh",
+                             @"acosh",
+                             @"atanh",
+                             
+                             //trig inverse functions
+                             @"csc",
+                             @"sec",
+                             @"cotan",
+                             @"acsc",
+                             @"asec",
+                             @"acotan",
+                             @"csch",
+                             @"sech",
+                             @"cotanh",
+                             @"acsch",
+                             @"asech",
+                             @"acotanh",
+                             
+                             //functions that take 0 parameters
+                             @"pi",
+                             @"pi_2",
+                             @"pi_4",
+                             @"tau",
+                             @"phi",
+                             @"sqrt2",
+                             @"e",
+                             @"log2e",
+                             @"log10e",
+                             @"ln2",
+                             @"ln10",
+                             nil];
     });
 	return standardFunctions;
 }
@@ -253,12 +254,14 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     static NSDictionary *standardAliases = nil;
     dispatch_once(&onceToken, ^{
         standardAliases = [[NSDictionary alloc] initWithObjectsAndKeys:
-			@"average", @"avg",
-			@"average", @"mean",
-			@"floor", @"trunc",
-            @"pi", @"\u03C0", // π
-            @"phi", @"\u03D5", // ϕ
-			nil];
+                           @"average", @"avg",
+                           @"average", @"mean",
+                           @"floor", @"trunc",
+                           @"pi", @"\u03C0", // π
+                           @"pi", @"tau_2",
+                           @"tau", @"\u03C4", // τ
+                           @"phi", @"\u03D5", // ϕ
+                           nil];
     });
     return standardAliases;
 }
