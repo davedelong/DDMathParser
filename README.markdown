@@ -116,6 +116,7 @@ Functions that take 1 parameter:
  - Their reciprocals (`csc`, `sec`, `cotan`)
  - The reciprocals of the inverses (`acsc`, `asec`, `acotan`)
  - The hyperbolic variations of all the above functions (`sinh`, `cosh`, `tanh`, `asinh`, `acosh`, `atanh`, `csch`, `sech`, `cotanh`, `acsch`, `asech`, `acotanh`)
+ - The versine functions (`versin`, `vercosin`, `coversin`, `covercosin`, `haversin`, `havercosin`, `hacoversin`, `hacovercosin`, `exsec`, `excsc`, `crd`)
 
 - `dtor()` - converts the passed parameter from degrees to radians
 - `rtod()` - converts the passed parameter from radians to degrees

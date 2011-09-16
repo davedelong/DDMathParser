@@ -394,7 +394,7 @@
         } else if (character == '<' || character == '>') {
             unichar nextCharacter = [self _nextCharacter];
             if (nextCharacter != character) {
-                *error = ERR_BADARG(@"< and > are not supported operators");
+                *error = ERR_BADARG(@"%C is not a valid operator", character);
                 _characterIndex = start;
                 return nil;
             } else {

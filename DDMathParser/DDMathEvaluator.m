@@ -229,6 +229,19 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                              @"asech",
                              @"acotanh",
                              
+                             //more trig functions
+                             @"versin",
+                             @"vercosin",
+                             @"coversin",
+                             @"covercosin",
+                             @"haversin",
+                             @"havercosin",
+                             @"hacoversin",
+                             @"hacovercosin",
+                             @"exsec",
+                             @"excsc",
+                             @"crd",
+                             
                              //functions that take 0 parameters
                              @"pi",
                              @"pi_2",
@@ -258,6 +271,13 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                            @"pi", @"tau_2",
                            @"tau", @"\u03C4", // τ
                            @"phi", @"\u03D5", // ϕ
+                           
+                           @"versin", @"vers",
+                           @"versin", @"ver",
+                           @"vercosin", @"vercos",
+                           @"coversin", @"cvs",
+                           @"crd", @"chord",
+                           
                            nil];
     });
     return standardAliases;

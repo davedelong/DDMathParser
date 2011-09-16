@@ -797,6 +797,139 @@ if ([arguments count] < __n) { \
 	return [[function copy] autorelease];
 }
 
+// more trig functions
++ (DDMathFunction) versinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:1-cos([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) vercosinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:1+cos([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) coversinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:1-sin([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) covercosinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:1+sin([n doubleValue])];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) haversinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:(1-cos([n doubleValue]))/2];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) havercosinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:(1+cos([n doubleValue]))/2];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) hacoversinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:(1-sin([n doubleValue]))/2];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) hacovercosinFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:(1+sin([n doubleValue]))/2];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) exsecFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:(1/cos([n doubleValue]))-1];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) excscFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:(1/sin([n doubleValue]))-1];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
++ (DDMathFunction) crdFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+		REQUIRE_N_ARGS(1);
+        NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
+        
+        NSNumber *result = [NSNumber numberWithDouble:2*sin([n doubleValue]/2)];
+		return [DDExpression numberExpressionWithNumber:result];
+	};
+	return [[function copy] autorelease];
+}
+
 + (DDMathFunction) dtorFunction {
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 		REQUIRE_N_ARGS(1);
@@ -815,7 +948,7 @@ if ([arguments count] < __n) { \
         NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         RETURN_IF_NIL(n);
         
-        NSNumber *result = [NSNumber numberWithDouble:[n doubleValue] / M_PI * 180];
+        NSNumber *result = [NSNumber numberWithDouble:[n doubleValue]/M_PI * 180];
 		return [DDExpression numberExpressionWithNumber:result];
 		
 	};

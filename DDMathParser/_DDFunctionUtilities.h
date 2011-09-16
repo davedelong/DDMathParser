@@ -70,6 +70,17 @@
 + (DDMathFunction) asechFunction;
 + (DDMathFunction) acotanhFunction;
 
++ (DDMathFunction) versinFunction;
++ (DDMathFunction) vercosinFunction;
++ (DDMathFunction) coversinFunction;
++ (DDMathFunction) covercosinFunction;
++ (DDMathFunction) haversinFunction;
++ (DDMathFunction) havercosinFunction;
++ (DDMathFunction) hacoversinFunction;
++ (DDMathFunction) hacovercosinFunction;
++ (DDMathFunction) exsecFunction;
++ (DDMathFunction) excscFunction;
++ (DDMathFunction) crdFunction;
 
 + (DDMathFunction) dtorFunction;
 + (DDMathFunction) rtodFunction;
