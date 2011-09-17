@@ -15,6 +15,9 @@
 @interface DDMathStringTokenizer ()
 
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error;
+- (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error;
+- (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError **)error;
+- (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError **)error;
 
 - (unichar)_peekNextCharacter;
 - (unichar)_nextCharacter;
@@ -97,7 +100,7 @@
         if (error && *error) {
             [self release], self = nil;
         } else {
-            [self didParseToken:nil];
+            [self _processToken:nil withError:nil];
         }
     }
     
@@ -111,10 +114,30 @@
 }
 
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error {
-    DDMathStringToken * previousToken = [_tokens lastObject];
-    
     //figure out if "-" and "+" are unary or binary
+    BOOL shouldContinue = [self _processUnknownOperatorToken:token withError:error];
+    if (!shouldContinue) {
+        return NO;
+    }
+    
+    if ([token operatorPrecedence] == DDPrecedenceUnary && [[token token] isEqual:@"+"]) {
+        // the unary + operator is a no-op operator.  It does nothing, so we'll throw it out
+        return YES;
+    }
+    
+    //this adds support for implicit multiplication
+    (void)[self _processImplicitMultiplicationWithToken:token error:error];
+    
+    //this adds support for not adding parentheses to functions
+    (void)[self _processArgumentlessFunctionWithToken:token error:error];
+    
+    [self appendToken:token];
+    return YES;
+}
+
+- (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error {
     if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
+        DDMathStringToken *previousToken = [_tokens lastObject];
         if (previousToken == nil) {
             [token setOperatorPrecedence:DDPrecedenceUnary];
         } else if ([previousToken tokenType] == DDTokenTypeOperator && 
@@ -132,13 +155,10 @@
             return NO;
         }
     }
-    
-    if ([token operatorPrecedence] == DDPrecedenceUnary && [[token token] isEqual:@"+"]) {
-        // the unary + operator is a no-op operator.  It does nothing, so we'll throw it out
-        return YES;
-    }
-    
-    //this adds support for implicit multiplication
+    return YES;
+}
+
+- (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError **)error {
     /**
      If you have <first token><second token>, then you can either inject a multiplication token or leave it alone.
      This table explains what should happen for each possible combination:
@@ -175,7 +195,8 @@
      )					Function		Multiply
      )					(				Multiply
      **/
-    if (previousToken != nil) {
+    DDMathStringToken *previousToken = [_tokens lastObject];
+    if (previousToken != nil && token != nil) {
         if ([previousToken tokenType] == DDTokenTypeNumber ||
             [previousToken tokenType] == DDTokenTypeVariable ||
             [previousToken operatorType] == DDOperatorParenthesisClose) {
@@ -184,16 +205,25 @@
                 //inject a "multiplication" token:
                 DDMathStringToken * multiply = [DDMathStringToken mathStringTokenWithToken:@"*" type:DDTokenTypeOperator];
                 
-                [self didParseToken:multiply];
                 [self appendToken:multiply];
             }
             
         }
     }
-    
-    [self didParseToken:token];
-    [self appendToken:token];
-    
+    return YES;
+}
+
+- (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError **)error {
+    DDMathStringToken *previousToken = [_tokens lastObject];
+    if (previousToken != nil && [previousToken tokenType] == DDTokenTypeFunction) {
+        if ([token tokenType] != DDTokenTypeOperator || [token operatorType] != DDOperatorParenthesisOpen || token == nil) {
+            DDMathStringToken *openParen = [DDMathStringToken mathStringTokenWithToken:@"(" type:DDTokenTypeOperator];
+            [self appendToken:openParen];
+            
+            DDMathStringToken *closeParen = [DDMathStringToken mathStringTokenWithToken:@")" type:DDTokenTypeOperator];
+            [self appendToken:closeParen];
+        }
+    }
     return YES;
 }
 
@@ -206,6 +236,7 @@
 
 // methods that can be used by subclasses
 - (void)appendToken:(DDMathStringToken *)token {
+    [self didParseToken:token];
     if (token) {
         [(NSMutableArray *)_tokens addObject:token];
     }

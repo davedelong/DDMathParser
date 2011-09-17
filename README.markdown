@@ -207,7 +207,7 @@ Useful for specifying a custom parser or custom operator associativities, specif
     DDExpression *e = [parser parsedExpressionWithError:&error];
     NSLog(@"%@", [e evaluateWithSubstitutions:nil evaluator:nil error:&error]);
     
-Useful for specifying a custom tokenizer.  An example of a custom tokenizer is included in the source.  It shows how to recognize certain functions without parentheses (e, pi, etc).
+Useful for specifying a custom tokenizer.
 
 ## Compatibility
 

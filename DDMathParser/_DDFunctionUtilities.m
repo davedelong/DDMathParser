@@ -12,18 +12,18 @@
 #import "DDMathEvaluator.h"
 
 #define REQUIRE_N_ARGS(__n) { \
-if ([arguments count] != __n) { \
+if ([arguments count] != (__n)) { \
 	if (error != nil) { \
-		*error = ERR_GENERIC(@"%@ requires %d arguments", NSStringFromSelector(_cmd), __n); \
+		*error = ERR_GENERIC(@"%@ requires %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
 	} \
 	return nil; \
 } \
 }
 
 #define REQUIRE_GTOE_N_ARGS(__n) { \
-if ([arguments count] < __n) { \
+if ([arguments count] < (__n)) { \
 	if (error != nil) { \
-		*error = ERR_GENERIC(@"%@ requires at least %d arguments", NSStringFromSelector(_cmd), __n); \
+		*error = ERR_GENERIC(@"%@ requires at least %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
 	} \
 	return nil; \
 } \

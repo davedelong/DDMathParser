@@ -47,7 +47,7 @@ int main (int argc, const char * argv[]) {
 		if ([line isEqual:@"list"]) { listFunctions(); continue; }
 		
         NSError *error = nil;
-        DDMathStringTokenizer *tokenizer = [[ConstantRecognizer alloc] initWithString:line error:&error];
+        DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:line error:&error];
         DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
         DDExpression *expression = [parser parsedExpressionWithError:&error];
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];

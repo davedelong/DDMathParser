@@ -44,7 +44,6 @@
 		5537E36F12AB21140000CFED /* Demo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537E36E12AB21140000CFED /* Demo.m */; };
 		5537E37312AB214D0000CFED /* DemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5537E37212AB214D0000CFED /* DemoController.m */; };
 		5537E37512AB229C0000CFED /* Demo.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5537E37412AB229C0000CFED /* Demo.xib */; };
-		553CC9C913C6AECA00A81B05 /* ConstantRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 553CC9C813C6AECA00A81B05 /* ConstantRecognizer.m */; };
 		554DA12B12985DAE00433840 /* DDExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F7963612934A1400EF2716 /* DDExpression.m */; };
 		554DA12E12985DB500433840 /* _DDFunctionExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */; };
 		554DA12F12985DB500433840 /* _DDNumberExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */; };
@@ -107,8 +106,6 @@
 		5537E37112AB214D0000CFED /* DemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoController.h; sourceTree = "<group>"; };
 		5537E37212AB214D0000CFED /* DemoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoController.m; sourceTree = "<group>"; };
 		5537E37412AB229C0000CFED /* Demo.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Demo.xib; sourceTree = "<group>"; };
-		553CC9C713C6AECA00A81B05 /* ConstantRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantRecognizer.h; sourceTree = "<group>"; };
-		553CC9C813C6AECA00A81B05 /* ConstantRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConstantRecognizer.m; sourceTree = "<group>"; };
 		5554D58912944AFD00A62529 /* DDMathEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathEvaluator.h; sourceTree = "<group>"; };
 		5554D58A12944AFD00A62529 /* DDMathEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathEvaluator.m; sourceTree = "<group>"; };
 		5554D5EF129478E800A62529 /* DDMathEvaluator+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDMathEvaluator+Private.h"; sourceTree = "<group>"; };
@@ -258,8 +255,6 @@
 			isa = PBXGroup;
 			children = (
 				08FB7796FE84155DC02AAC07 /* main.m */,
-				553CC9C713C6AECA00A81B05 /* ConstantRecognizer.h */,
-				553CC9C813C6AECA00A81B05 /* ConstantRecognizer.m */,
 			);
 			name = "Command line demo";
 			sourceTree = "<group>";
@@ -530,7 +525,6 @@
 				552532B712C1C92D00A942A7 /* _DDFunctionUtilities.m in Sources */,
 				5526E9E11310EF880018B4C9 /* DDTypes.m in Sources */,
 				550C416813BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */,
-				553CC9C913C6AECA00A81B05 /* ConstantRecognizer.m in Sources */,
 				557067B813CC0D19004CB1B2 /* _DDParserTerm.m in Sources */,
 				556C293713CD4276005203F1 /* _DDGroupTerm.m in Sources */,
 				556C293A13CD42A8005203F1 /* _DDFunctionTerm.m in Sources */,
