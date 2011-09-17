@@ -58,7 +58,7 @@
 		return [variableValue evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
 	}
     if ([variableValue isKindOfClass:[NSString class]]) {
-        return [evaluator evaluateString:variableValue withSubstitutions:substitutions];
+        return [evaluator evaluateString:variableValue withSubstitutions:substitutions error:error];
     }
 	if ([variableValue isKindOfClass:[NSNumber class]]) {
 		return variableValue;

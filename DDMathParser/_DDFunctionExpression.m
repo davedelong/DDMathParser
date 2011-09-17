@@ -102,6 +102,8 @@
 			numberValue = [result number];
 		} else if ([result isKindOfClass:[NSNumber class]]) {
 			numberValue = result;
+        } else if ([result isKindOfClass:[NSString class]]) {
+            numberValue = [evaluator evaluateString:result withSubstitutions:substitutions error:error];
 		} else {
 			if (error != nil) {
 				*error = ERR_BADARG(@"invalid return type from %@ function", [self function]);
