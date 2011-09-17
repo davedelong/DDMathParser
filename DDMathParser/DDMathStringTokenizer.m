@@ -125,11 +125,11 @@
         return YES;
     }
     
-    //this adds support for implicit multiplication
-    (void)[self _processImplicitMultiplicationWithToken:token error:error];
-    
     //this adds support for not adding parentheses to functions
     (void)[self _processArgumentlessFunctionWithToken:token error:error];
+    
+    //this adds support for implicit multiplication
+    (void)[self _processImplicitMultiplicationWithToken:token error:error];
     
     [self appendToken:token];
     return YES;

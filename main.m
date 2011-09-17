@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
-#import "ConstantRecognizer.h"
+#import "DDMathStringTokenizer.h"
 
 NSString* readLine(void);
 void listFunctions(void);

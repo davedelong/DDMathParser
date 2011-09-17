@@ -57,11 +57,14 @@
 	if ([variableValue isKindOfClass:[DDExpression class]]) {
 		return [variableValue evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
 	}
+    if ([variableValue isKindOfClass:[NSString class]]) {
+        return [evaluator evaluateString:variableValue withSubstitutions:substitutions];
+    }
 	if ([variableValue isKindOfClass:[NSNumber class]]) {
 		return variableValue;
 	}
 	if (error != nil) {
-		*error = ERR_GENERIC(@"unable to evaluate expression: %@", self);
+		*error = ERR_GENERIC(@"unable to resolve variable expression: %@", self);
 	}
 	return nil;
 }
