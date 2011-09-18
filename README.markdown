@@ -13,17 +13,20 @@ Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all th
 Registering new functions is easy.  You just need a block, a name, and the number of arguments the function accepts.  So for example:
 
     DDMathFunction function = ^ DDExpression* (NSArray *args, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+      if ([args count] != 1) {
+        //fill in *error and return nil
+      }
       NSNumber * n = [[args objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
       NSNumber * result = [NSNumber numberWithDouble:[n doubleValue] * 42.0f];
       return [DDExpression numberExpressionWithNumber:result];
     };
     [[DDMathEvaluator sharedMathEvaluator] registerFunction:function forName:@"multiplyBy42"];
     
-    NSLog(@"%@", [[DDMathEvaluator sharedMathEvaluator] evaluateString:@"multiplyBy42(3)" withSubstitutions:nil]);  //logs "126"
+    NSLog(@"%@", [@"multiplyBy42(3)" numberByEvaluatingString]);  //logs "126"
     
-You can also unregister added functions.  You cannot unregister built-in functions, nor can they be overridden.
+You may unregister any functions you have added this way.  You cannot unregister built-in functions, nor can they be overridden.
     
-Function names must begin with a letter, and can contain letters and digits.  Functions are case-insensitive.  (`mUlTiPlYbY42` is the same as `multiplyby42`)
+Function names must begin with a letter, can contain letters and digits, and are case-insensitive.  (`mUlTiPlYbY42` is the same as `multiplyby42`)
 
 Functions are registered with a specific instance of `DDMathEvaluator`.  The simplest approach is to register everything with the shared instance (`[DDMathEvaluator sharedMathEvaluator]`).  However, should you only need certain functions available in certain contexts, you can allocate and initialize any number of `DDMathEvaluator` objects.  All math evaluators recognize the built-in functions.
     
@@ -33,12 +36,12 @@ If you don't know what the value of a particular term should be when the string 
 
     NSString *math = @"6 * $a";
     
-Then when you figure out what the value is supposed to be, you can pass it along in the substitution dictionary:
+When you figure out what the value is supposed to be, you can pass it along in the substitution dictionary:
 
     NSDictionary *variableSubstitutions = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:7] forKey:@"a"];
     NSLog(@"%@", [[DDMathEvaluator sharedMathEvaluator] evaluateString:math withSubstitutions:variableSubstitutions]); //logs "42"
     
-Variables are denoted in the source string as beginning with `$` and can contain numbers or letters.  They are case sensitive.  (`$a` is not the same as `$A`)
+Variables are denoted in the source string as beginning with `$` and can contain numbers or letters.  They are case **sensitive**.  (`$a` is not the same as `$A`)
     
 ### Associativity
 
@@ -46,7 +49,7 @@ By default, all binary operators are left associative.  That means if you give a
 
 The exception to this is the power operator (`**`), which has its associativity determined at runtime.  The reason for this is that the power operator is supposed to be right associative, but is interpreted by `NSPredicate` as left associative ([rdar://problem/8692313](rdar://problem/8692313)).  `DDParser` performs a test to match the associativity used by `NSPredicate`.
 
-If you want this operator to be parsed with specific associativity, you can do so like this:
+If you want this operator (or any binary operator) to be parsed with specific associativity, you can do so like this:
 
     DDParser *parser = [DDParser parserWithString:@"2 ** 3 ** 2"];
     [parser setPowerAssociativity:DDOperatorAssociativityRight];
@@ -55,8 +58,9 @@ If you want this operator to be parsed with specific associativity, you can do s
    
 All binary operators can have their associativity changed this way.  If you want to change the associativity of an operator for all future parsings, you can use the class methods on `DDParser` to do so.  For example:
 
-	[DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
-	NSLog(@"%@", [@"2 ** 3 ** 2" numberByEvaluatingString]); //logs 512
+    NSLog(@"%@", [@"1 - 2 - 3" numberByEvaluatingString]); //logs -4
+	[DDParser setDefaultAdditionAssociativity:DDOperatorAssociativityRight];
+	NSLog(@"%@", [@"1 - 2 - 3" numberByEvaluatingString]); //logs 2
 	
 Changing the default associativity only affects parsers instantiated after the change.  It does not affect existing parsers.
 
@@ -83,6 +87,12 @@ Changing the default associativity only affects parsers instantiated after the c
 The parser recognizes implicit multiplication.  For example, we can write `3(4)` and understand that the answer should be `12`.  Implicit multiplication is applied when a number, variable, or closing parenthesis are followed by either a number, variable, function, or opening parenthesis.
 
 A full explanation of how the implicit multiplication is handled is in the source of `DDMathStringTokenizer.m`.
+
+### Argumentless functions
+
+Normally, a function is entered in the form `function(parameter, parameter)`.  However, the tokenizer can also recognize functions as simply `function`.  In this case, the opening and closing parentheses are injected into the token stream.  This is only useful when entering constants, since these are the only functions which do not accept parameters.  The upshot of this is that you can pass the string `@"π + e"` and will be correctly parsed as if you had passed `@"π() + e()"`.
+
+If you attempt to use this with other functions, an error will be generated and evaluation will fail.  This makes sense since (for example) `sin()` cannot be evaluated.  The `sin` function requires a parameter.
 
 ### Built-in functions
 
@@ -121,7 +131,7 @@ Functions that take 1 parameter:
 - `dtor()` - converts the passed parameter from degrees to radians
 - `rtod()` - converts the passed parameter from radians to degrees
 
-Functions that take no parameters:
+Functions that take no parameters ("constant functions"):
 
 - `phi()` - returns the value of ϕ (the Golden Ratio).  Also recognized as `ϕ()`
 - `pi()` - returns the value of π.  Also recognized as `π()`
@@ -143,9 +153,9 @@ Functions can also have aliases.  For example, the following are equivalent:
     avg(1,2,3)
     mean(1,2,3)
   
-You can create your own aliases as well.  If "`acotanh`" is too long to type for you, feel free to do:
+You can create your own aliases as well.  If "`hacoversin`" is too long to type for you, feel free to do:
 
-    [[DDMathEvaluator sharedMathEvaluator] addAlias:@"acth" forFunctionName:@"acotanh"];
+    [[DDMathEvaluator sharedMathEvaluator] addAlias:@"hcvsin" forFunctionName:@"hacoversin"];
 
 ## Usage
 
@@ -155,6 +165,10 @@ There are several ways to evaluate strings, depending on how much customization 
 
 - If you use one of the options that does *not* accept an `NSError **`, then any tokenization, parsing, or evaluation errors will be `NSLog`ged.
 - If you use one of the options that does accept an `NSError **`, then you *must* supply one.  Failing to do so will probably result in a crash.
+
+### Regarding Whitespace
+
+Until recently, whitespace was ignored in evaluated strings.  This meant that `@"3 4"` was the same as `@"34"`.  However, whitespace is now seen as a *logical break* in the token stream.  Now, `@"3 4"` will be parsed as the `3` token followed by the `4` token.  And because of the logic in recognizing implicit multiplication, a multiplication operator will be injected into the stream.  Now, `@"3 4"` is recognized as `@"3*4"`, or `12`.
 
 ### NSString
 

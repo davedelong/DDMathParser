@@ -11,6 +11,7 @@
 #import "DDMathStringToken.h"
 
 #define DD_IS_DIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+#define DD_IS_WHITESPACE(_c) ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:(_c)])
 
 @interface DDMathStringTokenizer ()
 
@@ -61,7 +62,7 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_singleCharFunctionSet = nil;
     dispatch_once(&onceToken, ^{
-        NSString *singleChars = [NSString stringWithFormat:@"\u03C0\u03D5"];
+        NSString *singleChars = [NSString stringWithFormat:@"\u03C0\u03D5\u03C4"];  // π, ϕ, and τ
         _singleCharFunctionSet = [[NSCharacterSet characterSetWithCharactersInString:singleChars] retain];
     });
     return _singleCharFunctionSet;
@@ -76,16 +77,10 @@
     self = [super init];
     if (self) {
         
-        NSUInteger length = [expressionString length];
-        _characters = calloc(length, sizeof(unichar));
+        _length = [expressionString length];
+        _characters = calloc(_length+1, sizeof(unichar));
+        [expressionString getCharacters:_characters];
         
-        for (NSUInteger i = 0; i < length; ++i) {
-            unichar character = [expressionString characterAtIndex:i];
-            if (![[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:character]) {
-                _characters[_length] = character;
-                _length++;
-            }
-        }
         _characterIndex = 0;
         
         _tokens = [[NSMutableArray alloc] init];
@@ -292,6 +287,10 @@
 - (DDMathStringToken *)_nextTokenWithError:(NSError **)error {
     ERR_ASSERT(error);
     unichar next = [self _peekNextCharacter];
+    while (DD_IS_WHITESPACE(next)) {
+        (void)[self _nextCharacter];
+        next = [self _peekNextCharacter];
+    }
     if (next == '\0') { return nil; }
     
     DDMathStringToken *token = nil;
