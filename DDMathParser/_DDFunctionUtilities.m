@@ -1001,7 +1001,7 @@ if ([arguments count] < (__n)) { \
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 #pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(0);
-		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_2_PI]];
+		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:2*M_PI]];
 		
 	};
 	return [[function copy] autorelease];
