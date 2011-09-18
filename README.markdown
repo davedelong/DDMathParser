@@ -161,6 +161,8 @@ You can create your own aliases as well.  If "`hacoversin`" is too long to type 
 
 Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParser.h"`, and you're good to go.  A demo target is included as part of the project.  It shows how to evaluate a user-entered string, with support for variables.
 
+Also, [this question on StackOverflow.com](http://stackoverflow.com/q/6975796/115730) has an excellent write-up on how to include DDMathParser as a submodule in your git repository.
+
 There are several ways to evaluate strings, depending on how much customization you want to do.  Most of these options require an `NSError **` parameter, although some do not.
 
 - If you use one of the options that does *not* accept an `NSError **`, then any tokenization, parsing, or evaluation errors will be `NSLog`ged.
