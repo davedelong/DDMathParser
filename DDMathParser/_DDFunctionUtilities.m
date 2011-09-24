@@ -263,7 +263,7 @@ if ([arguments count] < (__n)) { \
 		}
         
         double sum = 0;
-        for (NSNumber *value in arguments) {
+        for (NSNumber *value in evaluatedNumbers) {
             sum += [value doubleValue];
         }
         NSNumber *result = [NSNumber numberWithDouble:sum];
