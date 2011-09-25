@@ -20,8 +20,6 @@
 
 #endif
 
-NSMutableDictionary* _DDRule_ExtractExpressionsMatchingTemplates(DDExpression *rule, DDExpression *target);
-
 @interface _DDSimplificationRule : NSObject {
     DDExpression *predicate;
     DDExpression *replacement;

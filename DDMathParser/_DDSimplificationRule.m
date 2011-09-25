@@ -9,32 +9,6 @@
 #import "_DDSimplificationRule.h"
 #import "DDExpression.h"
 
-NSMutableDictionary* _DDRule_ExtractExpressionsMatchingTemplates(DDExpression *rule, DDExpression *target) {
-    NSMutableDictionary *d = [NSMutableDictionary dictionary];
-    NSString *ruleFunction = [rule function];
-    if ([ruleFunction hasPrefix:DDRuleTemplateAnyExpression]) {
-        [d setObject:target forKey:ruleFunction];
-    } else if ([ruleFunction hasPrefix:DDRuleTemplateAnyFunction] && [target expressionType] == DDExpressionTypeFunction) {
-        [d setObject:target forKey:ruleFunction];
-    } else if ([ruleFunction hasPrefix:DDRuleTemplateAnyNumber] && [target expressionType] == DDExpressionTypeNumber) {
-        [d setObject:target forKey:ruleFunction];
-    } else if ([ruleFunction hasPrefix:DDRuleTemplateAnyVariable] && [target expressionType] == DDExpressionTypeVariable) {
-        [d setObject:target forKey:ruleFunction];
-    } else if ([ruleFunction isEqualToString:[target function]]) {
-        NSArray *ruleArgs = [rule arguments];
-        NSArray *targetArgs = [target arguments];
-        
-        for (NSUInteger i = 0; i < [ruleArgs count]; ++i) {
-            DDExpression *ruleArg = [ruleArgs objectAtIndex:i];
-            DDExpression *targetArg = [targetArgs objectAtIndex:i];
-            
-            [d addEntriesFromDictionary:_DDRule_ExtractExpressionsMatchingTemplates(ruleArg, targetArg)];
-        }
-    }
-    
-    return d;
-}
-
 @interface _DDSimplificationRule ()
 
 - (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)pattern;
@@ -116,8 +90,32 @@ NSMutableDictionary* _DDRule_ExtractExpressionsMatchingTemplates(DDExpression *r
     return [self _ruleExpression:predicate matchesExpression:target];
 }
 
+- (NSMutableDictionary *)_extractExpressionMatchingTemplate:(DDExpression *)template fromExpression:(DDExpression *)target {
+    NSMutableDictionary *d = [NSMutableDictionary dictionary];
+    NSString *templateFunction = [template function];
+    if (([templateFunction hasPrefix:DDRuleTemplateAnyExpression]) ||
+        ([templateFunction hasPrefix:DDRuleTemplateAnyFunction] && [target expressionType] == DDExpressionTypeFunction) ||
+        ([templateFunction hasPrefix:DDRuleTemplateAnyNumber] && [target expressionType] == DDExpressionTypeNumber) ||
+        ([templateFunction hasPrefix:DDRuleTemplateAnyVariable] && [target expressionType] == DDExpressionTypeVariable)) {
+        
+        [d setObject:target forKey:templateFunction];
+    } else if ([templateFunction isEqualToString:[target function]]) {
+        NSArray *ruleArgs = [template arguments];
+        NSArray *targetArgs = [target arguments];
+        
+        for (NSUInteger i = 0; i < [ruleArgs count]; ++i) {
+            DDExpression *ruleArg = [ruleArgs objectAtIndex:i];
+            DDExpression *targetArg = [targetArgs objectAtIndex:i];
+            
+            [d addEntriesFromDictionary:[self _extractExpressionMatchingTemplate:ruleArg fromExpression:targetArg]];
+        }
+    }
+    
+    return d;
+}
+
 - (DDExpression *)expressionByApplyingReplacmentsToExpression:(DDExpression *)target {
-    NSDictionary *replacements = _DDRule_ExtractExpressionsMatchingTemplates(predicate, target);
+    NSDictionary *replacements = [self _extractExpressionMatchingTemplate:predicate fromExpression:target];
     return [self _recursivelyApplyReplacements:replacements usingPattern:replacement];
 }
 
