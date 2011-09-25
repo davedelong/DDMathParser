@@ -58,19 +58,19 @@
 
 - (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 	BOOL canSimplify = YES;
+    
+    NSMutableArray *newSubexpressions = [NSMutableArray array];
 	for (DDExpression * e in [self arguments]) {
 		DDExpression * a = [e simplifiedExpressionWithEvaluator:evaluator error:error];
 		if (!a) { return nil; }
-		if ([a expressionType] != DDExpressionTypeNumber) {
-			canSimplify = NO;
-		}
+        canSimplify &= [a expressionType] == DDExpressionTypeNumber;
+        [newSubexpressions addObject:a];
 	}
 	
 	if (canSimplify) {
 		if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 		
-		DDMathFunction mathFunction = [evaluator functionWithName:[self function]];
-		id result = mathFunction([self arguments], nil, evaluator, error);
+        id result = [self evaluateWithSubstitutions:nil evaluator:evaluator error:error];
 		
 		if ([result isKindOfClass:[_DDNumberExpression class]]) {
 			return result;
@@ -79,7 +79,7 @@
 		}		
 	}
 	
-	return self;
+	return [_DDFunctionExpression functionExpressionWithFunction:[self function] arguments:newSubexpressions error:error];
 }
 
 - (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
