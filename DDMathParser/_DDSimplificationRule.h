@@ -10,10 +10,17 @@
 
 @class DDExpression;
 
-extern NSString * const DDRuleTemplateAnyNumber;
-extern NSString * const DDRuleTemplateAnyFunction;
-extern NSString * const DDRuleTemplateAnyVariable;
-extern NSString * const DDRuleTemplateAnyExpression;
+#ifndef __DDRuleTemplates__
+#define __DDRuleTemplates__
+
+#define DDRuleTemplateAnyNumber @"__num"
+#define DDRuleTemplateAnyFunction @"__func"
+#define DDRuleTemplateAnyVariable @"__var"
+#define DDRuleTemplateAnyExpression @"__exp"
+
+#endif
+
+NSMutableDictionary* _DDRule_ExtractExpressionsMatchingTemplates(DDExpression *rule, DDExpression *target);
 
 @interface _DDSimplificationRule : NSObject {
     DDExpression *predicate;
@@ -21,5 +28,11 @@ extern NSString * const DDRuleTemplateAnyExpression;
 }
 
 + (_DDSimplificationRule *)simplicationRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement;
+
+- (BOOL)ruleMatchesExpression:(DDExpression *)target;
+
+// should only be invoked if ruleMatchesExpression: returned YES
+// otherwise there could be bizarre consequences
+- (DDExpression *)expressionByApplyingReplacmentsToExpression:(DDExpression *)target;
 
 @end
