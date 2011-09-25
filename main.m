@@ -58,6 +58,7 @@ int main (int argc, const char * argv[]) {
         } else {
             printf("\t%s = %s\n", [[expression description] UTF8String], [[value description] UTF8String]);
         }
+        printf("\tSimplified = %s\n", [[[expression simplifiedExpression] description] UTF8String]);
 
 	} while (1);
 

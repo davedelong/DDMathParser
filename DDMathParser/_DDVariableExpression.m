@@ -45,8 +45,8 @@
 
 - (NSString *) variable { return variable; }
 
-- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator {
-#pragma unused(evaluator)
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
+#pragma unused(evaluator, error)
 	return self;
 }
 
