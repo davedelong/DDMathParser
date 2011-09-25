@@ -22,15 +22,15 @@
 
 @interface _DDSimplificationRule : NSObject {
     DDExpression *predicate;
-    DDExpression *replacement;
+    DDExpression *pattern;
+    NSMutableDictionary *replacements;
 }
 
 + (_DDSimplificationRule *)simplicationRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement;
 
 - (BOOL)ruleMatchesExpression:(DDExpression *)target;
 
-// should only be invoked if ruleMatchesExpression: returned YES
-// otherwise there could be bizarre consequences
+// returns nil if the rule does not match the target expression
 - (DDExpression *)expressionByApplyingReplacmentsToExpression:(DDExpression *)target;
 
 @end
