@@ -13,6 +13,7 @@
 #import "DDExpression.h"
 #import "_DDFunctionUtilities.h"
 #import "_DDFunctionContainer.h"
+#import "_DDSimplificationRule.h"
 
 @interface DDMathEvaluator ()
 
@@ -20,6 +21,7 @@
 + (NSDictionary *) _standardAliases;
 + (NSSet *)_standardNames;
 - (void) _registerStandardFunctions;
+- (void)_registerStandardRewriteRules;
 - (_DDFunctionContainer *)functionContainerWithName:(NSString *)functionName;
 
 @end
@@ -42,7 +44,10 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if (self) {
 		functions = [[NSMutableArray alloc] init];
         functionMap = [[NSMutableDictionary alloc] init];
+        rewriteRules = [[NSMutableArray alloc] init];
+        
 		[self _registerStandardFunctions];
+        [self _registerStandardRewriteRules];
 	}
 	return self;
 }
@@ -53,6 +58,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	}
 	[functions release];
     [functionMap release];
+    [rewriteRules release];
 	[super dealloc];
 }
 
@@ -127,6 +133,11 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	//you can't unregister a standard alias (like "avg")
 	if ([[[self class] _standardNames] containsObject:alias]) { return; }
     [self unregisterFunctionWithName:alias];
+}
+
+- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template {
+    _DDSimplificationRule *rewriteRule = [_DDSimplificationRule simplicationRuleWithTemplate:template replacementPattern:rule];
+    [rewriteRules addObject:rewriteRule];
 }
 
 #pragma mark Evaluation
@@ -296,6 +307,46 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     return names;
 }
 
++ (NSDictionary *)_standardRewriteRules {
+    static dispatch_once_t onceToken;
+    static NSDictionary *rules = nil;
+    dispatch_once(&onceToken, ^{
+        rules = [[NSDictionary alloc] initWithObjectsAndKeys:
+                 //addition
+                 @"__exp1", @"0+__exp1",
+                 @"__exp1", @"__exp1+0",
+                 
+                 //subtraction
+                 @"0", @"__exp1 - __exp1",
+
+                 //multiplication
+                 @"__exp1", @"1 * __exp1",
+                 @"__exp1", @"__exp1 * 1",
+                 @"pow(__exp1, 2)", @"__exp1 * __exp1",
+                 
+                 @"2*__exp1", @"__exp1 + __exp1",
+                 
+                 //division
+                 @"1", @"__exp1 / __exp1",
+                 @"__exp1", @"__exp1 * __exp2 / __exp2",
+                 @"__exp1", @"__exp2 * __exp1 / __exp2",
+                 @"__exp1", @"__exp2 / __exp2 * __exp1",
+                 
+                 //other stuff
+                 @"exp(__exp1 + __exp2)", @"exp(__exp1) * exp(__exp2)",
+                 @"pow(__exp1 * __exp2, __exp3)", @"pow(__exp1, __exp3) * pow(__exp2, __exp3)",
+                 @"1", @"pow(__exp1, 0)",
+                 @"__exp1", @"pow(__exp1, 1)",
+                 @"abs(__exp1)", @"sqrt(pow(__exp1, 2))",
+                 @"abs(__exp1)", @"nthroot(pow(__exp1, __exp2), __exp2)",
+                 
+                 //
+                 @"__exp1", @"dtor(rtod(__exp1))",
+                 nil];
+    });
+    return rules;
+}
+
 - (void) _registerStandardFunctions {
 	for (NSString *functionName in [[self class] _standardFunctions]) {
 		
@@ -319,6 +370,47 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 		NSString *function = [aliases objectForKey:alias];
 		(void)[self addAlias:alias forFunctionName:function];
 	}
+}
+
+- (void)_registerStandardRewriteRules {
+    NSDictionary *templates = [[self class] _standardRewriteRules];
+    for (NSString *template in templates) {
+        NSString *replacement = [templates objectForKey:template];
+        
+        [self addRewriteRule:replacement forExpressionsMatchingTemplate:template];
+    }
+}
+
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression {
+    [rewriteRules makeObjectsPerformSelector:@selector(resetApplicationCount)];
+    
+    DDExpression *tmp = expression;
+    while (tmp != nil) {
+        expression = tmp;
+        BOOL changed = NO;
+        
+        for (_DDSimplificationRule *rule in rewriteRules) {
+            NSLog(@"%@ => %d", rule, [rule ruleMatchesExpression:tmp]);
+            if ([rule ruleMatchesExpression:tmp]) {
+                NSLog(@"match: %@", rule);
+                DDExpression *rewritten = [rule expressionByApplyingReplacmentsToExpression:tmp];
+                NSLog(@"%@ => %@", tmp, rewritten);
+                tmp = rewritten;
+                changed = YES;
+            }
+//            DDExpression *rewritten = [rule expressionByApplyingReplacmentsToExpression:tmp];
+//            if (rewritten != nil) {
+//                NSLog(@"matched rule: %@", rule);
+//                changed |= (tmp != rewritten);
+//                tmp = rewritten;
+//            }
+        }
+        
+        // we applied all the rules and nothing changed
+        if (!changed) { break; }
+    }
+    
+    return expression;
 }
 
 @end

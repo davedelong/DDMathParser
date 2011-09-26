@@ -2,8 +2,6 @@
 #import "DDMathParser.h"
 #import "DDMathStringTokenizer.h"
 
-#import "_DDSimplificationRule.h"
-
 NSString* readLine(void);
 void listFunctions(void);
 
@@ -40,8 +38,6 @@ int main (int argc, const char * argv[]) {
 	printf("Type \"exit\" to quit\n");
     
     [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
-    
-    _DDSimplificationRule *r = [_DDSimplificationRule simplicationRuleWithTemplate:@"__exp1 + __exp1" replacementPattern:@"2 * __exp1"];
 	
 	NSString * line = nil;
 	do {
@@ -53,7 +49,10 @@ int main (int argc, const char * argv[]) {
         NSError *error = nil;
         DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:line error:&error];
         DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
+        
         DDExpression *expression = [parser parsedExpressionWithError:&error];
+        DDExpression *rewritten = [[DDMathEvaluator sharedMathEvaluator] expressionByRewritingExpression:expression];
+        
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
         [tokenizer release];
         
@@ -63,13 +62,7 @@ int main (int argc, const char * argv[]) {
             printf("\t%s = %s\n", [[expression description] UTF8String], [[value description] UTF8String]);
         }
         
-        DDExpression *e = expression;
-        while (e) {
-            DDExpression *tmp = [r expressionByApplyingReplacmentsToExpression:expression];
-            NSLog(@"%@ => %@", e, tmp);
-            e = tmp;
-        }
-        printf("\tSimplified = %s\n", [[[expression simplifiedExpression] description] UTF8String]);
+        printf("\tRewritten: %s\n", [[rewritten description] UTF8String]);
 
 	} while (1);
 

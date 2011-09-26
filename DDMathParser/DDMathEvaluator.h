@@ -15,6 +15,7 @@
 @interface DDMathEvaluator : NSObject {
     NSMutableArray *functions;
 	NSMutableDictionary * functionMap;
+    NSMutableArray *rewriteRules;
 }
 
 + (id) sharedMathEvaluator;
@@ -28,5 +29,8 @@
 
 - (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName;
 - (void) removeAlias:(NSString *)alias;
+
+- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template;
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression;
 
 @end

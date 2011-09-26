@@ -16,6 +16,7 @@
 @end
 
 @implementation _DDSimplificationRule
+@synthesize maximumApplicationCount;
 
 + (_DDSimplificationRule *)simplicationRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement {
     return [[[self alloc] initWithTemplate:string replacementPattern:replacement] autorelease];
@@ -28,6 +29,7 @@
         predicate = [[DDExpression expressionFromString:string error:&error] retain];
         pattern = [[DDExpression expressionFromString:patternFormat error:&error] retain];
         replacements = [[NSMutableDictionary alloc] init];
+        maximumApplicationCount = 256;
         
         if (!predicate || !pattern || [predicate expressionType] != DDExpressionTypeFunction) {
             NSLog(@"error creating rule: %@", error);
@@ -118,10 +120,20 @@
     // clear out the replacements we'd seen before
     [replacements removeAllObjects];
     
-    return [self _ruleExpression:predicate matchesExpression:target];
+    BOOL matches = [self _ruleExpression:predicate matchesExpression:target];
+    if (!matches && [target expressionType] == DDExpressionTypeFunction) {
+        for (DDExpression *argument in [target arguments]) {
+            matches |= [self ruleMatchesExpression:argument];
+            if (matches) { break; }
+        }
+    }
+    return matches;
 }
 
 - (DDExpression *)_expressionByApplyingReplacementsToPattern:(DDExpression *)p {
+    if (applicationCount > [self maximumApplicationCount]) {
+        NSLog(@"Rewrite rule (%@) applied more than %lu times. Aborting", self, [self maximumApplicationCount]);
+    }
     if ([p expressionType] == DDExpressionTypeVariable) { return p; }
     if ([p expressionType] == DDExpressionTypeNumber) { return p; }
     
@@ -129,6 +141,7 @@
     
     DDExpression *functionReplacement = [replacements objectForKey:pFunction];
     if (functionReplacement) {
+        applicationCount++;
         return functionReplacement;
     }
     
@@ -138,12 +151,21 @@
         [replacedArguments addObject:replacementArgument];
     }
     
+    applicationCount++;
     return [DDExpression functionExpressionWithFunction:pFunction arguments:replacedArguments error:nil];
 }
 
 - (DDExpression *)expressionByApplyingReplacmentsToExpression:(DDExpression *)target {
     if (![self ruleMatchesExpression:target]) { return nil; }
     return [self _expressionByApplyingReplacementsToPattern:pattern];
+}
+
+- (void)resetApplicationCount {
+    applicationCount = 0;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@ (%@ => %@)", [super description], predicate, pattern];
 }
 
 @end
