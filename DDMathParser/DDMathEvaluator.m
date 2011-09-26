@@ -331,6 +331,8 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  @"__exp1", @"__exp1 * __exp2 / __exp2",
                  @"__exp1", @"__exp2 * __exp1 / __exp2",
                  @"__exp1", @"__exp2 / __exp2 * __exp1",
+                 @"1/__exp1", @"__exp2 / (__exp2 * __exp1)",
+                 @"1/__exp1", @"__exp2 / (__exp1 * __exp2)",
                  
                  //other stuff
                  @"exp(__exp1 + __exp2)", @"exp(__exp1) * exp(__exp2)",
@@ -381,33 +383,50 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     }
 }
 
-- (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression {
-    [rewriteRules makeObjectsPerformSelector:@selector(resetApplicationCount)];
+- (DDExpression *)_rewriteExpression:(DDExpression *)expression usingRule:(_DDSimplificationRule *)rule {
+    DDExpression *rewritten = [rule expressionByApplyingReplacmentsToExpression:expression];
     
+    // if the rule did not match, return the expression
+    if (rewritten == expression && [expression expressionType] == DDExpressionTypeFunction) {
+        NSMutableArray *newArguments = [NSMutableArray array];
+        BOOL argsChanged = NO;
+        for (DDExpression *arg in [expression arguments]) {
+            DDExpression *newArg = [self _rewriteExpression:arg usingRule:rule];
+            argsChanged |= (newArg != arg);
+            [newArguments addObject:newArg];
+        }
+        
+        if (argsChanged) {
+            rewritten = [_DDFunctionExpression functionExpressionWithFunction:[expression function] arguments:newArguments error:nil];
+        }
+    }
+    
+    return rewritten;
+}
+
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression {
     DDExpression *tmp = expression;
-    while (tmp != nil) {
+    NSUInteger iterationCount = 0;
+    
+    do {
         expression = tmp;
         BOOL changed = NO;
         
         for (_DDSimplificationRule *rule in rewriteRules) {
-            NSLog(@"%@ => %d", rule, [rule ruleMatchesExpression:tmp]);
-            if ([rule ruleMatchesExpression:tmp]) {
-                NSLog(@"match: %@", rule);
-                DDExpression *rewritten = [rule expressionByApplyingReplacmentsToExpression:tmp];
-                NSLog(@"%@ => %@", tmp, rewritten);
+            DDExpression *rewritten = [self _rewriteExpression:tmp usingRule:rule];
+            if (rewritten != tmp) {
                 tmp = rewritten;
                 changed = YES;
             }
-//            DDExpression *rewritten = [rule expressionByApplyingReplacmentsToExpression:tmp];
-//            if (rewritten != nil) {
-//                NSLog(@"matched rule: %@", rule);
-//                changed |= (tmp != rewritten);
-//                tmp = rewritten;
-//            }
         }
         
         // we applied all the rules and nothing changed
         if (!changed) { break; }
+        iterationCount++;
+    } while (tmp != nil && iterationCount < 256);
+    
+    if (iterationCount >= 256) {
+        NSLog(@"ABORT: replacement limit reached");
     }
     
     return expression;
