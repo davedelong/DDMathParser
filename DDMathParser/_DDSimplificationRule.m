@@ -16,7 +16,6 @@
 @end
 
 @implementation _DDSimplificationRule
-@synthesize maximumApplicationCount;
 
 + (_DDSimplificationRule *)simplicationRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement {
     return [[[self alloc] initWithTemplate:string replacementPattern:replacement] autorelease];
@@ -28,8 +27,6 @@
         NSError *error = nil;
         predicate = [[DDExpression expressionFromString:string error:&error] retain];
         pattern = [[DDExpression expressionFromString:patternFormat error:&error] retain];
-        replacements = [[NSMutableDictionary alloc] init];
-        maximumApplicationCount = 256;
         
         if (!predicate || !pattern || [predicate expressionType] != DDExpressionTypeFunction) {
             NSLog(@"error creating rule: %@", error);
@@ -43,11 +40,10 @@
 - (void)dealloc {
     [predicate release];
     [pattern release];
-    [replacements release];
     [super dealloc];
 }
 
-- (BOOL)_ruleExpression:(DDExpression *)rule matchesExpression:(DDExpression *)target  {
+- (BOOL)_ruleExpression:(DDExpression *)rule matchesExpression:(DDExpression *)target withReplacements:(NSMutableDictionary *)replacements {
     if ([rule expressionType] == DDExpressionTypeNumber || [rule expressionType] == DDExpressionTypeVariable) {
         return [target isEqual:rule];
     }
@@ -106,7 +102,7 @@
         DDExpression *ruleArg = [ruleArgs objectAtIndex:i];
         DDExpression *targetArg = [targetArgs objectAtIndex:i];
         
-        argsMatch &= [self _ruleExpression:ruleArg matchesExpression:targetArg];
+        argsMatch &= [self _ruleExpression:ruleArg matchesExpression:targetArg withReplacements:replacements];
         
         if (!argsMatch) { break; }
     }
@@ -117,23 +113,10 @@
 }
 
 - (BOOL)ruleMatchesExpression:(DDExpression *)target {
-    // clear out the replacements we'd seen before
-    [replacements removeAllObjects];
-    
-    BOOL matches = [self _ruleExpression:predicate matchesExpression:target];
-    if (!matches && [target expressionType] == DDExpressionTypeFunction) {
-        for (DDExpression *argument in [target arguments]) {
-            matches |= [self ruleMatchesExpression:argument];
-            if (matches) { break; }
-        }
-    }
-    return matches;
+    return [self _ruleExpression:predicate matchesExpression:target withReplacements:[NSMutableDictionary dictionary]];
 }
 
-- (DDExpression *)_expressionByApplyingReplacementsToPattern:(DDExpression *)p {
-    if (applicationCount > [self maximumApplicationCount]) {
-        NSLog(@"Rewrite rule (%@) applied more than %lu times. Aborting", self, [self maximumApplicationCount]);
-    }
+- (DDExpression *)_expressionByApplyingReplacementsToPattern:(DDExpression *)p replacements:(NSDictionary *)replacements {
     if ([p expressionType] == DDExpressionTypeVariable) { return p; }
     if ([p expressionType] == DDExpressionTypeNumber) { return p; }
     
@@ -141,27 +124,23 @@
     
     DDExpression *functionReplacement = [replacements objectForKey:pFunction];
     if (functionReplacement) {
-        applicationCount++;
         return functionReplacement;
     }
     
     NSMutableArray *replacedArguments = [NSMutableArray array];
     for (DDExpression *patternArgument in [p arguments]) {
-        DDExpression *replacementArgument = [self _expressionByApplyingReplacementsToPattern:patternArgument];
+        DDExpression *replacementArgument = [self _expressionByApplyingReplacementsToPattern:patternArgument replacements:replacements];
         [replacedArguments addObject:replacementArgument];
     }
     
-    applicationCount++;
     return [DDExpression functionExpressionWithFunction:pFunction arguments:replacedArguments error:nil];
 }
 
 - (DDExpression *)expressionByApplyingReplacmentsToExpression:(DDExpression *)target {
-    if (![self ruleMatchesExpression:target]) { return nil; }
-    return [self _expressionByApplyingReplacementsToPattern:pattern];
-}
-
-- (void)resetApplicationCount {
-    applicationCount = 0;
+    NSMutableDictionary *replacements = [NSMutableDictionary dictionary];
+    if (![self _ruleExpression:predicate matchesExpression:target withReplacements:replacements]) { return target; }
+    
+    return [self _expressionByApplyingReplacementsToPattern:pattern replacements:replacements];
 }
 
 - (NSString *)description {

@@ -23,15 +23,9 @@
 @interface _DDSimplificationRule : NSObject {
     DDExpression *predicate;
     DDExpression *pattern;
-    NSMutableDictionary *replacements;
-    NSUInteger applicationCount;
 }
 
-@property (nonatomic, assign) NSUInteger maximumApplicationCount; //default is 256
-
 + (_DDSimplificationRule *)simplicationRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement;
-
-- (void)resetApplicationCount;
 
 - (BOOL)ruleMatchesExpression:(DDExpression *)target;
 
