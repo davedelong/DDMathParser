@@ -13,7 +13,7 @@
 #import "DDExpression.h"
 #import "_DDFunctionUtilities.h"
 #import "_DDFunctionContainer.h"
-#import "_DDSimplificationRule.h"
+#import "_DDRewriteRule.h"
 
 @interface DDMathEvaluator ()
 
@@ -136,7 +136,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template {
-    _DDSimplificationRule *rewriteRule = [_DDSimplificationRule simplicationRuleWithTemplate:template replacementPattern:rule];
+    _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:template replacementPattern:rule];
     [rewriteRules addObject:rewriteRule];
 }
 
@@ -383,8 +383,8 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     }
 }
 
-- (DDExpression *)_rewriteExpression:(DDExpression *)expression usingRule:(_DDSimplificationRule *)rule {
-    DDExpression *rewritten = [rule expressionByApplyingReplacmentsToExpression:expression];
+- (DDExpression *)_rewriteExpression:(DDExpression *)expression usingRule:(_DDRewriteRule *)rule {
+    DDExpression *rewritten = [rule expressionByRewritingExpression:expression];
     
     // if the rule did not match, return the expression
     if (rewritten == expression && [expression expressionType] == DDExpressionTypeFunction) {
@@ -412,7 +412,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
         expression = tmp;
         BOOL changed = NO;
         
-        for (_DDSimplificationRule *rule in rewriteRules) {
+        for (_DDRewriteRule *rule in rewriteRules) {
             DDExpression *rewritten = [self _rewriteExpression:tmp usingRule:rule];
             if (rewritten != tmp) {
                 tmp = rewritten;
