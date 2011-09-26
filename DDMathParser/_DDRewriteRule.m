@@ -1,23 +1,23 @@
 //
-//  _DDSimplificationRule.m
+//  _DDRewriteRule.m
 //  DDMathParser
 //
 //  Created by Dave DeLong on 9/24/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "_DDSimplificationRule.h"
+#import "_DDRewriteRule.h"
 #import "DDExpression.h"
 
-@interface _DDSimplificationRule ()
+@interface _DDRewriteRule ()
 
 - (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)pattern;
 
 @end
 
-@implementation _DDSimplificationRule
+@implementation _DDRewriteRule
 
-+ (_DDSimplificationRule *)simplicationRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement {
++ (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement {
     return [[[self alloc] initWithTemplate:string replacementPattern:replacement] autorelease];
 }
 
@@ -116,7 +116,7 @@
     return [self _ruleExpression:predicate matchesExpression:target withReplacements:[NSMutableDictionary dictionary]];
 }
 
-- (DDExpression *)_expressionByApplyingReplacementsToPattern:(DDExpression *)p replacements:(NSDictionary *)replacements {
+- (DDExpression *)_expressionByApplyingReplacements:(NSDictionary *)replacements toPattern:(DDExpression *)p{
     if ([p expressionType] == DDExpressionTypeVariable) { return p; }
     if ([p expressionType] == DDExpressionTypeNumber) { return p; }
     
@@ -129,18 +129,18 @@
     
     NSMutableArray *replacedArguments = [NSMutableArray array];
     for (DDExpression *patternArgument in [p arguments]) {
-        DDExpression *replacementArgument = [self _expressionByApplyingReplacementsToPattern:patternArgument replacements:replacements];
+        DDExpression *replacementArgument = [self _expressionByApplyingReplacements:replacements toPattern:pattern];
         [replacedArguments addObject:replacementArgument];
     }
     
     return [DDExpression functionExpressionWithFunction:pFunction arguments:replacedArguments error:nil];
 }
 
-- (DDExpression *)expressionByApplyingReplacmentsToExpression:(DDExpression *)target {
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)target {
     NSMutableDictionary *replacements = [NSMutableDictionary dictionary];
     if (![self _ruleExpression:predicate matchesExpression:target withReplacements:replacements]) { return target; }
     
-    return [self _expressionByApplyingReplacementsToPattern:pattern replacements:replacements];
+    return [self _expressionByApplyingReplacements:replacements toPattern:pattern];
 }
 
 - (NSString *)description {

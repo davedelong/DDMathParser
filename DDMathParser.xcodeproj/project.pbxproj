@@ -55,7 +55,7 @@
 		556C293D13CD42F4005203F1 /* _DDNumberTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293C13CD42F4005203F1 /* _DDNumberTerm.m */; };
 		556C294013CD42FF005203F1 /* _DDVariableTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 556C293F13CD42FE005203F1 /* _DDVariableTerm.m */; };
 		557067B813CC0D19004CB1B2 /* _DDParserTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 557067B713CC0D19004CB1B2 /* _DDParserTerm.m */; };
-		55ABBAAB142ECB1300BDF29A /* _DDSimplificationRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ABBAAA142ECB1300BDF29A /* _DDSimplificationRule.m */; };
+		55ABBAAB142ECB1300BDF29A /* _DDRewriteRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */; };
 		55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55BA67A11299FAEF002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55BFA9B0128CDE7600A80228 /* ParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BFA9AF128CDE7600A80228 /* ParserTests.m */; };
@@ -121,8 +121,8 @@
 		557067B613CC0D19004CB1B2 /* _DDParserTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDParserTerm.h; sourceTree = "<group>"; };
 		557067B713CC0D19004CB1B2 /* _DDParserTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDParserTerm.m; sourceTree = "<group>"; };
 		5570E3B112AA2D8D002FE945 /* DDParserTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDParserTypes.h; sourceTree = "<group>"; };
-		55ABBAA9142ECB1300BDF29A /* _DDSimplificationRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _DDSimplificationRule.h; path = DDMathParser/_DDSimplificationRule.h; sourceTree = "<group>"; };
-		55ABBAAA142ECB1300BDF29A /* _DDSimplificationRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _DDSimplificationRule.m; path = DDMathParser/_DDSimplificationRule.m; sourceTree = "<group>"; };
+		55ABBAA9142ECB1300BDF29A /* _DDRewriteRule.h */ = {isa = PBXFileReference; fileEncoding = 4; name = _DDRewriteRule.h; path = DDMathParser/_DDRewriteRule.h; sourceTree = "<group>"; };
+		55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _DDRewriteRule.m; path = DDMathParser/_DDRewriteRule.m; sourceTree = "<group>"; };
 		55BA673E1298ECA2002279A5 /* DDMathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMathParser.h; path = DDMathParser/DDMathParser.h; sourceTree = "<group>"; };
 		55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDMathParsing.h"; sourceTree = "<group>"; };
 		55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DDMathParsing.m"; sourceTree = "<group>"; };
@@ -296,8 +296,8 @@
 		55ABBAAC142ECB1900BDF29A /* Simplification */ = {
 			isa = PBXGroup;
 			children = (
-				55ABBAA9142ECB1300BDF29A /* _DDSimplificationRule.h */,
-				55ABBAAA142ECB1300BDF29A /* _DDSimplificationRule.m */,
+				55ABBAA9142ECB1300BDF29A /* _DDRewriteRule.h */,
+				55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */,
 			);
 			name = Simplification;
 			sourceTree = "<group>";
@@ -545,7 +545,7 @@
 				556C294013CD42FF005203F1 /* _DDVariableTerm.m in Sources */,
 				551EA4B813CD657400302C67 /* _DDOperatorTerm.m in Sources */,
 				551EA4C513CF415100302C67 /* _DDFunctionContainer.m in Sources */,
-				55ABBAAB142ECB1300BDF29A /* _DDSimplificationRule.m in Sources */,
+				55ABBAAB142ECB1300BDF29A /* _DDRewriteRule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

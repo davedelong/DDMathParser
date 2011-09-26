@@ -1,5 +1,5 @@
 //
-//  _DDSimplificationRule.h
+//  _DDRewriteRule.h
 //  DDMathParser
 //
 //  Created by Dave DeLong on 9/24/11.
@@ -20,16 +20,16 @@
 
 #endif
 
-@interface _DDSimplificationRule : NSObject {
+@interface _DDRewriteRule : NSObject {
     DDExpression *predicate;
     DDExpression *pattern;
 }
 
-+ (_DDSimplificationRule *)simplicationRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement;
++ (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement;
 
 - (BOOL)ruleMatchesExpression:(DDExpression *)target;
 
 // returns nil if the rule does not match the target expression
-- (DDExpression *)expressionByApplyingReplacmentsToExpression:(DDExpression *)target;
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)target;
 
 @end
