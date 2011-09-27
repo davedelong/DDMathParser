@@ -10,16 +10,6 @@
 
 @class DDExpression;
 
-#ifndef __DDRuleTemplates__
-#define __DDRuleTemplates__
-
-#define DDRuleTemplateAnyNumber @"__num"
-#define DDRuleTemplateAnyFunction @"__func"
-#define DDRuleTemplateAnyVariable @"__var"
-#define DDRuleTemplateAnyExpression @"__exp"
-
-#endif
-
 @interface _DDRewriteRule : NSObject {
     DDExpression *predicate;
     DDExpression *pattern;

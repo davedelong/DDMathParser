@@ -156,12 +156,68 @@ Functions can also have aliases.  For example, the following are equivalent:
 You can create your own aliases as well.  If "`hacoversin`" is too long to type for you, feel free to do:
 
     [[DDMathEvaluator sharedMathEvaluator] addAlias:@"hcvsin" forFunctionName:@"hacoversin"];
+    
+### Expression Rewriting
+
+Expression Rewriting is the ability for expressions like `3 * $a / $a` to be rewritten as `3` without ever knowing what the value of `$a` is.  (See more info about rewriting [on Wikipedia](http://en.wikipedia.org/wiki/Rewriting))
+
+`DDMathEvaluator` has two methods related to expression rewriting:
+
+- `-expressionByRewritingExpression:`
+- `-addRewriteRule:forExpressionsMatchingTemplate:`
+
+The first method, `expressionByRewritingExpression:` is the primary gateway.  When handed a `DDExpression`, it will analyze it and attempt to make as many changes to the expression as possible.  It is conceivable that there may be rewriting rules that produce infinite loops, in which case `DDMathEvaluator` will abort the writing after a finite number of attempts.
+
+The second method allows you to define your own rewriting rules at runtime.  The first parameter dictates what the returned expression will look like.  The second parameter describes when the rule should be applied.  For example, your code may describe this rule:
+
+    NSString *template = @"pow(__exp1, 2)";
+    NSString *pattern = @"__exp1 * __exp1";
+    [[DDMathEvaluator sharedMathEvaluator] addRewriteRule:pattern forExpressionsMatchingTemplate:template];
+    
+Now, whenever the evaluator sees an expression of the form `pow([anything], 2)`, it'll replace it with `[anything] * [anything]`.  Notice how the `__exp1` symbol is used both in the template and the replacement pattern.  Wherever `__exp1` is seen in the pattern, it'll be replaced with the appropriate expression extracted from the original expression.
+
+The rewrite rules look for certain symbols in the template and replacement pattern.  They are:
+
+- `__num*` - any numeric literal
+- `__func*` - any function
+- `__var*` - any variable
+- `__exp*` - any expression
+
+The rewrite rule will make sure that all of the expressions in the source expression match the rule before proceding.  For example, if we have the rewrite rule of:
+
+    __exp1 * __exp1 * __exp1 => pow(__exp1, 3)
+    
+This will match:
+
+    sin(π) * sin(π) * sin(π)
+    
+But it will not match:
+
+    sin(π) * sin(π) * cos(π)
+    
+Replacement patterns do not need to contain any of the special symbols.  For example:
+
+    [[DDMathEvaluator sharedMathEvaluator] addRewriteRule:@"0" forExpressionsMatchingTemplate:@"__exp1 - __exp1"];
+    
+However, any symbol used in the replacement pattern *must* be used in the template.  Failure to do so will likely cause a crash.
+
+#### Caution
+
+There are cases where expression rewriting can return incorrect results.  For example:
+
+    __exp1 / __exp1 => 1
+    
+This will return the incorrect expression if `__exp1` would evaluate to `0`.  Similarly:
+
+    nthroot(pow(__exp1, __exp2), __exp2) => abs(__exp1)
+    
+This is incorrect if `__exp1` evaluates to a negative number and `__exp2` evaluates to an odd number.
 
 ## Usage
 
 Simply copy the "DDMathParser" subfolder into your project, `#import "DDMathParser.h"`, and you're good to go.  A demo target is included as part of the project.  It shows how to evaluate a user-entered string, with support for variables.
 
-Also, [this question on StackOverflow.com](http://stackoverflow.com/q/6975796/115730) has an excellent write-up on how to include DDMathParser as a submodule in your git repository.
+Alternatively, you can add DDMathParser as a submodule to your git repository, which will make it very easy to stay on top of the latest changes.  [This question on StackOverflow.com](http://stackoverflow.com/q/6975796/115730) has an excellent write-up on how to do that.
 
 There are several ways to evaluate strings, depending on how much customization you want to do.  Most of these options require an `NSError **` parameter, although some do not.
 

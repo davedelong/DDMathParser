@@ -11,3 +11,8 @@
 #import "DDParser.h"
 #import "DDTypes.h"
 #import "NSString+DDMathParsing.h"
+
+#define DDRuleTemplateAnyNumber @"__num"
+#define DDRuleTemplateAnyFunction @"__func"
+#define DDRuleTemplateAnyVariable @"__var"
+#define DDRuleTemplateAnyExpression @"__exp"
