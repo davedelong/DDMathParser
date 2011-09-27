@@ -183,17 +183,19 @@ The rewrite rules look for certain symbols in the template and replacement patte
 - `__var*` - any variable
 - `__exp*` - any expression
 
-The rewrite rule will make sure that all of the expressions in the source expression match the rule before proceding.  For example, if we have the rewrite rule of:
+The rewrite rule will make sure that all of the expressions in the source expression match the rule exactly before proceding.  For example, if we have the rewrite rule of:
 
     __exp1 * __exp1 * __exp1 => pow(__exp1, 3)
     
-This will match:
+This will match these expressions:
 
     sin(π) * sin(π) * sin(π)
+    (1+1) * (1+1) * (1+1)
     
-But it will not match:
+But it will not match these:
 
     sin(π) * sin(π) * cos(π)
+    (1+1) * (1+1) * (0+2)
     
 Replacement patterns do not need to contain any of the special symbols.  For example:
 
