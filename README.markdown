@@ -1,11 +1,5 @@
 # DDMathParser
 
-You have an `NSString`.  You want an `NSNumber`.  Previously, you would have to rely on [abusing `NSPredicate`](http://tumblr.com/xqopow93r) to turn your string into an `NSExpression` that you could then evaluate.  However, this has a major flaw:  extending it to support functions that aren't built-in to `NSExpression` provided for some awkward syntax.  So if you really need `sin()`, you have to jump through some intricate hoops to get it.
-
-You could also have used [`GCMathParser`](http://apptree.net/parser.htm).  This, however, isn't extensible at all.  So if you really need `stddev()` or `nthroot()` functions, you're out of luck.
-
-Thus, `DDMathParser`.  It is written to be identical to `NSExpression` in all the ways that matter, but with the major addition that you can define new functions as you need.
-
 ## Documentation
 
 Please see [the DDMathParser wiki](https://github.com/davedelong/DDMathParser/wiki) for up-to-date documentation.
