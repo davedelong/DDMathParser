@@ -328,9 +328,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  
                  //division
                  @"1", @"__exp1 / __exp1",
-                 @"__exp1", @"__exp1 * __exp2 / __exp2",
                  @"__exp1", @"__exp2 * __exp1 / __exp2",
-                 @"__exp1", @"__exp2 / __exp2 * __exp1",
                  @"1/__exp1", @"__exp2 / (__exp2 * __exp1)",
                  @"1/__exp1", @"__exp2 / (__exp1 * __exp2)",
                  
