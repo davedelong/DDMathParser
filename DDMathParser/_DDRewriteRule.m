@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDRewriteRule.h"
 #import "DDExpression.h"
 
@@ -116,7 +117,7 @@
     return [self _ruleExpression:predicate matchesExpression:target withReplacements:[NSMutableDictionary dictionary]];
 }
 
-- (DDExpression *)_expressionByApplyingReplacements:(NSDictionary *)replacements toPattern:(DDExpression *)p{
+- (DDExpression *)_expressionByApplyingReplacements:(NSDictionary *)replacements toPattern:(DDExpression *)p {
     if ([p expressionType] == DDExpressionTypeVariable) { return p; }
     if ([p expressionType] == DDExpressionTypeNumber) { return p; }
     
