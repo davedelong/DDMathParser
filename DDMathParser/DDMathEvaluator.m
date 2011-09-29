@@ -56,10 +56,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if (self == _sharedEvaluator) {
 		_sharedEvaluator = nil;
 	}
+#if !HAS_ARC
 	[functions release];
     [functionMap release];
     [rewriteRules release];
 	[super dealloc];
+#endif
 }
 
 #pragma mark - Functions
@@ -73,7 +75,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:name];
     [functions addObject:container];
     [functionMap setObject:container forKey:name];
-    [container release];
+    RELEASE(container);
 	
 	return YES;
 }
@@ -359,7 +361,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                 _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:functionName];
                 [functions addObject:container];
                 [functionMap setObject:container forKey:functionName];
-                [container release];
+                RELEASE(container);
 			} else {
 				NSLog(@"error registering function: %@", functionName);
 			}

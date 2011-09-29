@@ -12,7 +12,7 @@
 @interface _DDFunctionContainer : NSObject
 
 @property (nonatomic,copy) DDMathFunction function;
-@property (nonatomic,readonly) NSSet *aliases;
+@property (nonatomic,readonly,strong) NSSet *aliases;
 
 + (NSString *)normalizedAlias:(NSString *)alias;
 

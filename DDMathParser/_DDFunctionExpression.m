@@ -24,7 +24,7 @@
 					*error = ERR_GENERIC(@"function arguments must be DDExpression objects");
 					*error = nil;
 				}
-				[self release];
+                RELEASE(self);
 				return nil;
 			}
 		}
@@ -46,11 +46,14 @@
     [aCoder encodeObject:[self arguments] forKey:@"arguments"];
 }
 
+#if !HAS_ARC
 - (void) dealloc {
 	[function release];
 	[arguments release];
 	[super dealloc];
 }
+#endif
+
 - (DDExpressionType) expressionType { return DDExpressionTypeFunction; }
 
 - (NSString *) function { return [function lowercaseString]; }

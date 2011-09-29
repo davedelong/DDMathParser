@@ -14,7 +14,7 @@
 - (id) initWithNumber:(NSNumber *)n {
 	self = [super init];
 	if (self) {
-		number = [n retain];
+		number = RETAIN(n);
 	}
 	return self;
 }
@@ -27,10 +27,12 @@
     [aCoder encodeObject:[self number] forKey:@"number"];
 }
 
+#if !HAS_ARC
 - (void) dealloc {
 	[number release];
 	[super dealloc];
 }
+#endif
 
 - (DDExpressionType) expressionType { return DDExpressionTypeNumber; }
 

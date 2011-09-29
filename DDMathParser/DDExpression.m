@@ -24,15 +24,15 @@
 }
 
 + (id) numberExpressionWithNumber:(NSNumber *)number {
-	return [[[_DDNumberExpression alloc] initWithNumber:number] autorelease];
+	return AUTORELEASE([[_DDNumberExpression alloc] initWithNumber:number]);
 }
 
 + (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError **)error {
-	return [[[_DDFunctionExpression alloc] initWithFunction:function arguments:arguments error:error] autorelease];
+	return AUTORELEASE([[_DDFunctionExpression alloc] initWithFunction:function arguments:arguments error:error]);
 }
 
 + (id) variableExpressionWithVariable:(NSString *)variable {
-	return [[[_DDVariableExpression alloc] initWithVariable:variable] autorelease];
+	return AUTORELEASE([[_DDVariableExpression alloc] initWithVariable:variable]);
 }
 
 #pragma mark -

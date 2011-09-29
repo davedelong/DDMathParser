@@ -40,7 +40,7 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_operatorSet = nil;
     dispatch_once(&onceToken, ^{
-        _operatorSet = [[NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,x"] retain];
+        _operatorSet = RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,x"]);
     });
     return _operatorSet;
 }
@@ -63,13 +63,13 @@
     static NSCharacterSet *_singleCharFunctionSet = nil;
     dispatch_once(&onceToken, ^{
         NSString *singleChars = [NSString stringWithFormat:@"\u03C0\u03D5\u03C4"];  // π, ϕ, and τ
-        _singleCharFunctionSet = [[NSCharacterSet characterSetWithCharactersInString:singleChars] retain];
+        _singleCharFunctionSet = RETAIN([NSCharacterSet characterSetWithCharactersInString:singleChars]);
     });
     return _singleCharFunctionSet;
 }
 
 + (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error {
-    return [[[self alloc] initWithString:expressionString error:error] autorelease];
+    return AUTORELEASE([[self alloc] initWithString:expressionString error:error]);
 }
 
 - (id)initWithString:(NSString *)expressionString error:(NSError **)error {
@@ -87,13 +87,14 @@
         DDMathStringToken *token = nil;
         while((token = [self _nextTokenWithError:error]) != nil) {
             if (![self _processToken:token withError:error]) {
-                [self release];
+                RELEASE(self);
                 return nil;
             }
         }
 		
         if (error && *error) {
-            [self release], self = nil;
+            RELEASE(self);
+            self = nil;
         } else {
             [self _processToken:nil withError:nil];
         }
@@ -104,8 +105,10 @@
 
 - (void)dealloc {
     free(_characters);
+#if !HAS_ARC
     [_tokens release];
     [super dealloc];
+#endif
 }
 
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error {
@@ -240,7 +243,7 @@
 #pragma mark Character methods
 
 - (NSArray *)tokens {
-    return [[_tokens copy] autorelease];
+    return AUTORELEASE([_tokens copy]);
 }
 - (DDMathStringToken *) nextToken {
     DDMathStringToken *t = [self peekNextToken];

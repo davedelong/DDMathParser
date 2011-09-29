@@ -26,11 +26,13 @@
     return self;
 }
 
+#if !HAS_ARC
 - (void)dealloc {
     [function release];
     [aliases release];
     [super dealloc];
 }
+#endif
 
 - (NSMutableSet *)_aliases {
     return (NSMutableSet *)aliases;

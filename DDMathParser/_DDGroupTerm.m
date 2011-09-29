@@ -28,7 +28,7 @@
 @synthesize subterms;
 
 - (void)_setSubterms:(NSArray *)newTerms {
-    [subterms release];
+    RELEASE(subterms);
     subterms = [newTerms mutableCopy];
 }
 
@@ -53,7 +53,7 @@
                 [terms addObject:nextTerm];
             } else {
                 // extracting a term failed.  *error should've been filled already
-                [self release];
+                RELEASE(self);
                 return nil;
             }
             nextToken = [tokenizer peekNextToken];
@@ -62,7 +62,7 @@
         // consume the closing parenthesis and verify it exists
         if ([tokenizer nextToken] == nil) {
             *error = ERR_BADARG(@"imbalanced parentheses");
-            [self release];
+            RELEASE(self);
             return nil;
         }
         
@@ -71,10 +71,12 @@
     return self;
 }
 
+#if !HAS_ARC
 - (void)dealloc {
     [subterms release];
     [super dealloc];
 }
+#endif
 
 - (DDParserTermType)type { return DDParserTermTypeGroup; }
 
@@ -195,7 +197,7 @@
         NSArray *rightOperands = [[self subterms] subarrayWithRange:rightOperandRange];
         _DDGroupTerm *group = [[_DDGroupTerm alloc] _initWithSubterms:rightOperands error:error];
         [[self subterms] replaceObjectsInRange:rightOperandRange withObjectsFromArray:[NSArray arrayWithObject:group]];
-        [group release];
+        RELEASE(group);
         
         rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(replacementRange)-1];
     }
@@ -204,7 +206,7 @@
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
-    [function release];
+    RELEASE(function);
     
     return YES;
 }
@@ -244,7 +246,7 @@
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
     
-    [function release];
+    RELEASE(function);
     
     return YES;
 }

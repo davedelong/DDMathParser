@@ -80,7 +80,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 
 
 + (id) parserWithString:(NSString *)string error:(NSError **)error {
-    return [[[self alloc] initWithString:string error:error] autorelease];
+    return AUTORELEASE([[self alloc] initWithString:string error:error]);
 }
 
 - (id) initWithString:(NSString *)string error:(NSError **)error {
@@ -89,16 +89,16 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 }
 
 + (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
-	return [[[self alloc] initWithTokenizer:tokenizer error:error] autorelease];
+	return AUTORELEASE([[self alloc] initWithTokenizer:tokenizer error:error]);
 }
 
 - (id)initWithTokenizer:(DDMathStringTokenizer *)t error:(NSError **)error {
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
-		tokenizer = [t retain];
+		tokenizer = RETAIN(t);
 		if (!tokenizer) {
-			[self release];
+			RELEASE(self);
 			return nil;
 		}
 		
@@ -115,10 +115,12 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 	return self;
 }
 
+#if !HAS_ARC
 - (void) dealloc {
 	[tokenizer release];
 	[super dealloc];
 }
+#endif
 
 - (DDOperatorAssociativity) associativityForOperator:(DDOperator)operatorType {
 	switch (operatorType) {
@@ -154,7 +156,11 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
     
     DDExpression *expression = nil;
     
+#if HAS_ARC
+    @autoreleasepool {
+#else
 	NSAutoreleasePool * parserPool = [[NSAutoreleasePool alloc] init];
+#endif
     
     _DDParserTerm *root = [_DDParserTerm rootTermWithTokenizer:tokenizer error:error];
     if (!root) {
@@ -165,14 +171,19 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
         goto errorExit;
     }
 	
-	expression = [[root expressionWithError:error] retain];
+	expression = RETAIN([root expressionWithError:error]);
 	
 errorExit:
+#if HAS_ARC
+        ;
+    }
+#else
     [*error retain];
 	[parserPool drain];
     [*error autorelease];
+#endif
     
-	return [expression autorelease];
+	return AUTORELEASE(expression);
 }
 
 @end

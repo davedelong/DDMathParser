@@ -20,7 +20,7 @@
             v = [v substringFromIndex:1];
         }
         if ([v length] == 0) {
-            [self release];
+            RELEASE(self);
             return nil;
         }
 		variable = [v copy];
@@ -36,10 +36,12 @@
     [aCoder encodeObject:[self variable] forKey:@"variable"];
 }
 
+#if !HAS_ARC
 - (void) dealloc {
 	[variable release];
 	[super dealloc];
 }
+#endif
 
 - (DDExpressionType) expressionType { return DDExpressionTypeVariable; }
 

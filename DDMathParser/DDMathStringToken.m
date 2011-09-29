@@ -11,11 +11,13 @@
 @implementation DDMathStringToken
 @synthesize token, tokenType, operatorType, operatorPrecedence, operatorArity;
 
+#if !HAS_ARC
 - (void) dealloc {
 	[token release];
     [numberValue release];
 	[super dealloc];
 }
+#endif
 
 - (id) initWithToken:(NSString *)t type:(DDTokenType)type {
 	self = [super init];
@@ -108,7 +110,7 @@
 }
 
 + (id) mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type {
-	return [[[self alloc] initWithToken:t type:type] autorelease];
+	return AUTORELEASE([[self alloc] initWithToken:t type:type]);
 }
 
 - (NSNumber *) numberValue {
