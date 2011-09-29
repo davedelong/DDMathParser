@@ -6,6 +6,7 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
 #import "_DDParserTerm.h"
@@ -80,7 +81,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 
 
 + (id) parserWithString:(NSString *)string error:(NSError **)error {
-    return AUTORELEASE([[self alloc] initWithString:string error:error]);
+    return DD_AUTORELEASE([[self alloc] initWithString:string error:error]);
 }
 
 - (id) initWithString:(NSString *)string error:(NSError **)error {
@@ -89,16 +90,16 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 }
 
 + (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
-	return AUTORELEASE([[self alloc] initWithTokenizer:tokenizer error:error]);
+	return DD_AUTORELEASE([[self alloc] initWithTokenizer:tokenizer error:error]);
 }
 
 - (id)initWithTokenizer:(DDMathStringTokenizer *)t error:(NSError **)error {
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
-		tokenizer = RETAIN(t);
+		tokenizer = DD_RETAIN(t);
 		if (!tokenizer) {
-			RELEASE(self);
+			DD_RELEASE(self);
 			return nil;
 		}
 		
@@ -115,7 +116,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
 	return self;
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void) dealloc {
 	[tokenizer release];
 	[super dealloc];
@@ -156,7 +157,7 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
     
     DDExpression *expression = nil;
     
-#if HAS_ARC
+#if DD_HAS_ARC
     @autoreleasepool {
 #else
 	NSAutoreleasePool * parserPool = [[NSAutoreleasePool alloc] init];
@@ -171,10 +172,10 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
         goto errorExit;
     }
 	
-	expression = RETAIN([root expressionWithError:error]);
+	expression = DD_RETAIN([root expressionWithError:error]);
 	
 errorExit:
-#if HAS_ARC
+#if DD_HAS_ARC
         ;
     }
 #else
@@ -183,7 +184,7 @@ errorExit:
     [*error autorelease];
 #endif
     
-	return AUTORELEASE(expression);
+	return DD_AUTORELEASE(expression);
 }
 
 @end

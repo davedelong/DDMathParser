@@ -6,12 +6,13 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "DDMathStringToken.h"
 
 @implementation DDMathStringToken
 @synthesize token, tokenType, operatorType, operatorPrecedence, operatorArity;
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void) dealloc {
 	[token release];
     [numberValue release];
@@ -110,7 +111,7 @@
 }
 
 + (id) mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type {
-	return AUTORELEASE([[self alloc] initWithToken:t type:type]);
+	return DD_AUTORELEASE([[self alloc] initWithToken:t type:type]);
 }
 
 - (NSNumber *) numberValue {

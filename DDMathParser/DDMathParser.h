@@ -16,3 +16,22 @@
 #define DDRuleTemplateAnyFunction @"__func"
 #define DDRuleTemplateAnyVariable @"__var"
 #define DDRuleTemplateAnyExpression @"__exp"
+
+
+
+#if __has_feature(objc_arc)
+
+#define DD_HAS_ARC 1
+#define DD_RETAIN(_o) (_o)
+#define DD_RELEASE(_o) 
+#define DD_AUTORELEASE(_o) (_o)
+
+#else
+
+#define DD_HAS_ARC 0
+#define DD_RETAIN(_o) [(_o) retain]
+#define DD_RELEASE(_o) [(_o) release]
+#define DD_AUTORELEASE(_o) [(_o) autorelease]
+
+#endif
+

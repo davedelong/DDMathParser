@@ -6,6 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDFunctionTerm.h"
 #import "DDMathStringToken.h"
 #import "DDMathStringTokenizer.h"
@@ -45,7 +46,7 @@
                     if (parameterGroup) {
                         [newSubterms addObject:parameterGroup];
                     }
-                    RELEASE(parameterGroup);
+                    DD_RELEASE(parameterGroup);
                 } else {
                     // there's only one term in this parameter; no need to group it in parentheses
                     [newSubterms addObject:[parameterGroupTerms objectAtIndex:0]];
@@ -66,7 +67,7 @@
             NSArray *lastParameters = [[self subterms] subarrayWithRange:rangeOfLastParameter];
             _DDGroupTerm *parameterGroup = [[_DDGroupTerm alloc] _initWithSubterms:lastParameters error:error];
             [newSubterms addObject:parameterGroup];
-            RELEASE(parameterGroup);
+            DD_RELEASE(parameterGroup);
         } else if (rangeOfLastParameter.length == 1) {
             [newSubterms addObject:[[self subterms] objectAtIndex:rangeOfLastParameter.location]];
         }
@@ -78,7 +79,7 @@
     return self;
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void)dealloc {
     [functionName release];
     [super dealloc];

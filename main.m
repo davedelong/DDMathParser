@@ -16,7 +16,7 @@ NSString* readLine() {
         
     } while (1);
     
-    return AUTORELEASE([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    return DD_AUTORELEASE([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 }
 
 void listFunctions() {
@@ -30,7 +30,7 @@ void listFunctions() {
 int main (int argc, const char * argv[]) {
 #pragma unused(argc, argv)
     
-#if HAS_ARC
+#if DD_HAS_ARC
     @autoreleasepool {
 #else
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
@@ -59,7 +59,7 @@ int main (int argc, const char * argv[]) {
         DDExpression *rewritten = [[DDMathEvaluator sharedMathEvaluator] expressionByRewritingExpression:expression];
         
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
-        RELEASE(tokenizer);
+        DD_RELEASE(tokenizer);
         
 //        if (value == nil) {
 //            printf("\tERROR: %s\n", [[error description] UTF8String]);
@@ -74,7 +74,7 @@ int main (int argc, const char * argv[]) {
     // insert code here...
 		printf("Goodbye!\n");
         
-#if HAS_ARC
+#if DD_HAS_ARC
     }
 #else
     [pool drain];

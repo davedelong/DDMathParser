@@ -6,6 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "DDMathStringTokenizer.h"
 #import "DDMathParserMacros.h"
 #import "DDMathStringToken.h"
@@ -40,7 +41,7 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_operatorSet = nil;
     dispatch_once(&onceToken, ^{
-        _operatorSet = RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,x"]);
+        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,x"]);
     });
     return _operatorSet;
 }
@@ -63,13 +64,13 @@
     static NSCharacterSet *_singleCharFunctionSet = nil;
     dispatch_once(&onceToken, ^{
         NSString *singleChars = [NSString stringWithFormat:@"\u03C0\u03D5\u03C4"];  // π, ϕ, and τ
-        _singleCharFunctionSet = RETAIN([NSCharacterSet characterSetWithCharactersInString:singleChars]);
+        _singleCharFunctionSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:singleChars]);
     });
     return _singleCharFunctionSet;
 }
 
 + (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error {
-    return AUTORELEASE([[self alloc] initWithString:expressionString error:error]);
+    return DD_AUTORELEASE([[self alloc] initWithString:expressionString error:error]);
 }
 
 - (id)initWithString:(NSString *)expressionString error:(NSError **)error {
@@ -87,13 +88,13 @@
         DDMathStringToken *token = nil;
         while((token = [self _nextTokenWithError:error]) != nil) {
             if (![self _processToken:token withError:error]) {
-                RELEASE(self);
+                DD_RELEASE(self);
                 return nil;
             }
         }
 		
         if (error && *error) {
-            RELEASE(self);
+            DD_RELEASE(self);
             self = nil;
         } else {
             [self _processToken:nil withError:nil];
@@ -109,7 +110,7 @@
 
 - (void)dealloc {
     free(_characters);
-#if !HAS_ARC
+#if !DD_HAS_ARC
     [_tokens release];
     [super dealloc];
 #endif
@@ -247,7 +248,7 @@
 #pragma mark Character methods
 
 - (NSArray *)tokens {
-    return AUTORELEASE([_tokens copy]);
+    return DD_AUTORELEASE([_tokens copy]);
 }
 - (DDMathStringToken *) nextToken {
     DDMathStringToken *t = [self peekNextToken];

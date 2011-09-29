@@ -5,7 +5,7 @@
 //  Created by Dave DeLong on 11/17/10.
 //  Copyright 2010 Home. All rights reserved.
 //
-
+#import "DDMathParser.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
 #import "DDParser.h"
@@ -56,7 +56,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if (self == _sharedEvaluator) {
 		_sharedEvaluator = nil;
 	}
-#if !HAS_ARC
+#if !DD_HAS_ARC
 	[functions release];
     [functionMap release];
     [rewriteRules release];
@@ -75,7 +75,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:name];
     [functions addObject:container];
     [functionMap setObject:container forKey:name];
-    RELEASE(container);
+    DD_RELEASE(container);
 	
 	return YES;
 }
@@ -361,7 +361,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                 _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:functionName];
                 [functions addObject:container];
                 [functionMap setObject:container forKey:functionName];
-                RELEASE(container);
+                DD_RELEASE(container);
 			} else {
 				NSLog(@"error registering function: %@", functionName);
 			}

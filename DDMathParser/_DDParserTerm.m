@@ -6,6 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDParserTerm.h"
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
@@ -41,7 +42,7 @@
         [terms addObject:nextTerm];
     }
     
-    return AUTORELEASE([[_DDGroupTerm alloc] _initWithSubterms:terms error:error]);
+    return DD_AUTORELEASE([[_DDGroupTerm alloc] _initWithSubterms:terms error:error]);
 }
 
 + (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
@@ -63,7 +64,7 @@
             term = [[_DDFunctionTerm alloc] _initWithTokenizer:tokenizer error:error];
         }
         
-        return AUTORELEASE(term);
+        return DD_AUTORELEASE(term);
     } else {
         *error = ERR_GENERIC(@"can't create a term with a nil token");
     }
@@ -75,7 +76,7 @@
     self = [super init];
     if (self) {
         resolved = NO;
-        token = RETAIN(t);
+        token = DD_RETAIN(t);
     }
     return self;
 }
@@ -84,7 +85,7 @@
     return [self _initWithToken:[tokenizer nextToken] error:error];
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void)dealloc {
     [token release];
     [super dealloc];

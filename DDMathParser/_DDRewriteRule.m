@@ -19,26 +19,26 @@
 @implementation _DDRewriteRule
 
 + (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement {
-    return AUTORELEASE([[self alloc] initWithTemplate:string replacementPattern:replacement]);
+    return DD_AUTORELEASE([[self alloc] initWithTemplate:string replacementPattern:replacement]);
 }
 
 - (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)patternFormat {
     self = [super init];
     if (self) {
         NSError *error = nil;
-        predicate = RETAIN([DDExpression expressionFromString:string error:&error]);
-        pattern = RETAIN([DDExpression expressionFromString:patternFormat error:&error]);
+        predicate = DD_RETAIN([DDExpression expressionFromString:string error:&error]);
+        pattern = DD_RETAIN([DDExpression expressionFromString:patternFormat error:&error]);
         
         if (!predicate || !pattern || [predicate expressionType] != DDExpressionTypeFunction) {
             NSLog(@"error creating rule: %@", error);
-            RELEASE(self);
+            DD_RELEASE(self);
             return nil;
         }
     }
     return self;
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void)dealloc {
     [predicate release];
     [pattern release];

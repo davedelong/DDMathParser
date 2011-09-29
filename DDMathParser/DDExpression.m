@@ -6,6 +6,7 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "DDExpression.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
@@ -24,15 +25,15 @@
 }
 
 + (id) numberExpressionWithNumber:(NSNumber *)number {
-	return AUTORELEASE([[_DDNumberExpression alloc] initWithNumber:number]);
+	return DD_AUTORELEASE([[_DDNumberExpression alloc] initWithNumber:number]);
 }
 
 + (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError **)error {
-	return AUTORELEASE([[_DDFunctionExpression alloc] initWithFunction:function arguments:arguments error:error]);
+	return DD_AUTORELEASE([[_DDFunctionExpression alloc] initWithFunction:function arguments:arguments error:error]);
 }
 
 + (id) variableExpressionWithVariable:(NSString *)variable {
-	return AUTORELEASE([[_DDVariableExpression alloc] initWithVariable:variable]);
+	return DD_AUTORELEASE([[_DDVariableExpression alloc] initWithVariable:variable]);
 }
 
 #pragma mark -

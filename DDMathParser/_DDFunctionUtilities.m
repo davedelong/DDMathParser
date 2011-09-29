@@ -6,6 +6,7 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDFunctionUtilities.h"
 #import "DDExpression.h"
 #import "DDMathParserMacros.h"
@@ -45,7 +46,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:[firstValue doubleValue] + [secondValue doubleValue]];
         return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) subtractFunction {
@@ -59,7 +60,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:[firstValue doubleValue] - [secondValue doubleValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) multiplyFunction {
@@ -73,7 +74,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:[firstValue doubleValue] * [secondValue doubleValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) divideFunction {
@@ -87,7 +88,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:[firstValue doubleValue] / [secondValue doubleValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) modFunction {
@@ -101,7 +102,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:fmod([firstValue doubleValue], [secondValue doubleValue])];
         return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) negateFunction {
@@ -113,7 +114,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:-1 * [firstValue doubleValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) factorialFunction {
@@ -125,7 +126,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:tgamma([firstValue doubleValue]+1)];
         return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) powFunction {
@@ -139,7 +140,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:pow([base doubleValue], [exponent doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) nthrootFunction {
@@ -153,7 +154,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:pow([base doubleValue], 1/[root doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) andFunction {
@@ -167,7 +168,7 @@ if ([arguments count] < (__n)) { \
 		NSNumber * result = [NSNumber numberWithInteger:([first integerValue] & [second integerValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) orFunction {
@@ -181,7 +182,7 @@ if ([arguments count] < (__n)) { \
 		NSNumber * result = [NSNumber numberWithInteger:([first integerValue] | [second integerValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) notFunction {
@@ -193,7 +194,7 @@ if ([arguments count] < (__n)) { \
 		NSNumber * result = [NSNumber numberWithInteger:(~[first integerValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);	
+	return DD_AUTORELEASE([function copy]);	
 }
 
 + (DDMathFunction) xorFunction {
@@ -207,7 +208,7 @@ if ([arguments count] < (__n)) { \
 		NSNumber * result = [NSNumber numberWithInteger:([first integerValue] ^ [second integerValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);	
+	return DD_AUTORELEASE([function copy]);	
 }
 
 + (DDMathFunction) rshiftFunction {
@@ -221,7 +222,7 @@ if ([arguments count] < (__n)) { \
 		NSNumber * result = [NSNumber numberWithInteger:[first integerValue] >> [second integerValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) lshiftFunction {
@@ -235,7 +236,7 @@ if ([arguments count] < (__n)) { \
 		NSNumber * result = [NSNumber numberWithInteger:[first integerValue] << [second integerValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) averageFunction {
@@ -249,7 +250,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *avg = [NSNumber numberWithDouble:sum / [arguments count]];
 		return [DDExpression numberExpressionWithNumber:avg];
 	};
-	return AUTORELEASE([function copy]);	
+	return DD_AUTORELEASE([function copy]);	
 }
 
 + (DDMathFunction) sumFunction {
@@ -269,7 +270,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:sum];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) countFunction {
@@ -278,7 +279,7 @@ if ([arguments count] < (__n)) { \
 		REQUIRE_GTOE_N_ARGS(1);
 		return [DDExpression numberExpressionWithNumber:[NSDecimalNumber decimalNumberWithMantissa:[arguments count] exponent:0 isNegative:NO]];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) minFunction {
@@ -297,7 +298,7 @@ if ([arguments count] < (__n)) { \
 		}
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) maxFunction {
@@ -316,7 +317,7 @@ if ([arguments count] < (__n)) { \
 		}
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) medianFunction {
@@ -343,7 +344,7 @@ if ([arguments count] < (__n)) { \
 		}
 		return [DDExpression numberExpressionWithNumber:median];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) stddevFunction {
@@ -368,7 +369,7 @@ if ([arguments count] < (__n)) { \
 		
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) sqrtFunction {
@@ -380,7 +381,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:sqrt([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) randomFunction {
@@ -424,7 +425,7 @@ if ([arguments count] < (__n)) { \
 		
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithLongLong:random]];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) logFunction {
@@ -436,7 +437,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:log10([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) lnFunction {
@@ -446,7 +447,7 @@ if ([arguments count] < (__n)) { \
 		RETURN_IF_NIL(n);
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:log([n doubleValue])]];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) log2Function {
@@ -458,7 +459,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:log2([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) expFunction {
@@ -470,7 +471,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:exp([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) ceilFunction {
@@ -482,7 +483,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:ceil([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) absFunction {
@@ -494,7 +495,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithLongLong:llabs([n longLongValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) floorFunction {
@@ -506,7 +507,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:floor([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) sinFunction {
@@ -518,7 +519,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:sin([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) cosFunction {
@@ -530,7 +531,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:cos([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) tanFunction {
@@ -542,7 +543,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:tan([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) asinFunction {
@@ -554,7 +555,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:asin([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) acosFunction {
@@ -566,7 +567,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:acos([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) atanFunction {
@@ -578,7 +579,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:atan([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) sinhFunction {
@@ -590,7 +591,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:sinh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) coshFunction {
@@ -602,7 +603,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:cosh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) tanhFunction {
@@ -614,7 +615,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:tanh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) asinhFunction {
@@ -626,7 +627,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:asinh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) acoshFunction {
@@ -638,7 +639,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:acosh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) atanhFunction {
@@ -650,7 +651,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:atanh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) cscFunction {
@@ -662,7 +663,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/sin([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) secFunction {
@@ -674,7 +675,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/cos([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) cotanFunction {
@@ -686,7 +687,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/tan([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) acscFunction {
@@ -698,7 +699,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/asin([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) asecFunction {
@@ -710,7 +711,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/acos([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) acotanFunction {
@@ -722,7 +723,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/atan([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) cschFunction {
@@ -734,7 +735,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/sinh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) sechFunction {
@@ -746,7 +747,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/cosh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) cotanhFunction {
@@ -758,7 +759,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/tanh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) acschFunction {
@@ -770,7 +771,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/sinh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) asechFunction {
@@ -782,7 +783,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/cosh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) acotanhFunction {
@@ -794,7 +795,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1/atanh([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 // more trig functions
@@ -807,7 +808,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1-cos([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) vercosinFunction {
@@ -819,7 +820,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1+cos([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) coversinFunction {
@@ -831,7 +832,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1-sin([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) covercosinFunction {
@@ -843,7 +844,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:1+sin([n doubleValue])];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) haversinFunction {
@@ -855,7 +856,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:(1-cos([n doubleValue]))/2];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) havercosinFunction {
@@ -867,7 +868,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:(1+cos([n doubleValue]))/2];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) hacoversinFunction {
@@ -879,7 +880,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:(1-sin([n doubleValue]))/2];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) hacovercosinFunction {
@@ -891,7 +892,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:(1+sin([n doubleValue]))/2];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) exsecFunction {
@@ -903,7 +904,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:(1/cos([n doubleValue]))-1];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) excscFunction {
@@ -915,7 +916,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:(1/sin([n doubleValue]))-1];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) crdFunction {
@@ -927,7 +928,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:2*sin([n doubleValue]/2)];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) dtorFunction {
@@ -939,7 +940,7 @@ if ([arguments count] < (__n)) { \
         NSNumber *result = [NSNumber numberWithDouble:[n doubleValue]/180 * M_PI];
 		return [DDExpression numberExpressionWithNumber:result];
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) rtodFunction {
@@ -952,7 +953,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:result];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 #pragma mark Constant Functions
@@ -964,7 +965,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:1.6180339887498948]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) piFunction {
@@ -974,7 +975,7 @@ if ([arguments count] < (__n)) { \
         return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_PI]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) pi_2Function {
@@ -984,7 +985,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_PI_2]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) pi_4Function {
@@ -994,7 +995,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_PI_4]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) tauFunction {
@@ -1004,7 +1005,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:2*M_PI]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) sqrt2Function {
@@ -1014,7 +1015,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_SQRT2]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) eFunction {
@@ -1024,7 +1025,7 @@ if ([arguments count] < (__n)) { \
         return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_E]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) log2eFunction {
@@ -1034,7 +1035,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LOG2E]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) log10eFunction {
@@ -1044,7 +1045,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LOG10E]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) ln2Function {
@@ -1054,7 +1055,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LN2]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) ln10Function {
@@ -1064,7 +1065,7 @@ if ([arguments count] < (__n)) { \
 		return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:M_LN10]];
 		
 	};
-	return AUTORELEASE([function copy]);
+	return DD_AUTORELEASE([function copy]);
 }
 
 @end

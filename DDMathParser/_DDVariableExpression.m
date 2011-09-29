@@ -6,6 +6,7 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDVariableExpression.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
@@ -20,7 +21,7 @@
             v = [v substringFromIndex:1];
         }
         if ([v length] == 0) {
-            RELEASE(self);
+            DD_RELEASE(self);
             return nil;
         }
 		variable = [v copy];
@@ -36,7 +37,7 @@
     [aCoder encodeObject:[self variable] forKey:@"variable"];
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void) dealloc {
 	[variable release];
 	[super dealloc];

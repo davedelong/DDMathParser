@@ -26,7 +26,7 @@
     return self;
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void)dealloc {
     [function release];
     [aliases release];

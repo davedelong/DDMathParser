@@ -6,6 +6,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDGroupTerm.h"
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
@@ -28,7 +29,7 @@
 @synthesize subterms;
 
 - (void)_setSubterms:(NSArray *)newTerms {
-    RELEASE(subterms);
+    DD_RELEASE(subterms);
     subterms = [newTerms mutableCopy];
 }
 
@@ -53,7 +54,7 @@
                 [terms addObject:nextTerm];
             } else {
                 // extracting a term failed.  *error should've been filled already
-                RELEASE(self);
+                DD_RELEASE(self);
                 return nil;
             }
             nextToken = [tokenizer peekNextToken];
@@ -62,7 +63,7 @@
         // consume the closing parenthesis and verify it exists
         if ([tokenizer nextToken] == nil) {
             *error = ERR_BADARG(@"imbalanced parentheses");
-            RELEASE(self);
+            DD_RELEASE(self);
             return nil;
         }
         
@@ -71,7 +72,7 @@
     return self;
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void)dealloc {
     [subterms release];
     [super dealloc];
@@ -197,7 +198,7 @@
         NSArray *rightOperands = [[self subterms] subarrayWithRange:rightOperandRange];
         _DDGroupTerm *group = [[_DDGroupTerm alloc] _initWithSubterms:rightOperands error:error];
         [[self subterms] replaceObjectsInRange:rightOperandRange withObjectsFromArray:[NSArray arrayWithObject:group]];
-        RELEASE(group);
+        DD_RELEASE(group);
         
         rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(replacementRange)-1];
     }
@@ -206,7 +207,7 @@
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
-    RELEASE(function);
+    DD_RELEASE(function);
     
     return YES;
 }
@@ -246,7 +247,7 @@
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
     
-    RELEASE(function);
+    DD_RELEASE(function);
     
     return YES;
 }

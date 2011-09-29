@@ -6,6 +6,7 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDNumberExpression.h"
 
 
@@ -14,7 +15,7 @@
 - (id) initWithNumber:(NSNumber *)n {
 	self = [super init];
 	if (self) {
-		number = RETAIN(n);
+		number = DD_RETAIN(n);
 	}
 	return self;
 }
@@ -27,7 +28,7 @@
     [aCoder encodeObject:[self number] forKey:@"number"];
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void) dealloc {
 	[number release];
 	[super dealloc];

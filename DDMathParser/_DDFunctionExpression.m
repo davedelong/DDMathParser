@@ -6,6 +6,7 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "DDMathParser.h"
 #import "_DDFunctionExpression.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
@@ -24,7 +25,7 @@
 					*error = ERR_GENERIC(@"function arguments must be DDExpression objects");
 					*error = nil;
 				}
-                RELEASE(self);
+                DD_RELEASE(self);
 				return nil;
 			}
 		}
@@ -46,7 +47,7 @@
     [aCoder encodeObject:[self arguments] forKey:@"arguments"];
 }
 
-#if !HAS_ARC
+#if !DD_HAS_ARC
 - (void) dealloc {
 	[function release];
 	[arguments release];
