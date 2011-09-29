@@ -103,6 +103,10 @@
     return self;
 }
 
+- (void)finalize {
+    free(_characters);
+}
+
 - (void)dealloc {
     free(_characters);
 #if !HAS_ARC

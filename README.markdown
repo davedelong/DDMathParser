@@ -4,12 +4,6 @@
 
 Please see [the DDMathParser wiki](https://github.com/davedelong/DDMathParser/wiki) for up-to-date documentation.
 
-## Compatibility
-
-`DDMathParser` requires blocks, so therefore is only compatible with iOS 4+ and Mac OS X 10.6+.
-
-Though it has not been tested, `DDMathParser` should be fully compatible with garbage collected applications.
-
 ## License
 
 Copyright (c) 2010-2011 Dave DeLong
