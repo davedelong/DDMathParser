@@ -433,9 +433,6 @@
         }
         
         NSString *rawToken = [NSString stringWithCharacters:(_characters + start) length:length];
-        if (length == 1 && character == 'x') {
-            rawToken = @"*";
-        }
         return [DDMathStringToken mathStringTokenWithToken:rawToken type:DDTokenTypeOperator];
     }
     

@@ -315,6 +315,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  //addition
                  @"__exp1", @"0+__exp1",
                  @"__exp1", @"__exp1+0",
+                 @"2*__exp1", @"__exp1 + __exp1",
                  
                  //subtraction
                  @"0", @"__exp1 - __exp1",
@@ -323,8 +324,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  @"__exp1", @"1 * __exp1",
                  @"__exp1", @"__exp1 * 1",
                  @"pow(__exp1, 2)", @"__exp1 * __exp1",
-                 
-                 @"2*__exp1", @"__exp1 + __exp1",
                  
                  //division
                  @"1", @"__exp1 / __exp1",
