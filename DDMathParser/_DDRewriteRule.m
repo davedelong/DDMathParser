@@ -98,6 +98,8 @@
     
     if ([ruleArgs count] != [targetArgs count]) { return NO; }
     
+    if (![function isEqual:[target function]]) { return NO; }
+    
     BOOL argsMatch = YES;
     for (NSUInteger i = 0; i < [ruleArgs count]; ++i) {
         DDExpression *ruleArg = [ruleArgs objectAtIndex:i];
@@ -107,8 +109,6 @@
         
         if (!argsMatch) { break; }
     }
-    
-    if (![function isEqual:[target function]]) { return NO; }
     
     return argsMatch;
 }
@@ -130,7 +130,7 @@
     
     NSMutableArray *replacedArguments = [NSMutableArray array];
     for (DDExpression *patternArgument in [p arguments]) {
-        DDExpression *replacementArgument = [self _expressionByApplyingReplacements:replacements toPattern:pattern];
+        DDExpression *replacementArgument = [self _expressionByApplyingReplacements:replacements toPattern:patternArgument];
         [replacedArguments addObject:replacementArgument];
     }
     
