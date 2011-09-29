@@ -52,7 +52,10 @@ typedef enum {
 } DDOperatorArity;
 
 enum {
-	DDPrecedenceBitwiseOr = 0,
+	DDPrecedenceUnknown = -1,
+	DDPrecedenceNone = 0,
+    
+	DDPrecedenceBitwiseOr,
 	DDPrecedenceBitwiseXor,
 	DDPrecedenceBitwiseAnd,
 	DDPrecedenceLeftShift,
@@ -65,10 +68,7 @@ enum {
 	DDPrecedenceUnary,
 	DDPrecedenceFactorial,
 	DDPrecedencePower,
-	DDPrecedenceParentheses,
-	
-	DDPrecedenceUnknown = -1,
-	DDPrecedenceNone = -2
+	DDPrecedenceParentheses
 };
 
 typedef NSInteger DDPrecedence;
