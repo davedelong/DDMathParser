@@ -92,14 +92,9 @@
 		id result = mathFunction([self arguments], substitutions, evaluator, error);
 		if (!result) { return nil; }
 		
-		while ([result isKindOfClass:[_DDVariableExpression class]]) {
-			result = [result evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
-			if (!result) { return nil; }
-		}
-		
 		NSNumber * numberValue = nil;
-		if ([result isKindOfClass:[_DDNumberExpression class]]) {
-			numberValue = [result number];
+        if ([result isKindOfClass:[DDExpression class]]) {
+            numberValue = [result evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
 		} else if ([result isKindOfClass:[NSNumber class]]) {
 			numberValue = result;
         } else if ([result isKindOfClass:[NSString class]]) {
