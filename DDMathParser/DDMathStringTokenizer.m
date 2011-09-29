@@ -106,6 +106,7 @@
 
 - (void)finalize {
     free(_characters);
+    [super finalize];
 }
 
 - (void)dealloc {

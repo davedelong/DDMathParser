@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DDMathParser.h"
 #import "DDTypes.h"
 
 @interface _DDFunctionContainer : NSObject
 
 @property (nonatomic,copy) DDMathFunction function;
-@property (nonatomic,readonly,strong) NSSet *aliases;
+@property (nonatomic,readonly,DD_STRONG) NSSet *aliases;
 
 + (NSString *)normalizedAlias:(NSString *)alias;
 
