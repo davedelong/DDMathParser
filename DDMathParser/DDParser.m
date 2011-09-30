@@ -157,34 +157,12 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
     
     DDExpression *expression = nil;
     
-#if DD_HAS_ARC
-    @autoreleasepool {
-#else
-	NSAutoreleasePool * parserPool = [[NSAutoreleasePool alloc] init];
-#endif
-    
     _DDParserTerm *root = [_DDParserTerm rootTermWithTokenizer:tokenizer error:error];
-    if (!root) {
-        goto errorExit;
+    if ([root resolveWithParser:self error:error]) {
+        expression = [root expressionWithError:error];
     }
     
-    if (![root resolveWithParser:self error:error]) {
-        goto errorExit;
-    }
-	
-	expression = DD_RETAIN([root expressionWithError:error]);
-	
-errorExit:
-#if DD_HAS_ARC
-        ;
-    }
-#else
-    [*error retain];
-	[parserPool drain];
-    [*error autorelease];
-#endif
-    
-	return DD_AUTORELEASE(expression);
+	return expression;
 }
 
 @end

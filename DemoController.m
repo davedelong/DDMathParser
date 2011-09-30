@@ -21,6 +21,7 @@
 @synthesize variableList;
 @synthesize orderedVariables;
 
+#if !DD_HAS_ARC
 - (void) dealloc {
 	[inputField release];
 	[answerField release];
@@ -30,6 +31,7 @@
 	[variables release];
 	[super dealloc];
 }
+#endif
 
 - (void) awakeFromNib {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:NSControlTextDidChangeNotification object:inputField];
