@@ -53,28 +53,3 @@ typedef enum {
     DDOperatorArityUnary,
     DDOperatorArityBinary
 } DDOperatorArity;
-
-enum {
-	DDPrecedenceUnknown = -1,
-	DDPrecedenceNone = 0,
-    
-    DDPrecedenceLogicalOr,
-    DDPrecedenceLogicalAnd,
-    
-	DDPrecedenceBitwiseOr,
-	DDPrecedenceBitwiseXor,
-	DDPrecedenceBitwiseAnd,
-	DDPrecedenceLeftShift,
-	DDPrecedenceRightShift,
-	DDPrecedenceModulo,
-	DDPrecedenceSubtraction,
-	DDPrecedenceAddition = DDPrecedenceSubtraction,
-	DDPrecedenceDivision,
-	DDPrecedenceMultiplication = DDPrecedenceDivision,
-	DDPrecedenceUnary,
-	DDPrecedenceFactorial,
-	DDPrecedencePower,
-	DDPrecedenceParentheses
-};
-
-typedef NSInteger DDPrecedence;

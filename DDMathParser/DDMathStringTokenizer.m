@@ -124,7 +124,7 @@
         return NO;
     }
     
-    if ([token operatorPrecedence] == DDPrecedenceUnary && [[token token] isEqual:@"+"]) {
+    if ([token operatorType] == DDOperatorUnaryPlus) {
         // the unary + operator is a no-op operator.  It does nothing, so we'll throw it out
         return YES;
     }
@@ -140,19 +140,37 @@
 }
 
 - (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error {
-    if ([token tokenType] == DDTokenTypeOperator && [token operatorPrecedence] == DDPrecedenceUnknown) {
-        DDMathStringToken *previousToken = [_tokens lastObject];
+    if ([token tokenType] == DDTokenTypeOperator && [token operatorType] == DDOperatorInvalid) {
+        DDMathStringToken *previousToken = [_tokens lastObject];   
+        DDOperator resolvedOperator = DDOperatorInvalid;
+        
+        BOOL shouldBeUnary = NO;
+        
         if (previousToken == nil) {
-            [token setOperatorPrecedence:DDPrecedenceUnary];
+            shouldBeUnary = YES;
         } else if ([previousToken tokenType] == DDTokenTypeOperator && 
                    [previousToken operatorType] != DDOperatorParenthesisClose && 
                    [previousToken operatorType] != DDOperatorFactorial) {
-            [token setOperatorPrecedence:DDPrecedenceUnary];
-        } else if ([[token token] isEqual:@"+"]) {
-            [token setOperatorPrecedence:DDPrecedenceAddition];
-        } else if ([[token token] isEqual:@"-"]) {
-            [token setOperatorPrecedence:DDPrecedenceSubtraction];
+            shouldBeUnary = YES;
+        }
+        
+        if (shouldBeUnary) {
+            if ([[token token] isEqual:@"+"]) {
+                resolvedOperator = DDOperatorUnaryPlus;
+            } else if ([[token token] isEqual:@"-"]) {
+                resolvedOperator = DDOperatorUnaryMinus;
+            }
         } else {
+            if ([[token token] isEqual:@"+"]) {
+                resolvedOperator = DDOperatorAdd;
+            } else if ([[token token] isEqual:@"-"]) {
+                resolvedOperator = DDOperatorMinus;
+            }
+        }
+        
+        [token resolveToOperator:resolvedOperator];
+        
+        if ([token operatorType] == DDOperatorInvalid) {
             if (error != nil) {
                 *error = ERR_GENERIC(@"unknown precedence for token: %@", token);
             }

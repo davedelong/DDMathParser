@@ -133,7 +133,7 @@
 
 - (NSIndexSet *)_indicesOfOperatorsWithHighestPrecedence {
 	NSMutableIndexSet * indices = [NSMutableIndexSet indexSet];
-	__block DDPrecedence currentPrecedence = DDPrecedenceUnknown;
+	__block NSInteger currentPrecedence = -1;
     [[self subterms] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 #pragma unused(stop)
         _DDParserTerm *term = obj;

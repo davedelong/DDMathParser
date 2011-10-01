@@ -12,7 +12,7 @@
 @interface _DDOperatorTerm : _DDParserTerm
 
 @property (nonatomic,readonly) DDOperator operatorType;
-@property (nonatomic,readonly) DDPrecedence operatorPrecedence;
+@property (nonatomic,readonly) NSInteger operatorPrecedence;
 @property (nonatomic,readonly) DDOperatorArity operatorArity;
 @property (nonatomic,readonly) NSString *operatorFunction;
 

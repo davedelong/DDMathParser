@@ -8,13 +8,14 @@
 
 #import "DDMathParser.h"
 #import "DDMathStringToken.h"
+#import "_DDOperatorInfo.h"
 
 @implementation DDMathStringToken
 @synthesize token, tokenType, operatorType, operatorPrecedence, operatorArity;
 
 #if !DD_HAS_ARC
 - (void) dealloc {
-	[token release];
+    [token release];
     [numberValue release];
 	[super dealloc];
 }
@@ -23,79 +24,20 @@
 - (id) initWithToken:(NSString *)t type:(DDTokenType)type {
 	self = [super init];
 	if (self) {
-		token = [t copy];
+        token = [t copy];
 		tokenType = type;
 		operatorType = DDOperatorInvalid;
-		operatorPrecedence = DDPrecedenceNone;
-        operatorArity = DDOperatorArityUnknown;
 		
 		if (tokenType == DDTokenTypeOperator) {
-			if ([token isEqual:@"|"]) {
-				operatorType = DDOperatorBitwiseOr;
-				operatorPrecedence = DDPrecedenceBitwiseOr;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"^"]) {
-				operatorType = DDOperatorBitwiseXor; 
-				operatorPrecedence = DDPrecedenceBitwiseXor;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"&"]) {
-				operatorType = DDOperatorBitwiseAnd;
-				operatorPrecedence = DDPrecedenceBitwiseAnd;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"<<"]) {
-				operatorType = DDOperatorLeftShift;
-				operatorPrecedence = DDPrecedenceLeftShift;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@">>"]) {
-				operatorType = DDOperatorRightShift;
-				operatorPrecedence = DDPrecedenceRightShift;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"-"]) {
-				operatorType = DDOperatorMinus;
-				operatorPrecedence = DDPrecedenceUnknown;
-			} else if ([token isEqual:@"+"]) {
-				operatorType = DDOperatorAdd;
-				operatorPrecedence = DDPrecedenceUnknown;
-			} else if ([token isEqual:@"/"]) {
-				operatorType = DDOperatorDivide;
-				operatorPrecedence = DDPrecedenceDivision;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"*"]) {
-				operatorType = DDOperatorMultiply;
-				operatorPrecedence = DDPrecedenceMultiplication;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"%"]) {
-				operatorType = DDOperatorModulo;
-				operatorPrecedence = DDPrecedenceModulo;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"~"]) {
-				operatorType = DDOperatorBitwiseNot;
-				operatorPrecedence = DDPrecedenceUnary;
-                operatorArity = DDOperatorArityUnary;
-			} else if ([token isEqual:@"!"]) {
-                operatorType = DDOperatorFactorial;
-                operatorPrecedence = DDPrecedenceFactorial;
-                operatorArity = DDOperatorArityUnary;
-			} else if ([token isEqual:@"**"]) {
-				operatorType = DDOperatorPower;
-				operatorPrecedence = DDPrecedencePower;
-                operatorArity = DDOperatorArityBinary;
-			} else if ([token isEqual:@"("]) {
-				operatorType = DDOperatorParenthesisOpen;
-				operatorPrecedence = DDPrecedenceParentheses;
-			} else if ([token isEqual:@")"]) {
-				operatorType = DDOperatorParenthesisClose;
-				operatorPrecedence = DDPrecedenceParentheses;
-			} else if ([token isEqual:@","]) {
-				operatorType = DDOperatorComma;
-			} else if ([token isEqual:@"&&"]) {
-                operatorType = DDOperatorLogicalAnd;
-                operatorPrecedence = DDPrecedenceLogicalAnd;
-                operatorArity = DDOperatorArityBinary;
-            } else if ([token isEqual:@"||"]) {
-                operatorType = DDOperatorLogicalOr;
-                operatorPrecedence = DDPrecedenceLogicalOr;
-                operatorArity = DDOperatorArityBinary;
+            NSArray *operators = [_DDOperatorInfo allOperators];
+            NSArray *matching = [operators filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"token = %@", t]];
+            if ([matching count] == 0) {
+                DD_RELEASE(self);
+                return nil;
+            } else if ([matching count] == 1) {
+                operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
+            } else {
+                ambiguous = YES;
             }
 		}
 	}
@@ -127,23 +69,39 @@
 	return d;
 }
 
-- (DDOperator) operatorType {
-	if (operatorPrecedence == DDPrecedenceUnary) {
-		if (operatorType == DDOperatorAdd) { return DDOperatorUnaryPlus; }
-		if (operatorType == DDOperatorMinus) { return DDOperatorUnaryMinus; }
-	}
-	return operatorType;
+- (NSString *)token {
+    return token;
 }
 
-- (void)setOperatorPrecedence:(DDPrecedence)precedence {
-    if (operatorArity == DDOperatorArityUnknown) {
-        if (precedence == DDPrecedenceUnary || precedence == DDPrecedenceFactorial) {
-            operatorArity = DDOperatorArityUnary;
-        } else if (precedence != DDPrecedenceNone) {
-            operatorArity = DDOperatorArityBinary;
-        }
-    }
-    operatorPrecedence = precedence;
+- (DDOperator)operatorType {
+    if (ambiguous) { return DDOperatorInvalid; }
+    return [operatorInfo operator];
+}
+
+- (NSInteger)operatorPrecedence {
+    if (ambiguous) { return -1; }
+    return [operatorInfo precedence];
+}
+
+- (DDOperatorArity)operatorArity {
+    if (ambiguous) { return DDOperatorArityUnknown; }
+    return [operatorInfo arity];
+}
+
+- (NSString *)operatorFunction {
+    if (ambiguous) { return @""; }
+    return [operatorInfo function];
+}
+
+- (void)resolveToOperator:(DDOperator)operator {
+    DD_RELEASE(operatorInfo);
+    operatorInfo = nil;
+    
+    NSArray *matching = [[_DDOperatorInfo allOperators] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"operator = %d", operator]];
+    if ([matching count] != 1) { return; }
+    
+    ambiguous = NO;
+    operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
 }
 
 @end

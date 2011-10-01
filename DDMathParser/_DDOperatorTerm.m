@@ -17,7 +17,7 @@
     return [[self token] operatorType];
 }
 
-- (DDPrecedence)operatorPrecedence {
+- (NSInteger)operatorPrecedence {
     return [[self token] operatorPrecedence];
 }
 
@@ -26,36 +26,7 @@
 }
 
 - (NSString *)operatorFunction {
-    
-    static NSDictionary *operatorNames = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-		operatorNames = [[NSDictionary alloc] initWithObjectsAndKeys:
-						 @"or", @"|",
-						 @"xor", @"^", 
-						 @"and", @"&", 
-						 @"lshift", @"<<", 
-						 @"rshift", @">>", 
-						 @"subtract", @"-",
-						 @"add", @"+", 
-						 @"divide", @"/", 
-						 @"multiply", @"*", 
-						 @"mod", @"%", 
-						 @"not", @"~", 
-						 @"factorial", @"!", 
-						 @"pow", @"**", 
-                         @"l_and", @"&&",
-                         @"l_or", @"||",
-						 nil];
-    });
-	
-	NSString * function = [operatorNames objectForKey:[[self token] token]];
-	if ([self operatorPrecedence] == DDPrecedenceUnary) {
-		if ([[[self token] token] isEqual:@"-"]) { return @"negate"; }
-		if ([[[self token] token] isEqual:@"+"]) { return @""; }
-	}
-    
-    return function;
+    return [[self token] operatorFunction];
 }
 
 - (NSString *)description {
