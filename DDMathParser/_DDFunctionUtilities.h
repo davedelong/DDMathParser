@@ -98,5 +98,6 @@
 
 + (DDMathFunction) l_andFunction;
 + (DDMathFunction) l_orFunction;
++ (DDMathFunction) l_notFunction;
 
 @end

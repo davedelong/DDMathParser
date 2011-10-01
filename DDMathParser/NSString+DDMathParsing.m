@@ -18,9 +18,8 @@
 - (NSNumber *) numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions {
 	NSError *error = nil;
 	NSNumber *returnValue = [self numberByEvaluatingStringWithSubstitutions:substitutions error:&error];
-	if (error != nil) {
+	if (returnValue == nil) {
 		NSLog(@"error: %@", error);
-		return nil;
 	}
 	return returnValue;
 }

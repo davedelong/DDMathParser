@@ -92,12 +92,12 @@
                 return nil;
             }
         }
+        
+        [self _processToken:nil withError:error];
 		
         if (error && *error) {
             DD_RELEASE(self);
             self = nil;
-        } else {
-            [self _processToken:nil withError:nil];
         }
     }
     
@@ -119,10 +119,7 @@
 
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error {
     //figure out if "-" and "+" are unary or binary
-    BOOL shouldContinue = [self _processUnknownOperatorToken:token withError:error];
-    if (!shouldContinue) {
-        return NO;
-    }
+    (void)[self _processUnknownOperatorToken:token withError:error];
     
     if ([token operatorType] == DDOperatorUnaryPlus) {
         // the unary + operator is a no-op operator.  It does nothing, so we'll throw it out
@@ -140,8 +137,8 @@
 }
 
 - (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error {
+    DDMathStringToken *previousToken = [_tokens lastObject];   
     if ([token tokenType] == DDTokenTypeOperator && [token operatorType] == DDOperatorInvalid) {
-        DDMathStringToken *previousToken = [_tokens lastObject];   
         DDOperator resolvedOperator = DDOperatorInvalid;
         
         BOOL shouldBeUnary = NO;
@@ -168,6 +165,14 @@
             }
         }
         
+        if ([[token token] isEqual:@"!"]) {
+            if (previousToken == nil) {
+                resolvedOperator = DDOperatorLogicalNot;
+            } else if ([previousToken tokenType] == DDTokenTypeOperator && [previousToken operatorType] != DDOperatorParenthesisClose) {
+                resolvedOperator = DDOperatorLogicalNot;
+            }
+        }
+        
         [token resolveToOperator:resolvedOperator];
         
         if ([token operatorType] == DDOperatorInvalid) {
@@ -177,6 +182,14 @@
             return NO;
         }
     }
+    
+    if (token == nil && [[previousToken token] isEqual:@"!"]) {
+        [previousToken resolveToOperator:DDOperatorFactorial];
+        if (error != nil) {
+            *error = nil;
+        }
+    }
+    
     return YES;
 }
 

@@ -271,6 +271,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                              //logical functions
                              @"l_and",
                              @"l_or",
+                             @"l_not",
                              nil];
     });
 	return standardFunctions;

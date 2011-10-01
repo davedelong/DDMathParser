@@ -1097,4 +1097,16 @@ if ([arguments count] < (__n)) { \
 	return DD_AUTORELEASE([function copy]);
 }
 
++ (DDMathFunction) l_notFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(1);
+		NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSNumber *result = [NSNumber numberWithBool:![n boolValue]];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
 @end

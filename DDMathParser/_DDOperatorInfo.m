@@ -50,6 +50,9 @@
     [operators addObject:[self infoForOperator:DDOperatorLogicalAnd arity:DDOperatorArityBinary precedence:precedence token:@"&&" function:@"l_and"]];
     precedence++;
     
+    [operators addObject:[self infoForOperator:DDOperatorLogicalNot arity:DDOperatorArityUnary precedence:precedence token:@"!" function:@"l_not"]];
+    precedence++;
+    
     [operators addObject:[self infoForOperator:DDOperatorBitwiseOr arity:DDOperatorArityBinary precedence:precedence token:@"|" function:@"or"]];
     precedence++;
     

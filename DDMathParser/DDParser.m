@@ -145,6 +145,8 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
             
         // factorial is always left associative
         case DDOperatorFactorial: return DDOperatorAssociativityLeft;
+        // logical not is always right associative
+        case DDOperatorLogicalNot: return DDOperatorAssociativityRight;
             
 		default: return DDOperatorAssociativityLeft;
 	}

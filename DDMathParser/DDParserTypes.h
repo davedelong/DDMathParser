@@ -25,6 +25,7 @@ typedef enum {
     
     DDOperatorLogicalOr,
     DDOperatorLogicalAnd,
+    DDOperatorLogicalNot,
 	
 	DDOperatorBitwiseOr,
 	DDOperatorBitwiseXor,
