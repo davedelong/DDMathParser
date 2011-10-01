@@ -1109,4 +1109,88 @@ if ([arguments count] < (__n)) { \
 	return DD_AUTORELEASE([function copy]);
 }
 
++ (DDMathFunction) l_eqFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSComparisonResult compare = [left compare:right];
+        NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
++ (DDMathFunction) l_neqFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSComparisonResult compare = [left compare:right];
+        NSNumber *result = [NSNumber numberWithBool:compare != NSOrderedSame];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
++ (DDMathFunction) l_ltFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSComparisonResult compare = [left compare:right];
+        NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedAscending];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
++ (DDMathFunction) l_gtFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSComparisonResult compare = [left compare:right];
+        NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedDescending];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
++ (DDMathFunction) l_ltoeFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSComparisonResult compare = [left compare:right];
+        NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame || compare == NSOrderedAscending];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
++ (DDMathFunction) l_gtoeFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSComparisonResult compare = [left compare:right];
+        NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame || compare == NSOrderedDescending];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
 @end

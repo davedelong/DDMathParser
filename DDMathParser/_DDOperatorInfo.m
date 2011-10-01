@@ -50,6 +50,22 @@
     [operators addObject:[self infoForOperator:DDOperatorLogicalAnd arity:DDOperatorArityBinary precedence:precedence token:@"&&" function:@"l_and"]];
     precedence++;
     
+    [operators addObject:[self infoForOperator:DDOperatorLogicalEqual arity:DDOperatorArityBinary precedence:precedence token:@"==" function:@"l_eq"]];
+    [operators addObject:[self infoForOperator:DDOperatorLogicalNotEqual arity:DDOperatorArityBinary precedence:precedence token:@"!=" function:@"l_neq"]];
+    precedence++;
+    
+    [operators addObject:[self infoForOperator:DDOperatorLogicalLessThan arity:DDOperatorArityBinary precedence:precedence token:@"<" function:@"l_lt"]];
+    precedence++;
+    
+    [operators addObject:[self infoForOperator:DDOperatorLogicalGreaterThan arity:DDOperatorArityBinary precedence:precedence token:@">" function:@"l_gt"]];
+    precedence++;
+    
+    [operators addObject:[self infoForOperator:DDOperatorLogicalLessThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@"<=" function:@"l_ltoe"]];
+    precedence++;
+    
+    [operators addObject:[self infoForOperator:DDOperatorLogicalGreaterThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@">=" function:@"l_gtoe"]];
+    precedence++;
+    
     [operators addObject:[self infoForOperator:DDOperatorLogicalNot arity:DDOperatorArityUnary precedence:precedence token:@"!" function:@"l_not"]];
     precedence++;
     

@@ -272,6 +272,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                              @"l_and",
                              @"l_or",
                              @"l_not",
+                             @"l_eq",
+                             @"l_neq",
+                             @"l_lt",
+                             @"l_gt",
+                             @"l_ltoe",
+                             @"l_gtoe",
                              nil];
     });
 	return standardFunctions;

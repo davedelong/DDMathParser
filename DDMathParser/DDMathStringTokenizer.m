@@ -41,7 +41,7 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_operatorSet = nil;
     dispatch_once(&onceToken, ^{
-        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,x"]);
+        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,="]);
     });
     return _operatorSet;
 }
@@ -464,7 +464,9 @@
                 _characterIndex++;
                 length++;
             }
-        } else if ((character == '<' || character == '>' || character == '!') && peekNext == '=') {
+        }
+        
+        if ((character == '<' || character == '>' || character == '!') && peekNext == '=' && length == 1) {
             // <=, >=, !=
             _characterIndex++;
             length++;

@@ -99,5 +99,11 @@
 + (DDMathFunction) l_andFunction;
 + (DDMathFunction) l_orFunction;
 + (DDMathFunction) l_notFunction;
++ (DDMathFunction) l_eqFunction;
++ (DDMathFunction) l_neqFunction;
++ (DDMathFunction) l_ltFunction;
++ (DDMathFunction) l_gtFunction;
++ (DDMathFunction) l_ltoeFunction;
++ (DDMathFunction) l_gtoeFunction;
 
 @end

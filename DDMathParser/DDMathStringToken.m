@@ -24,6 +24,8 @@
 - (id) initWithToken:(NSString *)t type:(DDTokenType)type {
 	self = [super init];
 	if (self) {
+        if ([t isEqual:@"="]) { t = @"=="; }
+        
         token = [t copy];
 		tokenType = type;
 		operatorType = DDOperatorInvalid;
