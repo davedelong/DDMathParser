@@ -61,11 +61,11 @@ int main (int argc, const char * argv[]) {
         NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
         DD_RELEASE(tokenizer);
         
-//        if (value == nil) {
-//            printf("\tERROR: %s\n", [[error description] UTF8String]);
-//        } else {
+        if (value == nil) {
+            printf("\tERROR: %s\n", [[error description] UTF8String]);
+        } else {
             printf("\t%s = %s\n", [[expression description] UTF8String], [[value description] UTF8String]);
-//        }
+        }
         
         printf("\tRewritten: %s\n", [[rewritten description] UTF8String]);
 

@@ -267,6 +267,10 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                              @"log10e",
                              @"ln2",
                              @"ln10",
+                             
+                             //logical functions
+                             @"l_and",
+                             @"l_or",
                              nil];
     });
 	return standardFunctions;

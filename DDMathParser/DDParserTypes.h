@@ -22,6 +22,9 @@ typedef enum {
 
 typedef enum {
 	DDOperatorInvalid = 0,
+    
+    DDOperatorLogicalOr,
+    DDOperatorLogicalAnd,
 	
 	DDOperatorBitwiseOr,
 	DDOperatorBitwiseXor,
@@ -54,6 +57,9 @@ typedef enum {
 enum {
 	DDPrecedenceUnknown = -1,
 	DDPrecedenceNone = 0,
+    
+    DDPrecedenceLogicalOr,
+    DDPrecedenceLogicalAnd,
     
 	DDPrecedenceBitwiseOr,
 	DDPrecedenceBitwiseXor,

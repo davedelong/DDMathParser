@@ -425,20 +425,18 @@
     
     NSCharacterSet *operatorCharacters = [[self class] _operatorCharacterSet];
     if ([operatorCharacters characterIsMember:character]) {
-        if (character == '*') {
-            if ([self _peekNextCharacter] == '*') {
-                _characterIndex++; // consume the second *
+        unichar peekNext = [self _peekNextCharacter];
+        if (character == '<' || character == '>' || character == '*' || character == '&' || character == '|' || character == '=') {
+            // <, >, *, &, |, =
+            if (peekNext == character) {
+                // <<, >>, **, &&, ||, ==
+                _characterIndex++;
                 length++;
             }
-        } else if (character == '<' || character == '>') {
-            unichar nextCharacter = [self _nextCharacter];
-            if (nextCharacter != character) {
-                *error = ERR_BADARG(@"%C is not a valid operator", character);
-                _characterIndex = start;
-                return nil;
-            } else {
-                length++;
-            }
+        } else if ((character == '<' || character == '>' || character == '!') && peekNext == '=') {
+            // <=, >=, !=
+            _characterIndex++;
+            length++;
         }
         
         NSString *rawToken = [NSString stringWithCharacters:(_characters + start) length:length];

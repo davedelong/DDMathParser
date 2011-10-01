@@ -1068,4 +1068,33 @@ if ([arguments count] < (__n)) { \
 	return DD_AUTORELEASE([function copy]);
 }
 
+// logical functions
+
++ (DDMathFunction) l_andFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSNumber *result = [NSNumber numberWithBool:[left boolValue] && [right boolValue]];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
++ (DDMathFunction) l_orFunction {
+	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+#pragma unused(variables, evaluator)
+		REQUIRE_N_ARGS(2);
+		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSNumber *result = [NSNumber numberWithBool:[left boolValue] ||
+                            [right boolValue]];
+		return [DDExpression numberExpressionWithNumber:result];
+		
+	};
+	return DD_AUTORELEASE([function copy]);
+}
+
 @end

@@ -34,77 +34,69 @@
 				operatorType = DDOperatorBitwiseOr;
 				operatorPrecedence = DDPrecedenceBitwiseOr;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"^"]) {
+			} else if ([token isEqual:@"^"]) {
 				operatorType = DDOperatorBitwiseXor; 
 				operatorPrecedence = DDPrecedenceBitwiseXor;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"&"]) {
+			} else if ([token isEqual:@"&"]) {
 				operatorType = DDOperatorBitwiseAnd;
 				operatorPrecedence = DDPrecedenceBitwiseAnd;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"<<"]) {
+			} else if ([token isEqual:@"<<"]) {
 				operatorType = DDOperatorLeftShift;
 				operatorPrecedence = DDPrecedenceLeftShift;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@">>"]) {
+			} else if ([token isEqual:@">>"]) {
 				operatorType = DDOperatorRightShift;
 				operatorPrecedence = DDPrecedenceRightShift;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"-"]) {
+			} else if ([token isEqual:@"-"]) {
 				operatorType = DDOperatorMinus;
 				operatorPrecedence = DDPrecedenceUnknown;
-			}
-			if ([token isEqual:@"+"]) {
+			} else if ([token isEqual:@"+"]) {
 				operatorType = DDOperatorAdd;
 				operatorPrecedence = DDPrecedenceUnknown;
-			}
-			if ([token isEqual:@"/"]) {
+			} else if ([token isEqual:@"/"]) {
 				operatorType = DDOperatorDivide;
 				operatorPrecedence = DDPrecedenceDivision;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"*"]) {
+			} else if ([token isEqual:@"*"]) {
 				operatorType = DDOperatorMultiply;
 				operatorPrecedence = DDPrecedenceMultiplication;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"%"]) {
+			} else if ([token isEqual:@"%"]) {
 				operatorType = DDOperatorModulo;
 				operatorPrecedence = DDPrecedenceModulo;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"~"]) {
+			} else if ([token isEqual:@"~"]) {
 				operatorType = DDOperatorBitwiseNot;
 				operatorPrecedence = DDPrecedenceUnary;
                 operatorArity = DDOperatorArityUnary;
-			}
-			if ([token isEqual:@"!"]) {
-				operatorType = DDOperatorFactorial;
-				operatorPrecedence = DDPrecedenceFactorial;
+			} else if ([token isEqual:@"!"]) {
+                operatorType = DDOperatorFactorial;
+                operatorPrecedence = DDPrecedenceFactorial;
                 operatorArity = DDOperatorArityUnary;
-			}
-			if ([token isEqual:@"**"]) {
+			} else if ([token isEqual:@"**"]) {
 				operatorType = DDOperatorPower;
 				operatorPrecedence = DDPrecedencePower;
                 operatorArity = DDOperatorArityBinary;
-			}
-			if ([token isEqual:@"("]) {
+			} else if ([token isEqual:@"("]) {
 				operatorType = DDOperatorParenthesisOpen;
 				operatorPrecedence = DDPrecedenceParentheses;
-			}
-			if ([token isEqual:@")"]) {
+			} else if ([token isEqual:@")"]) {
 				operatorType = DDOperatorParenthesisClose;
 				operatorPrecedence = DDPrecedenceParentheses;
-			}
-			
-			if ([token isEqual:@","]) {
+			} else if ([token isEqual:@","]) {
 				operatorType = DDOperatorComma;
-			}
+			} else if ([token isEqual:@"&&"]) {
+                operatorType = DDOperatorLogicalAnd;
+                operatorPrecedence = DDPrecedenceLogicalAnd;
+                operatorArity = DDOperatorArityBinary;
+            } else if ([token isEqual:@"||"]) {
+                operatorType = DDOperatorLogicalOr;
+                operatorPrecedence = DDPrecedenceLogicalOr;
+                operatorArity = DDOperatorArityBinary;
+            }
 		}
 	}
 	return self;

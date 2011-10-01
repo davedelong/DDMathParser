@@ -96,4 +96,7 @@
 + (DDMathFunction) ln2Function;
 + (DDMathFunction) ln10Function;
 
++ (DDMathFunction) l_andFunction;
++ (DDMathFunction) l_orFunction;
+
 @end
