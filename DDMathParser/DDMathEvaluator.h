@@ -30,7 +30,7 @@
 - (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName;
 - (void) removeAlias:(NSString *)alias;
 
-- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template;
+- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template condition:(NSString *)condition;
 - (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression;
 
 @end

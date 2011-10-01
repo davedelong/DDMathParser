@@ -12,17 +12,17 @@
 
 @interface _DDRewriteRule ()
 
-- (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)pattern;
+- (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)pattern condition:(NSString *)condition;
 
 @end
 
 @implementation _DDRewriteRule
 
-+ (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement {
-    return DD_AUTORELEASE([[self alloc] initWithTemplate:string replacementPattern:replacement]);
++ (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement condition:(NSString *)condition {
+    return DD_AUTORELEASE([[self alloc] initWithTemplate:string replacementPattern:replacement condition:condition]);
 }
 
-- (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)patternFormat {
+- (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)patternFormat condition:(NSString *)conditionFormat {
     self = [super init];
     if (self) {
         NSError *error = nil;
@@ -34,6 +34,10 @@
             DD_RELEASE(self);
             return nil;
         }
+        
+        if (conditionFormat) {
+            condition = DD_RETAIN([DDExpression expressionFromString:conditionFormat error:&error]);
+        }
     }
     return self;
 }
@@ -42,6 +46,7 @@
 - (void)dealloc {
     [predicate release];
     [pattern release];
+    [condition release];
     [super dealloc];
 }
 #endif
@@ -115,10 +120,6 @@
     return argsMatch;
 }
 
-- (BOOL)ruleMatchesExpression:(DDExpression *)target {
-    return [self _ruleExpression:predicate matchesExpression:target withReplacements:[NSMutableDictionary dictionary]];
-}
-
 - (DDExpression *)_expressionByApplyingReplacements:(NSDictionary *)replacements toPattern:(DDExpression *)p {
     if ([p expressionType] == DDExpressionTypeVariable) { return p; }
     if ([p expressionType] == DDExpressionTypeNumber) { return p; }
@@ -139,9 +140,24 @@
     return [DDExpression functionExpressionWithFunction:pFunction arguments:replacedArguments error:nil];
 }
 
-- (DDExpression *)expressionByRewritingExpression:(DDExpression *)target {
+- (BOOL)matchExpression:(DDExpression *)target replacements:(NSMutableDictionary *)replacements evaluator:(DDMathEvaluator *)evaluator {
+    BOOL matches = [self _ruleExpression:predicate matchesExpression:target withReplacements:replacements];
+    if (matches && condition) {
+        DDExpression *resolvedCondition = [self _expressionByApplyingReplacements:replacements toPattern:condition];
+        NSError *evalError = nil;
+        NSNumber *result = [resolvedCondition evaluateWithSubstitutions:replacements evaluator:evaluator error:&evalError];
+        matches &= [result boolValue];
+    }
+    return matches;
+}
+
+- (BOOL)ruleMatchesExpression:(DDExpression *)target withEvaluator:(DDMathEvaluator *)evaluator {
+    return [self matchExpression:target replacements:[NSMutableDictionary dictionary] evaluator:evaluator];
+}
+
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)target withEvaluator:(DDMathEvaluator *)evaluator {
     NSMutableDictionary *replacements = [NSMutableDictionary dictionary];
-    if (![self _ruleExpression:predicate matchesExpression:target withReplacements:replacements]) { return target; }
+    if (![self matchExpression:target replacements:replacements evaluator:evaluator]) { return target; }
     
     return [self _expressionByApplyingReplacements:replacements toPattern:pattern];
 }

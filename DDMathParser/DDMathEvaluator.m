@@ -137,8 +137,8 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     [self unregisterFunctionWithName:alias];
 }
 
-- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template {
-    _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:template replacementPattern:rule];
+- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template condition:(NSString *)condition {
+    _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:template replacementPattern:rule condition:condition];
     [rewriteRules addObject:rewriteRule];
 }
 
@@ -339,12 +339,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  @"pow(__exp1, 2)", @"__exp1 * __exp1",
                  @"multiply(__var1, __num1)", @"multiply(__num1, __var1)",
                  
-                 //division
-                 @"1", @"__exp1 / __exp1",
-                 @"__exp1", @"__exp2 * __exp1 / __exp2",
-                 @"1/__exp1", @"__exp2 / (__exp2 * __exp1)",
-                 @"1/__exp1", @"__exp2 / (__exp1 * __exp2)",
-                 
                  //other stuff
                  @"__exp1", @"--__exp1",
                  @"exp(__exp1 + __exp2)", @"exp(__exp1) * exp(__exp2)",
@@ -352,7 +346,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  @"1", @"pow(__exp1, 0)",
                  @"__exp1", @"pow(__exp1, 1)",
                  @"abs(__exp1)", @"sqrt(pow(__exp1, 2))",
-                 @"abs(__exp1)", @"nthroot(pow(__exp1, __exp2), __exp2)",
                  
                  //
                  @"__exp1", @"dtor(rtod(__exp1))",
@@ -391,12 +384,23 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     for (NSString *template in templates) {
         NSString *replacement = [templates objectForKey:template];
         
-        [self addRewriteRule:replacement forExpressionsMatchingTemplate:template];
+        [self addRewriteRule:replacement forExpressionsMatchingTemplate:template condition:nil];
     }
+    
+    //division
+    [self addRewriteRule:@"1" forExpressionsMatchingTemplate:@"__exp1 / __exp1" condition:@"__exp1 != 0"];
+    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"(__exp1 * __exp2) / __exp2" condition:@"__exp2 != 0"];
+    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"(__exp2 * __exp1) / __exp2" condition:@"__exp2 != 0"];
+    [self addRewriteRule:@"1/__exp1" forExpressionsMatchingTemplate:@"__exp2 / (__exp2 * __exp1)" condition:@"__exp2 != 0"];
+    [self addRewriteRule:@"1/__exp1" forExpressionsMatchingTemplate:@"__exp2 / (__exp1 * __exp2)" condition:@"__exp2 != 0"];
+    
+    //exponents and roots
+    [self addRewriteRule:@"abs(__exp1)" forExpressionsMatchingTemplate:@"nthroot(pow(__exp1, __exp2), __exp2)" condition:@"__exp2 % 2 == 0"];
+    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"nthroot(pow(__exp1, __exp2), __exp2)" condition:@"__exp2 % 2 == 1"];
 }
 
 - (DDExpression *)_rewriteExpression:(DDExpression *)expression usingRule:(_DDRewriteRule *)rule {
-    DDExpression *rewritten = [rule expressionByRewritingExpression:expression];
+    DDExpression *rewritten = [rule expressionByRewritingExpression:expression withEvaluator:self];
     
     // if the rule did not match, return the expression
     if (rewritten == expression && [expression expressionType] == DDExpressionTypeFunction) {

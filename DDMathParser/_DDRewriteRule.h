@@ -13,13 +13,14 @@
 @interface _DDRewriteRule : NSObject {
     DDExpression *predicate;
     DDExpression *pattern;
+    DDExpression *condition;
 }
 
-+ (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement;
++ (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement condition:(NSString *)condition;
 
-- (BOOL)ruleMatchesExpression:(DDExpression *)target;
+- (BOOL)ruleMatchesExpression:(DDExpression *)target withEvaluator:(DDMathEvaluator *)evaluator;
 
 // returns nil if the rule does not match the target expression
-- (DDExpression *)expressionByRewritingExpression:(DDExpression *)target;
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)target withEvaluator:(DDMathEvaluator *)evaluator;
 
 @end
