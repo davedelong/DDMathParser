@@ -50,6 +50,7 @@
     [operators addObject:[self infoForOperator:DDOperatorLogicalAnd arity:DDOperatorArityBinary precedence:precedence token:@"&&" function:@"l_and"]];
     precedence++;
     
+    // == and != have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorLogicalEqual arity:DDOperatorArityBinary precedence:precedence token:@"==" function:@"l_eq"]];
     [operators addObject:[self infoForOperator:DDOperatorLogicalNotEqual arity:DDOperatorArityBinary precedence:precedence token:@"!=" function:@"l_neq"]];
     precedence++;
@@ -83,19 +84,15 @@
     
     [operators addObject:[self infoForOperator:DDOperatorRightShift arity:DDOperatorArityBinary precedence:precedence token:@">>" function:@"rshift"]];
     precedence++;
-    
-    [operators addObject:[self infoForOperator:DDOperatorMinus arity:DDOperatorArityBinary precedence:precedence token:@"-" function:@"subtract"]];
-    // DO NOT INCREMENT PRECEDENCE
-    // the next operator is addition, which has the same precedence
-    
+
+    // addition and subtraction have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorAdd arity:DDOperatorArityBinary precedence:precedence token:@"+" function:@"add"]];
+    [operators addObject:[self infoForOperator:DDOperatorMinus arity:DDOperatorArityBinary precedence:precedence token:@"-" function:@"subtract"]];
     precedence++;
-    
-    [operators addObject:[self infoForOperator:DDOperatorDivide arity:DDOperatorArityBinary precedence:precedence token:@"/" function:@"divide"]];
-    // DO NOT INCREMENT PRECEDENCE
-    // the next operator is multiplication, which has the same precedence
-    
+
+    // multiplication and division have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorMultiply arity:DDOperatorArityBinary precedence:precedence token:@"*" function:@"multiply"]];
+    [operators addObject:[self infoForOperator:DDOperatorDivide arity:DDOperatorArityBinary precedence:precedence token:@"/" function:@"divide"]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorModulo arity:DDOperatorArityBinary precedence:precedence token:@"%" function:@"mod"]];
@@ -116,10 +113,8 @@
     [operators addObject:[self infoForOperator:DDOperatorPower arity:DDOperatorArityBinary precedence:precedence token:@"**" function:@"pow"]];
     precedence++;
     
+    // ( and ) have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorParenthesisOpen arity:DDOperatorArityUnknown precedence:precedence token:@"(" function:@""]];
-    // DO NOT INCREMENT PRECEDENCE
-    // the next operator is ), which has the same precedence
-    
     [operators addObject:[self infoForOperator:DDOperatorParenthesisClose arity:DDOperatorArityUnknown precedence:precedence token:@")" function:@""]];
     precedence++;
     
