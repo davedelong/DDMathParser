@@ -41,7 +41,12 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_operatorSet = nil;
     dispatch_once(&onceToken, ^{
-        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,="]);
+        // \u2228 is ∨
+        // \u2227 is ∧
+        // \u00AC is ¬
+        // \u2264 is ≤
+        // \u2265 is ≥
+        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,=\u2228\u2227\u00ac\u2264\u2265"]);
     });
     return _operatorSet;
 }

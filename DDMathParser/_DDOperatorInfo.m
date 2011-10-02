@@ -45,9 +45,11 @@
     NSInteger precedence = 0;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalOr arity:DDOperatorArityBinary precedence:precedence token:@"||" function:@"l_or"]];
+    [operators addObject:[self infoForOperator:DDOperatorLogicalOr arity:DDOperatorArityBinary precedence:precedence token:@"\u2228" function:@"l_or"]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalAnd arity:DDOperatorArityBinary precedence:precedence token:@"&&" function:@"l_and"]];
+    [operators addObject:[self infoForOperator:DDOperatorLogicalAnd arity:DDOperatorArityBinary precedence:precedence token:@"\u2227" function:@"l_and"]];
     precedence++;
     
     // == and != have the same precedence
@@ -62,12 +64,15 @@
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalLessThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@"<=" function:@"l_ltoe"]];
+    [operators addObject:[self infoForOperator:DDOperatorLogicalLessThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@"\u2264" function:@"l_ltoe"]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalGreaterThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@">=" function:@"l_gtoe"]];
+    [operators addObject:[self infoForOperator:DDOperatorLogicalGreaterThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@"\u2265" function:@"l_gtoe"]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalNot arity:DDOperatorArityUnary precedence:precedence token:@"!" function:@"l_not"]];
+    [operators addObject:[self infoForOperator:DDOperatorLogicalNot arity:DDOperatorArityUnary precedence:precedence token:@"\u00ac" function:@"l_not"]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorBitwiseOr arity:DDOperatorArityBinary precedence:precedence token:@"|" function:@"or"]];

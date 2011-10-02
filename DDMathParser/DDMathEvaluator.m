@@ -341,6 +341,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  
                  //other stuff
                  @"__exp1", @"--__exp1",
+                 @"abs(__exp1)", @"abs(-__exp1)",
                  @"exp(__exp1 + __exp2)", @"exp(__exp1) * exp(__exp2)",
                  @"pow(__exp1 * __exp2, __exp3)", @"pow(__exp1, __exp3) * pow(__exp2, __exp3)",
                  @"1", @"pow(__exp1, 0)",
@@ -397,6 +398,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     //exponents and roots
     [self addRewriteRule:@"abs(__exp1)" forExpressionsMatchingTemplate:@"nthroot(pow(__exp1, __exp2), __exp2)" condition:@"__exp2 % 2 == 0"];
     [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"nthroot(pow(__exp1, __exp2), __exp2)" condition:@"__exp2 % 2 == 1"];
+    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"abs(__exp1)" condition:@"__exp1 >= 0"];
 }
 
 - (DDExpression *)_rewriteExpression:(DDExpression *)expression usingRule:(_DDRewriteRule *)rule {
