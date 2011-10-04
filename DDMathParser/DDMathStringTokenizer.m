@@ -188,7 +188,7 @@
         }
     }
     
-    if (token == nil && [[previousToken token] isEqual:@"!"]) {
+    if ([[previousToken token] isEqual:@"!"] && [previousToken operatorType] == DDOperatorInvalid) {
         [previousToken resolveToOperator:DDOperatorFactorial];
         if (error != nil) {
             *error = nil;
@@ -237,17 +237,30 @@
      **/
     DDMathStringToken *previousToken = [_tokens lastObject];
     if (previousToken != nil && token != nil) {
+        BOOL shouldInsertMultiplier = NO;
         if ([previousToken tokenType] == DDTokenTypeNumber ||
             [previousToken tokenType] == DDTokenTypeVariable ||
             [previousToken operatorType] == DDOperatorParenthesisClose) {
             
             if ([token tokenType] != DDTokenTypeOperator || [token operatorType] == DDOperatorParenthesisOpen) {
                 //inject a "multiplication" token:
-                DDMathStringToken * multiply = [DDMathStringToken mathStringTokenWithToken:@"*" type:DDTokenTypeOperator];
-                
-                [self appendToken:multiply];
+                shouldInsertMultiplier = YES;
             }
             
+        }
+        
+        if (shouldInsertMultiplier == NO && [previousToken tokenType] == DDTokenTypeOperator && [token tokenType] == DDTokenTypeOperator) {
+            if ([previousToken operatorArity] == DDOperatorArityUnary && [token operatorArity] == DDOperatorArityUnary) {
+                if ([previousToken operatorAssociativity] != [token operatorAssociativity]) {
+                    shouldInsertMultiplier = YES;
+                }
+            }
+        }
+        
+        if (shouldInsertMultiplier) {
+            DDMathStringToken * multiply = [DDMathStringToken mathStringTokenWithToken:@"*" type:DDTokenTypeOperator];
+            
+            [self appendToken:multiply];
         }
     }
     return YES;

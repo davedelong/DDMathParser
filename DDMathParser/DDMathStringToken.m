@@ -95,6 +95,11 @@
     return [operatorInfo function];
 }
 
+- (DDOperatorAssociativity)operatorAssociativity {
+    if (ambiguous) { return 0; }
+    return [operatorInfo defaultAssociativity];
+}
+
 - (void)resolveToOperator:(DDOperator)operator {
     DD_RELEASE(operatorInfo);
     operatorInfo = nil;

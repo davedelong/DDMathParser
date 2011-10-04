@@ -13,10 +13,12 @@
 
 @property (nonatomic, readonly) DDOperator operator;
 @property (nonatomic, readonly) DDOperatorArity arity;
+@property (nonatomic, assign) DDOperatorAssociativity defaultAssociativity;
 @property (nonatomic, readonly) NSInteger precedence;
 @property (nonatomic, readonly, DD_STRONG) NSString *token;
 @property (nonatomic, readonly, DD_STRONG) NSString *function;
 
 + (NSArray *)allOperators;
++ (NSArray *)infosForOperator:(DDOperator)operator;
 
 @end

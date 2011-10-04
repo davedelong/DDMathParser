@@ -25,6 +25,7 @@
 @property (nonatomic,readonly) DDTokenType tokenType;
 @property (nonatomic,readonly) DDOperator operatorType;
 @property (nonatomic,readonly) DDOperatorArity operatorArity;
+@property (nonatomic,readonly) DDOperatorAssociativity operatorAssociativity;
 @property (nonatomic,readonly) NSInteger operatorPrecedence;
 @property (nonatomic,readonly) NSString *operatorFunction;
 
