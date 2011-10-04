@@ -15,16 +15,7 @@
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
-
-static DDOperatorAssociativity defaultBitwiseOrAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultBitwiseXorAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultBitwiseAndAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultBitwiseLeftShiftAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultBitwiseRightShiftAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultAdditionAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultMultiplicationAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultModAssociativity = DDOperatorAssociativityLeft;
-static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativityLeft;
+#import "_DDOperatorInfo.h"
 
 @implementation DDParser
 
@@ -52,32 +43,51 @@ static DDOperatorAssociativity defaultPowerAssociativity = DDOperatorAssociativi
     [super initialize];
 }
 
-+ (DDOperatorAssociativity) defaultBitwiseOrAssociativity { return defaultBitwiseOrAssociativity; }
-+ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseOrAssociativity = newAssociativity; }
+#define GET_ASSOCIATIVITY(_op) { \
+NSArray *ops = [_DDOperatorInfo infosForOperator:(_op)]; \
+_DDOperatorInfo *info = [ops objectAtIndex:0]; \
+return [info defaultAssociativity]; \
+}
 
-+ (DDOperatorAssociativity) defaultBitwiseXorAssociativity { return defaultBitwiseXorAssociativity; }
-+ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseXorAssociativity = newAssociativity; }
+#define SET_ASSOCIATIVITY(_op,_a) { \
+NSArray *ops = [_DDOperatorInfo infosForOperator:(_op)]; \
+for (_DDOperatorInfo *info in ops) { \
+[info setDefaultAssociativity:(_a)]; \
+} \
+}
 
-+ (DDOperatorAssociativity) defaultBitwiseAndAssociativity { return defaultBitwiseAndAssociativity; }
-+ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseAndAssociativity = newAssociativity; }
++ (DDOperatorAssociativity) defaultBitwiseOrAssociativity { GET_ASSOCIATIVITY(DDOperatorBitwiseOr); }
++ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity {  SET_ASSOCIATIVITY(DDOperatorBitwiseOr, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity { return defaultBitwiseLeftShiftAssociativity; }
-+ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseLeftShiftAssociativity = newAssociativity; }
++ (DDOperatorAssociativity) defaultBitwiseXorAssociativity { GET_ASSOCIATIVITY(DDOperatorBitwiseXor); }
++ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorBitwiseXor, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity { return defaultBitwiseRightShiftAssociativity; }
-+ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { defaultBitwiseRightShiftAssociativity = newAssociativity; }
++ (DDOperatorAssociativity) defaultBitwiseAndAssociativity { GET_ASSOCIATIVITY(DDOperatorBitwiseAnd); }
++ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorBitwiseAnd, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultAdditionAssociativity { return defaultAdditionAssociativity; }
-+ (void) setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity { defaultAdditionAssociativity = newAssociativity; }
++ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity { GET_ASSOCIATIVITY(DDOperatorLeftShift); }
++ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorLeftShift, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultMultiplicationAssociativity { return defaultMultiplicationAssociativity; }
-+ (void) setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity { defaultMultiplicationAssociativity = newAssociativity; }
++ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity { GET_ASSOCIATIVITY(DDOperatorRightShift); }
++ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorRightShift, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultModAssociativity { return defaultModAssociativity; }
-+ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { defaultModAssociativity = newAssociativity; }
++ (DDOperatorAssociativity) defaultAdditionAssociativity { GET_ASSOCIATIVITY(DDOperatorAdd); }
++ (void) setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity {
+    SET_ASSOCIATIVITY(DDOperatorAdd, newAssociativity);
+    SET_ASSOCIATIVITY(DDOperatorMinus, newAssociativity);
+}
 
-+ (DDOperatorAssociativity) defaultPowerAssociativity { return defaultPowerAssociativity; }
-+ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { defaultPowerAssociativity = newAssociativity; }
++ (DDOperatorAssociativity) defaultMultiplicationAssociativity { GET_ASSOCIATIVITY(DDOperatorMultiply); }
++ (void) setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity {
+    SET_ASSOCIATIVITY(DDOperatorMultiply, newAssociativity);
+    SET_ASSOCIATIVITY(DDOperatorDivide, newAssociativity);
+}
+
++ (DDOperatorAssociativity) defaultModAssociativity { GET_ASSOCIATIVITY(DDOperatorModulo); }
++ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorModulo, newAssociativity); }
+
++ (DDOperatorAssociativity) defaultPowerAssociativity { GET_ASSOCIATIVITY(DDOperatorPower); }
++ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorPower, newAssociativity); }
 
 
 + (id) parserWithString:(NSString *)string error:(NSError **)error {
