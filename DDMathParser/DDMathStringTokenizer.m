@@ -151,8 +151,7 @@
         if (previousToken == nil) {
             shouldBeUnary = YES;
         } else if ([previousToken tokenType] == DDTokenTypeOperator && 
-                   [previousToken operatorType] != DDOperatorParenthesisClose && 
-                   [previousToken operatorType] != DDOperatorFactorial) {
+                   [previousToken operatorAssociativity] != DDOperatorAssociativityLeft) {
             shouldBeUnary = YES;
         }
         
@@ -170,11 +169,16 @@
             }
         }
         
-        if ([[token token] isEqual:@"!"]) {
+        if (resolvedOperator == DDOperatorInvalid && [[token token] isEqual:@"!"]) {
             if (previousToken == nil) {
                 resolvedOperator = DDOperatorLogicalNot;
-            } else if ([previousToken tokenType] == DDTokenTypeOperator && [previousToken operatorType] != DDOperatorParenthesisClose) {
+            } else if ([previousToken tokenType] == DDTokenTypeOperator && 
+                       ([previousToken operatorArity] == DDOperatorArityBinary ||
+                        [previousToken operatorAssociativity] == DDOperatorAssociativityRight)
+                       ) {
                 resolvedOperator = DDOperatorLogicalNot;
+            } else {
+                resolvedOperator = DDOperatorFactorial;
             }
         }
         
@@ -188,73 +192,25 @@
         }
     }
     
-    if ([[previousToken token] isEqual:@"!"] && [previousToken operatorType] == DDOperatorInvalid) {
-        [previousToken resolveToOperator:DDOperatorFactorial];
-        if (error != nil) {
-            *error = nil;
-        }
-    }
-    
     return YES;
 }
 
 - (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError **)error {
-    /**
-     If you have <first token><second token>, then you can either inject a multiplication token or leave it alone.
-     This table explains what should happen for each possible combination:
-     
-     First Token		Second Token	Action
-     -----------------------------------------
-     Number				Number			Multiply
-     Number				Operator		Normal
-     Number				Variable		Multiply
-     Number				Function		Multiply
-     Number				(				Multiply
-     
-     Operator			Number			Normal
-     Operator			Operator		Normal
-     Operator			Variable		Normal
-     Operator			Function		Normal
-     Operator			(				Normal
-     
-     Variable			Number			Multiply
-     Variable			Operator		Normal
-     Variable			Variable		Multiply
-     Variable			Function		Multiply
-     Variable			(				Multiply
-     
-     Function			Number			Normal
-     Function			Operator		Normal
-     Function			Variable		Normal
-     Function			Function		Normal
-     Function			(				Normal
-     
-     )					Number			Multiply
-     )					Operator		Normal
-     )					Variable		Multiply
-     )					Function		Multiply
-     )					(				Multiply
-     **/
+    // See: https://github.com/davedelong/DDMathParser/wiki/Implicit-Multiplication
+    
     DDMathStringToken *previousToken = [_tokens lastObject];
     if (previousToken != nil && token != nil) {
         BOOL shouldInsertMultiplier = NO;
         if ([previousToken tokenType] == DDTokenTypeNumber ||
             [previousToken tokenType] == DDTokenTypeVariable ||
-            [previousToken operatorType] == DDOperatorParenthesisClose) {
+            ([previousToken operatorArity] == DDOperatorArityUnary && [previousToken operatorAssociativity] == DDOperatorAssociativityLeft)) {
             
-            if ([token tokenType] != DDTokenTypeOperator || [token operatorType] == DDOperatorParenthesisOpen) {
+            if ([token tokenType] != DDTokenTypeOperator || 
+                ([token operatorArity] == DDOperatorArityUnary && [token operatorAssociativity] == DDOperatorAssociativityRight)) {
                 //inject a "multiplication" token:
                 shouldInsertMultiplier = YES;
             }
             
-        }
-        
-        if (shouldInsertMultiplier == NO && [previousToken tokenType] == DDTokenTypeOperator && [token tokenType] == DDTokenTypeOperator) {
-            if ([previousToken operatorArity] == DDOperatorArityUnary && [token operatorArity] == DDOperatorArityUnary) {
-                if ([previousToken operatorAssociativity] != [token operatorAssociativity]) {
-                    shouldInsertMultiplier = YES;
-                }
-            }
         }
         
         if (shouldInsertMultiplier) {

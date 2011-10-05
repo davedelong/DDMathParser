@@ -125,8 +125,8 @@
     precedence++;
     
     // ( and ) have the same precedence
-    [operators addObject:[self infoForOperator:DDOperatorParenthesisOpen arity:DDOperatorArityUnknown precedence:precedence token:@"(" function:@"" associativity:DDOperatorAssociativityLeft]];
-    [operators addObject:[self infoForOperator:DDOperatorParenthesisClose arity:DDOperatorArityUnknown precedence:precedence token:@")" function:@"" associativity:DDOperatorAssociativityLeft]];
+    [operators addObject:[self infoForOperator:DDOperatorParenthesisOpen arity:DDOperatorArityUnary precedence:precedence token:@"(" function:@"" associativity:DDOperatorAssociativityRight]];
+    [operators addObject:[self infoForOperator:DDOperatorParenthesisClose arity:DDOperatorArityUnary precedence:precedence token:@")" function:@"" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorComma arity:DDOperatorArityUnknown precedence:precedence token:@"," function:@"" associativity:DDOperatorAssociativityLeft]];
