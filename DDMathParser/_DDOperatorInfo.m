@@ -112,12 +112,12 @@
     [operators addObject:[self infoForOperator:DDOperatorBitwiseNot arity:DDOperatorArityUnary precedence:precedence token:@"~" function:@"not" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
+    // right associative unary operators have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorUnaryMinus arity:DDOperatorArityUnary precedence:precedence token:@"-" function:@"negate" associativity:DDOperatorAssociativityRight]];
-    precedence++;
-    
     [operators addObject:[self infoForOperator:DDOperatorUnaryPlus arity:DDOperatorArityUnary precedence:precedence token:@"+" function:@"" associativity:DDOperatorAssociativityRight]];
     precedence++;
     
+    // there's only one left associative unary operator
     [operators addObject:[self infoForOperator:DDOperatorFactorial arity:DDOperatorArityUnary precedence:precedence token:@"!" function:@"factorial" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
@@ -125,6 +125,7 @@
     precedence++;
     
     // ( and ) have the same precedence
+    // these are defined as unary right/left associative for convenience
     [operators addObject:[self infoForOperator:DDOperatorParenthesisOpen arity:DDOperatorArityUnary precedence:precedence token:@"(" function:@"" associativity:DDOperatorAssociativityRight]];
     [operators addObject:[self infoForOperator:DDOperatorParenthesisClose arity:DDOperatorArityUnary precedence:precedence token:@")" function:@"" associativity:DDOperatorAssociativityLeft]];
     precedence++;
