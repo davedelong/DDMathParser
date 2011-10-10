@@ -107,7 +107,6 @@
 		552532B612C1C92D00A942A7 /* _DDFunctionUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDFunctionUtilities.m; sourceTree = "<group>"; };
 		5526E9E01310EF880018B4C9 /* DDTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTypes.m; sourceTree = "<group>"; };
 		5537E35A12AB20D20000CFED /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5537E35C12AB20D20000CFED /* Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Demo-Info.plist"; sourceTree = "<group>"; };
 		5537E36E12AB21140000CFED /* Demo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Demo.m; sourceTree = "<group>"; };
 		5537E37112AB214D0000CFED /* DemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoController.h; sourceTree = "<group>"; };
 		5537E37212AB214D0000CFED /* DemoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoController.m; sourceTree = "<group>"; };
@@ -130,6 +129,7 @@
 		5570E3B112AA2D8D002FE945 /* DDParserTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDParserTypes.h; sourceTree = "<group>"; };
 		55ABBAA9142ECB1300BDF29A /* _DDRewriteRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _DDRewriteRule.h; path = DDMathParser/_DDRewriteRule.h; sourceTree = "<group>"; };
 		55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = _DDRewriteRule.m; path = DDMathParser/_DDRewriteRule.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		55B303E414428310003D7FEC /* Demo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Demo-Info.plist"; sourceTree = "<group>"; };
 		55BA673E1298ECA2002279A5 /* DDMathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = DDMathParser.h; path = DDMathParser/DDMathParser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDMathParsing.h"; sourceTree = "<group>"; };
 		55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DDMathParsing.m"; sourceTree = "<group>"; };
@@ -193,8 +193,6 @@
 				C6859EA2029092E104C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
-				55BFA9A7128CDDEB00A80228 /* UnitTests-Info.plist */,
-				5537E35C12AB20D20000CFED /* Demo-Info.plist */,
 			);
 			name = DDMathParser;
 			sourceTree = "<group>";
@@ -260,8 +258,9 @@
 				5537E37112AB214D0000CFED /* DemoController.h */,
 				5537E37212AB214D0000CFED /* DemoController.m */,
 				5537E37412AB229C0000CFED /* Demo.xib */,
+				55B303E414428310003D7FEC /* Demo-Info.plist */,
 			);
-			name = Demo;
+			path = Demo;
 			sourceTree = "<group>";
 		};
 		5565122513CA7AE4004B7C67 /* Command line demo */ = {
@@ -269,7 +268,7 @@
 			children = (
 				08FB7796FE84155DC02AAC07 /* main.m */,
 			);
-			name = "Command line demo";
+			path = "Command line demo";
 			sourceTree = "<group>";
 		};
 		5565122613CAB1D7004B7C67 /* Terms */ = {
@@ -327,6 +326,7 @@
 		55BFA9BA128CDF8F00A80228 /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
+				55BFA9A7128CDDEB00A80228 /* UnitTests-Info.plist */,
 				55F9F0121295C19900F4A9FD /* NSExpression+EasyParsing.h */,
 				55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */,
 				55BFA9AE128CDE7600A80228 /* ParserTests.h */,
@@ -336,7 +336,7 @@
 				55D2AD4E1295834600BA2905 /* EvaluationTests.h */,
 				55D2AD4F1295834600BA2905 /* EvaluationTests.m */,
 			);
-			name = "Unit Tests";
+			path = "Unit Tests";
 			sourceTree = "<group>";
 		};
 		55F7966612934F8900EF2716 /* Evaluator */ = {
@@ -648,7 +648,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "Demo-Info.plist";
+				INFOPLIST_FILE = "Demo/Demo-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -669,7 +669,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "Demo-Info.plist";
+				INFOPLIST_FILE = "Demo/Demo-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = (
 					"-framework",
