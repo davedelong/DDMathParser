@@ -8,7 +8,9 @@
 
 #import "_DDGroupTerm.h"
 
-@interface _DDFunctionTerm : _DDGroupTerm
+@interface _DDFunctionTerm : _DDGroupTerm {
+    NSString *functionName;
+}
 
 @property (nonatomic,readonly,DD_STRONG) NSString *functionName;
 

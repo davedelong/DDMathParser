@@ -10,7 +10,10 @@
 #import "DDMathParser.h"
 #import "DDTypes.h"
 
-@interface _DDFunctionContainer : NSObject
+@interface _DDFunctionContainer : NSObject {
+    DDMathFunction function;
+    NSSet *aliases;
+}
 
 @property (nonatomic,copy) DDMathFunction function;
 @property (nonatomic,readonly,DD_STRONG) NSSet *aliases;

@@ -28,11 +28,11 @@
 
 - (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
     ERR_ASSERT(error);
-    DDMathStringToken *token = [tokenizer nextToken];
+    DDMathStringToken *t = [tokenizer nextToken];
     
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {
-        functionName = [[token token] copy];
+        functionName = [[t token] copy];
         
         // process the subterms to group them up by commas
         NSMutableArray *newSubterms = [NSMutableArray array];
@@ -74,7 +74,7 @@
         
         [self _setSubterms:newSubterms];
     } else {
-        *error = ERR_BADARG(@"missing parentheses after function \"%@\"", token);
+        *error = ERR_BADARG(@"missing parentheses after function \"%@\"", t);
     }
     return self;
 }

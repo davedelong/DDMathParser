@@ -16,6 +16,7 @@
     NSNumber *numberValue;
 	DDTokenType tokenType;
     _DDOperatorInfo *operatorInfo;
+    DDOperator operatorType;
     BOOL ambiguous;
 }
 

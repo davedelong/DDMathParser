@@ -11,7 +11,7 @@
 #import "_DDOperatorInfo.h"
 
 @implementation DDMathStringToken
-@synthesize token, tokenType, operatorType, operatorPrecedence, operatorArity;
+@synthesize token, tokenType;
 
 #if !DD_HAS_ARC
 - (void) dealloc {

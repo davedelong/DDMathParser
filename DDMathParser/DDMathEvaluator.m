@@ -44,10 +44,8 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if (self) {
 		functions = [[NSMutableArray alloc] init];
         functionMap = [[NSMutableDictionary alloc] init];
-        rewriteRules = [[NSMutableArray alloc] init];
         
 		[self _registerStandardFunctions];
-        [self _registerStandardRewriteRules];
 	}
 	return self;
 }
@@ -138,6 +136,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template condition:(NSString *)condition {
+    [self _registerStandardRewriteRules];
     _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:template replacementPattern:rule condition:condition];
     [rewriteRules addObject:rewriteRule];
 }
@@ -381,6 +380,10 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (void)_registerStandardRewriteRules {
+    if (rewriteRules != nil) { return; }
+    
+    rewriteRules = [[NSMutableArray alloc] init];
+    
     NSDictionary *templates = [[self class] _standardRewriteRules];
     for (NSString *template in templates) {
         NSString *replacement = [templates objectForKey:template];
@@ -423,6 +426,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 }
 
 - (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression {
+    [self _registerStandardRewriteRules];
     DDExpression *tmp = expression;
     NSUInteger iterationCount = 0;
     
