@@ -31,8 +31,7 @@
 		operatorType = DDOperatorInvalid;
 		
 		if (tokenType == DDTokenTypeOperator) {
-            NSArray *operators = [_DDOperatorInfo allOperators];
-            NSArray *matching = [operators filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"token = %@", t]];
+            NSArray *matching = [_DDOperatorInfo infosForOperatorToken:t];
             if ([matching count] == 0) {
                 DD_RELEASE(self);
                 return nil;
@@ -104,7 +103,7 @@
     DD_RELEASE(operatorInfo);
     operatorInfo = nil;
     
-    NSArray *matching = [[_DDOperatorInfo allOperators] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"operator = %d", operator]];
+    NSArray *matching = [_DDOperatorInfo infosForOperator:operator];
     if ([matching count] != 1) { return; }
     
     ambiguous = NO;

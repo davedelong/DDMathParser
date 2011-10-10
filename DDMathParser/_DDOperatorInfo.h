@@ -27,5 +27,6 @@
 
 + (NSArray *)allOperators;
 + (NSArray *)infosForOperator:(DDOperator)operator;
++ (NSArray *)infosForOperatorToken:(NSString *)token;
 
 @end

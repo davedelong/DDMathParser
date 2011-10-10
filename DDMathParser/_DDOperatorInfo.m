@@ -35,7 +35,45 @@
 }
 
 + (NSArray *)infosForOperator:(DDOperator)operator {
-    return [[self allOperators] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"operator = %d", operator]];
+    static dispatch_once_t onceToken;
+    static NSMutableDictionary *_operatorLookup = nil;
+    dispatch_once(&onceToken, ^{
+        _operatorLookup = [[NSMutableDictionary alloc] init];
+        
+        NSArray *operators = [self allOperators];
+        for (_DDOperatorInfo *info in operators) {
+            DDOperator op = [info operator];
+            NSNumber *key = [NSNumber numberWithInt:op];
+            
+            NSMutableArray *value = [_operatorLookup objectForKey:key];
+            if (value == nil) {
+                value = [NSMutableArray array];
+                [_operatorLookup setObject:value forKey:key];
+            }
+            [value addObject:info];
+        }
+    });
+    return [_operatorLookup objectForKey:[NSNumber numberWithInt:operator]];
+}
+
++ (NSArray *)infosForOperatorToken:(NSString *)token {
+    static dispatch_once_t onceToken;
+    static NSMutableDictionary *_operatorLookup = nil;
+    dispatch_once(&onceToken, ^{
+        _operatorLookup = [[NSMutableDictionary alloc] init];
+        
+        NSArray *operators = [self allOperators];
+        for (_DDOperatorInfo *info in operators) {
+            
+            NSMutableArray *value = [_operatorLookup objectForKey:[info token]];
+            if (value == nil) {
+                value = [NSMutableArray array];
+                [_operatorLookup setObject:value forKey:[info token]];
+            }
+            [value addObject:info];
+        }
+    });
+    return [_operatorLookup objectForKey:token];
 }
 
 #if !DD_HAS_ARC
