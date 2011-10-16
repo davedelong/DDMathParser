@@ -32,10 +32,24 @@
 
 + (NSCharacterSet *)_operatorCharacterSet;
 + (NSCharacterSet *)_functionCharacterSet;
++ (NSCharacterSet *)_singleCharacterFunctionCharacterSet;
 
 @end
 
 @implementation DDMathStringTokenizer
+
++ (NSCharacterSet *)legalCharacters {
+    static dispatch_once_t onceToken;
+    static NSCharacterSet *legal = nil;
+    dispatch_once(&onceToken, ^{
+        NSMutableCharacterSet *mutable = [NSMutableCharacterSet characterSetWithCharactersInString:@"$."];
+        [mutable formUnionWithCharacterSet:[self _operatorCharacterSet]];
+        [mutable formUnionWithCharacterSet:[self _functionCharacterSet]];
+        [mutable formUnionWithCharacterSet:[self _singleCharacterFunctionCharacterSet]];
+        legal = [mutable copy];
+    });
+    return legal;
+}
 
 + (NSCharacterSet *)_operatorCharacterSet {
     static dispatch_once_t onceToken;

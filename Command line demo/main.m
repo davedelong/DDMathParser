@@ -6,14 +6,17 @@ NSString* readLine(void);
 void listFunctions(void);
 
 NSString* readLine() {
-    
+    NSCharacterSet *valid = [DDMathStringTokenizer legalCharacters];
     NSMutableData *data = [NSMutableData data];
+    
     
     do {
         char c = getchar();
-        if (c == '\r' || c == '\n') { break; }
-        [data appendBytes:&c length:1];
+        if (c > 0xffff) { continue; }
+        if ([[NSCharacterSet newlineCharacterSet] characterIsMember:(unichar)c]) { break; }
+        if (![valid characterIsMember:(unichar)c]) { continue; }
         
+        [data appendBytes:&c length:sizeof(char)];
     } while (1);
     
     return DD_AUTORELEASE([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
@@ -58,16 +61,18 @@ int main (int argc, const char * argv[]) {
         DDExpression *expression = [parser parsedExpressionWithError:&error];
         DDExpression *rewritten = [[DDMathEvaluator sharedMathEvaluator] expressionByRewritingExpression:expression];
         
-        NSNumber *value = [expression evaluateWithSubstitutions:nil evaluator:nil error:&error];
+        NSNumber *value = [rewritten evaluateWithSubstitutions:nil evaluator:nil error:&error];
         DD_RELEASE(tokenizer);
         
         if (value == nil) {
             printf("\tERROR: %s\n", [[error description] UTF8String]);
         } else {
-            printf("\t%s = %s\n", [[expression description] UTF8String], [[value description] UTF8String]);
+            if (rewritten != expression) {
+                printf("\t%s REWRITTEN AS %s\n", [[expression description] UTF8String], [[rewritten description] UTF8String]);
+            }
+            printf("\t%s = %s\n", [[rewritten description] UTF8String], [[value description] UTF8String]);
         }
         
-        printf("\tRewritten: %s\n", [[rewritten description] UTF8String]);
 
 	} while (1);
 

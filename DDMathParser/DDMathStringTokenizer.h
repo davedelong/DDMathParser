@@ -20,6 +20,8 @@
     
 }
 
++ (NSCharacterSet *)legalCharacters;
+
 + (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error;
 - (id)initWithString:(NSString *)expressionString error:(NSError **)error;
 

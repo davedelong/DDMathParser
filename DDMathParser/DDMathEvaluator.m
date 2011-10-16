@@ -337,6 +337,8 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  @"__exp1", @"__exp1 * 1",
                  @"pow(__exp1, 2)", @"__exp1 * __exp1",
                  @"multiply(__var1, __num1)", @"multiply(__num1, __var1)",
+                 @"0", @"0 * __exp1",
+                 @"0", @"__exp1 * 0",
                  
                  //other stuff
                  @"__exp1", @"--__exp1",
