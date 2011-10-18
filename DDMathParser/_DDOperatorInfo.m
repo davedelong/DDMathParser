@@ -141,7 +141,9 @@
 
     // multiplication and division have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorMultiply arity:DDOperatorArityBinary precedence:precedence token:@"*" function:@"multiply" associativity:DDOperatorAssociativityLeft]];
+    [operators addObject:[self infoForOperator:DDOperatorMultiply arity:DDOperatorArityBinary precedence:precedence token:@"\u00d7" function:@"multiply" associativity:DDOperatorAssociativityLeft]];
     [operators addObject:[self infoForOperator:DDOperatorDivide arity:DDOperatorArityBinary precedence:precedence token:@"/" function:@"divide" associativity:DDOperatorAssociativityLeft]];
+    [operators addObject:[self infoForOperator:DDOperatorDivide arity:DDOperatorArityBinary precedence:precedence token:@"\u00f7" function:@"divide" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorModulo arity:DDOperatorArityBinary precedence:precedence token:@"%" function:@"mod" associativity:DDOperatorAssociativityLeft]];

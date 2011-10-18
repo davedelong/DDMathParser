@@ -6,7 +6,7 @@ NSString* readLine(void);
 void listFunctions(void);
 
 NSString* readLine() {
-    NSCharacterSet *valid = [DDMathStringTokenizer legalCharacters];
+//    NSCharacterSet *valid = [DDMathStringTokenizer legalCharacters];
     NSMutableData *data = [NSMutableData data];
     
     
@@ -14,7 +14,7 @@ NSString* readLine() {
         char c = getchar();
         if (c > 0xffff) { continue; }
         if ([[NSCharacterSet newlineCharacterSet] characterIsMember:(unichar)c]) { break; }
-        if (![valid characterIsMember:(unichar)c]) { continue; }
+//        if (![valid characterIsMember:(unichar)c]) { continue; }
         
         [data appendBytes:&c length:sizeof(char)];
     } while (1);

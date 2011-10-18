@@ -60,7 +60,9 @@
         // \u00AC is ¬
         // \u2264 is ≤
         // \u2265 is ≥
-        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,=\u2228\u2227\u00ac\u2264\u2265"]);
+        // \u00f7 is ÷
+        // \u00d7 is ×
+        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,=\u2228\u2227\u00ac\u2264\u2265\u00f7\u00d7"]);
     });
     return _operatorSet;
 }
