@@ -10,6 +10,7 @@
 #import "DDMathStringTokenizer.h"
 #import "DDMathParserMacros.h"
 #import "DDMathStringToken.h"
+#import "_DDOperatorInfo.h"
 
 #define DD_IS_DIGIT(_c) ((_c) >= '0' && (_c) <= '9')
 #define DD_IS_WHITESPACE(_c) ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:(_c)])
@@ -55,14 +56,10 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_operatorSet = nil;
     dispatch_once(&onceToken, ^{
-        // \u2228 is ∨
-        // \u2227 is ∧
-        // \u00AC is ¬
-        // \u2264 is ≤
-        // \u2265 is ≥
-        // \u00f7 is ÷
-        // \u00d7 is ×
-        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"+-*/&|!%^~()<>,=\u2228\u2227\u00ac\u2264\u2265\u00f7\u00d7"]);
+        NSArray *allOperators = [_DDOperatorInfo allOperators];
+        NSArray *operatorTokens = [allOperators valueForKey:@"token"];
+        NSString *operatorString = [operatorTokens componentsJoinedByString:@""];
+        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:operatorString]);
     });
     return _operatorSet;
 }

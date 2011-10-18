@@ -89,10 +89,12 @@
     NSInteger precedence = 0;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalOr arity:DDOperatorArityBinary precedence:precedence token:@"||" function:@"l_or" associativity:DDOperatorAssociativityLeft]];
+    // \u2228 is ∨
     [operators addObject:[self infoForOperator:DDOperatorLogicalOr arity:DDOperatorArityBinary precedence:precedence token:@"\u2228" function:@"l_or" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalAnd arity:DDOperatorArityBinary precedence:precedence token:@"&&" function:@"l_and" associativity:DDOperatorAssociativityLeft]];
+    // \u2227 is ∧
     [operators addObject:[self infoForOperator:DDOperatorLogicalAnd arity:DDOperatorArityBinary precedence:precedence token:@"\u2227" function:@"l_and" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
@@ -109,14 +111,17 @@
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalLessThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@"<=" function:@"l_ltoe" associativity:DDOperatorAssociativityLeft]];
+    // \u2264 is ≤
     [operators addObject:[self infoForOperator:DDOperatorLogicalLessThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@"\u2264" function:@"l_ltoe" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalGreaterThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@">=" function:@"l_gtoe" associativity:DDOperatorAssociativityLeft]];
+    // \u2265 is ≥
     [operators addObject:[self infoForOperator:DDOperatorLogicalGreaterThanOrEqual arity:DDOperatorArityBinary precedence:precedence token:@"\u2265" function:@"l_gtoe" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     [operators addObject:[self infoForOperator:DDOperatorLogicalNot arity:DDOperatorArityUnary precedence:precedence token:@"!" function:@"l_not" associativity:DDOperatorAssociativityRight]];
+    // \u00AC is ¬
     [operators addObject:[self infoForOperator:DDOperatorLogicalNot arity:DDOperatorArityUnary precedence:precedence token:@"\u00ac" function:@"l_not" associativity:DDOperatorAssociativityRight]];
     precedence++;
     
@@ -142,8 +147,10 @@
 
     // multiplication and division have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorMultiply arity:DDOperatorArityBinary precedence:precedence token:@"*" function:@"multiply" associativity:DDOperatorAssociativityLeft]];
+    // \u00d7 is ×
     [operators addObject:[self infoForOperator:DDOperatorMultiply arity:DDOperatorArityBinary precedence:precedence token:@"\u00d7" function:@"multiply" associativity:DDOperatorAssociativityLeft]];
     [operators addObject:[self infoForOperator:DDOperatorDivide arity:DDOperatorArityBinary precedence:precedence token:@"/" function:@"divide" associativity:DDOperatorAssociativityLeft]];
+    // \u00f7 is ÷
     [operators addObject:[self infoForOperator:DDOperatorDivide arity:DDOperatorArityBinary precedence:precedence token:@"\u00f7" function:@"divide" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
