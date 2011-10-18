@@ -98,6 +98,7 @@
     
     // == and != have the same precedence
     [operators addObject:[self infoForOperator:DDOperatorLogicalEqual arity:DDOperatorArityBinary precedence:precedence token:@"==" function:@"l_eq" associativity:DDOperatorAssociativityLeft]];
+    [operators addObject:[self infoForOperator:DDOperatorLogicalEqual arity:DDOperatorArityBinary precedence:precedence token:@"=" function:@"l_eq" associativity:DDOperatorAssociativityLeft]];
     [operators addObject:[self infoForOperator:DDOperatorLogicalNotEqual arity:DDOperatorArityBinary precedence:precedence token:@"!=" function:@"l_neq" associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
