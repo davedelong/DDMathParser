@@ -14,13 +14,6 @@ typedef enum {
 } DDOperatorAssociativity;
 
 typedef enum {
-	DDTokenTypeNumber = 0,
-	DDTokenTypeOperator = 1,
-	DDTokenTypeFunction = 2,
-	DDTokenTypeVariable = 3
-} DDTokenType;
-
-typedef enum {
 	DDOperatorInvalid = 0,
     
     DDOperatorLogicalOr,

@@ -9,6 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "DDParserTypes.h"
 
+typedef enum {
+	DDTokenTypeNumber = 0,
+	DDTokenTypeOperator = 1,
+	DDTokenTypeFunction = 2,
+	DDTokenTypeVariable = 3
+} DDTokenType;
+
 @class _DDOperatorInfo;
 
 @interface DDMathStringToken : NSObject {
