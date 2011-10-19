@@ -102,10 +102,10 @@
     operatorInfo = nil;
     
     NSArray *matching = [_DDOperatorInfo infosForOperator:operator];
-    if ([matching count] != 1) { return; }
-    
-    ambiguous = NO;
-    operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
+    if ([matching count] > 0) {
+        ambiguous = NO;
+        operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
+    }
 }
 
 @end

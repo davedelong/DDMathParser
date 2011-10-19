@@ -442,25 +442,25 @@
     unichar character = [self _nextCharacter];
     
     NSCharacterSet *operatorCharacters = [[self class] _operatorCharacterSet];
-    if ([operatorCharacters characterIsMember:character]) {
-        unichar peekNext = [self _peekNextCharacter];
-        if (character == '<' || character == '>' || character == '*' || character == '&' || character == '|' || character == '=') {
-            // <, >, *, &, |, =
-            if (peekNext == character) {
-                // <<, >>, **, &&, ||, ==
-                _characterIndex++;
-                length++;
-            }
+    
+    NSString *lastGood = nil;
+    NSUInteger lastGoodLength = length;
+    
+    while ([operatorCharacters characterIsMember:character]) {
+        NSString *tmp = [NSString stringWithCharacters:(_characters+start) length:length];
+        NSArray *operators = [_DDOperatorInfo infosForOperatorToken:tmp];
+        if ([operators count] > 0) {
+            lastGood = tmp;
+            lastGoodLength = length;
         }
+        character = [self _nextCharacter];
+        length++;
+    }
+    
+    if (length > 0 && lastGood != nil) {
+        _characterIndex = start+lastGoodLength;
         
-        if ((character == '<' || character == '>' || character == '!') && peekNext == '=' && length == 1) {
-            // <=, >=, !=
-            _characterIndex++;
-            length++;
-        }
-        
-        NSString *rawToken = [NSString stringWithCharacters:(_characters + start) length:length];
-        return [DDMathStringToken mathStringTokenWithToken:rawToken type:DDTokenTypeOperator];
+        return [DDMathStringToken mathStringTokenWithToken:lastGood type:DDTokenTypeOperator];
     }
     
     _characterIndex = start;
