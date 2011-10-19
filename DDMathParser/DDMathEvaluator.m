@@ -14,6 +14,7 @@
 #import "_DDFunctionUtilities.h"
 #import "_DDFunctionContainer.h"
 #import "_DDRewriteRule.h"
+#import <objc/runtime.h>
 
 @interface DDMathEvaluator ()
 
@@ -170,114 +171,21 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     static dispatch_once_t onceToken;
     static NSSet *standardFunctions = nil;
     dispatch_once(&onceToken, ^{
-        standardFunctions = [[NSSet alloc] initWithObjects:
-                             //arithmetic functions (2 parameters)
-                             @"add",
-                             @"subtract",
-                             @"multiply",
-                             @"divide",
-                             @"mod",
-                             @"factorial",
-                             @"pow",
-                             @"nthroot",
-                             
-                             //bitwise functions (2 parameters)
-                             @"and",
-                             @"or",
-                             @"xor",
-                             @"rshift",
-                             @"lshift",
-                             
-                             //functions that take > 0 parameters
-                             @"average",
-                             @"sum",
-                             @"count",
-                             @"min",
-                             @"max",
-                             @"median",
-                             @"stddev",
-                             @"random",
-                             
-                             //functions that take 1 parameter
-                             @"negate",
-                             @"not",
-                             @"sqrt",
-                             @"log",
-                             @"ln",
-                             @"log2",
-                             @"exp",
-                             @"ceil",
-                             @"trunc",
-                             @"floor",
-                             @"abs",
-                             
-                             //trig functions
-                             @"sin",
-                             @"cos",
-                             @"tan",
-                             @"asin",
-                             @"acos",
-                             @"atan",
-                             @"dtor",
-                             @"rtod",
-                             @"sinh",
-                             @"cosh",
-                             @"tanh",
-                             @"asinh",
-                             @"acosh",
-                             @"atanh",
-                             
-                             //trig inverse functions
-                             @"csc",
-                             @"sec",
-                             @"cotan",
-                             @"acsc",
-                             @"asec",
-                             @"acotan",
-                             @"csch",
-                             @"sech",
-                             @"cotanh",
-                             @"acsch",
-                             @"asech",
-                             @"acotanh",
-                             
-                             //more trig functions
-                             @"versin",
-                             @"vercosin",
-                             @"coversin",
-                             @"covercosin",
-                             @"haversin",
-                             @"havercosin",
-                             @"hacoversin",
-                             @"hacovercosin",
-                             @"exsec",
-                             @"excsc",
-                             @"crd",
-                             
-                             //functions that take 0 parameters
-                             @"pi",
-                             @"pi_2",
-                             @"pi_4",
-                             @"tau",
-                             @"phi",
-                             @"sqrt2",
-                             @"e",
-                             @"log2e",
-                             @"log10e",
-                             @"ln2",
-                             @"ln10",
-                             
-                             //logical functions
-                             @"l_and",
-                             @"l_or",
-                             @"l_not",
-                             @"l_eq",
-                             @"l_neq",
-                             @"l_lt",
-                             @"l_gt",
-                             @"l_ltoe",
-                             @"l_gtoe",
-                             nil];
+        NSMutableSet *names = [NSMutableSet set];
+        
+        Class utilitiesMetaClass = objc_getMetaClass("_DDFunctionUtilities");
+        unsigned int count = 0;
+        Method *methods = class_copyMethodList(utilitiesMetaClass, &count);
+        for (unsigned int i = 0; i < count; ++i) {
+            NSString *methodName = NSStringFromSelector(method_getName(methods[i]));
+            if ([methodName hasSuffix:@"Function"]) {
+                NSString *functionName = [methodName substringToIndex:[methodName length] - 8]; // 8 == [@"Function" length]
+                [names addObject:functionName];
+            }
+        }
+        
+        free(methods);
+        standardFunctions = [names copy];
     });
 	return standardFunctions;
 }
