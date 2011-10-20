@@ -71,6 +71,6 @@
 - (id) initWithString:(NSString *)string error:(NSError **)error;
 
 - (DDExpression *) parsedExpressionWithError:(NSError **)error;
-- (DDOperatorAssociativity) associativityForOperator:(DDOperator)operatorType;
+- (DDOperatorAssociativity) associativityForOperator:(NSString *)operator;
 
 @end

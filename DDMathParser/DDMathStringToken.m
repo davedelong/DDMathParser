@@ -72,9 +72,9 @@
     return token;
 }
 
-- (DDOperator)operatorType {
+- (NSString *)operatorType {
     if (ambiguous) { return DDOperatorInvalid; }
-    return [operatorInfo operator];
+    return [operatorInfo function];
 }
 
 - (NSInteger)operatorPrecedence {
@@ -97,11 +97,11 @@
     return [operatorInfo defaultAssociativity];
 }
 
-- (void)resolveToOperator:(DDOperator)operator {
+- (void)resolveToOperator:(NSString *)operator {
     DD_RELEASE(operatorInfo);
     operatorInfo = nil;
     
-    NSArray *matching = [_DDOperatorInfo infosForOperator:operator];
+    NSArray *matching = [_DDOperatorInfo infosForOperatorFunction:operator];
     if ([matching count] > 0) {
         ambiguous = NO;
         operatorInfo = DD_RETAIN([matching objectAtIndex:0]);

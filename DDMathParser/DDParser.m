@@ -17,6 +17,19 @@
 #import "DDExpression.h"
 #import "_DDOperatorInfo.h"
 
+static inline void DDOperatorSetAssociativity(NSString *o, DDOperatorAssociativity a) {
+    NSArray *ops = [_DDOperatorInfo infosForOperatorFunction:o];
+    for (_DDOperatorInfo *info in ops) {
+        [info setDefaultAssociativity:a];
+    }
+}
+
+static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
+    NSArray *ops = [_DDOperatorInfo infosForOperatorFunction:o];
+    _DDOperatorInfo *info = [ops objectAtIndex:0];
+    return [info defaultAssociativity];
+}
+
 @implementation DDParser
 
 @synthesize bitwiseOrAssociativity;
@@ -43,51 +56,38 @@
     [super initialize];
 }
 
-#define GET_ASSOCIATIVITY(_op) { \
-NSArray *ops = [_DDOperatorInfo infosForOperator:(_op)]; \
-_DDOperatorInfo *info = [ops objectAtIndex:0]; \
-return [info defaultAssociativity]; \
-}
++ (DDOperatorAssociativity) defaultBitwiseOrAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseOr); }
++ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity {  DDOperatorSetAssociativity(DDOperatorBitwiseOr, newAssociativity); }
 
-#define SET_ASSOCIATIVITY(_op,_a) { \
-NSArray *ops = [_DDOperatorInfo infosForOperator:(_op)]; \
-for (_DDOperatorInfo *info in ops) { \
-[info setDefaultAssociativity:(_a)]; \
-} \
-}
++ (DDOperatorAssociativity) defaultBitwiseXorAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseXor); }
++ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseXor, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseOrAssociativity { GET_ASSOCIATIVITY(DDOperatorBitwiseOr); }
-+ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity {  SET_ASSOCIATIVITY(DDOperatorBitwiseOr, newAssociativity); }
++ (DDOperatorAssociativity) defaultBitwiseAndAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseAnd); }
++ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseAnd, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseXorAssociativity { GET_ASSOCIATIVITY(DDOperatorBitwiseXor); }
-+ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorBitwiseXor, newAssociativity); }
++ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorLeftShift); }
++ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorLeftShift, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseAndAssociativity { GET_ASSOCIATIVITY(DDOperatorBitwiseAnd); }
-+ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorBitwiseAnd, newAssociativity); }
++ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorRightShift); }
++ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorRightShift, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity { GET_ASSOCIATIVITY(DDOperatorLeftShift); }
-+ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorLeftShift, newAssociativity); }
-
-+ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity { GET_ASSOCIATIVITY(DDOperatorRightShift); }
-+ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorRightShift, newAssociativity); }
-
-+ (DDOperatorAssociativity) defaultAdditionAssociativity { GET_ASSOCIATIVITY(DDOperatorAdd); }
++ (DDOperatorAssociativity) defaultAdditionAssociativity { return DDOperatorGetAssociativity(DDOperatorAdd); }
 + (void) setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity {
-    SET_ASSOCIATIVITY(DDOperatorAdd, newAssociativity);
-    SET_ASSOCIATIVITY(DDOperatorMinus, newAssociativity);
+    DDOperatorSetAssociativity(DDOperatorAdd, newAssociativity);
+    DDOperatorSetAssociativity(DDOperatorMinus, newAssociativity);
 }
 
-+ (DDOperatorAssociativity) defaultMultiplicationAssociativity { GET_ASSOCIATIVITY(DDOperatorMultiply); }
++ (DDOperatorAssociativity) defaultMultiplicationAssociativity { return DDOperatorGetAssociativity(DDOperatorMultiply); }
 + (void) setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity {
-    SET_ASSOCIATIVITY(DDOperatorMultiply, newAssociativity);
-    SET_ASSOCIATIVITY(DDOperatorDivide, newAssociativity);
+    DDOperatorSetAssociativity(DDOperatorMultiply, newAssociativity);
+    DDOperatorSetAssociativity(DDOperatorDivide, newAssociativity);
 }
 
-+ (DDOperatorAssociativity) defaultModAssociativity { GET_ASSOCIATIVITY(DDOperatorModulo); }
-+ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorModulo, newAssociativity); }
++ (DDOperatorAssociativity) defaultModAssociativity { return DDOperatorGetAssociativity(DDOperatorModulo); }
++ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorModulo, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultPowerAssociativity { GET_ASSOCIATIVITY(DDOperatorPower); }
-+ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { SET_ASSOCIATIVITY(DDOperatorPower, newAssociativity); }
++ (DDOperatorAssociativity) defaultPowerAssociativity { return DDOperatorGetAssociativity(DDOperatorPower); }
++ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorPower, newAssociativity); }
 
 
 + (id) parserWithString:(NSString *)string error:(NSError **)error {
@@ -133,34 +133,36 @@ for (_DDOperatorInfo *info in ops) { \
 }
 #endif
 
-- (DDOperatorAssociativity) associativityForOperator:(DDOperator)operatorType {
-	switch (operatorType) {
-        // binary operators can have customizable associativity
-		case DDOperatorBitwiseOr: return bitwiseOrAssociativity;
-		case DDOperatorBitwiseXor: return bitwiseXorAssociativity;
-		case DDOperatorBitwiseAnd: return bitwiseAndAssociativity;
-		case DDOperatorLeftShift: return bitwiseLeftShiftAssociativity;
-		case DDOperatorRightShift: return bitwiseRightShiftAssociativity;
-		case DDOperatorMinus:
-		case DDOperatorAdd: return additionAssociativity;
-		case DDOperatorDivide:
-		case DDOperatorMultiply: return multiplicationAssociativity;
-		case DDOperatorModulo: return modAssociativity;
-		case DDOperatorPower: return powerAssociativity;
-			
-        // unary operators are always right associative (except for factorial)
-        case DDOperatorUnaryPlus:
-        case DDOperatorUnaryMinus:
-		case DDOperatorBitwiseNot: return DDOperatorAssociativityRight;
-            
-        // factorial is always left associative
-        case DDOperatorFactorial: return DDOperatorAssociativityLeft;
-        // logical not is always right associative
-        case DDOperatorLogicalNot: return DDOperatorAssociativityRight;
-            
-		default: return DDOperatorAssociativityLeft;
-	}
-	return DDOperatorAssociativityLeft;
+- (DDOperatorAssociativity) associativityForOperator:(NSString *)operatorType {
+    if (operatorType == DDOperatorBitwiseOr) {
+        return bitwiseOrAssociativity;
+    }
+    if (operatorType == DDOperatorBitwiseXor) {
+        return bitwiseXorAssociativity;
+    }
+    if (operatorType == DDOperatorBitwiseAnd) {
+        return bitwiseAndAssociativity;
+    }
+    if (operatorType == DDOperatorLeftShift) {
+        return bitwiseLeftShiftAssociativity;
+    }
+    if (operatorType == DDOperatorRightShift) {
+        return bitwiseRightShiftAssociativity;
+    }
+    if (operatorType == DDOperatorMinus || operatorType == DDOperatorAdd) {
+        return additionAssociativity;
+    }
+    if (operatorType == DDOperatorDivide || operatorType == DDOperatorMultiply) {
+        return multiplicationAssociativity;
+    }
+    if (operatorType == DDOperatorModulo) {
+        return modAssociativity;
+    }
+    if (operatorType == DDOperatorPower) {
+        return powerAssociativity;
+    }
+    
+    return DDOperatorGetAssociativity(operatorType);
 }
 
 - (DDExpression *) parsedExpressionWithError:(NSError **)error {

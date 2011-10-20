@@ -13,7 +13,7 @@
 
 - (DDParserTermType)type { return DDParserTermTypeOperator; }
 
-- (DDOperator)operatorType {
+- (NSString *)operatorType {
     return [[self token] operatorType];
 }
 

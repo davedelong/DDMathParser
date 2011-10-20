@@ -23,7 +23,7 @@ typedef enum {
     NSNumber *numberValue;
 	DDTokenType tokenType;
     _DDOperatorInfo *operatorInfo;
-    DDOperator operatorType;
+    NSString *operatorType;
     BOOL ambiguous;
 }
 
@@ -31,7 +31,7 @@ typedef enum {
 
 @property (nonatomic,readonly) NSString * token;
 @property (nonatomic,readonly) DDTokenType tokenType;
-@property (nonatomic,readonly) DDOperator operatorType;
+@property (nonatomic,readonly) NSString *operatorType;
 @property (nonatomic,readonly) DDOperatorArity operatorArity;
 @property (nonatomic,readonly) DDOperatorAssociativity operatorAssociativity;
 @property (nonatomic,readonly) NSInteger operatorPrecedence;
@@ -39,6 +39,6 @@ typedef enum {
 
 - (NSNumber *) numberValue;
 
-- (void)resolveToOperator:(DDOperator)operator;
+- (void)resolveToOperator:(NSString *)operator;
 
 @end

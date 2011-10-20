@@ -14,43 +14,37 @@ typedef enum {
 } DDOperatorAssociativity;
 
 typedef enum {
-	DDOperatorInvalid = 0,
-    
-    DDOperatorLogicalOr,
-    DDOperatorLogicalAnd,
-    DDOperatorLogicalNot,
-    
-    DDOperatorLogicalEqual,
-    DDOperatorLogicalNotEqual,
-    DDOperatorLogicalLessThan,
-    DDOperatorLogicalGreaterThan,
-    DDOperatorLogicalLessThanOrEqual,
-    DDOperatorLogicalGreaterThanOrEqual,
-	
-	DDOperatorBitwiseOr,
-	DDOperatorBitwiseXor,
-	DDOperatorBitwiseAnd,
-	DDOperatorLeftShift,
-	DDOperatorRightShift,
-	DDOperatorMinus,
-	DDOperatorAdd,
-	DDOperatorDivide,
-	DDOperatorMultiply,
-	DDOperatorModulo,
-	DDOperatorBitwiseNot,
-	DDOperatorFactorial,
-	DDOperatorPower,
-	DDOperatorParenthesisOpen,
-	DDOperatorParenthesisClose,
-	
-	DDOperatorComma,
-	DDOperatorUnaryMinus,
-	DDOperatorUnaryPlus
-} DDOperator;
-
-typedef enum {
     DDOperatorArityUnknown = 0,
     
     DDOperatorArityUnary,
     DDOperatorArityBinary
 } DDOperatorArity;
+
+extern NSString *const DDOperatorInvalid;
+extern NSString *const DDOperatorLogicalOr;
+extern NSString *const DDOperatorLogicalAnd;
+extern NSString *const DDOperatorLogicalNot;
+extern NSString *const DDOperatorLogicalEqual;
+extern NSString *const DDOperatorLogicalNotEqual;
+extern NSString *const DDOperatorLogicalLessThan;
+extern NSString *const DDOperatorLogicalGreaterThan;
+extern NSString *const DDOperatorLogicalLessThanOrEqual;
+extern NSString *const DDOperatorLogicalGreaterThanOrEqual;
+extern NSString *const DDOperatorBitwiseOr;
+extern NSString *const DDOperatorBitwiseXor;
+extern NSString *const DDOperatorBitwiseAnd;
+extern NSString *const DDOperatorLeftShift;
+extern NSString *const DDOperatorRightShift;
+extern NSString *const DDOperatorMinus;
+extern NSString *const DDOperatorAdd;
+extern NSString *const DDOperatorDivide;
+extern NSString *const DDOperatorMultiply;
+extern NSString *const DDOperatorModulo;
+extern NSString *const DDOperatorBitwiseNot;
+extern NSString *const DDOperatorFactorial;
+extern NSString *const DDOperatorPower;
+extern NSString *const DDOperatorParenthesisOpen;
+extern NSString *const DDOperatorParenthesisClose;
+extern NSString *const DDOperatorComma;
+extern NSString *const DDOperatorUnaryMinus;
+extern NSString *const DDOperatorUnaryPlus;

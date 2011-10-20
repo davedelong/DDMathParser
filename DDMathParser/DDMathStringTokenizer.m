@@ -157,7 +157,7 @@
 - (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error {
     DDMathStringToken *previousToken = [_tokens lastObject];   
     if ([token tokenType] == DDTokenTypeOperator && [token operatorType] == DDOperatorInvalid) {
-        DDOperator resolvedOperator = DDOperatorInvalid;
+        NSString *resolvedOperator = DDOperatorInvalid;
         
         BOOL shouldBeUnary = NO;
         
