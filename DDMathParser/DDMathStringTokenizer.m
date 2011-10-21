@@ -68,11 +68,7 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_functionSet = nil;
     dispatch_once(&onceToken, ^{
-        NSMutableCharacterSet * c = [NSMutableCharacterSet lowercaseLetterCharacterSet];
-		[c formUnionWithCharacterSet:[NSCharacterSet uppercaseLetterCharacterSet]];
-		[c formUnionWithCharacterSet:[NSCharacterSet decimalDigitCharacterSet]];
-		[c addCharactersInString:@"_"];
-        _functionSet = [c copy];
+        _functionSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01233456789_"]);
     });
     return _functionSet;
 }

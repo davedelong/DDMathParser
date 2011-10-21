@@ -162,8 +162,12 @@
     [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryPlus token:@"+" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
     precedence++;
     
-    // there's only one left associative unary operator
+    // all the left associative unary operators have the same precedence
     [operators addObject:[self infoForOperatorFunction:DDOperatorFactorial token:@"!" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+    // \u00ba is º (option-0); not necessary a degree sign, but common enough for it
+    [operators addObject:[self infoForOperatorFunction:DDOperatorDegree token:@"\u00ba" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+    // \u00b0 is °
+    [operators addObject:[self infoForOperatorFunction:DDOperatorDegree token:@"\u00b0" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     [operators addObject:[self infoForOperatorFunction:DDOperatorPower token:@"**" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityRight]];
