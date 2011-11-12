@@ -74,7 +74,7 @@
         
         [self _setSubterms:newSubterms];
     } else {
-        *error = ERR_BADARG(@"missing parentheses after function \"%@\"", t);
+        *error = ERR(DDErrorCodeImbalancedParentheses, @"missing parentheses after function \"%@\"", t);
     }
     return self;
 }

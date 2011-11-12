@@ -22,8 +22,7 @@
 		for (id arg in a) {
 			if ([arg isKindOfClass:[DDExpression class]] == NO) {
 				if (error != nil) {
-					*error = ERR_GENERIC(@"function arguments must be DDExpression objects");
-					*error = nil;
+                    *error = ERR(DDErrorCodeInvalidArgument, @"function arguments must be DDExpression objects");
 				}
                 DD_RELEASE(self);
 				return nil;
@@ -105,7 +104,7 @@
             numberValue = [evaluator evaluateString:result withSubstitutions:substitutions error:error];
 		} else {
 			if (error != nil) {
-				*error = ERR_BADARG(@"invalid return type from %@ function", [self function]);
+                *error = ERR(DDErrorCodeInvalidFunctionReturnType, @"invalid return type from %@ function", [self function]);
 			}
 			return nil;
 		}

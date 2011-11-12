@@ -109,9 +109,12 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 - (BOOL) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error {
     NSString *functionName = [functionExpression function];
 	if (error) {
-        *error = ERR_FUNCTION(functionName, @"unable to resolve function: %@", functionName);
-	} else {
-		NSLog(@"unable to resolve function: %@", functionName);
+        *error = [NSError errorWithDomain:DDMathParserErrorDomain 
+                                     code:DDErrorCodeUnresolvedFunction 
+                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSString stringWithFormat:@"unable to resolve function: %@", functionName], NSLocalizedDescriptionKey,
+                                           functionName, DDUnknownFunctionKey,
+                                           nil]];
 	}
 	return NO;
 }
@@ -239,7 +242,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                  
                  //subtraction
                  @"0", @"__exp1 - __exp1",
-
+                 
                  //multiplication
                  @"__exp1", @"1 * __exp1",
                  @"__exp1", @"__exp1 * 1",
@@ -277,7 +280,8 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                 [functionMap setObject:container forKey:functionName];
                 DD_RELEASE(container);
 			} else {
-				NSLog(@"error registering function: %@", functionName);
+                // this would only happen when a function name has been misspelled = programmer error = raise an exception
+                [NSException raise:NSInvalidArgumentException format:@"error registering function: %@", functionName];
 			}
 		}
 	}

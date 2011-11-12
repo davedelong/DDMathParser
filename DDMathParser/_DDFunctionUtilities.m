@@ -15,7 +15,7 @@
 #define REQUIRE_N_ARGS(__n) { \
 if ([arguments count] != (__n)) { \
 	if (error != nil) { \
-		*error = ERR_GENERIC(@"%@ requires %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
+        *error = ERR(DDErrorCodeInvalidNumberOfArguments, @"%@ requires %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
 	} \
 	return nil; \
 } \
@@ -23,8 +23,8 @@ if ([arguments count] != (__n)) { \
 
 #define REQUIRE_GTOE_N_ARGS(__n) { \
 if ([arguments count] < (__n)) { \
-	if (error != nil) { \
-		*error = ERR_GENERIC(@"%@ requires at least %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
+if (error != nil) { \
+        *error = ERR(DDErrorCodeInvalidNumberOfArguments, @"%@ requires at least %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
 	} \
 	return nil; \
 } \
@@ -388,7 +388,7 @@ if ([arguments count] < (__n)) { \
 	DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
 		if ([arguments count] > 2) {
 			if (error != nil) {
-				*error = ERR_GENERIC(@"random() may only have up to 2 arguments");
+                *error = ERR(DDErrorCodeInvalidNumberOfArguments, @"random() may only have up to 2 arguments");
 			}
 			return nil;
 		}
@@ -413,7 +413,7 @@ if ([arguments count] < (__n)) { \
 			
 			if ([upperBound integerValue] <= [lowerBound integerValue]) {
 				if (error != nil) {
-					*error = ERR_GENERIC(@"upper bound (%ld) of random() must be larger than lower bound (%ld)", [upperBound integerValue], [lowerBound integerValue]);
+                    *error = ERR(DDErrorCodeInvalidArgument, @"upper bound (%ld) of random() must be larger than lower bound (%ld)", [upperBound integerValue], [lowerBound integerValue]);
 				}
 				return nil;
 			}

@@ -11,3 +11,4 @@
 NSString * const DDMathParserErrorDomain = @"com.davedelong.ddmathparser";
 
 NSString * const DDUnknownFunctionKey = @"com.davedelong.ddmathparser.Function";
+NSString * const DDUnknownVariableKey = @"com.davedelong.ddmathparser.Variable";

@@ -195,7 +195,7 @@
         
         if ([token operatorType] == DDOperatorInvalid) {
             if (error != nil) {
-                *error = ERR_GENERIC(@"unknown precedence for token: %@", token);
+                *error = ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
             }
             return NO;
         }
@@ -342,6 +342,7 @@
 - (DDMathStringToken *)_parseNumberWithError:(NSError **)error {
     ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
+    DDMathStringToken *token = nil;
     
     while (DD_IS_DIGIT([self _peekNextCharacter])) {
         _characterIndex++;
@@ -379,13 +380,17 @@
     
     NSUInteger length = _characterIndex - start;
     if (length > 0) {
-        NSString *rawToken = [NSString stringWithCharacters:(_characters+start) length:length];
-        DDMathStringToken *token = [DDMathStringToken mathStringTokenWithToken:rawToken type:DDTokenTypeNumber];
-        return token;
+        if (length != 1 || _characters[start] != '.') { // do not recognize "." as a number
+            NSString *rawToken = [NSString stringWithCharacters:(_characters+start) length:length];
+            token = [DDMathStringToken mathStringTokenWithToken:rawToken type:DDTokenTypeNumber];
+        }
     }
     
-    *error = ERR_BADARG(@"unable to parse number");
-    return nil;
+    if (!token) {
+        _characterIndex = start;
+        *error = ERR(DDErrorCodeInvalidNumber, @"unable to parse number");
+    }
+    return token;
 }
 
 - (DDMathStringToken *)_parseFunctionWithError:(NSError **)error {
@@ -411,7 +416,7 @@
     }
     
     _characterIndex = start;
-    *error = ERR_BADARG(@"unable to parse identifier");
+    *error = ERR(DDErrorCodeInvalidIdentifier, @"unable to parse identifier");
     return nil;
 }
 
@@ -422,7 +427,7 @@
     DDMathStringToken *token = [self _parseFunctionWithError:error];
     if (token == nil) {
         _characterIndex = start;
-        *error = ERR_BADARG(@"variable names must be at least 1 character long");
+        *error = ERR(DDErrorCodeInvalidVariable, @"variable names must be at least 1 character long");
     } else {
         token = [DDMathStringToken mathStringTokenWithToken:[token token] type:DDTokenTypeVariable];
         *error = nil;
@@ -453,14 +458,14 @@
         length++;
     }
     
-    if (length > 0 && lastGood != nil) {
+    if (lastGood != nil) {
         _characterIndex = start+lastGoodLength;
         
         return [DDMathStringToken mathStringTokenWithToken:lastGood type:DDTokenTypeOperator];
     }
     
     _characterIndex = start;
-    *error = ERR_BADARG(@"%C is not a valid operator", character);
+    *error = ERR(DDErrorCodeInvalidOperator, @"%C is not a valid operator", character);
     return nil;
 }
 

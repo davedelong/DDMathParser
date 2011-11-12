@@ -67,7 +67,12 @@
 		return variableValue;
 	}
 	if (error != nil) {
-		*error = ERR_GENERIC(@"unable to resolve variable expression: %@", self);
+        *error = [NSError errorWithDomain:DDMathParserErrorDomain 
+                                     code:DDErrorCodeUnresolvedVariable 
+                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSString stringWithFormat:@"unable to resolve variable: %@", self], NSLocalizedDescriptionKey,
+                                           [self variable], DDUnknownVariableKey,
+                                           nil]];
 	}
 	return nil;
 }

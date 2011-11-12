@@ -18,10 +18,34 @@ typedef DDExpression* (^DDMathFunction)(NSArray *, NSDictionary *, DDMathEvaluat
 extern NSString * const DDMathParserErrorDomain;
 
 extern NSString * const DDUnknownFunctionKey;
+extern NSString * const DDUnknownVariableKey;
+      
+typedef enum {
+    // ERROR CODE                                   // LOCALIZED DESCRIPTION EXAMPLE
+    
+    // a generic error
+    DDErrorCodeInvalidFormat = 1,
+    
+    // parsing & tokenization errors
+    DDErrorCodeInvalidOperator,                     //@"%C is not a valid operator"
+    DDErrorCodeInvalidIdentifier,                   //@"unable to parse identifier
+    DDErrorCodeInvalidVariable,                     //@"variable names must be at least 1 character long"
+    DDErrorCodeInvalidNumber,                       //@"unable to parse number"
+    DDErrorCodeUnknownOperatorPrecedence,           //@"unknown precedence for token: %@
+    
+    // grouping & resolution errors
+    DDErrorCodeImbalancedParentheses,               //@"imbalanced parentheses", @"missing parentheses after function %@"
+    DDErrorCodeInvalidOperatorArity,                //@"unknown arity for operator: %@"
+    DDErrorCodeBinaryOperatorMissingLeftOperand,    //@"no left operand to binary %@"
+    DDErrorCodeBinaryOperatorMissingRightOperand,   //@"no right operand to binary %@"
+    DDErrorCodeUnaryOperatorMissingLeftOperand,     //@"no left operand to unary %@"
+    DDErrorCodeUnaryOperatorMissingRightOperand,    //@"no right operand to unary %@"
+    
+    // evaluation errors
+    DDErrorCodeUnresolvedVariable,                  //@"unable to resolve variable expression: %@"
+    DDErrorCodeUnresolvedFunction,                  //@"unable to resolve function: %@"
+    DDErrorCodeInvalidFunctionReturnType,           //@"invalid return type from %@ function"
+    DDErrorCodeInvalidNumberOfArguments,            //@"random() may only have up to 2 arguments"
+    DDErrorCodeInvalidArgument,                     //@"upper bound (%ld) of random() must be larger than lower bound (%ld)"
 
-enum {
-    DDErrorCodeGeneric = -1,
-    DDErrorCodeInvalidArgument = 1,
-};
-
-typedef NSInteger DDErrorCode;
+} DDErrorCode;

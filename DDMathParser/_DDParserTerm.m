@@ -66,7 +66,7 @@
         
         return DD_AUTORELEASE(term);
     } else {
-        *error = ERR_GENERIC(@"can't create a term with a nil token");
+        *error = ERR(DDErrorCodeInvalidFormat, @"can't create a term with a nil token");
     }
     return nil;
 }
@@ -99,7 +99,7 @@
 
 - (DDExpression *)expressionWithError:(NSError **)error {
     ERR_ASSERT(error);
-    *error = ERR_GENERIC(@"Subclasses must override the -%@ method", NSStringFromSelector(_cmd));
+    [NSException raise:NSInvalidArgumentException format:@"Subclasses must override the -%@ method", NSStringFromSelector(_cmd)];
     return nil;
 }
 

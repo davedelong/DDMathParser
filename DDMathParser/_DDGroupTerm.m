@@ -62,7 +62,7 @@
         
         // consume the closing parenthesis and verify it exists
         if ([tokenizer nextToken] == nil) {
-            *error = ERR_BADARG(@"imbalanced parentheses");
+            *error = ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
             DD_RELEASE(self);
             return nil;
         }
@@ -115,7 +115,7 @@
         } else {
             // more than one term is left
             // but there are no more operators
-            *error = ERR_BADARG(@"invalid format: %@", self);
+            *error = ERR(DDErrorCodeInvalidFormat, @"invalid format: %@", self);
             return NO;
         }
     }
@@ -160,7 +160,7 @@
         return [self _reduceUnaryOperatorAtIndex:index withParser:parser error:error];
     }
     
-    *error = ERR_BADARG(@"unknown arity for operator: %@", operator);
+    *error = ERR(DDErrorCodeInvalidOperatorArity, @"unknown arity for operator: %@", operator);
     return NO;
 }
 
@@ -170,11 +170,11 @@
     _DDOperatorTerm *operator = [[self subterms] objectAtIndex:index];
     
     if (index == 0) {
-        *error = ERR_BADARG(@"no left operand to binary %@", operator);
+        *error = ERR(DDErrorCodeBinaryOperatorMissingLeftOperand, @"no left operand to binary %@", operator);
         return NO;
     }
     if (index == [[self subterms] count] - 1) {
-        *error = ERR_BADARG(@"no right operand to binary %@", operator);
+        *error = ERR(DDErrorCodeBinaryOperatorMissingRightOperand, @"no right operand to binary %@", operator);
         return NO;
     }
     
@@ -188,7 +188,7 @@
         // this should really only happen when operator is the power operator and the exponent has 1+ negations
         rightOperandRange.length++;
         if (NSMaxRange(rightOperandRange)-1 >= [[self subterms] count]) {
-            *error = ERR_BADARG(@"no right operand to unary %@", rightmostOperand);
+            *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", rightmostOperand);
             return NO;
         }
         rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(rightOperandRange)-1];
@@ -223,7 +223,7 @@
     if (associativity == DDOperatorAssociativityRight) {
         // right associative unary operator (negate, not)
         if (index == [[self subterms] count] - 1) {
-            *error = ERR_BADARG(@"no right operand to unary %@", operator);
+            *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", operator);
             return NO;
         }
         
@@ -233,7 +233,7 @@
     } else {
         // left associative unary operator (factorial)
         if (index == 0) {
-            *error = ERR_BADARG(@"no left operand to unary %@", operator);
+            *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", operator);
             return NO;
         }
         
@@ -260,7 +260,7 @@
         _DDParserTerm *term = [[self subterms] objectAtIndex:0];
         return [term expressionWithError:error];
     }
-    *error = ERR_GENERIC(@"Unable to create expression from term: %@", self);
+    *error = ERR(DDErrorCodeInvalidFormat, @"Unable to create expression from term: %@", self);
     return nil;
 }
 
