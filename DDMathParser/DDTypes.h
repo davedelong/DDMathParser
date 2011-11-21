@@ -40,6 +40,7 @@ typedef enum {
     DDErrorCodeBinaryOperatorMissingRightOperand,   //@"no right operand to binary %@"
     DDErrorCodeUnaryOperatorMissingLeftOperand,     //@"no left operand to unary %@"
     DDErrorCodeUnaryOperatorMissingRightOperand,    //@"no right operand to unary %@"
+    DDErrorCodeOperatorMissingOperands,             //@"missing operand(s) for operator: %@"
     
     // evaluation errors
     DDErrorCodeUnresolvedVariable,                  //@"unable to resolve variable expression: %@"
