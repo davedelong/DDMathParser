@@ -33,7 +33,15 @@
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError *__autoreleasing *)error {
 #pragma unused(parser)
     ERR_ASSERT(error);
-    *error = ERR(DDErrorCodeOperatorMissingOperands, @"missing operand(s) for operator: %@", [self token]);
+    if ([self operatorArity] == DDOperatorArityUnary) {
+        if ([[self token] operatorAssociativity] == DDOperatorAssociativityLeft) {
+            *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", [self token]);
+        } else {
+            *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", [self token]);
+        }
+    } else {
+        *error = ERR(DDErrorCodeOperatorMissingOperands, @"missing operands for operator: %@", [self token]);
+    }
     return NO;
 }
 
