@@ -140,6 +140,8 @@
     // addition and subtraction have the same precedence
     [operators addObject:[self infoForOperatorFunction:DDOperatorAdd token:@"+" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     [operators addObject:[self infoForOperatorFunction:DDOperatorMinus token:@"-" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+    // \u2212 is −
+    [operators addObject:[self infoForOperatorFunction:DDOperatorMinus token:@"\u2212" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     // multiplication and division have the same precedence
@@ -159,6 +161,8 @@
     
     // right associative unary operators have the same precedence
     [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryMinus token:@"-" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
+    // \u2212 is −
+    [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryMinus token:@"\u2212" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
     [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryPlus token:@"+" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
     precedence++;
     
