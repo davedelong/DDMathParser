@@ -8,7 +8,7 @@
 
 #import "_DDOperatorInfo.h"
 
-#define PERCENT_AS_MOD 0
+#define PERCENT_AS_MOD 1
 
 @implementation _DDOperatorInfo
 

@@ -543,7 +543,7 @@ if (error != nil) { \
         }
         
         BOOL percentIsRightArgument = ([[percentContext arguments] objectAtIndex:1] == percentExpression);
-        if ([operatorInfo defaultAssociativity] == DDOperatorAssociativityLeft && !percentIsRightArgument) {
+        if (!percentIsRightArgument) {
             if (error) {
                 *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
             }
