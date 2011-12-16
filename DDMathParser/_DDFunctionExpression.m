@@ -14,6 +14,12 @@
 #import "_DDVariableExpression.h"
 #import "DDMathParserMacros.h"
 
+@interface DDExpression ()
+
+- (void)_setParentExpression:(DDExpression *)parent;
+
+@end
+
 @implementation _DDFunctionExpression
 
 - (id) initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError **)error {
@@ -31,6 +37,9 @@
 		
 		function = [f copy];
 		arguments = [a copy];
+        for (DDExpression *argument in arguments) {
+            [argument _setParentExpression:self];
+        }
 	}
 	return self;
 }

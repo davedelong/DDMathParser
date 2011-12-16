@@ -19,6 +19,8 @@
 
 @implementation DDExpression
 
+@synthesize parentExpression=_parentExpression;
+
 + (id) expressionFromString:(NSString *)expressionString error:(NSError **)error {
     DDParser *parser = [DDParser parserWithString:expressionString error:error];
     return [parser parsedExpressionWithError:error];
@@ -103,6 +105,10 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 #pragma unused(aCoder)
     return;
+}
+
+- (void)_setParentExpression:(DDExpression *)parent {
+    _parentExpression = parent;
 }
 
 @end

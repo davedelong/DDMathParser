@@ -43,6 +43,7 @@
 + (DDMathFunction) ceilFunction;
 + (DDMathFunction) absFunction;
 + (DDMathFunction) floorFunction;
++ (DDMathFunction) percentFunction;
 
 + (DDMathFunction) sinFunction;
 + (DDMathFunction) cosFunction;

@@ -31,6 +31,7 @@ NSString *const DDOperatorModulo = @"modulo";
 NSString *const DDOperatorBitwiseNot = @"not";
 NSString *const DDOperatorFactorial = @"factorial";
 NSString *const DDOperatorDegree = @"dtor";
+NSString *const DDOperatorPercent = @"percent";
 NSString *const DDOperatorPower = @"pow";
 NSString *const DDOperatorParenthesisOpen = @"open_paren";
 NSString *const DDOperatorParenthesisClose = @"close_paren";

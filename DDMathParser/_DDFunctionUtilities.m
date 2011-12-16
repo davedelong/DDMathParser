@@ -11,6 +11,7 @@
 #import "DDExpression.h"
 #import "DDMathParserMacros.h"
 #import "DDMathEvaluator.h"
+#import "_DDOperatorInfo.h"
 
 #define REQUIRE_N_ARGS(__n) { \
 if ([arguments count] != (__n)) { \
@@ -508,6 +509,58 @@ if (error != nil) { \
 		return [DDExpression numberExpressionWithNumber:result];
 	};
 	return DD_AUTORELEASE([function copy]);
+}
+
++ (DDMathFunction) percentFunction {
+    DDMathFunction function = ^ DDExpression* (NSArray *arguments, NSDictionary *variables, DDMathEvaluator *evaluator, NSError **error) {
+        REQUIRE_N_ARGS(1);
+        
+        DDExpression *percentArgument = [arguments objectAtIndex:0];
+        DDExpression *percentExpression = [percentArgument parentExpression];
+        DDExpression *percentContext = [percentExpression parentExpression];
+        
+        if (percentContext == nil || [percentExpression expressionType] != DDExpressionTypeFunction) {
+            if (error) {
+                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
+            }
+            return nil;
+        }
+        
+        NSString *parentFunction = [percentContext function];
+        _DDOperatorInfo *operatorInfo = [[_DDOperatorInfo infosForOperatorFunction:parentFunction] lastObject];
+        if (operatorInfo == nil) {
+            if (error) {
+                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
+            }
+            return nil;
+        }
+        
+        if ([operatorInfo arity] != DDOperatorArityBinary) {
+            if (error) {
+                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
+            }
+            return nil;
+        }
+        
+        BOOL percentIsRightArgument = ([[percentContext arguments] objectAtIndex:1] == percentExpression);
+        if ([operatorInfo defaultAssociativity] == DDOperatorAssociativityLeft && !percentIsRightArgument) {
+            if (error) {
+                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
+            }
+            return nil;
+        }
+        
+        DDExpression *baseExpression = [[percentContext arguments] objectAtIndex:0];
+        NSNumber *context = [baseExpression evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        NSNumber *percent = [percentArgument evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        
+        RETURN_IF_NIL(context);
+        RETURN_IF_NIL(percent);
+        
+        NSNumber *result = [NSNumber numberWithDouble:[context doubleValue] * ([percent doubleValue] / 100.0)];
+        return [DDExpression numberExpressionWithNumber:result];
+    };
+    return DD_AUTORELEASE([function copy]);
 }
 
 + (DDMathFunction) sinFunction {

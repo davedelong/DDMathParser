@@ -8,6 +8,8 @@
 
 #import "_DDOperatorInfo.h"
 
+#define PERCENT_AS_MOD 0
+
 @implementation _DDOperatorInfo
 
 @synthesize arity=_arity;
@@ -164,8 +166,10 @@
     [operators addObject:[self infoForOperatorFunction:DDOperatorDivide token:@"\u00f7" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
+#if PERCENT_AS_MOD
     [operators addObject:[self infoForOperatorFunction:DDOperatorModulo token:@"%" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
+#endif
     
     [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseNot token:@"~" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
     precedence++;
@@ -183,6 +187,11 @@
     [operators addObject:[self infoForOperatorFunction:DDOperatorDegree token:@"\u00ba" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     // \u00b0 is °
     [operators addObject:[self infoForOperatorFunction:DDOperatorDegree token:@"\u00b0" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+    
+#if !PERCENT_AS_MOD
+    [operators addObject:[self infoForOperatorFunction:DDOperatorPercent token:@"%" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+#endif
+    
     precedence++;
     
     [operators addObject:[self infoForOperatorFunction:DDOperatorPower token:@"**" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityRight]];
