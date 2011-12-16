@@ -49,6 +49,17 @@
             }
             [value addObject:info];
         }
+        
+        // this is to make sure all of the operators are defined correctly
+        for (NSString *functionName in _operatorLookup) {
+            NSArray *operatorInfos = [_operatorLookup objectForKey:functionName];
+            _DDOperatorInfo *baseInfo = [operatorInfos lastObject];
+            for (_DDOperatorInfo *info in operatorInfos) {
+                NSAssert([info precedence] == [baseInfo precedence], @"mismatched operator precedences");
+                NSAssert([info arity] == [baseInfo arity], @"mismatched operator arity");
+                NSAssert([info defaultAssociativity] == [baseInfo defaultAssociativity], @"mismatched operator associativity");
+            }
+        }
     });
     return [_operatorLookup objectForKey:operator];
 }
