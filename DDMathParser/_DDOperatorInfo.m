@@ -156,7 +156,7 @@
     [operators addObject:[self infoForOperatorFunction:DDOperatorModulo token:@"%" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
-    [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseNot token:@"~" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+    [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseNot token:@"~" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
     precedence++;
     
     // right associative unary operators have the same precedence
