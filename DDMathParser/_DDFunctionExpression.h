@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DDExpression_Internal.h"
+#import "DDExpression.h"
 
 @interface _DDFunctionExpression : DDExpression {
 	NSString * function;

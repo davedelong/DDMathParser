@@ -8,8 +8,6 @@
 
 #import "_DDOperatorInfo.h"
 
-#define PERCENT_AS_MOD 1
-
 @implementation _DDOperatorInfo
 
 @synthesize arity=_arity;
@@ -166,7 +164,7 @@
     [operators addObject:[self infoForOperatorFunction:DDOperatorDivide token:@"\u00f7" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
-#if PERCENT_AS_MOD
+#if DD_INTERPRET_PERCENT_SIGN_AS_MOD
     [operators addObject:[self infoForOperatorFunction:DDOperatorModulo token:@"%" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
 #endif
@@ -188,7 +186,7 @@
     // \u00b0 is °
     [operators addObject:[self infoForOperatorFunction:DDOperatorDegree token:@"\u00b0" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     
-#if !PERCENT_AS_MOD
+#if !DD_INTERPRET_PERCENT_SIGN_AS_MOD
     [operators addObject:[self infoForOperatorFunction:DDOperatorPercent token:@"%" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
 #endif
     
