@@ -68,6 +68,29 @@
 	return d;
 }
 
+- (NSString *)debugDescription {
+    NSMutableString *d = [NSMutableString stringWithString:[self description]];
+    if (tokenType == DDTokenTypeOperator) {
+        [d appendString:@" ("];
+        
+        DDOperatorArity arity = [self operatorArity];
+        NSString *arityNames[3] = { @"UNK", @"UN", @"BIN" };
+        [d appendFormat:@"arity:%@, ", arityNames[arity]];
+        
+        NSInteger precedence = [self operatorPrecedence];
+        [d appendFormat:@"precedence:%d, ", precedence];
+        
+        DDOperatorAssociativity assoc = [self operatorAssociativity];
+        NSString *assocNames[2] = { @"LEFT", @"RIGHT" };
+        [d appendFormat:@"associativity:%@, ", assocNames[assoc]];
+        
+        [d appendFormat:@"function:%@", [self operatorFunction]];
+        
+        [d appendString:@")"];
+    }
+    return d;
+}
+
 - (NSString *)token {
     return token;
 }

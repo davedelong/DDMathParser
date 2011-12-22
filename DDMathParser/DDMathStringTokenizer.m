@@ -159,9 +159,17 @@
         
         if (previousToken == nil) {
             shouldBeUnary = YES;
-        } else if ([previousToken tokenType] == DDTokenTypeOperator && 
-                   [previousToken operatorAssociativity] != DDOperatorAssociativityLeft) {
-            shouldBeUnary = YES;
+        } else if ([previousToken tokenType] == DDTokenTypeOperator) {
+            if ([previousToken operatorArity] == DDOperatorArityBinary) {
+                // a binary operator can't be followed by a binary operator
+                // therefore, this is probably a unary operator
+                shouldBeUnary = YES;
+            } else if ([previousToken operatorArity] == DDOperatorArityUnary &&
+                       [previousToken operatorAssociativity] == DDOperatorAssociativityRight) {
+                // a right-assoc unary operator can be followed by another unary operator
+                // (a left-assoc unary followed by a left-assoc unary is handled below)
+                shouldBeUnary = YES;
+            }
         }
         
         if (shouldBeUnary) {
