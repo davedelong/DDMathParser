@@ -6,29 +6,30 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
+#import "UnitTestMacros.h"
 #import "EvaluationTests.h"
-#import "DDExpression.h"
+#import "DDMathParser.h"
 #import "NSExpression+EasyParsing.h"
 
 @implementation EvaluationTests
 
 - (void) compareToNSExpression:(NSString *)string compareExpressions:(BOOL)compare {
-	DDExpression * d = [DDExpression expressionFromString:string error:nil];
-	NSExpression * e = [NSExpression expressionWithString:string];
-	
-	NSNumber * dn = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
-	NSNumber * en = [e expressionValueWithObject:nil context:nil];
-	
-	NSLog(@"--------------------------------");
-	NSLog(@"testing: %@", string);
-	NSLog(@"expecting: %@ => %@", e, en);
-	NSLog(@"given: %@ => %@", d, dn);
-	STAssertEqualObjects(dn, en, @"invalid evalutation.  Expected %@, given %@", en, dn);
-	
-	if (compare) {
-		NSExpression * generatedExpression = [d expressionValue];
-		STAssertEqualObjects(generatedExpression, e, @"invalid generated expression.  expected %@, given %@", e, generatedExpression);	
-	}
+//	DDExpression * d = [DDExpression expressionFromString:string error:nil];
+//	NSExpression * e = [NSExpression expressionWithString:string];
+//	
+//	NSNumber * dn = [d evaluateWithSubstitutions:nil evaluator:nil error:nil];
+//	NSNumber * en = [e expressionValueWithObject:nil context:nil];
+//	
+//	NSLog(@"--------------------------------");
+//	NSLog(@"testing: %@", string);
+//	NSLog(@"expecting: %@ => %@", e, en);
+//	NSLog(@"given: %@ => %@", d, dn);
+//	STAssertEqualObjects(dn, en, @"invalid evalutation.  Expected %@, given %@", en, dn);
+//	
+//	if (compare) {
+//		NSExpression * generatedExpression = [d expressionValue];
+//		STAssertEqualObjects(generatedExpression, e, @"invalid generated expression.  expected %@, given %@", e, generatedExpression);	
+//	}
 }
 
 - (void) compareToNSExpression:(NSString *)string {
@@ -36,18 +37,9 @@
 }
 
 - (void) testSimple {
-	[self compareToNSExpression:@"1"];
-	[self compareToNSExpression:@"2"];
-	[self compareToNSExpression:@"3"];
-	[self compareToNSExpression:@"4"];
-	[self compareToNSExpression:@"5"];
-	[self compareToNSExpression:@"6"];
-	[self compareToNSExpression:@"7"];
-	[self compareToNSExpression:@"8"];
-	[self compareToNSExpression:@"9"];
-	[self compareToNSExpression:@"10"];
-	
-	[self compareToNSExpression:@"1000"];
+    TEST(@"1", 1);
+    TEST(@"1/2", 0.5);
+    TEST(@"1+-2", -1);
 }
 
 - (void) testAddition {
