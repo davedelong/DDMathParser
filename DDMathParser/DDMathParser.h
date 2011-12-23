@@ -43,5 +43,5 @@
 // change this to 0 if you want the "%" character to mean a percentage
 // please see the wiki for more information about what this switch means:
 // https://github.com/davedelong/DDMathParser/wiki
-#define DD_INTERPRET_PERCENT_SIGN_AS_MOD 0
+#define DD_INTERPRET_PERCENT_SIGN_AS_MOD 1
 
