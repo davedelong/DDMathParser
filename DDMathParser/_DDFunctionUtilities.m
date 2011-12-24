@@ -519,39 +519,21 @@ if (error != nil) { \
         DDExpression *percentExpression = [percentArgument parentExpression];
         DDExpression *percentContext = [percentExpression parentExpression];
         
-        if (percentContext == nil || [percentExpression expressionType] != DDExpressionTypeFunction) {
-            if (error) {
-                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
-            }
-            return nil;
-        }
-        
         NSString *parentFunction = [percentContext function];
         _DDOperatorInfo *operatorInfo = [[_DDOperatorInfo infosForOperatorFunction:parentFunction] lastObject];
-        if (operatorInfo == nil) {
-            if (error) {
-                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
+        
+        NSNumber *context = [NSNumber numberWithInt:1];
+        
+        if ([operatorInfo arity] == DDOperatorArityBinary) {
+            if ([parentFunction isEqualToString:DDOperatorAdd] || [parentFunction isEqualToString:DDOperatorMinus]) {
+                BOOL percentIsRightArgument = ([[percentContext arguments] objectAtIndex:1] == percentExpression);
+                if (percentIsRightArgument) {
+                    DDExpression *baseExpression = [[percentContext arguments] objectAtIndex:0];
+                    context = [baseExpression evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+                }
             }
-            return nil;
         }
         
-        if ([operatorInfo arity] != DDOperatorArityBinary) {
-            if (error) {
-                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
-            }
-            return nil;
-        }
-        
-        BOOL percentIsRightArgument = ([[percentContext arguments] objectAtIndex:1] == percentExpression);
-        if (!percentIsRightArgument) {
-            if (error) {
-                *error = ERR(DDErrorCodeInvalidFormat, @"unable to determine context for percent");
-            }
-            return nil;
-        }
-        
-        DDExpression *baseExpression = [[percentContext arguments] objectAtIndex:0];
-        NSNumber *context = [baseExpression evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         NSNumber *percent = [percentArgument evaluateWithSubstitutions:variables evaluator:evaluator error:error];
         
         RETURN_IF_NIL(context);

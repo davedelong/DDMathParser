@@ -65,4 +65,11 @@
     TEST(@"2!!!!!!!!!", 2);
 }
 
+- (void)testPercent {
+    TEST(@"100+percent(5)", 105);
+    TEST(@"100-percent(5)", 95);
+    TEST(@"100*percent(5)", 5);
+    TEST(@"100/percent(5)", 2000);
+}
+
 @end
