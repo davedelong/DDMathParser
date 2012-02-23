@@ -36,47 +36,53 @@ int main (int argc, const char * argv[]) {
 #if DD_HAS_ARC
     @autoreleasepool {
 #else
-    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+        NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 #endif
-	
-	printf("Math Evaluator!\n");
-	printf("\ttype a mathematical expression to evaluate it.\n");
-	printf("\nStandard operators available: + - * / %% ! & | ~ ^ << >>\n");
-	printf("\nType \"list\" to show available functions\n");
-	printf("Type \"exit\" to quit\n");
-    
-    [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
-	
-	NSString * line = nil;
-	do {
-		printf("> ");
-		line = readLine();
-		if ([line isEqual:@"exit"]) { break; }
-		if ([line isEqual:@"list"]) { listFunctions(); continue; }
-		
-        NSError *error = nil;
-        DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:line error:&error];
-        DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
         
-        DDExpression *expression = [parser parsedExpressionWithError:&error];
-        DDExpression *rewritten = [[DDMathEvaluator sharedMathEvaluator] expressionByRewritingExpression:expression];
+        printf("Math Evaluator!\n");
+        printf("\ttype a mathematical expression to evaluate it.\n");
+        printf("\nStandard operators available: + - * / %% ! & | ~ ^ << >>\n");
+        printf("\nType \"list\" to show available functions\n");
+        printf("Type \"exit\" to quit\n");
         
-        NSNumber *value = [rewritten evaluateWithSubstitutions:nil evaluator:nil error:&error];
-        DD_RELEASE(tokenizer);
+        [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
+        DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
+        [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
+            return DD_AUTORELEASE([^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
+                return [DDExpression numberExpressionWithNumber:[NSNumber numberWithInt:42]];
+            } copy]);
+        }];
         
-        if (value == nil) {
-            printf("\tERROR: %s\n", [[error description] UTF8String]);
-        } else {
-            if (rewritten != expression) {
-                printf("\t%s REWRITTEN AS %s\n", [[expression description] UTF8String], [[rewritten description] UTF8String]);
+        NSString * line = nil;
+        do {
+            printf("> ");
+            line = readLine();
+            if ([line isEqual:@"exit"]) { break; }
+            if ([line isEqual:@"list"]) { listFunctions(); continue; }
+            
+            NSError *error = nil;
+            
+            DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:line error:&error];
+            DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
+            
+            DDExpression *expression = [parser parsedExpressionWithError:&error];
+            DDExpression *rewritten = [evaluator expressionByRewritingExpression:expression];
+            
+            NSNumber *value = [rewritten evaluateWithSubstitutions:nil evaluator:evaluator error:&error];
+            DD_RELEASE(tokenizer);
+            
+            if (value == nil) {
+                printf("\tERROR: %s\n", [[error description] UTF8String]);
+            } else {
+                if (rewritten != expression) {
+                    printf("\t%s REWRITTEN AS %s\n", [[expression description] UTF8String], [[rewritten description] UTF8String]);
+                }
+                printf("\t%s = %s\n", [[rewritten description] UTF8String], [[value description] UTF8String]);
             }
-            printf("\t%s = %s\n", [[rewritten description] UTF8String], [[value description] UTF8String]);
-        }
+            
+            
+        } while (1);
         
-
-	} while (1);
-
-    // insert code here...
 		printf("Goodbye!\n");
         
 #if DD_HAS_ARC

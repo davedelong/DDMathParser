@@ -12,11 +12,16 @@
 @class DDMathEvaluator;
 @class DDExpression;
 
+typedef DDMathFunction (^DDFunctionResolver)(NSString *);
+
 @interface DDMathEvaluator : NSObject {
     NSMutableArray *functions;
 	NSMutableDictionary * functionMap;
     NSMutableArray *rewriteRules;
+    DDFunctionResolver functionResolver;
 }
+
+@property (nonatomic, copy) DDFunctionResolver functionResolver;
 
 + (id) sharedMathEvaluator;
 

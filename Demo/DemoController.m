@@ -29,6 +29,7 @@
 	[orderedVariables release];
 	
 	[variables release];
+    [evaluator release];
 	[super dealloc];
 }
 #endif
@@ -39,20 +40,58 @@
 	variables = [[NSMutableDictionary alloc] init];
 }
 
-- (NSArray *) variablesInExpression:(DDExpression *)e {
+- (DDMathEvaluator *)evaluator {
+    if (evaluator == nil) {
+        NSDictionary *parameters = nil;
+        __block DemoController *blockSelf = self;
+        
+        DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
+        [evaluator setFunctionResolver:^(NSString *name) {
+            NSLog(@"resolving function: %@", name);
+            
+            DDMathFunction resolved = ^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *evaluator, NSError **error) {
+                if ([args count] > 0) {
+                    if (error) {
+                        *error = [NSError errorWithDomain:@"com.davedelong.ddmathparser.demo" code:-1 userInfo:nil];
+                    }
+                    return nil;
+                }
+                NSDictionary *vars = blockSelf->variables;
+                NSNumber *n = [vars objectForKey:name];
+                return [DDExpression numberExpressionWithNumber:n];
+            };
+
+            return DD_AUTORELEASE([resolved copy]);
+        }];
+    }
+    
+    return evaluator;
+}
+
+- (NSArray *) variablesAndFunctionsInExpression:(DDExpression *)e {
 	NSMutableArray * v = [NSMutableArray array];
+    BOOL shouldRecurse = NO;
 	if ([e expressionType] == DDExpressionTypeVariable) {
 		[v addObject:[e variable]];
-	} else if ([e expressionType] == DDExpressionTypeFunction) {
+    } else if ([e expressionType] == DDExpressionTypeFunction) {
+        DDMathEvaluator *eval = [self evaluator];
+        if ([[eval registeredFunctions] containsObject:[e function]]) {
+            shouldRecurse = YES;
+        } else {
+            [v addObject:[e function]];
+        }
+	}
+    
+    if (shouldRecurse) {
 		for (DDExpression * se in [e arguments]) {
-			[v addObjectsFromArray:[self variablesInExpression:se]];
+			[v addObjectsFromArray:[self variablesAndFunctionsInExpression:se]];
 		}
 	}
 	return v;
 }
 
 - (void) updateVariablesWithExpression:(DDExpression *)e {
-	NSArray * v = [self variablesInExpression:e];
+	NSArray * v = [self variablesAndFunctionsInExpression:e];
 	
 	NSMutableSet * keysThatShouldBeRemoved = [NSMutableSet setWithArray:[variables allKeys]];
 	[keysThatShouldBeRemoved minusSet:[NSSet setWithArray:v]];
@@ -69,6 +108,8 @@
 }
 
 - (void) evaluate {
+    DDMathEvaluator *eval = [self evaluator];
+    
 	NSString * string = [inputField stringValue];
 	NSError *error = nil;
 	if ([string length] > 0) {
@@ -76,7 +117,7 @@
 		if (error == nil) {
 			NSLog(@"parsed: %@", expression);
 			[self updateVariablesWithExpression:expression];
-			NSNumber * result = [expression evaluateWithSubstitutions:variables evaluator:nil error:&error];
+			NSNumber * result = [expression evaluateWithSubstitutions:variables evaluator:eval error:&error];
 			if (error == nil) {
 				[answerField setTextColor:[NSColor blackColor]];
 				[answerField setStringValue:[result description]];

@@ -30,6 +30,8 @@
 
 @implementation DDMathEvaluator
 
+@synthesize functionResolver=functionResolver;
+
 static DDMathEvaluator * _sharedEvaluator = nil;
 
 + (id) sharedMathEvaluator {
@@ -59,6 +61,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	[functions release];
     [functionMap release];
     [rewriteRules release];
+    [functionResolver release];
 	[super dealloc];
 #endif
 }
@@ -99,7 +102,11 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 
 - (DDMathFunction) functionWithName:(NSString *)functionName {
     _DDFunctionContainer *container = [self functionContainerWithName:functionName];
-    return [container function];
+    DDMathFunction function = [container function];
+    if (function == nil && functionResolver != nil) {
+        function = functionResolver(functionName);
+    }
+    return function;
 }
 
 - (NSArray *) registeredFunctions {
