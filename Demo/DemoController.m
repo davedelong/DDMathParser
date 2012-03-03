@@ -42,11 +42,10 @@
 
 - (DDMathEvaluator *)evaluator {
     if (evaluator == nil) {
-        NSDictionary *parameters = nil;
         __block DemoController *blockSelf = self;
         
-        DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
-        [evaluator setFunctionResolver:^(NSString *name) {
+        evaluator = [[DDMathEvaluator alloc] init];
+        [evaluator setFunctionResolver:^DDMathFunction(NSString *name) {
             NSLog(@"resolving function: %@", name);
             
             DDMathFunction resolved = ^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *evaluator, NSError **error) {

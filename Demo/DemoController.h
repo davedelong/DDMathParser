@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class DDMathEvaluator;
 
 @interface DemoController : NSObject <NSTableViewDelegate, NSTableViewDataSource> {
 	NSTextField * inputField;
@@ -17,6 +18,7 @@
 	
 	NSArray * orderedVariables;
 	NSMutableDictionary * variables;
+    DDMathEvaluator *evaluator;
 }
 
 @property (nonatomic, retain) NSArray * orderedVariables;
