@@ -51,9 +51,10 @@
         }
         
         // this is to make sure all of the operators are defined correctly
+        _DDOperatorInfo *baseInfo = nil;
         for (NSString *functionName in _operatorLookup) {
             NSArray *operatorInfos = [_operatorLookup objectForKey:functionName];
-            _DDOperatorInfo *baseInfo = [operatorInfos lastObject];
+            baseInfo = [operatorInfos lastObject];
             for (_DDOperatorInfo *info in operatorInfos) {
                 NSAssert([info precedence] == [baseInfo precedence], @"mismatched operator precedences");
                 NSAssert([info arity] == [baseInfo arity], @"mismatched operator arity");
