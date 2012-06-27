@@ -205,6 +205,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     static NSDictionary *standardAliases = nil;
     dispatch_once(&onceToken, ^{
         standardAliases = [[NSDictionary alloc] initWithObjectsAndKeys:
+                           @"mod", @"modulo",
                            @"average", @"avg",
                            @"average", @"mean",
                            @"floor", @"trunc",
