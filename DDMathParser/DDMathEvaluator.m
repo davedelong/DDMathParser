@@ -208,6 +208,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                            @"average", @"avg",
                            @"average", @"mean",
                            @"floor", @"trunc",
+                           @"mod", @"modulo",
                            @"pi", @"\u03C0", // π
                            @"pi", @"tau_2",
                            @"tau", @"\u03C4", // τ
