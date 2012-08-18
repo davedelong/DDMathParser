@@ -169,6 +169,10 @@
                 // a right-assoc unary operator can be followed by another unary operator
                 // (a left-assoc unary followed by a left-assoc unary is handled below)
                 shouldBeUnary = YES;
+            } else if ([previousToken operatorArity] == DDOperatorArityUnknown) {
+                // the previous operator has unknown arity. this _should_ only happen when preceded by a comma,
+                // so we'll assume that this should be a unary operator
+                shouldBeUnary = YES;
             }
         }
         
