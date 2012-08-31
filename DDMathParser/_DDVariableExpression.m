@@ -57,6 +57,11 @@
 	if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
 	
 	id variableValue = [substitutions objectForKey:[self variable]];
+    
+    if (variableValue == nil) {
+        variableValue = [evaluator variableWithName:[self variable]];
+    }
+    
 	if ([variableValue isKindOfClass:[DDExpression class]]) {
 		return [variableValue evaluateWithSubstitutions:substitutions evaluator:evaluator error:error];
 	}

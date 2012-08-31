@@ -50,3 +50,8 @@ typedef enum {
     DDErrorCodeInvalidArgument,                     //@"upper bound (%ld) of random() must be larger than lower bound (%ld)"
 
 } DDErrorCode;
+
+typedef enum {
+    DDAngleMeasurementModeRadians,
+    DDAngleMeasurementModeDegrees
+} DDAngleMeasurementMode;

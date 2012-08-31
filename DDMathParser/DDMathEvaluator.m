@@ -30,7 +30,9 @@
 
 @implementation DDMathEvaluator
 
+@synthesize angleMeasurementMode=angleMeasurementMode;
 @synthesize functionResolver=functionResolver;
+@synthesize variableResolver=variableResolver;
 
 static DDMathEvaluator * _sharedEvaluator = nil;
 
@@ -47,6 +49,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if (self) {
 		functions = [[NSMutableArray alloc] init];
         functionMap = [[NSMutableDictionary alloc] init];
+        angleMeasurementMode = DDAngleMeasurementModeRadians;
         
 		[self _registerStandardFunctions];
 	}
@@ -62,6 +65,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     [functionMap release];
     [rewriteRules release];
     [functionResolver release];
+    [variableResolver release];
 	[super dealloc];
 #endif
 }
@@ -124,6 +128,14 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                                            nil]];
 	}
 	return NO;
+}
+
+- (id) variableWithName:(NSString *)variableName {
+    id value = nil;
+    if (variableResolver != nil) {
+        value = variableResolver(variableName);
+    }
+    return value;
 }
 
 - (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName {

@@ -13,6 +13,7 @@
 @interface DDMathEvaluator ()
 
 - (DDMathFunction) functionWithName:(NSString *)functionName;
+- (id) variableWithName:(NSString *)variableName;
 
 - (BOOL) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error;
 

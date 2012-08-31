@@ -13,15 +13,20 @@
 @class DDExpression;
 
 typedef DDMathFunction (^DDFunctionResolver)(NSString *);
+typedef NSNumber* (^DDVariableResolver)(NSString *);
 
 @interface DDMathEvaluator : NSObject {
     NSMutableArray *functions;
 	NSMutableDictionary * functionMap;
     NSMutableArray *rewriteRules;
     DDFunctionResolver functionResolver;
+    DDVariableResolver variableResolver;
+    DDAngleMeasurementMode angleMeasurementMode;
 }
 
+@property (nonatomic) DDAngleMeasurementMode angleMeasurementMode; // default is Radians
 @property (nonatomic, copy) DDFunctionResolver functionResolver;
+@property (nonatomic, copy) DDVariableResolver variableResolver;
 
 + (id) sharedMathEvaluator;
 
