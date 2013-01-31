@@ -429,7 +429,7 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 			[params addObject:value];
 		}
 		
-		NSInteger random = arc4random();
+		long long random = arc4random();
 		
 		if ([params count] == 1) {
 			NSNumber * lowerBound = [params objectAtIndex:0];
