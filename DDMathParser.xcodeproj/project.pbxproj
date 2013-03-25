@@ -67,6 +67,9 @@
 		55F3918A1632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */; };
 		55F3918B1633349100AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */; };
 		55F3918C1633349500AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */; };
+		55F3918F1634AAB100AB28B1 /* _DDDecimalFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F3918E1634AAB100AB28B1 /* _DDDecimalFunctions.m */; };
+		55F391901634AAB100AB28B1 /* _DDDecimalFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F3918E1634AAB100AB28B1 /* _DDDecimalFunctions.m */; };
+		55F391911634AAB100AB28B1 /* _DDDecimalFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F3918E1634AAB100AB28B1 /* _DDDecimalFunctions.m */; };
 		55F795E31293175B00EF2716 /* DDMathStringToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F795E21293175B00EF2716 /* DDMathStringToken.m */; };
 		55F795F3129323B200EF2716 /* DDMathStringToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F795E21293175B00EF2716 /* DDMathStringToken.m */; };
 		55F7963712934A1400EF2716 /* DDExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F7963612934A1400EF2716 /* DDExpression.m */; };
@@ -146,6 +149,8 @@
 		55E2FCB6129DC90400CD6023 /* DDParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DDParser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		55F391881632FF8800AB28B1 /* _DDPrecisionFunctionEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDPrecisionFunctionEvaluator.h; sourceTree = "<group>"; };
 		55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDPrecisionFunctionEvaluator.m; sourceTree = "<group>"; };
+		55F3918D1634AAB000AB28B1 /* _DDDecimalFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDDecimalFunctions.h; sourceTree = "<group>"; };
+		55F3918E1634AAB100AB28B1 /* _DDDecimalFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDDecimalFunctions.m; sourceTree = "<group>"; };
 		55F795E11293175B00EF2716 /* DDMathStringToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathStringToken.h; sourceTree = "<group>"; };
 		55F795E21293175B00EF2716 /* DDMathStringToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathStringToken.m; sourceTree = "<group>"; };
 		55F795F01293235A00EF2716 /* TokenizerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TokenizerTests.h; sourceTree = "<group>"; };
@@ -359,6 +364,8 @@
 				552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */,
 				55F391881632FF8800AB28B1 /* _DDPrecisionFunctionEvaluator.h */,
 				55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */,
+				55F3918D1634AAB000AB28B1 /* _DDDecimalFunctions.h */,
+				55F3918E1634AAB100AB28B1 /* _DDDecimalFunctions.m */,
 				55F7963512934A1400EF2716 /* DDExpression.h */,
 				55F7963612934A1400EF2716 /* DDExpression.m */,
 				55F9EFE91295AF3D00F4A9FD /* _DDFunctionExpression.h */,
@@ -510,6 +517,7 @@
 				554243591437654800BA293D /* _DDOperatorInfo.m in Sources */,
 				556E126C149D2D4F00859AD8 /* DDParserTypes.m in Sources */,
 				55F3918C1633349500AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */,
+				55F391911634AAB100AB28B1 /* _DDDecimalFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,6 +549,7 @@
 				556E126D149D2D5000859AD8 /* DDParserTypes.m in Sources */,
 				558A285714A2EEE9000FBE0C /* UnitTestMacros.m in Sources */,
 				55F3918B1633349100AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */,
+				55F391901634AAB100AB28B1 /* _DDDecimalFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -570,6 +579,7 @@
 				554243571437654800BA293D /* _DDOperatorInfo.m in Sources */,
 				551C8C4A144E5CFC00520BDA /* DDParserTypes.m in Sources */,
 				55F3918A1632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */,
+				55F3918F1634AAB100AB28B1 /* _DDDecimalFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

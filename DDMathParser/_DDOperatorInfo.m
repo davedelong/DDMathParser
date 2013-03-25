@@ -56,9 +56,9 @@
             NSArray *operatorInfos = [_operatorLookup objectForKey:functionName];
             baseInfo = [operatorInfos lastObject];
             for (_DDOperatorInfo *info in operatorInfos) {
-                NSAssert([info precedence] == [baseInfo precedence], @"mismatched operator precedences");
-                NSAssert([info arity] == [baseInfo arity], @"mismatched operator arity");
-                NSAssert([info defaultAssociativity] == [baseInfo defaultAssociativity], @"mismatched operator associativity");
+                NSAssert([info precedence] == [baseInfo precedence], @"mismatched operator precedences: %@ ≠ %@", [info token], [baseInfo token]);
+                NSAssert([info arity] == [baseInfo arity], @"mismatched operator arity: %@ ≠ %@", [info token], [baseInfo token]);
+                NSAssert([info defaultAssociativity] == [baseInfo defaultAssociativity], @"mismatched operator associativity: %@ ≠ %@", [info token], [baseInfo token]);
             }
         }
     });
@@ -120,11 +120,13 @@
     precedence++;
     
     [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual token:@"<=" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual token:@"=<" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     // \u2264 is ≤
     [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual token:@"\u2264" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;
     
     [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual token:@">=" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual token:@"=>" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     // \u2265 is ≥
     [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual token:@"\u2265" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
     precedence++;

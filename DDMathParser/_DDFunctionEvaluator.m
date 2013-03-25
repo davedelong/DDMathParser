@@ -175,7 +175,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	REQUIRE_N_ARGS(1);
 	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
-    
+#warning fix me
     NSNumber *result = [NSNumber numberWithDouble:tgamma([firstValue doubleValue]+1)];
     return [DDExpression numberExpressionWithNumber:result];
 }

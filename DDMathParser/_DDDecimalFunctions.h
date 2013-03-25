@@ -44,6 +44,12 @@ extern BOOL DDDecimalIsNegative(NSDecimal d);
 extern BOOL DDDecimalIsProbablyEqual(NSDecimal a, NSDecimal b);
 
 extern void DDDecimalNegate(NSDecimal *d);
+extern void DDDecimalInvert(NSDecimal *d);
+
+extern NSDecimal DDDecimalAdd(NSDecimal a, NSDecimal b);
+extern NSDecimal DDDecimalSubtract(NSDecimal a, NSDecimal b);
+extern NSDecimal DDDecimalMultiply(NSDecimal a, NSDecimal b);
+extern NSDecimal DDDecimalDivide(NSDecimal a, NSDecimal b);
 
 extern NSDecimal DDDecimalAverage2(NSDecimal a, NSDecimal b);
 extern NSDecimal DDDecimalMod(NSDecimal a, NSDecimal b);

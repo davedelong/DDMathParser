@@ -191,6 +191,35 @@ void DDDecimalNegate(NSDecimal *d) {
     NSDecimalMultiply(d, d, &nOne, NSRoundBankers);
 }
 
+void DDDecimalInvert(NSDecimal *d) {
+    NSDecimal one = DDDecimalOne();
+    NSDecimalDivide(d, &one, d, NSRoundBankers);
+}
+
+NSDecimal DDDecimalAdd(NSDecimal a, NSDecimal b) {
+    NSDecimal r;
+    NSDecimalAdd(&r, &a, &b, NSRoundBankers);
+    return r;
+}
+
+NSDecimal DDDecimalSubtract(NSDecimal a, NSDecimal b) {
+    NSDecimal r;
+    NSDecimalSubtract(&r, &a, &b, NSRoundBankers);
+    return r;
+}
+
+NSDecimal DDDecimalMultiply(NSDecimal a, NSDecimal b) {
+    NSDecimal r;
+    NSDecimalMultiply(&r, &a, &b, NSRoundBankers);
+    return r;
+}
+
+NSDecimal DDDecimalDivide(NSDecimal a, NSDecimal b) {
+    NSDecimal r;
+    NSDecimalDivide(&r, &a, &b, NSRoundBankers);
+    return r;
+}
+
 NSDecimal DDDecimalAverage2(NSDecimal a, NSDecimal b) {
 	NSDecimal r;
 	NSDecimalAdd(&r, &a, &b, NSRoundBankers);
@@ -500,43 +529,6 @@ NSDecimal DDDecimalCot(NSDecimal d) {
      
      return tangentResult;
 }
-
-/*
-
-NSDecimal DDDecimalAsin(NSDecimal x) {
-    // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
-    NSDecimal one = DDDecimalOne();
-    NSDecimal absX = DDDecimalAbsoluteValue(x);
-    if (NSDecimalCompare(&one, &absX) == NSOrderedAscending) {
-        return DDDecimalNAN();
-    }
-    
-    NSLog(@"Arcsine start");
-    
-    NSDecimal z = x;
-    NSDecimal fraction = DDDecimalOne();
-    for (NSInteger n = 1; n < 200;) {
-        NSDecimal numerator = DDDecimalFromInteger(n);
-        NSDecimalMultiply(&fraction, &fraction, &numerator, NSRoundBankers);
-        NSDecimal denominator = DDDecimalFromInteger(++n);
-        NSDecimalDivide(&fraction, &fraction, &denominator, NSRoundBankers);
-        
-        denominator = DDDecimalFromInteger(++n);
-        NSDecimalPower(&numerator, &x, n, NSRoundBankers);
-        NSDecimal zTerm;
-        NSDecimalDivide(&zTerm, &numerator, &denominator, NSRoundBankers);
-        
-        NSLog(@"%d, zTerm: %@, fraction: %@, power: %@", n, NSDecimalString(&zTerm, [NSLocale currentLocale]), NSDecimalString(&fraction, [NSLocale currentLocale]), NSDecimalString(&numerator, [NSLocale currentLocale]));
-        NSDecimalMultiply(&zTerm, &fraction, &zTerm, NSRoundBankers);
-        
-        NSDecimalAdd(&z, &z, &zTerm, NSRoundBankers);
-    }
-
-    NSLog(@"Arcsine end");
-
-    return z;
-}
-*/
 
 NSDecimal DDDecimalAcos(NSDecimal d) {
     // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
