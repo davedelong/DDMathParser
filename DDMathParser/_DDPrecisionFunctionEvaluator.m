@@ -87,7 +87,7 @@
 	RETURN_IF_NIL(firstValue);
     
 #warning fix me
-    NSNumber *result = [NSNumber numberWithDouble:tgamma([firstValue doubleValue]+1)];
+    NSNumber *result = @(tgamma([firstValue doubleValue]+1));
     return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -241,7 +241,7 @@
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
 #warning fix me
-    NSNumber *result = [NSNumber numberWithDouble:log10([n doubleValue])];
+    NSNumber *result = @(log10([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -250,7 +250,7 @@
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
 #warning fix me
-	return [DDExpression numberExpressionWithNumber:[NSNumber numberWithDouble:log([n doubleValue])]];
+	return [DDExpression numberExpressionWithNumber:@(log([n doubleValue]))];
 }
 
 - (DDExpression *)log2:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
@@ -258,7 +258,7 @@
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
 #warning fix me
-    NSNumber *result = [NSNumber numberWithDouble:log2([n doubleValue])];
+    NSNumber *result = @(log2([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -267,7 +267,7 @@
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
 #warning fix me
-    NSNumber *result = [NSNumber numberWithDouble:exp([n doubleValue])];
+    NSNumber *result = @(exp([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -317,7 +317,7 @@
     NSString *parentFunction = [percentContext function];
     _DDOperatorInfo *operatorInfo = [[_DDOperatorInfo infosForOperatorFunction:parentFunction] lastObject];
     
-    NSNumber *context = [NSNumber numberWithInt:1];
+    NSNumber *context = @1;
     
     if ([operatorInfo arity] == DDOperatorArityBinary) {
         if ([parentFunction isEqualToString:DDOperatorAdd] || [parentFunction isEqualToString:DDOperatorMinus]) {
@@ -337,7 +337,7 @@
     RETURN_IF_NIL(context);
     RETURN_IF_NIL(percent);
     
-    NSNumber *result = [NSNumber numberWithDouble:[context doubleValue] * ([percent doubleValue] / 100.0)];
+    NSNumber *result = @([context doubleValue] * ([percent doubleValue] / 100.0));
     return [DDExpression numberExpressionWithNumber:result];
 }
 

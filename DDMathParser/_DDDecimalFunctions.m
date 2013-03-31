@@ -156,7 +156,7 @@ NSDecimal DDDecimalFromInteger(NSInteger i) {
 }
 
 NSDecimal DDDecimalFromDouble(double d) {
-	return [[NSNumber numberWithDouble:d] decimalValue];
+	return [@(d) decimalValue];
 }
 
 #pragma mark Extraction

@@ -53,7 +53,7 @@
         numberValue = [[NSDecimalNumber alloc] initWithString:[self token]];
         if (numberValue == nil) {
             NSLog(@"supposedly invalid number: %@", [self token]);
-            numberValue = [[NSNumber alloc] initWithInt:0];
+            numberValue = DD_RETAIN(@0);
         }
     }
 	return numberValue;

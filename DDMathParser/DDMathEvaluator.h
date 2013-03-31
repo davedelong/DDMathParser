@@ -17,7 +17,9 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 
 @interface DDMathEvaluator : NSObject
 
-@property (nonatomic) BOOL usesHighPrecisionEvaluation;
+@property (nonatomic) BOOL usesHighPrecisionEvaluation; // default is NO
+@property (nonatomic) BOOL resolvesFunctionsAsVariables; // default is NO
+
 @property (nonatomic) DDAngleMeasurementMode angleMeasurementMode; // default is Radians
 @property (nonatomic, copy) DDFunctionResolver functionResolver;
 @property (nonatomic, copy) DDVariableResolver variableResolver;

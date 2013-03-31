@@ -273,6 +273,34 @@
 			path = Demo;
 			sourceTree = "<group>";
 		};
+		5564B916170897D700E57E02 /* Function Evaluators */ = {
+			isa = PBXGroup;
+			children = (
+				552532B512C1C92D00A942A7 /* _DDFunctionEvaluator.h */,
+				552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */,
+				55F391881632FF8800AB28B1 /* _DDPrecisionFunctionEvaluator.h */,
+				55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */,
+				55F3918D1634AAB000AB28B1 /* _DDDecimalFunctions.h */,
+				55F3918E1634AAB100AB28B1 /* _DDDecimalFunctions.m */,
+			);
+			name = "Function Evaluators";
+			sourceTree = "<group>";
+		};
+		5564B917170897E500E57E02 /* Expressions */ = {
+			isa = PBXGroup;
+			children = (
+				55F7963512934A1400EF2716 /* DDExpression.h */,
+				55F7963612934A1400EF2716 /* DDExpression.m */,
+				55F9EFE91295AF3D00F4A9FD /* _DDFunctionExpression.h */,
+				55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */,
+				55F9EFEC1295AF7500F4A9FD /* _DDNumberExpression.h */,
+				55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */,
+				55F9EFEF1295AFB500F4A9FD /* _DDVariableExpression.h */,
+				55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */,
+			);
+			name = Expressions;
+			sourceTree = "<group>";
+		};
 		5565122513CA7AE4004B7C67 /* Command line demo */ = {
 			isa = PBXGroup;
 			children = (
@@ -360,20 +388,8 @@
 				5554D58912944AFD00A62529 /* DDMathEvaluator.h */,
 				5554D58A12944AFD00A62529 /* DDMathEvaluator.m */,
 				5554D5EF129478E800A62529 /* DDMathEvaluator+Private.h */,
-				552532B512C1C92D00A942A7 /* _DDFunctionEvaluator.h */,
-				552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */,
-				55F391881632FF8800AB28B1 /* _DDPrecisionFunctionEvaluator.h */,
-				55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */,
-				55F3918D1634AAB000AB28B1 /* _DDDecimalFunctions.h */,
-				55F3918E1634AAB100AB28B1 /* _DDDecimalFunctions.m */,
-				55F7963512934A1400EF2716 /* DDExpression.h */,
-				55F7963612934A1400EF2716 /* DDExpression.m */,
-				55F9EFE91295AF3D00F4A9FD /* _DDFunctionExpression.h */,
-				55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */,
-				55F9EFEC1295AF7500F4A9FD /* _DDNumberExpression.h */,
-				55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */,
-				55F9EFEF1295AFB500F4A9FD /* _DDVariableExpression.h */,
-				55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */,
+				5564B916170897D700E57E02 /* Function Evaluators */,
+				5564B917170897E500E57E02 /* Expressions */,
 			);
 			name = Evaluator;
 			path = DDMathParser;

@@ -197,16 +197,16 @@
     if (rightOperandRange.length > 1) {
         NSArray *rightOperands = [[self subterms] subarrayWithRange:rightOperandRange];
         _DDGroupTerm *group = [[_DDGroupTerm alloc] _initWithSubterms:rightOperands error:error];
-        [[self subterms] replaceObjectsInRange:rightOperandRange withObjectsFromArray:[NSArray arrayWithObject:group]];
+        [[self subterms] replaceObjectsInRange:rightOperandRange withObjectsFromArray:@[group]];
         DD_RELEASE(group);
         
         rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(replacementRange)-1];
     }
     
-    NSArray *parameters = [NSArray arrayWithObjects:leftOperand, rightmostOperand, nil];
+    NSArray *parameters = @[leftOperand, rightmostOperand];
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
     
-    [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
+    [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:@[function]];
     DD_RELEASE(function);
     
     return YES;
@@ -242,10 +242,10 @@
         
     }
     
-    NSArray *parameters = [NSArray arrayWithObject:parameter];
+    NSArray *parameters = @[parameter];
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
     
-    [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:[NSArray arrayWithObject:function]];
+    [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:@[function]];
     
     DD_RELEASE(function);
     

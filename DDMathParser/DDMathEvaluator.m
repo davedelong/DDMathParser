@@ -122,26 +122,33 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     NSString *functionName = [functionExpression function];
     
     DDExpression *e = nil;
-    DDMathFunction function = [_functionMap objectForKey:functionName];
     
-    if (function == nil && _functionResolver != nil) {
+    if ([self resolvesFunctionsAsVariables]) {
+        // see if we have a variable value with the same name as the function
+        id variableValue = [variables objectForKey:functionName];
+        NSNumber *n = [self _evaluateValue:variableValue withSubstitutions:variables error:error];
+        if (n != nil) {
+            e = [DDExpression numberExpressionWithNumber:n];
+        }
+    }
+    
+    DDMathFunction function = [_functionMap objectForKey:functionName];
+    if (e == nil && function == nil && _functionResolver != nil) {
         function = _functionResolver(functionName);
         if (function) {
             [self registerFunction:function forName:functionName];
         }
     }
     
-    if (function != nil) {
-        e = function([functionExpression arguments], [NSDictionary dictionary], self, error);
+    if (e == nil && function != nil) {
+        e = function([functionExpression arguments], @{}, self, error);
     }
     
 	if (e == nil && error != nil) {
         *error = [NSError errorWithDomain:DDMathParserErrorDomain 
                                      code:DDErrorCodeUnresolvedFunction 
-                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSString stringWithFormat:@"unable to resolve function: %@", functionName], NSLocalizedDescriptionKey,
-                                           functionName, DDUnknownFunctionKey,
-                                           nil]];
+                                 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"unable to resolve function: %@", functionName],
+                                           DDUnknownFunctionKey: functionName}];
 	}
 	return e;
 }
@@ -226,27 +233,19 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	id variableValue = [substitutions objectForKey:[e variable]];
     
     if (variableValue == nil) {
+        // the substitutions dictionary was insufficient
+        // use the variable resolver (if available)
         variableValue = [self variableWithName:[e variable]];
     }
     
-	if ([variableValue isKindOfClass:[DDExpression class]]) {
-        return [self evaluateExpression:variableValue withSubstitutions:substitutions error:error];
-	}
-    if ([variableValue isKindOfClass:[NSString class]]) {
-        return [self evaluateString:variableValue withSubstitutions:substitutions error:error];
-    }
-	if ([variableValue isKindOfClass:[NSNumber class]]) {
-		return variableValue;
-	}
-	if (error != nil) {
+    NSNumber *numberValue = [self _evaluateValue:variableValue withSubstitutions:substitutions error:error];
+    if (numberValue == nil && error != nil && *error == nil) {
         *error = [NSError errorWithDomain:DDMathParserErrorDomain
                                      code:DDErrorCodeUnresolvedVariable
-                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
-                                           [NSString stringWithFormat:@"unable to resolve variable: %@", e], NSLocalizedDescriptionKey,
-                                           [e variable], DDUnknownVariableKey,
-                                           nil]];
+                                 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"unable to resolve variable: %@", e],
+                                           DDUnknownVariableKey: [e variable]}];
 	}
-	return nil;
+	return numberValue;
     
 }
 
@@ -256,20 +255,23 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     
     if (!result) { return nil; }
 		
-    NSNumber *numberValue = nil;
-    if ([result isKindOfClass:[DDExpression class]]) {
-        numberValue = [self evaluateExpression:result withSubstitutions:substitutions error:error];
-    } else if ([result isKindOfClass:[NSNumber class]]) {
-        numberValue = result;
-    } else if ([result isKindOfClass:[NSString class]]) {
-        numberValue = [self evaluateString:result withSubstitutions:substitutions error:error];
-    } else {
-        if (error != nil) {
-            *error = ERR(DDErrorCodeInvalidFunctionReturnType, @"invalid return type from %@ function", [e function]);
-        }
-        return nil;
+    NSNumber *numberValue = [self _evaluateValue:result withSubstitutions:substitutions error:error];
+    if (numberValue == nil && error != nil && *error == nil) {
+        *error = ERR(DDErrorCodeInvalidFunctionReturnType, @"invalid return type from %@ function", [e function]);
     }
     return numberValue;
+}
+
+- (NSNumber *)_evaluateValue:(id)value withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
+    // given an object of unknown type, this evaluates it as best as it can
+    if ([value isKindOfClass:[DDExpression class]]) {
+        return [self evaluateExpression:value withSubstitutions:substitutions error:error];
+    } else if ([value isKindOfClass:[NSString class]]) {
+        return [self evaluateString:value withSubstitutions:substitutions error:error];
+    } else if ([value isKindOfClass:[NSNumber class]]) {
+        return value;
+    }
+    return nil;
 }
 
 #pragma mark - Built-In Functions
@@ -278,23 +280,20 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     static dispatch_once_t onceToken;
     static NSDictionary *standardAliases = nil;
     dispatch_once(&onceToken, ^{
-        standardAliases = [[NSDictionary alloc] initWithObjectsAndKeys:
-                           @"average", @"avg",
-                           @"average", @"mean",
-                           @"floor", @"trunc",
-                           @"mod", @"modulo",
-                           @"pi", @"\u03C0", // π
-                           @"pi", @"tau_2",
-                           @"tau", @"\u03C4", // τ
-                           @"phi", @"\u03D5", // ϕ
+        standardAliases = @{@"avg": @"average",
+                           @"mean": @"average",
+                           @"trunc": @"floor",
+                           @"modulo": @"mod",
+                           @"\u03C0": @"pi", // π
+                           @"tau_2": @"pi",
+                           @"\u03C4": @"tau", // τ
+                           @"\u03D5": @"phi", // ϕ
                            
-                           @"versin", @"vers",
-                           @"versin", @"ver",
-                           @"vercosin", @"vercos",
-                           @"coversin", @"cvs",
-                           @"crd", @"chord",
-                           
-                           nil];
+                           @"vers": @"versin",
+                           @"ver": @"versin",
+                           @"vercos": @"vercosin",
+                           @"cvs": @"coversin",
+                           @"chord": @"crd"};
     });
     return standardAliases;
 }
@@ -303,35 +302,32 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     static dispatch_once_t onceToken;
     static NSDictionary *rules = nil;
     dispatch_once(&onceToken, ^{
-        rules = [[NSDictionary alloc] initWithObjectsAndKeys:
-                 //addition
-                 @"__exp1", @"0+__exp1",
-                 @"__exp1", @"__exp1+0",
-                 @"2*__exp1", @"__exp1 + __exp1",
+        rules = @{@"0+__exp1": @"__exp1",
+                 @"__exp1+0": @"__exp1",
+                 @"__exp1 + __exp1": @"2*__exp1",
                  
                  //subtraction
-                 @"0", @"__exp1 - __exp1",
+                 @"__exp1 - __exp1": @"0",
                  
                  //multiplication
-                 @"__exp1", @"1 * __exp1",
-                 @"__exp1", @"__exp1 * 1",
-                 @"pow(__exp1, 2)", @"__exp1 * __exp1",
-                 @"multiply(__var1, __num1)", @"multiply(__num1, __var1)",
-                 @"0", @"0 * __exp1",
-                 @"0", @"__exp1 * 0",
+                 @"1 * __exp1": @"__exp1",
+                 @"__exp1 * 1": @"__exp1",
+                 @"__exp1 * __exp1": @"pow(__exp1, 2)",
+                 @"multiply(__num1, __var1)": @"multiply(__var1, __num1)",
+                 @"0 * __exp1": @"0",
+                 @"__exp1 * 0": @"0",
                  
                  //other stuff
-                 @"__exp1", @"--__exp1",
-                 @"abs(__exp1)", @"abs(-__exp1)",
-                 @"exp(__exp1 + __exp2)", @"exp(__exp1) * exp(__exp2)",
-                 @"pow(__exp1 * __exp2, __exp3)", @"pow(__exp1, __exp3) * pow(__exp2, __exp3)",
-                 @"1", @"pow(__exp1, 0)",
-                 @"__exp1", @"pow(__exp1, 1)",
-                 @"abs(__exp1)", @"sqrt(pow(__exp1, 2))",
+                 @"--__exp1": @"__exp1",
+                 @"abs(-__exp1)": @"abs(__exp1)",
+                 @"exp(__exp1) * exp(__exp2)": @"exp(__exp1 + __exp2)",
+                 @"pow(__exp1, __exp3) * pow(__exp2, __exp3)": @"pow(__exp1 * __exp2, __exp3)",
+                 @"pow(__exp1, 0)": @"1",
+                 @"pow(__exp1, 1)": @"__exp1",
+                 @"sqrt(pow(__exp1, 2))": @"abs(__exp1)",
                  
                  //
-                 @"__exp1", @"dtor(rtod(__exp1))",
-                 nil];
+                 @"dtor(rtod(__exp1))": @"__exp1"};
     });
     return rules;
 }
