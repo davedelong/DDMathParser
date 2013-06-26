@@ -175,7 +175,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	REQUIRE_N_ARGS(1);
 	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
-#warning fix me
+#warning FIXME: Issue #31
     NSNumber *result = @(tgamma([firstValue doubleValue]+1));
     return [DDExpression numberExpressionWithNumber:result];
 }
@@ -492,7 +492,6 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
             if (percentIsRightArgument) {
                 DDExpression *baseExpression = [[percentContext arguments] objectAtIndex:0];
                 context = [[self evaluator] evaluateExpression:baseExpression withSubstitutions:variables error:error];
-                
             }
         }
     }

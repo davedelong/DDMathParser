@@ -86,7 +86,7 @@
 	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
     
-#warning fix me
+#warning FIXME: use high precision math
     NSNumber *result = @(tgamma([firstValue doubleValue]+1));
     return [DDExpression numberExpressionWithNumber:result];
 }
@@ -240,7 +240,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning fix me
+#warning FIXME: use high precision math
     NSNumber *result = @(log10([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
@@ -249,7 +249,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning fix me
+#warning FIXME: use high precision math
 	return [DDExpression numberExpressionWithNumber:@(log([n doubleValue]))];
 }
 
@@ -257,7 +257,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning fix me
+#warning FIXME: use high precision math
     NSNumber *result = @(log2([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
@@ -266,7 +266,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning fix me
+#warning FIXME: use high precision math
     NSNumber *result = @(exp([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
@@ -309,7 +309,6 @@
 
 - (DDExpression *)percent:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
     REQUIRE_N_ARGS(1);
-#warning fix me
     DDExpression *percentArgument = [arguments objectAtIndex:0];
     DDExpression *percentExpression = [percentArgument parentExpression];
     DDExpression *percentContext = [percentExpression parentExpression];
@@ -337,6 +336,7 @@
     RETURN_IF_NIL(context);
     RETURN_IF_NIL(percent);
     
+#warning FIXME: use high precision math
     NSNumber *result = @([context doubleValue] * ([percent doubleValue] / 100.0));
     return [DDExpression numberExpressionWithNumber:result];
 }
