@@ -12,7 +12,7 @@ NSString* readLine() {
     
     do {
         char c = getchar();
-        if (c > 0xffff) { continue; }
+//        if (c > 0xffff) { continue; }
         if ([[NSCharacterSet newlineCharacterSet] characterIsMember:(unichar)c]) { break; }
 //        if (![valid characterIsMember:(unichar)c]) { continue; }
         
@@ -47,11 +47,11 @@ int main (int argc, const char * argv[]) {
         
         [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
-        [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
-            return DD_AUTORELEASE([^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
-                return [DDExpression numberExpressionWithNumber:[NSNumber numberWithInt:42]];
-            } copy]);
-        }];
+//        [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
+//            return DD_AUTORELEASE([^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
+//                return [DDExpression numberExpressionWithNumber:[NSNumber numberWithInt:42]];
+//            } copy]);
+//        }];
         
         NSString * line = nil;
         do {

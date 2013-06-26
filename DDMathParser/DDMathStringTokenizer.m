@@ -341,6 +341,10 @@
         token = [self _parseVariableWithError:error];
     }
     
+    if (token == nil && (next == '"' || next == '\'')) {
+        token = [self _parseStringVariableWithError:error];
+    }
+    
     if (token == nil) {
         token = [self _parseOperatorWithError:error];
     }
@@ -445,6 +449,48 @@
         *error = nil;
     }
     return token;
+}
+
+- (DDMathStringToken *)_parseStringVariableWithError:(NSError **)error {
+    ERR_ASSERT(error);
+    NSUInteger start = _characterIndex;
+    unichar quoteChar = [self _peekNextCharacter];
+    
+    _characterIndex++; // consume the quote
+    
+    BOOL isBackslashEscaped = NO;
+    NSMutableString *cleaned = [NSMutableString stringWithCapacity:42];
+    
+    while (1) {
+        unichar next = [self _peekNextCharacter];
+        if (next == '\0') { break; }
+        
+        if (isBackslashEscaped == NO) {
+            if (next == '\\') {
+                isBackslashEscaped = YES;
+                _characterIndex++; // consume the backslash
+            } else if (next != quoteChar) {
+                [cleaned appendFormat:@"%C", [self _nextCharacter]];
+            } else {
+                // it's a double quote
+                break;
+            }
+        } else {
+            [cleaned appendFormat:@"%C", next];
+            isBackslashEscaped = NO;
+            _characterIndex++;
+        }
+    }
+    
+    if ([self _peekNextCharacter] != quoteChar) {
+        _characterIndex = start;
+        *error = ERR(DDErrorCodeInvalidVariable, @"Unable to parsed quoted variable name");
+        return nil;
+    } else {
+        _characterIndex++;
+        *error = nil;
+        return [DDMathStringToken mathStringTokenWithToken:cleaned type:DDTokenTypeVariable];
+    }
 }
 
 - (DDMathStringToken *)_parseOperatorWithError:(NSError **)error {
