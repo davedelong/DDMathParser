@@ -793,16 +793,21 @@ NSDecimal DDDecimalAtanh(NSDecimal x) {
     return z;
 }
 
-//NSDecimal DDDecimalAcsch(NSDecimal d) {
-//    //TODO: arccsch
-//    
-//}
-//
-//NSDecimal DDDecimalAsech(NSDecimal d) {
-//    //TODO: arcsech
-//}
-//
-//NSDecimal DDDecimalAcoth(NSDecimal d) {
-//    //TODO: arccotanh
-//}
+NSDecimal DDDecimalAcsch(NSDecimal d) {
+    // from: http://en.wikipedia.org/wiki/Inverse_hyperbolic_function#Series_expansions
+    d = DDDecimalInverse(d);
+    return DDDecimalAsinh(d);
+}
+
+NSDecimal DDDecimalAsech(NSDecimal d) {
+    // from: http://en.wikipedia.org/wiki/Inverse_hyperbolic_function#Series_expansions
+    d = DDDecimalInverse(d);
+    return DDDecimalAcosh(d);
+}
+
+NSDecimal DDDecimalAcoth(NSDecimal d) {
+    // from: http://en.wikipedia.org/wiki/Inverse_hyperbolic_function#Series_expansions
+    d = DDDecimalInverse(d);
+    return DDDecimalAtanh(d);
+}
 

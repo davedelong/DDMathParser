@@ -93,6 +93,6 @@ extern NSDecimal DDDecimalAsinh(NSDecimal d);
 extern NSDecimal DDDecimalAcosh(NSDecimal d);
 extern NSDecimal DDDecimalAtanh(NSDecimal d);
 
-//extern NSDecimal DDDecimalAcsch(NSDecimal d);
-//extern NSDecimal DDDecimalAsech(NSDecimal d);
-//extern NSDecimal DDDecimalAcoth(NSDecimal d);
+extern NSDecimal DDDecimalAcsch(NSDecimal d);
+extern NSDecimal DDDecimalAsech(NSDecimal d);
+extern NSDecimal DDDecimalAcoth(NSDecimal d);
