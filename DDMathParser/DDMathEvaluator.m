@@ -141,7 +141,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     }
     
     if (e == nil && function != nil) {
-        e = function([functionExpression arguments], @{}, self, error);
+        e = function([functionExpression arguments], variables, self, error);
     }
     
 	if (e == nil && error != nil) {
