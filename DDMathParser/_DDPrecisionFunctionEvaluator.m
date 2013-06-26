@@ -580,7 +580,8 @@
     NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
-    NSNumber *result = [NSNumber numberWithDouble:1/sinh([n doubleValue])];
+    NSDecimal decimal = DDDecimalAcsch([n decimalValue]);
+    NSDecimalNumber *result = [NSDecimalNumber decimalNumberWithDecimal:decimal];
 	return _DDRTOD([DDExpression numberExpressionWithNumber:result], [self evaluator], error);
 }
 
@@ -589,7 +590,8 @@
     NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
-    NSNumber *result = [NSNumber numberWithDouble:1/cosh([n doubleValue])];
+    NSDecimal decimal = DDDecimalAsech([n decimalValue]);
+    NSDecimalNumber *result = [NSDecimalNumber decimalNumberWithDecimal:decimal];
 	return _DDRTOD([DDExpression numberExpressionWithNumber:result], [self evaluator], error);
 }
 
@@ -598,7 +600,8 @@
     NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
-    NSNumber *result = [NSNumber numberWithDouble:1/atanh([n doubleValue])];
+    NSDecimal decimal = DDDecimalAcoth([n decimalValue]);
+    NSDecimalNumber *result = [NSDecimalNumber decimalNumberWithDecimal:decimal];
 	return _DDRTOD([DDExpression numberExpressionWithNumber:result], [self evaluator], error);
 }
 // more trig functions
