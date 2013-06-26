@@ -33,7 +33,7 @@
 
 + (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
     NSMutableArray *terms = [NSMutableArray array];
-    while ([tokenizer peekNextToken] != nil) {
+    while ([tokenizer peekNextObject] != nil) {
         _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
         if (!nextTerm) {
             return nil;
@@ -47,7 +47,7 @@
 
 + (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
     ERR_ASSERT(error);
-    DDMathStringToken *next = [tokenizer peekNextToken];
+    DDMathStringToken *next = [tokenizer peekNextObject];
     if (next) {
         _DDParserTerm *term = nil;
         if ([next tokenType] == DDTokenTypeNumber) {
@@ -82,7 +82,7 @@
 }
 
 - (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
-    return [self _initWithToken:[tokenizer nextToken] error:error];
+    return [self _initWithToken:[tokenizer nextObject] error:error];
 }
 
 #if !DD_HAS_ARC

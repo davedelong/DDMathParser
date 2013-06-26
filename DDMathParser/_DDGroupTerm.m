@@ -47,7 +47,7 @@
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {
         NSMutableArray *terms = [NSMutableArray array];
-        DDMathStringToken *nextToken = [tokenizer peekNextToken];
+        DDMathStringToken *nextToken = [tokenizer peekNextObject];
         while (nextToken && [nextToken operatorType] != DDOperatorParenthesisClose) {
             _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
             if (nextTerm) {
@@ -57,11 +57,11 @@
                 DD_RELEASE(self);
                 return nil;
             }
-            nextToken = [tokenizer peekNextToken];
+            nextToken = [tokenizer peekNextObject];
         }
         
         // consume the closing parenthesis and verify it exists
-        if ([tokenizer nextToken] == nil) {
+        if ([tokenizer nextObject] == nil) {
             *error = ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
             DD_RELEASE(self);
             return nil;

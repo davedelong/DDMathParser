@@ -275,18 +275,20 @@
 
 #pragma mark Character methods
 
-- (NSArray *)tokens {
-    return DD_AUTORELEASE([_tokens copy]);
+- (NSArray *)allObjects {
+    NSRange r = NSMakeRange(_tokenIndex, [_tokens count] - _tokenIndex);
+    if (_tokenIndex >= [_tokens count]) { r.length = 0; }
+    return [_tokens subarrayWithRange:r];
 }
-- (DDMathStringToken *)nextToken {
-    DDMathStringToken *t = [self peekNextToken];
+- (DDMathStringToken *)nextObject {
+    DDMathStringToken *t = [self peekNextObject];
     if (t != nil) {
         _tokenIndex++;
     }
     return t;
 }
 
-- (DDMathStringToken *)peekNextToken {
+- (DDMathStringToken *)peekNextObject {
     if (_tokenIndex >= [_tokens count]) { return nil; }
     return [_tokens objectAtIndex:_tokenIndex];
 }
