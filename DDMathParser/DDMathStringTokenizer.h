@@ -10,7 +10,7 @@
 
 @class DDMathStringToken;
 
-@interface DDMathStringTokenizer : NSObject {
+@interface DDMathStringTokenizer : NSEnumerator {
     unichar *_characters;
     NSUInteger _length;
     NSUInteger _characterIndex;
