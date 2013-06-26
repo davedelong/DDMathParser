@@ -342,7 +342,11 @@
         token = [self _parseVariableWithError:error];
     }
     
+<<<<<<< HEAD
     if (token == nil && (next == '"' || next == '\'')) {
+=======
+    if (token == nil && next == '"') {
+>>>>>>> Exploring parsing strings as variables.
         token = [self _parseStringVariableWithError:error];
     }
     
