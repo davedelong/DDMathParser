@@ -23,11 +23,7 @@ typedef enum {
     DDParserTermTypeGroup
 } DDParserTermType;
 
-@interface _DDParserTerm : NSObject {
-    BOOL resolved;
-    DDParserTermType type;
-    DDMathStringToken *token;
-}
+@interface _DDParserTerm : NSObject
 
 @property (nonatomic,getter=isResolved) BOOL resolved;
 @property (nonatomic,readonly) DDParserTermType type;

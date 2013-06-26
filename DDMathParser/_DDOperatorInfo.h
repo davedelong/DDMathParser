@@ -9,13 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
 
-@interface _DDOperatorInfo : NSObject {
-    DDOperatorArity _arity;
-    DDOperatorAssociativity _defaultAssociativity;
-    NSInteger _precedence;
-    NSString *_token;
-    NSString *_function;
-}
+@interface _DDOperatorInfo : NSObject
 
 @property (nonatomic, readonly, DD_STRONG) NSString *function;
 @property (nonatomic, readonly, DD_STRONG) NSString *token;

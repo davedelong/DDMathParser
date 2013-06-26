@@ -12,7 +12,6 @@ NSString* readLine() {
     
     do {
         char c = getchar();
-//        if (c > 0xffff) { continue; }
         if ([[NSCharacterSet newlineCharacterSet] characterIsMember:(unichar)c]) { break; }
 //        if (![valid characterIsMember:(unichar)c]) { continue; }
         

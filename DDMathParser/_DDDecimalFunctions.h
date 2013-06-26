@@ -4,8 +4,6 @@
 //
 //  Created by Dave DeLong on 12/24/10.
 //  Copyright 2010 Home. All rights reserved.
-//
-//  From https://github.com/davedelong/DDMathParser/commit/6121b9d8c3651bcafeb8d89063471b1ba2aa9d3c
 
 #import <Foundation/Foundation.h>
 

@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DDExpression.h"
 
-@interface _DDFunctionExpression : DDExpression {
-	NSString * function;
-	NSArray * arguments;
-}
+@interface _DDFunctionExpression : DDExpression
 
 - (id)initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError **)error;
 

@@ -27,10 +27,6 @@
 
 @implementation _DDParserTerm
 
-@synthesize resolved;
-@synthesize type;
-@synthesize token;
-
 + (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
     NSMutableArray *terms = [NSMutableArray array];
     while ([tokenizer peekNextObject] != nil) {
@@ -75,8 +71,8 @@
 #pragma unused(error)
     self = [super init];
     if (self) {
-        resolved = NO;
-        token = DD_RETAIN(t);
+        _resolved = NO;
+        _token = DD_RETAIN(t);
     }
     return self;
 }
@@ -87,7 +83,7 @@
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-    [token release];
+    [_token release];
     [super dealloc];
 }
 #endif

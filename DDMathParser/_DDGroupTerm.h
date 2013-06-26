@@ -7,9 +7,7 @@
 //
 #import "_DDParserTerm.h"
 
-@interface _DDGroupTerm : _DDParserTerm {
-    NSMutableArray *subterms;
-}
+@interface _DDGroupTerm : _DDParserTerm
 
 @property (nonatomic,readonly,DD_STRONG) NSMutableArray *subterms;
 

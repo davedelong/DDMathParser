@@ -16,12 +16,11 @@
 #import "DDExpression.h"
 
 @implementation _DDFunctionTerm
-@synthesize functionName;
 
 - (id)_initWithFunction:(NSString *)function subterms:(NSArray *)terms error:(NSError **)error {
     self = [super _initWithSubterms:terms error:error];
     if (self) {
-        functionName = [function copy];
+        _functionName = [function copy];
     }
     return self;
 }
@@ -32,7 +31,7 @@
     
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {
-        functionName = [[t token] copy];
+        _functionName = [[t token] copy];
         
         // process the subterms to group them up by commas
         NSMutableArray *newSubterms = [NSMutableArray array];
@@ -81,7 +80,7 @@
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-    [functionName release];
+    [_functionName release];
     [super dealloc];
 }
 #endif
@@ -91,7 +90,7 @@
 - (NSString *)description {
     NSArray *parameterDescriptions = [[self subterms] valueForKey:@"description"];
     NSString *parameters = [parameterDescriptions componentsJoinedByString:@","];
-    return [NSString stringWithFormat:@"%@(%@)", functionName, parameters];
+    return [NSString stringWithFormat:@"%@(%@)", _functionName, parameters];
 }
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
@@ -118,7 +117,7 @@
         [parameters addObject:parameter];
     }
     
-    return [DDExpression functionExpressionWithFunction:functionName arguments:parameters error:error];
+    return [DDExpression functionExpressionWithFunction:_functionName arguments:parameters error:error];
 }
 
 @end

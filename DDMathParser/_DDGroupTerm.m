@@ -26,11 +26,10 @@
 @end
 
 @implementation _DDGroupTerm
-@synthesize subterms;
 
 - (void)_setSubterms:(NSArray *)newTerms {
-    DD_RELEASE(subterms);
-    subterms = [newTerms mutableCopy];
+    DD_RELEASE(_subterms);
+    _subterms = [newTerms mutableCopy];
 }
 
 - (id)_initWithSubterms:(NSArray *)terms error:(NSError **)error {
@@ -74,7 +73,7 @@
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-    [subterms release];
+    [_subterms release];
     [super dealloc];
 }
 #endif

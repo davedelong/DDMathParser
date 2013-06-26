@@ -16,7 +16,11 @@
 
 @end
 
-@implementation _DDRewriteRule
+@implementation _DDRewriteRule {
+    DDExpression *_predicate;
+    DDExpression *_pattern;
+    DDExpression *_condition;
+}
 
 + (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement condition:(NSString *)condition {
     return DD_AUTORELEASE([[self alloc] initWithTemplate:string replacementPattern:replacement condition:condition]);
@@ -26,17 +30,17 @@
     self = [super init];
     if (self) {
         NSError *error = nil;
-        predicate = DD_RETAIN([DDExpression expressionFromString:string error:&error]);
-        pattern = DD_RETAIN([DDExpression expressionFromString:patternFormat error:&error]);
+        _predicate = DD_RETAIN([DDExpression expressionFromString:string error:&error]);
+        _pattern = DD_RETAIN([DDExpression expressionFromString:patternFormat error:&error]);
         
-        if (!predicate || !pattern || [predicate expressionType] != DDExpressionTypeFunction) {
+        if (!_predicate || !_pattern || [_predicate expressionType] != DDExpressionTypeFunction) {
             NSLog(@"error creating rule: %@", error);
             DD_RELEASE(self);
             return nil;
         }
         
         if (conditionFormat) {
-            condition = DD_RETAIN([DDExpression expressionFromString:conditionFormat error:&error]);
+            _condition = DD_RETAIN([DDExpression expressionFromString:conditionFormat error:&error]);
         }
     }
     return self;
@@ -44,9 +48,9 @@
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-    [predicate release];
-    [pattern release];
-    [condition release];
+    [_predicate release];
+    [_pattern release];
+    [_condition release];
     [super dealloc];
 }
 #endif
@@ -141,9 +145,9 @@
 }
 
 - (BOOL)matchExpression:(DDExpression *)target replacements:(NSMutableDictionary *)replacements evaluator:(DDMathEvaluator *)evaluator {
-    BOOL matches = [self _ruleExpression:predicate matchesExpression:target withReplacements:replacements];
-    if (matches && condition) {
-        DDExpression *resolvedCondition = [self _expressionByApplyingReplacements:replacements toPattern:condition];
+    BOOL matches = [self _ruleExpression:_predicate matchesExpression:target withReplacements:replacements];
+    if (matches && _condition) {
+        DDExpression *resolvedCondition = [self _expressionByApplyingReplacements:replacements toPattern:_condition];
         NSError *evalError = nil;
         NSNumber *result = [evaluator evaluateExpression:resolvedCondition withSubstitutions:replacements error:&evalError];
         matches &= [result boolValue];
@@ -159,11 +163,11 @@
     NSMutableDictionary *replacements = [NSMutableDictionary dictionary];
     if (![self matchExpression:target replacements:replacements evaluator:evaluator]) { return target; }
     
-    return [self _expressionByApplyingReplacements:replacements toPattern:pattern];
+    return [self _expressionByApplyingReplacements:replacements toPattern:_pattern];
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ (%@ => %@)", [super description], predicate, pattern];
+    return [NSString stringWithFormat:@"%@ (%@ => %@)", [super description], _predicate, _pattern];
 }
 
 @end

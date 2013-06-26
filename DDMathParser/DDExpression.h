@@ -17,11 +17,9 @@ typedef enum {
 
 @class DDMathEvaluator, DDParser;
 
-@interface DDExpression : NSObject <NSCoding> {
-    DDExpression *_parentExpression;
-}
+@interface DDExpression : NSObject <NSCoding>
 
-@property (nonatomic, readonly) DDExpression *parentExpression;
+@property (nonatomic, readonly, assign) DDExpression *parentExpression;
 
 + (id)expressionFromString:(NSString *)expressionString error:(NSError **)error;
 

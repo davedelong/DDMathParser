@@ -20,7 +20,10 @@
 
 @end
 
-@implementation _DDFunctionExpression
+@implementation _DDFunctionExpression {
+	NSString *_function;
+	NSArray *_arguments;
+}
 
 - (id)initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError **)error {
 	self = [super init];
@@ -35,9 +38,9 @@
 			}
 		}
 		
-		function = [f copy];
-		arguments = [a copy];
-        for (DDExpression *argument in arguments) {
+		_function = [f copy];
+		_arguments = [a copy];
+        for (DDExpression *argument in _arguments) {
             [argument _setParentExpression:self];
         }
 	}
@@ -57,16 +60,16 @@
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-	[function release];
-	[arguments release];
+	[_function release];
+	[_arguments release];
 	[super dealloc];
 }
 #endif
 
 - (DDExpressionType)expressionType { return DDExpressionTypeFunction; }
 
-- (NSString *)function { return [function lowercaseString]; }
-- (NSArray *)arguments { return arguments; }
+- (NSString *)function { return [_function lowercaseString]; }
+- (NSArray *)arguments { return _arguments; }
 
 - (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 	BOOL canSimplify = YES;

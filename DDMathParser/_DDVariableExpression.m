@@ -12,7 +12,10 @@
 #import "DDMathEvaluator+Private.h"
 #import "DDMathParserMacros.h"
 
-@implementation _DDVariableExpression
+@implementation _DDVariableExpression {
+	
+	NSString *_variable;
+}
 
 - (id)initWithVariable:(NSString *)v {
 	self = [super init];
@@ -24,7 +27,7 @@
             DD_RELEASE(self);
             return nil;
         }
-		variable = [v copy];
+		_variable = [v copy];
 	}
 	return self;
 }
@@ -39,14 +42,14 @@
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-	[variable release];
+	[_variable release];
 	[super dealloc];
 }
 #endif
 
 - (DDExpressionType)expressionType { return DDExpressionTypeVariable; }
 
-- (NSString *)variable { return variable; }
+- (NSString *)variable { return _variable; }
 
 - (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 #pragma unused(evaluator, error)

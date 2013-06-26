@@ -273,13 +273,14 @@
     }
 }
 
-#pragma mark Character methods
+#pragma mark NSEnumerator methods
 
 - (NSArray *)allObjects {
     NSRange r = NSMakeRange(_tokenIndex, [_tokens count] - _tokenIndex);
     if (_tokenIndex >= [_tokens count]) { r.length = 0; }
     return [_tokens subarrayWithRange:r];
 }
+
 - (DDMathStringToken *)nextObject {
     DDMathStringToken *t = [self peekNextObject];
     if (t != nil) {
@@ -297,6 +298,8 @@
 	_tokenIndex = 0;
     _characterIndex = 0;
 }
+
+#pragma mark Character methods
 
 - (unichar)_peekNextCharacter {
     if (_characterIndex >= _length) { return '\0'; }

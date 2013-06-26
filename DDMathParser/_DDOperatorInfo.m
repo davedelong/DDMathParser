@@ -10,12 +10,6 @@
 
 @implementation _DDOperatorInfo
 
-@synthesize arity=_arity;
-@synthesize defaultAssociativity=_defaultAssociativity;
-@synthesize precedence=_precedence;
-@synthesize token=_token;
-@synthesize function=_function;
-
 - (id)initWithOperatorFunction:(NSString *)function token:(NSString *)token arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
     self = [super init];
     if (self) {
@@ -27,6 +21,14 @@
     }
     return self;
 }
+
+#if !DD_HAS_ARC
+- (void)dealloc {
+    [_token release];
+    [_function release];
+    [super dealloc];
+}
+#endif
 
 + (id)infoForOperatorFunction:(NSString *)function token:(NSString *)token arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
     return DD_AUTORELEASE([[self alloc] initWithOperatorFunction:function token:token arity:arity precedence:precedence associativity:associativity]);
@@ -84,14 +86,6 @@
     });
     return [_operatorLookup objectForKey:token];
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-    [_token release];
-    [_function release];
-    [super dealloc];
-}
-#endif
 
 + (NSArray *)_buildOperators {
     NSMutableArray *operators = [NSMutableArray array];

@@ -10,13 +10,15 @@
 #import "DDMathStringToken.h"
 #import "_DDOperatorInfo.h"
 
-@implementation DDMathStringToken
-@synthesize token, tokenType;
+@implementation DDMathStringToken {
+	DDTokenType _tokenType;
+    _DDOperatorInfo *_operatorInfo;
+    BOOL _ambiguous;
+}
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-    [token release];
-    [numberValue release];
+    DD_RELEASE(_operatorInfo);
 	[super dealloc];
 }
 #endif
@@ -24,21 +26,26 @@
 - (id)initWithToken:(NSString *)t type:(DDTokenType)type {
 	self = [super init];
 	if (self) {
-        token = [t copy];
-		tokenType = type;
-		operatorType = DDOperatorInvalid;
+        _token = [t copy];
+		_tokenType = type;
 		
-		if (tokenType == DDTokenTypeOperator) {
+		if (_tokenType == DDTokenTypeOperator) {
             NSArray *matching = [_DDOperatorInfo infosForOperatorToken:t];
             if ([matching count] == 0) {
                 DD_RELEASE(self);
                 return nil;
             } else if ([matching count] == 1) {
-                operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
+                _operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
             } else {
-                ambiguous = YES;
+                _ambiguous = YES;
             }
-		}
+		} else if (_tokenType == DDTokenTypeNumber) {
+            _numberValue = [[NSDecimalNumber alloc] initWithString:[self token]];
+            if (_numberValue == nil) {
+                NSLog(@"supposedly invalid number: %@", [self token]);
+                _numberValue = DD_RETAIN(@0);
+            }
+        }
 	}
 	return self;
 }
@@ -47,30 +54,18 @@
 	return DD_AUTORELEASE([[self alloc] initWithToken:t type:type]);
 }
 
-- (NSNumber *)numberValue {
-	if ([self tokenType] != DDTokenTypeNumber) { return nil; }
-	if (numberValue == nil) {
-        numberValue = [[NSDecimalNumber alloc] initWithString:[self token]];
-        if (numberValue == nil) {
-            NSLog(@"supposedly invalid number: %@", [self token]);
-            numberValue = DD_RETAIN(@0);
-        }
-    }
-	return numberValue;
-}
-
 - (NSString *)description {
 	NSMutableString * d = [NSMutableString string];
-	if (tokenType == DDTokenTypeVariable) {
+	if (_tokenType == DDTokenTypeVariable) {
 		[d appendString:@"$"];
 	}
-	[d appendString:token];
+	[d appendString:_token];
 	return d;
 }
 
 - (NSString *)debugDescription {
     NSMutableString *d = [NSMutableString stringWithString:[self description]];
-    if (tokenType == DDTokenTypeOperator) {
+    if (_tokenType == DDTokenTypeOperator) {
         [d appendString:@" ("];
         
         DDOperatorArity arity = [self operatorArity];
@@ -91,43 +86,39 @@
     return d;
 }
 
-- (NSString *)token {
-    return token;
-}
-
 - (NSString *)operatorType {
-    if (ambiguous) { return DDOperatorInvalid; }
-    return [operatorInfo function];
+    if (_ambiguous) { return DDOperatorInvalid; }
+    return [_operatorInfo function];
 }
 
 - (NSInteger)operatorPrecedence {
-    if (ambiguous) { return -1; }
-    return [operatorInfo precedence];
+    if (_ambiguous) { return -1; }
+    return [_operatorInfo precedence];
 }
 
 - (DDOperatorArity)operatorArity {
-    if (ambiguous) { return DDOperatorArityUnknown; }
-    return [operatorInfo arity];
+    if (_ambiguous) { return DDOperatorArityUnknown; }
+    return [_operatorInfo arity];
 }
 
 - (NSString *)operatorFunction {
-    if (ambiguous) { return @""; }
-    return [operatorInfo function];
+    if (_ambiguous) { return @""; }
+    return [_operatorInfo function];
 }
 
 - (DDOperatorAssociativity)operatorAssociativity {
-    if (ambiguous) { return 0; }
-    return [operatorInfo defaultAssociativity];
+    if (_ambiguous) { return 0; }
+    return [_operatorInfo defaultAssociativity];
 }
 
 - (void)resolveToOperator:(NSString *)operator {
-    DD_RELEASE(operatorInfo);
-    operatorInfo = nil;
+    DD_RELEASE(_operatorInfo);
+    _operatorInfo = nil;
     
     NSArray *matching = [_DDOperatorInfo infosForOperatorFunction:operator];
     if ([matching count] > 0) {
-        ambiguous = NO;
-        operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
+        _ambiguous = NO;
+        _operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
     }
 }
 

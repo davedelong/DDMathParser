@@ -18,26 +18,20 @@ typedef enum {
 
 @class _DDOperatorInfo;
 
-@interface DDMathStringToken : NSObject {
-	NSString *token;
-    NSNumber *numberValue;
-	DDTokenType tokenType;
-    _DDOperatorInfo *operatorInfo;
-    NSString *operatorType;
-    BOOL ambiguous;
-}
+@interface DDMathStringToken : NSObject
 
 + (id)mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type;
 
-@property (nonatomic,readonly) NSString * token;
-@property (nonatomic,readonly) DDTokenType tokenType;
-@property (nonatomic,readonly) NSString *operatorType;
-@property (nonatomic,readonly) DDOperatorArity operatorArity;
-@property (nonatomic,readonly) DDOperatorAssociativity operatorAssociativity;
-@property (nonatomic,readonly) NSInteger operatorPrecedence;
-@property (nonatomic,readonly) NSString *operatorFunction;
+@property (nonatomic, readonly) NSString *token;
+@property (nonatomic, readonly) DDTokenType tokenType;
 
-- (NSNumber *)numberValue;
+@property (nonatomic, readonly) NSString *operatorType;
+@property (nonatomic, readonly) DDOperatorArity operatorArity;
+@property (nonatomic, readonly) DDOperatorAssociativity operatorAssociativity;
+@property (nonatomic, readonly) NSInteger operatorPrecedence;
+@property (nonatomic, readonly) NSString *operatorFunction;
+
+@property (nonatomic, readonly) NSNumber *numberValue;
 
 - (void)resolveToOperator:(NSString *)operator;
 

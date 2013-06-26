@@ -10,12 +10,14 @@
 #import "_DDNumberExpression.h"
 
 
-@implementation _DDNumberExpression
+@implementation _DDNumberExpression {
+	NSNumber *_number;
+}
 
 - (id)initWithNumber:(NSNumber *)n {
 	self = [super init];
 	if (self) {
-		number = DD_RETAIN(n);
+		_number = DD_RETAIN(n);
 	}
 	return self;
 }
@@ -30,7 +32,7 @@
 
 #if !DD_HAS_ARC
 - (void)dealloc {
-	[number release];
+	[_number release];
 	[super dealloc];
 }
 #endif
@@ -42,7 +44,7 @@
 	return self;
 }
 
-- (NSNumber *)number { return number; }
+- (NSNumber *)number { return _number; }
 
 - (NSString *)description {
 	return [[self number] description];
