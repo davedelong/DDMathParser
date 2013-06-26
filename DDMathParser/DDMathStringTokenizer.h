@@ -28,9 +28,7 @@
 - (NSArray *)tokens;
 
 - (DDMathStringToken *)nextToken;
-- (DDMathStringToken *)currentToken;
 - (DDMathStringToken *)peekNextToken;
-- (DDMathStringToken *)previousToken;
 
 - (void)reset;
 

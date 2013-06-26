@@ -286,22 +286,9 @@
     return t;
 }
 
-- (DDMathStringToken *)currentToken {
-    if (_tokenIndex > [_tokens count]) { return nil; }
-    if (_tokenIndex == 0) { return nil; }
-    
-    return [_tokens objectAtIndex:(_tokenIndex-1)];
-}
-
 - (DDMathStringToken *)peekNextToken {
     if (_tokenIndex >= [_tokens count]) { return nil; }
     return [_tokens objectAtIndex:_tokenIndex];
-}
-
-- (DDMathStringToken *)previousToken {
-    if (_tokenIndex <= 1) { return nil; }
-    if (_tokenIndex > [_tokens count]+1) { return nil; }
-    return [_tokens objectAtIndex:_tokenIndex-2];
 }
 
 - (void)reset {
