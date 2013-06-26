@@ -6,14 +6,12 @@ NSString* readLine(void);
 void listFunctions(void);
 
 NSString* readLine() {
-//    NSCharacterSet *valid = [DDMathStringTokenizer legalCharacters];
     NSMutableData *data = [NSMutableData data];
     
     
     do {
         char c = getchar();
         if ([[NSCharacterSet newlineCharacterSet] characterIsMember:(unichar)c]) { break; }
-//        if (![valid characterIsMember:(unichar)c]) { continue; }
         
         [data appendBytes:&c length:sizeof(char)];
     } while (1);
@@ -46,11 +44,11 @@ int main (int argc, const char * argv[]) {
         
         [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
-//        [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
-//            return DD_AUTORELEASE([^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
-//                return [DDExpression numberExpressionWithNumber:[NSNumber numberWithInt:42]];
-//            } copy]);
-//        }];
+        [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
+            return DD_AUTORELEASE([^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
+                return [DDExpression numberExpressionWithNumber:@42];
+            } copy]);
+        }];
         
         NSString * line = nil;
         do {

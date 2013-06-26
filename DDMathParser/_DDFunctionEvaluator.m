@@ -409,7 +409,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
         random = arc4random_uniform(upperBound);
     }
 	
-	return [DDExpression numberExpressionWithNumber:[NSNumber numberWithLongLong:random]];
+	return [DDExpression numberExpressionWithNumber:@(random)];
 }
 
 - (DDExpression *)log:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
@@ -954,7 +954,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	REQUIRE_N_ARGS(2);
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
-    NSNumber *result = [NSNumber numberWithBool:[left boolValue] && [right boolValue]];
+    NSNumber *result = @([left boolValue] && [right boolValue]);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -962,16 +962,14 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	REQUIRE_N_ARGS(2);
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
-    NSNumber *result = [NSNumber numberWithBool:[left boolValue] ||
-                        
-                        [right boolValue]];
+    NSNumber *result = @([left boolValue] || [right boolValue]);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
 - (DDExpression *)l_not:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-    NSNumber *result = [NSNumber numberWithBool:![n boolValue]];
+    NSNumber *result = @(![n boolValue]);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -980,7 +978,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
     NSComparisonResult compare = [left compare:right];
-    NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame];
+    NSNumber *result = @(compare == NSOrderedSame);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -989,7 +987,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
     NSComparisonResult compare = [left compare:right];
-    NSNumber *result = [NSNumber numberWithBool:compare != NSOrderedSame];
+    NSNumber *result = @(compare != NSOrderedSame);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -998,7 +996,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
     NSComparisonResult compare = [left compare:right];
-    NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedAscending];
+    NSNumber *result = @(compare == NSOrderedAscending);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -1007,7 +1005,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
     NSComparisonResult compare = [left compare:right];
-    NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedDescending];
+    NSNumber *result = @(compare == NSOrderedDescending);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -1016,7 +1014,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
     NSComparisonResult compare = [left compare:right];
-    NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame || compare == NSOrderedAscending];
+    NSNumber *result = @(compare == NSOrderedSame || compare == NSOrderedAscending);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -1025,7 +1023,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
     NSComparisonResult compare = [left compare:right];
-    NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame || compare == NSOrderedDescending];
+    NSNumber *result = @(compare == NSOrderedSame || compare == NSOrderedDescending);
 	return [DDExpression numberExpressionWithNumber:result];
 }
 

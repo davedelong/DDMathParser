@@ -98,7 +98,7 @@
 	[variables removeObjectsForKeys:[keysThatShouldBeRemoved allObjects]];
 	for (NSString * variable in v) {
 		if ([variables objectForKey:variable] == nil) {
-			[variables setObject:[NSNumber numberWithInt:0] forKey:variable];
+			[variables setObject:@0 forKey:variable];
 		}
 	}
 	
