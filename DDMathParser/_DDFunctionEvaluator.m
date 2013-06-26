@@ -382,7 +382,6 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 - (DDExpression *)random:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	if ([arguments count] > 2) {
 		if (error != nil) {
-            
             *error = ERR(DDErrorCodeInvalidNumberOfArguments, @"random() may only have up to 2 arguments");
 		}
 		return nil;
@@ -395,28 +394,20 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 		[params addObject:value];
 	}
 	
-	NSInteger random = arc4random();
+    long long lowerBound = LONG_LONG_MIN;
+    long long upperBound = LONG_LONG_MAX;
 	
-	if ([params count] == 1) {
-		NSNumber *lowerBound = [params objectAtIndex:0];
-		while (random < [lowerBound integerValue]) {
-            random += [lowerBound integerValue];
-		}
-	} else if ([params count] == 2) {
-		NSNumber *lowerBound = [params objectAtIndex:0];
-		NSNumber *upperBound = [params objectAtIndex:1];
-		
-		if ([upperBound integerValue] <= [lowerBound integerValue]) {
-            if (error != nil) {
-                *error = ERR(DDErrorCodeInvalidArgument, @"upper bound (%ld) of random() must be larger than lower bound (%ld)", [upperBound integerValue], [lowerBound integerValue]);
-            }
-            return nil;
-		}
-		
-		long long range = llabs(([upperBound longLongValue] - [lowerBound longLongValue]) + 1);
-		random = random % range;
-		random += [lowerBound longLongValue];
-	}
+	if ([params count] > 0) {
+        lowerBound = [[params objectAtIndex:0] longLongValue];
+    }
+    if ([params count] > 1) {
+        upperBound = [[params objectAtIndex:1] longLongValue];
+    }
+    
+    long long random = arc4random_uniform(upperBound);
+    while (random < lowerBound) {
+        random = arc4random_uniform(upperBound);
+    }
 	
 	return [DDExpression numberExpressionWithNumber:[NSNumber numberWithLongLong:random]];
 }
