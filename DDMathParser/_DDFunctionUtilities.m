@@ -1185,6 +1185,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSNumber *result = [NSNumber numberWithBool:[left boolValue] && [right boolValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 		
@@ -1198,6 +1200,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSNumber *result = [NSNumber numberWithBool:[left boolValue] ||
                             [right boolValue]];
 		return [DDExpression numberExpressionWithNumber:result];
@@ -1211,6 +1215,7 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 #pragma unused(variables, evaluator)
 		REQUIRE_N_ARGS(1);
 		NSNumber *n = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(n);
         NSNumber *result = [NSNumber numberWithBool:![n boolValue]];
 		return [DDExpression numberExpressionWithNumber:result];
 		
@@ -1224,6 +1229,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSComparisonResult compare = [left compare:right];
         NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame];
 		return [DDExpression numberExpressionWithNumber:result];
@@ -1238,6 +1245,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSComparisonResult compare = [left compare:right];
         NSNumber *result = [NSNumber numberWithBool:compare != NSOrderedSame];
 		return [DDExpression numberExpressionWithNumber:result];
@@ -1252,6 +1261,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSComparisonResult compare = [left compare:right];
         NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedAscending];
 		return [DDExpression numberExpressionWithNumber:result];
@@ -1266,6 +1277,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSComparisonResult compare = [left compare:right];
         NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedDescending];
 		return [DDExpression numberExpressionWithNumber:result];
@@ -1280,6 +1293,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSComparisonResult compare = [left compare:right];
         NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame || compare == NSOrderedAscending];
 		return [DDExpression numberExpressionWithNumber:result];
@@ -1294,6 +1309,8 @@ static inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 		REQUIRE_N_ARGS(2);
 		NSNumber *left = [[arguments objectAtIndex:0] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
 		NSNumber *right = [[arguments objectAtIndex:1] evaluateWithSubstitutions:variables evaluator:evaluator error:error];
+        RETURN_IF_NIL(left);
+        RETURN_IF_NIL(right);
         NSComparisonResult compare = [left compare:right];
         NSNumber *result = [NSNumber numberWithBool:compare == NSOrderedSame || compare == NSOrderedDescending];
 		return [DDExpression numberExpressionWithNumber:result];
