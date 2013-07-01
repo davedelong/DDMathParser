@@ -10,6 +10,7 @@
 #import "EvaluationTests.h"
 #import "DDMathParser.h"
 #import "NSExpression+EasyParsing.h"
+#import "KVTestObject.h"
 
 @implementation EvaluationTests
 
@@ -70,6 +71,18 @@
     TEST(@"100-percent(5)", 95);
     TEST(@"100*percent(5)", 5);
     TEST(@"100/percent(5)", 2000);
+}
+
+- (void)testKVTestObject {
+    KVTestObject *testObject = [[KVTestObject alloc] init];
+    [testObject setAValue: @5];
+    
+    KVTestObject *test1Object = [[KVTestObject alloc] init];
+    [test1Object setAValue: @99.999];
+    [testObject setChildObject: test1Object];
+    
+    STAssertEqualObjects([@"$aValue" numberByEvaluatingStringAgainstObject: testObject], @5, @"%@ should be equal to %@", @"$aValue", @5);
+    STAssertEqualObjects([@"$childObject.aValue - 10" numberByEvaluatingStringAgainstObject: testObject], @89.999, @"%@ should be equal to %@", @"$childObject.aValue", @89.999);
 }
 
 @end
