@@ -13,6 +13,7 @@
 #import "_DDOperatorInfo.h"
 
 #define DD_IS_DIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+#define DD_IS_HEX(_c) (((_c) >= '0' && (_c) <= '9') || ((_c) >= 'a' && (_c) <= 'f') || ((_c) >= 'A' && (_c) <= 'F'))
 #define DD_IS_WHITESPACE(_c) ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:(_c)])
 
 @interface DDMathStringTokenizer ()
@@ -360,6 +361,17 @@
     NSUInteger start = _characterIndex;
     DDMathStringToken *token = nil;
     
+    if ([self _peekNextCharacter] == '0') {
+        _characterIndex++;
+        unichar next = [self _peekNextCharacter];
+        if (next == 'x' || next == 'X') {
+            _characterIndex++;
+            return [self _parseHexNumberWithError:error];
+        } else {
+            _characterIndex = start;
+        }
+    }
+    
     while (DD_IS_DIGIT([self _peekNextCharacter])) {
         _characterIndex++;
     }
@@ -405,6 +417,30 @@
     if (!token) {
         _characterIndex = start;
         *error = ERR(DDErrorCodeInvalidNumber, @"unable to parse number");
+    }
+    return token;
+}
+
+- (DDMathStringToken *)_parseHexNumberWithError:(NSError **)error {
+    DDMathStringToken *token = nil;
+    NSUInteger start = _characterIndex;
+    while (DD_IS_HEX([self _peekNextCharacter])) {
+        _characterIndex++;
+    }
+    NSUInteger length = _characterIndex - start;
+    if (length > 0) {
+        NSString *rawHex = [NSString stringWithCharacters:(_characters+start) length:length];
+        NSScanner *scanner = [NSScanner scannerWithString:rawHex];
+        
+        unsigned long long hexValue = 0;
+        [scanner scanHexLongLong:&hexValue];
+        
+        token = [DDMathStringToken mathStringTokenWithToken:[@(hexValue) stringValue] type:DDTokenTypeNumber];
+    }
+    
+    if (!token) {
+        _characterIndex = start;
+        *error = ERR(DDErrorCodeInvalidNumber, @"unable to parse hex number");
     }
     return token;
 }
