@@ -33,7 +33,6 @@
 				if (error != nil) {
                     *error = ERR(DDErrorCodeInvalidArgument, @"function arguments must be DDExpression objects");
 				}
-                DD_RELEASE(self);
 				return nil;
 			}
 		}
@@ -57,14 +56,6 @@
     [aCoder encodeObject:[self function] forKey:@"function"];
     [aCoder encodeObject:[self arguments] forKey:@"arguments"];
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-	[_function release];
-	[_arguments release];
-	[super dealloc];
-}
-#endif
 
 - (DDExpressionType)expressionType { return DDExpressionTypeFunction; }
 

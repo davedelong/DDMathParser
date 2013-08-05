@@ -53,14 +53,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	if (self == _sharedEvaluator) {
 		_sharedEvaluator = nil;
 	}
-#if !DD_HAS_ARC
-    [_functionEvaluator release];
-    [_functionMap release];
-    [_rewriteRules release];
-    [_functionResolver release];
-    [_variableResolver release];
-	[super dealloc];
-#endif
 }
 
 #pragma mark - Properties
@@ -68,7 +60,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 - (void)setUsesHighPrecisionEvaluation:(BOOL)usesHighPrecisionEvaluation {
     if (usesHighPrecisionEvaluation != _usesHighPrecisionEvaluation) {
         _usesHighPrecisionEvaluation = usesHighPrecisionEvaluation;
-        DD_RELEASE(_functionEvaluator);
         
         if (_usesHighPrecisionEvaluation) {
             _functionEvaluator = [[_DDPrecisionFunctionEvaluator alloc] initWithMathEvaluator:self];
@@ -95,7 +86,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     
     function = [function copy];
     [_functionMap setObject:function forKey:functionName];
-    DD_RELEASE(function);
     
     return YES;
 }
@@ -183,7 +173,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     
     function = [function copy];
     [_functionMap setObject:function forKey:alias];
-    DD_RELEASE(function);
     
     return YES;
 }

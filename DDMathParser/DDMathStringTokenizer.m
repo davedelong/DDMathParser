@@ -60,7 +60,7 @@
         NSArray *allOperators = [_DDOperatorInfo allOperators];
         NSArray *operatorTokens = [allOperators valueForKey:@"token"];
         NSString *operatorString = [operatorTokens componentsJoinedByString:@""];
-        _operatorSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:operatorString]);
+        _operatorSet = [NSCharacterSet characterSetWithCharactersInString:operatorString];
     });
     return _operatorSet;
 }
@@ -69,7 +69,7 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_functionSet = nil;
     dispatch_once(&onceToken, ^{
-        _functionSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01233456789_"]);
+        _functionSet = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01233456789_"];
     });
     return _functionSet;
 }
@@ -79,13 +79,13 @@
     static NSCharacterSet *_singleCharFunctionSet = nil;
     dispatch_once(&onceToken, ^{
         NSString *singleChars = [NSString stringWithFormat:@"\u03C0\u03D5\u03C4"];  // π, ϕ, and τ
-        _singleCharFunctionSet = DD_RETAIN([NSCharacterSet characterSetWithCharactersInString:singleChars]);
+        _singleCharFunctionSet = [NSCharacterSet characterSetWithCharactersInString:singleChars];
     });
     return _singleCharFunctionSet;
 }
 
 + (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error {
-    return DD_AUTORELEASE([[self alloc] initWithString:expressionString error:error]);
+    return [[self alloc] initWithString:expressionString error:error];
 }
 
 - (id)initWithString:(NSString *)expressionString error:(NSError **)error {
@@ -103,7 +103,6 @@
         DDMathStringToken *token = nil;
         while((token = [self _nextTokenWithError:error]) != nil) {
             if (![self _processToken:token withError:error]) {
-                DD_RELEASE(self);
                 return nil;
             }
         }
@@ -111,7 +110,6 @@
         [self _processToken:nil withError:error];
 		
         if (error && *error) {
-            DD_RELEASE(self);
             self = nil;
         }
     }
@@ -119,17 +117,8 @@
     return self;
 }
 
-- (void)finalize {
-    free(_characters);
-    [super finalize];
-}
-
 - (void)dealloc {
     free(_characters);
-#if !DD_HAS_ARC
-    [_tokens release];
-    [super dealloc];
-#endif
 }
 
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error {
@@ -418,6 +407,7 @@
 }
 
 - (DDMathStringToken *)_parseHexNumberWithError:(NSError **)error {
+    ERR_ASSERT(error);
     DDMathStringToken *token = nil;
     NSUInteger start = _characterIndex;
     while (DD_IS_HEX([self _peekNextCharacter])) {

@@ -15,7 +15,7 @@
 NSDecimal DDDecimalNAN() {
     static NSDecimalNumber * _nan = nil;
     if (_nan == nil) {
-        _nan = DD_RETAIN([NSDecimalNumber notANumber]);
+        _nan = [NSDecimalNumber notANumber];
     }
     return [_nan decimalValue];
 }

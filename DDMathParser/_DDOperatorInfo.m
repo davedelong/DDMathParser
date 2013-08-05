@@ -16,22 +16,14 @@
         _arity = arity;
         _defaultAssociativity = associativity;
         _precedence = precedence;
-        _token = DD_RETAIN(token);
-        _function = DD_RETAIN(function);        
+        _token = token;
+        _function = function;
     }
     return self;
 }
 
-#if !DD_HAS_ARC
-- (void)dealloc {
-    [_token release];
-    [_function release];
-    [super dealloc];
-}
-#endif
-
 + (id)infoForOperatorFunction:(NSString *)function token:(NSString *)token arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
-    return DD_AUTORELEASE([[self alloc] initWithOperatorFunction:function token:token arity:arity precedence:precedence associativity:associativity]);
+    return [[self alloc] initWithOperatorFunction:function token:token arity:arity precedence:precedence associativity:associativity];
 }
 
 + (NSArray *)infosForOperatorFunction:(NSString *)operator {

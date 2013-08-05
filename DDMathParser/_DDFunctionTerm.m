@@ -45,7 +45,6 @@
                     if (parameterGroup) {
                         [newSubterms addObject:parameterGroup];
                     }
-                    DD_RELEASE(parameterGroup);
                 } else {
                     // there's only one term in this parameter; no need to group it in parentheses
                     [newSubterms addObject:[parameterGroupTerms objectAtIndex:0]];
@@ -66,7 +65,6 @@
             NSArray *lastParameters = [[self subterms] subarrayWithRange:rangeOfLastParameter];
             _DDGroupTerm *parameterGroup = [[_DDGroupTerm alloc] _initWithSubterms:lastParameters error:error];
             [newSubterms addObject:parameterGroup];
-            DD_RELEASE(parameterGroup);
         } else if (rangeOfLastParameter.length == 1) {
             [newSubterms addObject:[[self subterms] objectAtIndex:rangeOfLastParameter.location]];
         }
@@ -77,13 +75,6 @@
     }
     return self;
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-    [_functionName release];
-    [super dealloc];
-}
-#endif
 
 - (DDParserTermType)type { return DDParserTermTypeFunction; }
 

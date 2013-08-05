@@ -16,13 +16,6 @@
     BOOL _ambiguous;
 }
 
-#if !DD_HAS_ARC
-- (void)dealloc {
-    DD_RELEASE(_operatorInfo);
-	[super dealloc];
-}
-#endif
-
 - (id)initWithToken:(NSString *)t type:(DDTokenType)type {
 	self = [super init];
 	if (self) {
@@ -32,10 +25,9 @@
 		if (_tokenType == DDTokenTypeOperator) {
             NSArray *matching = [_DDOperatorInfo infosForOperatorToken:t];
             if ([matching count] == 0) {
-                DD_RELEASE(self);
                 return nil;
             } else if ([matching count] == 1) {
-                _operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
+                _operatorInfo = [matching objectAtIndex:0];
             } else {
                 _ambiguous = YES;
             }
@@ -43,7 +35,7 @@
             _numberValue = [[NSDecimalNumber alloc] initWithString:[self token]];
             if (_numberValue == nil) {
                 NSLog(@"supposedly invalid number: %@", [self token]);
-                _numberValue = DD_RETAIN(@0);
+                _numberValue = @0;
             }
         }
 	}
@@ -51,7 +43,7 @@
 }
 
 + (id)mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type {
-	return DD_AUTORELEASE([[self alloc] initWithToken:t type:type]);
+	return [[self alloc] initWithToken:t type:type];
 }
 
 - (NSString *)description {
@@ -112,13 +104,12 @@
 }
 
 - (void)resolveToOperator:(NSString *)operator {
-    DD_RELEASE(_operatorInfo);
     _operatorInfo = nil;
     
     NSArray *matching = [_DDOperatorInfo infosForOperatorFunction:operator];
     if ([matching count] > 0) {
         _ambiguous = NO;
-        _operatorInfo = DD_RETAIN([matching objectAtIndex:0]);
+        _operatorInfo = [matching objectAtIndex:0];
     }
 }
 

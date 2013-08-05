@@ -28,7 +28,6 @@
 @implementation _DDGroupTerm
 
 - (void)_setSubterms:(NSArray *)newTerms {
-    DD_RELEASE(_subterms);
     _subterms = [newTerms mutableCopy];
 }
 
@@ -53,7 +52,6 @@
                 [terms addObject:nextTerm];
             } else {
                 // extracting a term failed.  *error should've been filled already
-                DD_RELEASE(self);
                 return nil;
             }
             nextToken = [tokenizer peekNextObject];
@@ -62,7 +60,6 @@
         // consume the closing parenthesis and verify it exists
         if ([tokenizer nextObject] == nil) {
             *error = ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
-            DD_RELEASE(self);
             return nil;
         }
         
@@ -70,13 +67,6 @@
     }
     return self;
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-    [_subterms release];
-    [super dealloc];
-}
-#endif
 
 - (DDParserTermType)type { return DDParserTermTypeGroup; }
 
@@ -197,7 +187,6 @@
         NSArray *rightOperands = [[self subterms] subarrayWithRange:rightOperandRange];
         _DDGroupTerm *group = [[_DDGroupTerm alloc] _initWithSubterms:rightOperands error:error];
         [[self subterms] replaceObjectsInRange:rightOperandRange withObjectsFromArray:@[group]];
-        DD_RELEASE(group);
         
         rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(replacementRange)-1];
     }
@@ -206,7 +195,6 @@
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:@[function]];
-    DD_RELEASE(function);
     
     return YES;
 }
@@ -245,8 +233,6 @@
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operator operatorFunction] subterms:parameters error:error];
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:@[function]];
-    
-    DD_RELEASE(function);
     
     return YES;
 }

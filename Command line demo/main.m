@@ -16,7 +16,7 @@ NSString* readLine() {
         [data appendBytes:&c length:sizeof(char)];
     } while (1);
     
-    return DD_AUTORELEASE([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
 void listFunctions() {
@@ -30,11 +30,7 @@ void listFunctions() {
 int main (int argc, const char * argv[]) {
 #pragma unused(argc, argv)
     
-#if DD_HAS_ARC
     @autoreleasepool {
-#else
-        NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-#endif
         
         printf("Math Evaluator!\n");
         printf("\ttype a mathematical expression to evaluate it.\n");
@@ -45,9 +41,9 @@ int main (int argc, const char * argv[]) {
         [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
         [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
-            return DD_AUTORELEASE([^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
+            return [^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
                 return [DDExpression numberExpressionWithNumber:@42];
-            } copy]);
+            } copy];
         }];
         
         NSString * line = nil;
@@ -66,7 +62,6 @@ int main (int argc, const char * argv[]) {
             DDExpression *rewritten = [evaluator expressionByRewritingExpression:expression];
             
             NSNumber *value = [evaluator evaluateExpression:rewritten withSubstitutions:nil error:&error];
-            DD_RELEASE(tokenizer);
             
             if (value == nil) {
                 printf("\tERROR: %s\n", [[error description] UTF8String]);
@@ -80,14 +75,8 @@ int main (int argc, const char * argv[]) {
             
         } while (1);
         
-        DD_RELEASE(evaluator);
-        
 		printf("Goodbye!\n");
         
-#if DD_HAS_ARC
     }
-#else
-    [pool drain];
-#endif
     return 0;
 }

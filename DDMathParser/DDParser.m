@@ -91,7 +91,7 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
 
 
 + (id)parserWithString:(NSString *)string error:(NSError **)error {
-    return DD_AUTORELEASE([[self alloc] initWithString:string error:error]);
+    return [[self alloc] initWithString:string error:error];
 }
 
 - (id)initWithString:(NSString *)string error:(NSError **)error {
@@ -100,16 +100,15 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
 }
 
 + (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
-	return DD_AUTORELEASE([[self alloc] initWithTokenizer:tokenizer error:error]);
+	return [[self alloc] initWithTokenizer:tokenizer error:error];
 }
 
 - (id)initWithTokenizer:(DDMathStringTokenizer *)t error:(NSError **)error {
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
-		tokenizer = DD_RETAIN(t);
+		tokenizer = t;
 		if (!tokenizer) {
-			DD_RELEASE(self);
 			return nil;
 		}
 		
@@ -125,13 +124,6 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
 	}
 	return self;
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-	[tokenizer release];
-	[super dealloc];
-}
-#endif
 
 - (DDOperatorAssociativity)associativityForOperator:(NSString *)operatorType {
     if (operatorType == DDOperatorBitwiseOr) {

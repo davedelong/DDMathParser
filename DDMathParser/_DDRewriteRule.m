@@ -23,37 +23,27 @@
 }
 
 + (_DDRewriteRule *)rewriteRuleWithTemplate:(NSString *)string replacementPattern:(NSString *)replacement condition:(NSString *)condition {
-    return DD_AUTORELEASE([[self alloc] initWithTemplate:string replacementPattern:replacement condition:condition]);
+    return [[self alloc] initWithTemplate:string replacementPattern:replacement condition:condition];
 }
 
 - (id)initWithTemplate:(NSString *)string replacementPattern:(NSString *)patternFormat condition:(NSString *)conditionFormat {
     self = [super init];
     if (self) {
         NSError *error = nil;
-        _predicate = DD_RETAIN([DDExpression expressionFromString:string error:&error]);
-        _pattern = DD_RETAIN([DDExpression expressionFromString:patternFormat error:&error]);
+        _predicate = [DDExpression expressionFromString:string error:&error];
+        _pattern = [DDExpression expressionFromString:patternFormat error:&error];
         
         if (!_predicate || !_pattern || [_predicate expressionType] != DDExpressionTypeFunction) {
             NSLog(@"error creating rule: %@", error);
-            DD_RELEASE(self);
             return nil;
         }
         
         if (conditionFormat) {
-            _condition = DD_RETAIN([DDExpression expressionFromString:conditionFormat error:&error]);
+            _condition = [DDExpression expressionFromString:conditionFormat error:&error];
         }
     }
     return self;
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-    [_predicate release];
-    [_pattern release];
-    [_condition release];
-    [super dealloc];
-}
-#endif
 
 - (BOOL)_ruleExpression:(DDExpression *)rule matchesExpression:(DDExpression *)target withReplacements:(NSMutableDictionary *)replacements {
     if ([rule expressionType] == DDExpressionTypeNumber || [rule expressionType] == DDExpressionTypeVariable) {

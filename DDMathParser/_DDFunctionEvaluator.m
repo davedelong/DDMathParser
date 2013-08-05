@@ -80,7 +80,6 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
         }];
         
         functions = [set copy];
-        DD_RELEASE(set);
     });
     return functions;
 }

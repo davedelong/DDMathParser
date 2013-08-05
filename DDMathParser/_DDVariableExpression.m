@@ -24,7 +24,6 @@
             v = [v substringFromIndex:1];
         }
         if ([v length] == 0) {
-            DD_RELEASE(self);
             return nil;
         }
 		_variable = [v copy];
@@ -39,13 +38,6 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:[self variable] forKey:@"variable"];
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-	[_variable release];
-	[super dealloc];
-}
-#endif
 
 - (DDExpressionType)expressionType { return DDExpressionTypeVariable; }
 

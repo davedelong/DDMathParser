@@ -38,7 +38,7 @@
         [terms addObject:nextTerm];
     }
     
-    return DD_AUTORELEASE([[_DDGroupTerm alloc] _initWithSubterms:terms error:error]);
+    return [[_DDGroupTerm alloc] _initWithSubterms:terms error:error];
 }
 
 + (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
@@ -60,7 +60,7 @@
             term = [[_DDFunctionTerm alloc] _initWithTokenizer:tokenizer error:error];
         }
         
-        return DD_AUTORELEASE(term);
+        return term;
     } else {
         *error = ERR(DDErrorCodeInvalidFormat, @"can't create a term with a nil token");
     }
@@ -72,7 +72,7 @@
     self = [super init];
     if (self) {
         _resolved = NO;
-        _token = DD_RETAIN(t);
+        _token = t;
     }
     return self;
 }
@@ -80,13 +80,6 @@
 - (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
     return [self _initWithToken:[tokenizer nextObject] error:error];
 }
-
-#if !DD_HAS_ARC
-- (void)dealloc {
-    [_token release];
-    [super dealloc];
-}
-#endif
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
 #pragma unused(parser,error)
