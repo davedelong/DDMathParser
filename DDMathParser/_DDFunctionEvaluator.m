@@ -62,7 +62,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
                 NSString *selector = NSStringFromSelector(method_getName(m));
                 NSString *suffix = _DDFunctionSelectorSuffix;
                 if ([selector hasSuffix:suffix]) {
-                    NSInteger index = [selector length] - [suffix length];
+                    NSUInteger index = [selector length] - [suffix length];
                     NSString *functionName = [selector substringToIndex:index];
                     if ([functionName isEqualToString:@"evaluateFunction"] == NO) {
                         [set addObject:functionName];
