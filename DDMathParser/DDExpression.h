@@ -19,7 +19,7 @@ typedef enum {
 
 @interface DDExpression : NSObject <NSCoding>
 
-@property (nonatomic, readonly, assign) DDExpression *parentExpression;
+@property (nonatomic, readonly, weak) DDExpression *parentExpression;
 
 + (id)expressionFromString:(NSString *)expressionString error:(NSError **)error;
 
@@ -35,14 +35,15 @@ typedef enum {
 - (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error;
 
 #pragma mark Number methods
-- (NSNumber *)number;
+@property (readonly) NSNumber *number;
 
 #pragma mark Function methods
-- (NSString *)function;
-//returns an array of DDExpression objects
-- (NSArray *)arguments;
+
+@property (readonly) NSString *function;
+@property (readonly) NSArray *arguments; // an array of DDExpressions
 
 #pragma mark Variable
-- (NSString *)variable;
+
+@property (readonly) NSString *variable;
 
 @end

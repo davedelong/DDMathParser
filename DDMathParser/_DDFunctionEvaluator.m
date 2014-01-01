@@ -16,7 +16,7 @@
 
 
 
-inline DDExpression* _DDDTOR(DDExpression *e, DDMathEvaluator *evaluator, NSError **error) {
+DDExpression* _DDDTOR(DDExpression *e, DDMathEvaluator *evaluator, NSError **error) {
     DDExpression *final = e;
     if ([evaluator angleMeasurementMode] == DDAngleMeasurementModeDegrees) {
         if ([e expressionType] != DDExpressionTypeFunction || ![[e function] isEqualToString:@"dtor"]) {
@@ -28,7 +28,7 @@ inline DDExpression* _DDDTOR(DDExpression *e, DDMathEvaluator *evaluator, NSErro
     return final;
 }
 
-inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator, NSError **error) {
+DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator, NSError **error) {
     DDExpression *final = e;
     if ([evaluator angleMeasurementMode] == DDAngleMeasurementModeDegrees) {
         if ([e expressionType] != DDExpressionTypeFunction || ![[e function] isEqualToString:@"rtod"]) {
@@ -44,9 +44,7 @@ typedef DDExpression* (*_DDFunctionEvaluatorIMP)(id, SEL, NSArray *, NSDictionar
 
 static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
-@implementation _DDFunctionEvaluator {
-    __unsafe_unretained DDMathEvaluator *_evaluator;
-}
+@implementation _DDFunctionEvaluator
 
 @synthesize evaluator=_evaluator;
 

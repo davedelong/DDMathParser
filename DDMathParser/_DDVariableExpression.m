@@ -13,7 +13,6 @@
 #import "DDMathParserMacros.h"
 
 @implementation _DDVariableExpression {
-	
 	NSString *_variable;
 }
 

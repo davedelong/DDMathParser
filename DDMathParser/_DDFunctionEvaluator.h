@@ -30,8 +30,8 @@ return nil; \
 
 #define RETURN_IF_NIL(_n) if ((_n) == nil) { return nil; }
 
-extern inline DDExpression* _DDDTOR(DDExpression *e, DDMathEvaluator *evaluator, NSError **error);
-extern inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator, NSError **error);
+extern DDExpression* _DDDTOR(DDExpression *e, DDMathEvaluator *evaluator, NSError **error);
+extern DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator, NSError **error);
 
 @class _DDFunctionExpression;
 
@@ -42,7 +42,7 @@ extern inline DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator,
 
 - (id)initWithMathEvaluator:(DDMathEvaluator *)evaluator;
 
-@property (readonly) DDMathEvaluator *evaluator;
+@property (readonly, weak) DDMathEvaluator *evaluator;
 
 - (DDExpression *)evaluateFunction:(_DDFunctionExpression *)expression variables:(NSDictionary *)variables error:(NSError **)error;
 
