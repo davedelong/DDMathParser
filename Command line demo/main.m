@@ -21,7 +21,7 @@ NSString* readLine() {
 
 void listFunctions() {
 	printf("\nFunctions available:\n");
-	NSArray * functions = [[DDMathEvaluator sharedMathEvaluator] registeredFunctions];
+	NSArray * functions = [[DDMathEvaluator defaultMathEvaluator] registeredFunctions];
 	for (NSString * function in functions) {
 		printf("\t%s()\n", [function UTF8String]);
 	}

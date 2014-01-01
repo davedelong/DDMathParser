@@ -74,7 +74,7 @@
 	}
 	
 	if (canSimplify) {
-		if (evaluator == nil) { evaluator = [DDMathEvaluator sharedMathEvaluator]; }
+		if (evaluator == nil) { evaluator = [DDMathEvaluator defaultMathEvaluator]; }
 		
         id result = [evaluator evaluateExpression:self withSubstitutions:nil error:error];
 		

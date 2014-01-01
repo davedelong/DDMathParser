@@ -24,7 +24,8 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 @property (nonatomic, copy) DDFunctionResolver functionResolver;
 @property (nonatomic, copy) DDVariableResolver variableResolver;
 
-+ (id)sharedMathEvaluator;
++ (id)sharedMathEvaluator __attribute__((deprecated("Use +defaultMathEvaluator instead")));
++ (instancetype)defaultMathEvaluator;
 
 - (BOOL)registerFunction:(DDMathFunction)function forName:(NSString *)functionName;
 - (void)unregisterFunctionWithName:(NSString *)functionName;

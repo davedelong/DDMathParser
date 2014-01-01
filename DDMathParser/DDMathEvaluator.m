@@ -23,14 +23,18 @@
     _DDFunctionEvaluator *_functionEvaluator;
 }
 
-static DDMathEvaluator * _sharedEvaluator = nil;
 
 + (id)sharedMathEvaluator {
+    return [self defaultMathEvaluator];
+}
+
++ (instancetype)defaultMathEvaluator {
+    static DDMathEvaluator * _defaultEvaluator = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-		_sharedEvaluator = [[DDMathEvaluator alloc] init];
+		_defaultEvaluator = [[DDMathEvaluator alloc] init];
     });
-	return _sharedEvaluator;
+	return _defaultEvaluator;
 }
 
 - (id)init {
@@ -47,12 +51,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
         }
 	}
 	return self;
-}
-
-- (void)dealloc {
-	if (self == _sharedEvaluator) {
-		_sharedEvaluator = nil;
-	}
 }
 
 #pragma mark - Properties

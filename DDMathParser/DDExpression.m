@@ -48,7 +48,7 @@
 }
 - (DDExpression *)simplifiedExpression {
 	NSError *error = nil;
-	DDExpression *simplified = [self simplifiedExpressionWithEvaluator:[DDMathEvaluator sharedMathEvaluator] error:&error];
+	DDExpression *simplified = [self simplifiedExpressionWithEvaluator:[DDMathEvaluator defaultMathEvaluator] error:&error];
 	if (error != nil) {
 		NSLog(@"error: %@", error);
 		return nil;
