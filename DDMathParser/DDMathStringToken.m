@@ -8,11 +8,11 @@
 
 #import "DDMathParser.h"
 #import "DDMathStringToken.h"
-#import "_DDOperatorInfo.h"
+#import "DDMathOperator.h"
 
 @implementation DDMathStringToken {
 	DDTokenType _tokenType;
-    _DDOperatorInfo *_operatorInfo;
+    DDMathOperator *_operatorInfo;
     BOOL _ambiguous;
 }
 
@@ -23,7 +23,7 @@
 		_tokenType = type;
 		
 		if (_tokenType == DDTokenTypeOperator) {
-            NSArray *matching = [_DDOperatorInfo infosForOperatorToken:t];
+            NSArray *matching = [DDMathOperator infosForOperatorToken:t];
             if ([matching count] == 0) {
                 return nil;
             } else if ([matching count] == 1) {
@@ -104,7 +104,7 @@
 }
 
 - (void)resolveToOperator:(NSString *)operator {
-    _operatorInfo = [_DDOperatorInfo infoForOperatorFunction:operator];
+    _operatorInfo = [DDMathOperator infoForOperatorFunction:operator];
     _ambiguous = (_operatorInfo == nil);
 }
 

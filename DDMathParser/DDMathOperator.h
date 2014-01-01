@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
 
-@interface _DDOperatorInfo : NSObject
+@interface DDMathOperator : NSObject
 
 @property (nonatomic, readonly, strong) NSString *function;
 @property (nonatomic, readonly, strong) NSArray *tokens;

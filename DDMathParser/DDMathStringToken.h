@@ -16,7 +16,7 @@ typedef enum {
 	DDTokenTypeVariable = 3
 } DDTokenType;
 
-@class _DDOperatorInfo;
+@class DDMathOperator;
 
 @interface DDMathStringToken : NSObject
 

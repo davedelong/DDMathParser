@@ -10,7 +10,7 @@
 #import "DDMathStringTokenizer.h"
 #import "DDMathParserMacros.h"
 #import "DDMathStringToken.h"
-#import "_DDOperatorInfo.h"
+#import "DDMathOperator.h"
 
 #define DD_IS_DIGIT(_c) ((_c) >= '0' && (_c) <= '9')
 #define DD_IS_HEX(_c) (((_c) >= '0' && (_c) <= '9') || ((_c) >= 'a' && (_c) <= 'f') || ((_c) >= 'A' && (_c) <= 'F'))
@@ -67,7 +67,7 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *_operatorSet = nil;
     dispatch_once(&onceToken, ^{
-        NSArray *allOperators = [_DDOperatorInfo allOperators];
+        NSArray *allOperators = [DDMathOperator allOperators];
         NSArray *operatorTokens = [allOperators valueForKeyPath:@"@distinctUnionOfArrays.tokens"];
         NSString *operatorString = [operatorTokens componentsJoinedByString:@""];
         _operatorSet = [NSCharacterSet characterSetWithCharactersInString:operatorString];
@@ -181,18 +181,18 @@
         }
         
         if (shouldBeUnary) {
-            NSArray *potentialOperators = @[[_DDOperatorInfo infoForOperatorFunction:DDOperatorUnaryPlus],
-                                            [_DDOperatorInfo infoForOperatorFunction:DDOperatorUnaryMinus]];
-            for (_DDOperatorInfo *info in potentialOperators) {
+            NSArray *potentialOperators = @[[DDMathOperator infoForOperatorFunction:DDOperatorUnaryPlus],
+                                            [DDMathOperator infoForOperatorFunction:DDOperatorUnaryMinus]];
+            for (DDMathOperator *info in potentialOperators) {
                 if ([info.tokens containsObject:token.token]) {
                     resolvedOperator = info.function;
                     break;
                 }
             }
         } else {
-            NSArray *potentialOperators = @[[_DDOperatorInfo infoForOperatorFunction:DDOperatorAdd],
-                                            [_DDOperatorInfo infoForOperatorFunction:DDOperatorMinus]];
-            for (_DDOperatorInfo *info in potentialOperators) {
+            NSArray *potentialOperators = @[[DDMathOperator infoForOperatorFunction:DDOperatorAdd],
+                                            [DDMathOperator infoForOperatorFunction:DDOperatorMinus]];
+            for (DDMathOperator *info in potentialOperators) {
                 if ([info.tokens containsObject:token.token]) {
                     resolvedOperator = info.function;
                     break;
@@ -557,7 +557,7 @@
     
     while ([operatorCharacters characterIsMember:character]) {
         NSString *tmp = [NSString stringWithCharacters:(_caseInsensitiveCharacters+start) length:length];
-        NSArray *operators = [_DDOperatorInfo infosForOperatorToken:tmp];
+        NSArray *operators = [DDMathOperator infosForOperatorToken:tmp];
         if ([operators count] > 0) {
             lastGood = tmp;
             lastGoodLength = length;

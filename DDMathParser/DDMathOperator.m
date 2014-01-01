@@ -6,13 +6,13 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "_DDOperatorInfo.h"
+#import "DDMathOperator.h"
 
 static NSArray *_allOperators;
 static NSDictionary *_operatorsByFunction;
 static NSDictionary *_infosByToken;
 
-@implementation _DDOperatorInfo
+@implementation DDMathOperator
 
 - (id)initWithOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
     self = [super init];
@@ -27,7 +27,7 @@ static NSDictionary *_infosByToken;
 }
 
 + (id)infoForOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
-    return [[_DDOperatorInfo alloc] initWithOperatorFunction:function tokens:tokens arity:arity precedence:precedence associativity:associativity];
+    return [[DDMathOperator alloc] initWithOperatorFunction:function tokens:tokens arity:arity precedence:precedence associativity:associativity];
 }
 
 + (instancetype)infoForOperatorFunction:(NSString *)function {
@@ -168,7 +168,7 @@ static NSDictionary *_infosByToken;
 #endif
         
         NSMutableDictionary *lookupByToken = [NSMutableDictionary dictionary];
-        for (_DDOperatorInfo *info in _allOperators) {
+        for (DDMathOperator *info in _allOperators) {
             NSArray *tokens = [info tokens];
             for (NSString *token in tokens) {
                 NSMutableArray *infosForThisToken = [lookupByToken objectForKey:token];
