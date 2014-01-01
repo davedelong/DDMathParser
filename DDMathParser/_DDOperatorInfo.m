@@ -156,6 +156,7 @@ static NSDictionary *_infosByToken;
         
         
 #if DD_INCLUDE_OPERATOR_WORDS
+        // these should all be lowercase
         [[_operatorsByFunction objectForKey:DDOperatorLogicalOr] addTokens:@[@"or"]];
         [[_operatorsByFunction objectForKey:DDOperatorLogicalAnd] addTokens:@[@"and"]];
         [[_operatorsByFunction objectForKey:DDOperatorLogicalEqual] addTokens:@[@"eq"]];

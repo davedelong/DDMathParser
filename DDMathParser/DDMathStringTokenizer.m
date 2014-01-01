@@ -38,7 +38,17 @@
 
 @end
 
-@implementation DDMathStringTokenizer
+@implementation DDMathStringTokenizer {
+    unichar *_characters;
+    unichar *_caseInsensitiveCharacters;
+    
+    NSUInteger _length;
+    NSUInteger _characterIndex;
+    
+    NSArray *_tokens;
+    NSUInteger _tokenIndex;
+    
+}
 
 + (NSCharacterSet *)legalCharacters {
     static dispatch_once_t onceToken;
@@ -95,7 +105,10 @@
         
         _length = [expressionString length];
         _characters = calloc(_length+1, sizeof(unichar));
+        _caseInsensitiveCharacters = calloc(_length+1, sizeof(unichar));
+        
         [expressionString getCharacters:_characters];
+        [[expressionString lowercaseString] getCharacters:_caseInsensitiveCharacters];
         
         _characterIndex = 0;
         
@@ -119,6 +132,7 @@
 
 - (void)dealloc {
     free(_characters);
+    free(_caseInsensitiveCharacters);
 }
 
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error {
@@ -297,12 +311,20 @@
 #pragma mark Character methods
 
 - (unichar)_peekNextCharacter {
-    if (_characterIndex >= _length) { return '\0'; }
-    return _characters[_characterIndex];
+    return [self _peek:_characters];
 }
 
 - (unichar)_nextCharacter {
-    unichar character = [self _peekNextCharacter];
+    return [self _next:_characters];
+}
+
+- (unichar)_peek:(unichar *)characters {
+    if (_characterIndex >= _length) { return '\0'; }
+    return characters[_characterIndex];
+}
+
+- (unichar)_next:(unichar *)characters {
+    unichar character = [self _peek:characters];
     if (character != '\0') { _characterIndex++; }
     return character;
 }
@@ -526,7 +548,7 @@
     NSUInteger start = _characterIndex;
     NSUInteger length = 1;
     
-    unichar character = [self _nextCharacter];
+    unichar character = [self _next:_caseInsensitiveCharacters];
     
     NSCharacterSet *operatorCharacters = [[self class] _operatorCharacterSet];
     
@@ -534,13 +556,13 @@
     NSUInteger lastGoodLength = length;
     
     while ([operatorCharacters characterIsMember:character]) {
-        NSString *tmp = [NSString stringWithCharacters:(_characters+start) length:length];
+        NSString *tmp = [NSString stringWithCharacters:(_caseInsensitiveCharacters+start) length:length];
         NSArray *operators = [_DDOperatorInfo infosForOperatorToken:tmp];
         if ([operators count] > 0) {
             lastGood = tmp;
             lastGoodLength = length;
         }
-        character = [self _nextCharacter];
+        character = [self _next:_caseInsensitiveCharacters];
         length++;
     }
     
