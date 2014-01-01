@@ -72,12 +72,12 @@ static NSDictionary *_infosByToken;
         [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThan tokens:@[@">"] arity:BINARY precedence:precedence associativity:LEFT]];
         precedence++;
         
-        // \u2264 is ≤
-        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual tokens:@[@"<=", @"=<", @"\u2264"] arity:BINARY precedence:precedence associativity:LEFT]];
+        // \u2264 is ≤, \u226f is ≯ (not greater than)
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual tokens:@[@"<=", @"=<", @"\u2264", @"\u226f"] arity:BINARY precedence:precedence associativity:LEFT]];
         precedence++;
         
-        // \u2265 is ≥
-        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual tokens:@[@">=", @"=>", @"\u2265"] arity:BINARY precedence:precedence associativity:LEFT]];
+        // \u2265 is ≥, \u226e is ≮ (not less than)
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual tokens:@[@">=", @"=>", @"\u2265", @"\u226e"] arity:BINARY precedence:precedence associativity:LEFT]];
         precedence++;
         
         // \u00AC is ¬

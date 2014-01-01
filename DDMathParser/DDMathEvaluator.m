@@ -133,10 +133,10 @@
     }
     
 	if (e == nil && error != nil) {
-        *error = [NSError errorWithDomain:DDMathParserErrorDomain 
-                                     code:DDErrorCodeUnresolvedFunction 
+        *error = [NSError errorWithDomain:DDMathParserErrorDomain
+                                     code:DDErrorCodeUnresolvedFunction
                                  userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"unable to resolve function: %@", functionName],
-                                           DDUnknownFunctionKey: functionName}];
+                                            DDUnknownFunctionKey: functionName}];
 	}
 	return e;
 }
@@ -230,7 +230,7 @@
         *error = [NSError errorWithDomain:DDMathParserErrorDomain
                                      code:DDErrorCodeUnresolvedVariable
                                  userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"unable to resolve variable: %@", e],
-                                           DDUnknownVariableKey: [e variable]}];
+                                            DDUnknownVariableKey: [e variable]}];
 	}
 	return numberValue;
     
@@ -241,7 +241,7 @@
     id result = [_functionEvaluator evaluateFunction:e variables:substitutions error:error];
     
     if (!result) { return nil; }
-		
+    
     NSNumber *numberValue = [self _evaluateValue:result withSubstitutions:substitutions error:error];
     if (numberValue == nil && error != nil && *error == nil) {
         *error = ERR(DDErrorCodeInvalidFunctionReturnType, @"invalid return type from %@ function", [e function]);
@@ -268,19 +268,19 @@
     static NSDictionary *standardAliases = nil;
     dispatch_once(&onceToken, ^{
         standardAliases = @{@"avg": @"average",
-                           @"mean": @"average",
-                           @"trunc": @"floor",
-                           @"modulo": @"mod",
-                           @"\u03C0": @"pi", // π
-                           @"tau_2": @"pi",
-                           @"\u03C4": @"tau", // τ
-                           @"\u03D5": @"phi", // ϕ
-                           
-                           @"vers": @"versin",
-                           @"ver": @"versin",
-                           @"vercos": @"vercosin",
-                           @"cvs": @"coversin",
-                           @"chord": @"crd"};
+                            @"mean": @"average",
+                            @"trunc": @"floor",
+                            @"modulo": @"mod",
+                            @"\u03C0": @"pi", // π
+                            @"tau_2": @"pi",
+                            @"\u03C4": @"tau", // τ
+                            @"\u03D5": @"phi", // ϕ
+                            
+                            @"vers": @"versin",
+                            @"ver": @"versin",
+                            @"vercos": @"vercosin",
+                            @"cvs": @"coversin",
+                            @"chord": @"crd"};
     });
     return standardAliases;
 }
@@ -290,31 +290,31 @@
     static NSDictionary *rules = nil;
     dispatch_once(&onceToken, ^{
         rules = @{@"0+__exp1": @"__exp1",
-                 @"__exp1+0": @"__exp1",
-                 @"__exp1 + __exp1": @"2*__exp1",
-                 
-                 //subtraction
-                 @"__exp1 - __exp1": @"0",
-                 
-                 //multiplication
-                 @"1 * __exp1": @"__exp1",
-                 @"__exp1 * 1": @"__exp1",
-                 @"__exp1 * __exp1": @"pow(__exp1, 2)",
-                 @"multiply(__num1, __var1)": @"multiply(__var1, __num1)",
-                 @"0 * __exp1": @"0",
-                 @"__exp1 * 0": @"0",
-                 
-                 //other stuff
-                 @"--__exp1": @"__exp1",
-                 @"abs(-__exp1)": @"abs(__exp1)",
-                 @"exp(__exp1) * exp(__exp2)": @"exp(__exp1 + __exp2)",
-                 @"pow(__exp1, __exp3) * pow(__exp2, __exp3)": @"pow(__exp1 * __exp2, __exp3)",
-                 @"pow(__exp1, 0)": @"1",
-                 @"pow(__exp1, 1)": @"__exp1",
-                 @"sqrt(pow(__exp1, 2))": @"abs(__exp1)",
-                 
-                 //
-                 @"dtor(rtod(__exp1))": @"__exp1"};
+                  @"__exp1+0": @"__exp1",
+                  @"__exp1 + __exp1": @"2*__exp1",
+                  
+                  //subtraction
+                  @"__exp1 - __exp1": @"0",
+                  
+                  //multiplication
+                  @"1 * __exp1": @"__exp1",
+                  @"__exp1 * 1": @"__exp1",
+                  @"__exp1 * __exp1": @"pow(__exp1, 2)",
+                  @"multiply(__num1, __var1)": @"multiply(__var1, __num1)",
+                  @"0 * __exp1": @"0",
+                  @"__exp1 * 0": @"0",
+                  
+                  //other stuff
+                  @"--__exp1": @"__exp1",
+                  @"abs(-__exp1)": @"abs(__exp1)",
+                  @"exp(__exp1) * exp(__exp2)": @"exp(__exp1 + __exp2)",
+                  @"pow(__exp1, __exp3) * pow(__exp2, __exp3)": @"pow(__exp1 * __exp2, __exp3)",
+                  @"pow(__exp1, 0)": @"1",
+                  @"pow(__exp1, 1)": @"__exp1",
+                  @"sqrt(pow(__exp1, 2))": @"abs(__exp1)",
+                  
+                  //
+                  @"dtor(rtod(__exp1))": @"__exp1"};
     });
     return rules;
 }
