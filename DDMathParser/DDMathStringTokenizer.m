@@ -58,7 +58,7 @@
     static NSCharacterSet *_operatorSet = nil;
     dispatch_once(&onceToken, ^{
         NSArray *allOperators = [_DDOperatorInfo allOperators];
-        NSArray *operatorTokens = [allOperators valueForKey:@"token"];
+        NSArray *operatorTokens = [allOperators valueForKeyPath:@"@distinctUnionOfArrays.tokens"];
         NSString *operatorString = [operatorTokens componentsJoinedByString:@""];
         _operatorSet = [NSCharacterSet characterSetWithCharactersInString:operatorString];
     });
@@ -141,7 +141,7 @@
 }
 
 - (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error {
-    DDMathStringToken *previousToken = [_tokens lastObject];   
+    DDMathStringToken *previousToken = [_tokens lastObject];
     if ([token tokenType] == DDTokenTypeOperator && [token operatorType] == DDOperatorInvalid) {
         NSString *resolvedOperator = DDOperatorInvalid;
         
@@ -167,23 +167,29 @@
         }
         
         if (shouldBeUnary) {
-            if ([[token token] isEqual:@"+"]) {
-                resolvedOperator = DDOperatorUnaryPlus;
-            } else if ([[token token] isEqual:@"-"]) {
-                resolvedOperator = DDOperatorUnaryMinus;
+            NSArray *potentialOperators = @[[_DDOperatorInfo infoForOperatorFunction:DDOperatorUnaryPlus],
+                                            [_DDOperatorInfo infoForOperatorFunction:DDOperatorUnaryMinus]];
+            for (_DDOperatorInfo *info in potentialOperators) {
+                if ([info.tokens containsObject:token.token]) {
+                    resolvedOperator = info.function;
+                    break;
+                }
             }
         } else {
-            if ([[token token] isEqual:@"+"]) {
-                resolvedOperator = DDOperatorAdd;
-            } else if ([[token token] isEqual:@"-"]) {
-                resolvedOperator = DDOperatorMinus;
+            NSArray *potentialOperators = @[[_DDOperatorInfo infoForOperatorFunction:DDOperatorAdd],
+                                            [_DDOperatorInfo infoForOperatorFunction:DDOperatorMinus]];
+            for (_DDOperatorInfo *info in potentialOperators) {
+                if ([info.tokens containsObject:token.token]) {
+                    resolvedOperator = info.function;
+                    break;
+                }
             }
         }
         
         if (resolvedOperator == DDOperatorInvalid && [[token token] isEqual:@"!"]) {
             if (previousToken == nil) {
                 resolvedOperator = DDOperatorLogicalNot;
-            } else if ([previousToken tokenType] == DDTokenTypeOperator && 
+            } else if ([previousToken tokenType] == DDTokenTypeOperator &&
                        ([previousToken operatorArity] == DDOperatorArityBinary ||
                         [previousToken operatorAssociativity] == DDOperatorAssociativityRight)
                        ) {
@@ -216,7 +222,7 @@
             [previousToken tokenType] == DDTokenTypeVariable ||
             ([previousToken operatorArity] == DDOperatorArityUnary && [previousToken operatorAssociativity] == DDOperatorAssociativityLeft)) {
             
-            if ([token tokenType] != DDTokenTypeOperator || 
+            if ([token tokenType] != DDTokenTypeOperator ||
                 ([token operatorArity] == DDOperatorArityUnary && [token operatorAssociativity] == DDOperatorAssociativityRight)) {
                 //inject a "multiplication" token:
                 shouldInsertMultiplier = YES;
@@ -315,10 +321,6 @@
         token = [self _parseNumberWithError:error];
     }
     
-    if (token == nil) {
-        token = [self _parseFunctionWithError:error];
-    }
-    
     if (token == nil && next == '$') {
         token = [self _parseVariableWithError:error];
     }
@@ -333,6 +335,10 @@
     
     if (token == nil) {
         token = [self _parseOperatorWithError:error];
+    }
+    
+    if (token == nil) {
+        token = [self _parseFunctionWithError:error];
     }
     
     if (token != nil) {
@@ -440,7 +446,7 @@
     if ([singleCharacterFunctions characterIsMember:[self _peekNextCharacter]]) {
         length++;
         _characterIndex++;
-    } else {    
+    } else {
         NSCharacterSet *functionSet = [[self class] _functionCharacterSet];
         while ([functionSet characterIsMember:[self _peekNextCharacter]]) {
             length++;

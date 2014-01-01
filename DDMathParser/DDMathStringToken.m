@@ -104,13 +104,8 @@
 }
 
 - (void)resolveToOperator:(NSString *)operator {
-    _operatorInfo = nil;
-    
-    NSArray *matching = [_DDOperatorInfo infosForOperatorFunction:operator];
-    if ([matching count] > 0) {
-        _ambiguous = NO;
-        _operatorInfo = [matching objectAtIndex:0];
-    }
+    _operatorInfo = [_DDOperatorInfo infoForOperatorFunction:operator];
+    _ambiguous = (_operatorInfo == nil);
 }
 
 @end

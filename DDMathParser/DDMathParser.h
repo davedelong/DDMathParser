@@ -22,3 +22,5 @@
 // https://github.com/davedelong/DDMathParser/wiki
 #define DD_INTERPRET_PERCENT_SIGN_AS_MOD 1
 
+// change this to 1 if want "a or b" to be equivalent to "a || b"
+#define DD_INCLUDE_OPERATOR_WORDS 0

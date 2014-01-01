@@ -477,7 +477,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
     DDExpression *percentContext = [percentExpression parentExpression];
     
     NSString *parentFunction = [percentContext function];
-    _DDOperatorInfo *operatorInfo = [[_DDOperatorInfo infosForOperatorFunction:parentFunction] lastObject];
+    _DDOperatorInfo *operatorInfo = [_DDOperatorInfo infoForOperatorFunction:parentFunction];
     
     NSNumber *context = @1;
     

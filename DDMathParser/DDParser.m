@@ -18,16 +18,13 @@
 #import "_DDOperatorInfo.h"
 
 static inline void DDOperatorSetAssociativity(NSString *o, DDOperatorAssociativity a) {
-    NSArray *ops = [_DDOperatorInfo infosForOperatorFunction:o];
-    for (_DDOperatorInfo *info in ops) {
-        [info setDefaultAssociativity:a];
-    }
+    _DDOperatorInfo *info = [_DDOperatorInfo infoForOperatorFunction:o];
+    info.defaultAssociativity = a;
 }
 
 static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
-    NSArray *ops = [_DDOperatorInfo infosForOperatorFunction:o];
-    _DDOperatorInfo *info = [ops objectAtIndex:0];
-    return [info defaultAssociativity];
+    _DDOperatorInfo *info = [_DDOperatorInfo infoForOperatorFunction:o];
+    return info.defaultAssociativity;
 }
 
 @implementation DDParser

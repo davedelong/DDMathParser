@@ -12,13 +12,13 @@
 @interface _DDOperatorInfo : NSObject
 
 @property (nonatomic, readonly, strong) NSString *function;
-@property (nonatomic, readonly, strong) NSString *token;
+@property (nonatomic, readonly, strong) NSArray *tokens;
 @property (nonatomic, readonly) DDOperatorArity arity;
 @property (nonatomic, assign) DDOperatorAssociativity defaultAssociativity;
 @property (nonatomic, readonly) NSInteger precedence;
 
 + (NSArray *)allOperators;
-+ (NSArray *)infosForOperatorFunction:(NSString *)operator;
++ (instancetype)infoForOperatorFunction:(NSString *)operator;
 + (NSArray *)infosForOperatorToken:(NSString *)token;
 
 @end

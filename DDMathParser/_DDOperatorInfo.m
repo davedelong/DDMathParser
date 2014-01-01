@@ -8,200 +8,182 @@
 
 #import "_DDOperatorInfo.h"
 
+static NSArray *_allOperators;
+static NSDictionary *_operatorsByFunction;
+static NSDictionary *_infosByToken;
+
 @implementation _DDOperatorInfo
 
-- (id)initWithOperatorFunction:(NSString *)function token:(NSString *)token arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
+- (id)initWithOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
     self = [super init];
     if (self) {
         _arity = arity;
         _defaultAssociativity = associativity;
         _precedence = precedence;
-        _token = token;
+        _tokens = tokens;
         _function = function;
     }
     return self;
 }
 
-+ (id)infoForOperatorFunction:(NSString *)function token:(NSString *)token arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
-    return [[self alloc] initWithOperatorFunction:function token:token arity:arity precedence:precedence associativity:associativity];
++ (id)infoForOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity precedence:(NSInteger)precedence associativity:(DDOperatorAssociativity)associativity {
+    return [[_DDOperatorInfo alloc] initWithOperatorFunction:function tokens:tokens arity:arity precedence:precedence associativity:associativity];
 }
 
-+ (NSArray *)infosForOperatorFunction:(NSString *)operator {
-    static dispatch_once_t onceToken;
-    static NSMutableDictionary *_operatorLookup = nil;
-    dispatch_once(&onceToken, ^{
-        _operatorLookup = [[NSMutableDictionary alloc] init];
-        
-        NSArray *operators = [self allOperators];
-        for (_DDOperatorInfo *info in operators) {
-            NSString *key = [info function];
-            
-            NSMutableArray *value = [_operatorLookup objectForKey:key];
-            if (value == nil) {
-                value = [NSMutableArray array];
-                [_operatorLookup setObject:value forKey:key];
-            }
-            [value addObject:info];
-        }
-        
-        // this is to make sure all of the operators are defined correctly
-        _DDOperatorInfo *baseInfo = nil;
-        for (NSString *functionName in _operatorLookup) {
-            NSArray *operatorInfos = [_operatorLookup objectForKey:functionName];
-            baseInfo = [operatorInfos lastObject];
-            for (_DDOperatorInfo *info in operatorInfos) {
-                NSAssert([info precedence] == [baseInfo precedence], @"mismatched operator precedences: %@ ≠ %@", [info token], [baseInfo token]);
-                NSAssert([info arity] == [baseInfo arity], @"mismatched operator arity: %@ ≠ %@", [info token], [baseInfo token]);
-                NSAssert([info defaultAssociativity] == [baseInfo defaultAssociativity], @"mismatched operator associativity: %@ ≠ %@", [info token], [baseInfo token]);
-            }
-        }
-    });
-    return [_operatorLookup objectForKey:operator];
++ (instancetype)infoForOperatorFunction:(NSString *)function {
+    [self _buildOperators];
+    return [_operatorsByFunction objectForKey:function];
 }
 
 + (NSArray *)infosForOperatorToken:(NSString *)token {
-    static dispatch_once_t onceToken;
-    static NSMutableDictionary *_operatorLookup = nil;
-    dispatch_once(&onceToken, ^{
-        _operatorLookup = [[NSMutableDictionary alloc] init];
-        
-        NSArray *operators = [self allOperators];
-        for (_DDOperatorInfo *info in operators) {
-            
-            NSMutableArray *value = [_operatorLookup objectForKey:[info token]];
-            if (value == nil) {
-                value = [NSMutableArray array];
-                [_operatorLookup setObject:value forKey:[info token]];
-            }
-            [value addObject:info];
-        }
-    });
-    return [_operatorLookup objectForKey:token];
+    [self _buildOperators];
+    return [_infosByToken objectForKey:token];
 }
 
-+ (NSArray *)_buildOperators {
-    NSMutableArray *operators = [NSMutableArray array];
-    NSInteger precedence = 0;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalOr token:@"||" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u2228 is ∨
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalOr token:@"\u2228" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalAnd token:@"&&" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u2227 is ∧
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalAnd token:@"\u2227" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    // == and != have the same precedence
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalEqual token:@"==" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalEqual token:@"=" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalNotEqual token:@"!=" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThan token:@"<" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThan token:@">" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual token:@"<=" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual token:@"=<" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u2264 is ≤
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual token:@"\u2264" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual token:@">=" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual token:@"=>" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u2265 is ≥
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual token:@"\u2265" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalNot token:@"!" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    // \u00AC is ¬
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalNot token:@"\u00ac" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseOr token:@"|" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseXor token:@"^" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseAnd token:@"&" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorLeftShift token:@"<<" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorRightShift token:@">>" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    // addition and subtraction have the same precedence
-    [operators addObject:[self infoForOperatorFunction:DDOperatorAdd token:@"+" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorMinus token:@"-" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u2212 is −
-    [operators addObject:[self infoForOperatorFunction:DDOperatorMinus token:@"\u2212" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    // multiplication and division have the same precedence
-    [operators addObject:[self infoForOperatorFunction:DDOperatorMultiply token:@"*" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u00d7 is ×
-    [operators addObject:[self infoForOperatorFunction:DDOperatorMultiply token:@"\u00d7" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorDivide token:@"/" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u00f7 is ÷
-    [operators addObject:[self infoForOperatorFunction:DDOperatorDivide token:@"\u00f7" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
+- (void)addTokens:(NSArray *)moreTokens {
+    _tokens = [_tokens arrayByAddingObjectsFromArray:moreTokens];
+}
+
+#define UNARY DDOperatorArityUnary
+#define BINARY DDOperatorArityBinary
+#define LEFT DDOperatorAssociativityLeft
+#define RIGHT DDOperatorAssociativityRight
+
++ (void)_buildOperators {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSMutableArray *operators = [NSMutableArray array];
+        NSInteger precedence = 0;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalOr tokens:@[@"||", @"\u2228"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalAnd tokens:@[@"&&", @"\u2227"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        // == and != have the same precedence
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalEqual tokens:@[@"==", @"="] arity:BINARY precedence:precedence associativity:LEFT]];
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalNotEqual tokens:@[@"!="] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThan tokens:@[@"<"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThan tokens:@[@">"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        // \u2264 is ≤
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalLessThanOrEqual tokens:@[@"<=", @"=<", @"\u2264"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        // \u2265 is ≥
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalGreaterThanOrEqual tokens:@[@">=", @"=>", @"\u2265"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        // \u00AC is ¬
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLogicalNot tokens:@[@"!", @"\u00ac"] arity:UNARY precedence:precedence associativity:RIGHT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseOr tokens:@[@"|"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseXor tokens:@[@"^"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseAnd tokens:@[@"&"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorLeftShift tokens:@[@"<<"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorRightShift tokens:@[@">>"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        // addition and subtraction have the same precedence
+        [operators addObject:[self infoForOperatorFunction:DDOperatorAdd tokens:@[@"+"] arity:BINARY precedence:precedence associativity:LEFT]];
+        // \u2212 is −
+        [operators addObject:[self infoForOperatorFunction:DDOperatorMinus tokens:@[@"-", @"\u2212"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        // multiplication and division have the same precedence
+        // \u00d7 is ×
+        [operators addObject:[self infoForOperatorFunction:DDOperatorMultiply tokens:@[@"*", @"\u00d7"] arity:BINARY precedence:precedence associativity:LEFT]];
+        // \u00f7 is ÷
+        [operators addObject:[self infoForOperatorFunction:DDOperatorDivide tokens:@[@"/", @"\u00f7"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
 #if DD_INTERPRET_PERCENT_SIGN_AS_MOD
-    [operators addObject:[self infoForOperatorFunction:DDOperatorModulo token:@"%" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
+        [operators addObject:[self infoForOperatorFunction:DDOperatorModulo tokens:@[@"%"] arity:BINARY precedence:precedence associativity:LEFT]];
+        precedence++;
 #endif
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseNot token:@"~" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    precedence++;
-    
-    // right associative unary operators have the same precedence
-    [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryMinus token:@"-" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    // \u2212 is −
-    [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryMinus token:@"\u2212" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryPlus token:@"+" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    precedence++;
-    
-    // all the left associative unary operators have the same precedence
-    [operators addObject:[self infoForOperatorFunction:DDOperatorFactorial token:@"!" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u00ba is º (option-0); not necessary a degree sign, but common enough for it
-    [operators addObject:[self infoForOperatorFunction:DDOperatorDegree token:@"\u00ba" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    // \u00b0 is °
-    [operators addObject:[self infoForOperatorFunction:DDOperatorDegree token:@"\u00b0" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorBitwiseNot tokens:@[@"~"] arity:UNARY precedence:precedence associativity:RIGHT]];
+        precedence++;
+        
+        // right associative unary operators have the same precedence
+        // \u2212 is −
+        [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryMinus tokens:@[@"-", @"\u2212"] arity:UNARY precedence:precedence associativity:RIGHT]];
+        [operators addObject:[self infoForOperatorFunction:DDOperatorUnaryPlus tokens:@[@"+"] arity:UNARY precedence:precedence associativity:RIGHT]];
+        precedence++;
+        
+        // all the left associative unary operators have the same precedence
+        [operators addObject:[self infoForOperatorFunction:DDOperatorFactorial tokens:@[@"!"] arity:UNARY precedence:precedence associativity:LEFT]];
+        // \u00ba is º (option-0); not necessary a degree sign, but common enough for it
+        // \u00b0 is °
+        [operators addObject:[self infoForOperatorFunction:DDOperatorDegree tokens:@[@"\u00ba", @"\u00b0"] arity:UNARY precedence:precedence associativity:LEFT]];
+        
 #if !DD_INTERPRET_PERCENT_SIGN_AS_MOD
-    [operators addObject:[self infoForOperatorFunction:DDOperatorPercent token:@"%" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
+        [operators addObject:[self infoForOperatorFunction:DDOperatorPercent tokens:@[@"%"] arity:UNARY precedence:precedence associativity:LEFT]];
 #endif
-    
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorPower token:@"**" arity:DDOperatorArityBinary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    precedence++;
-    
-    // ( and ) have the same precedence
-    // these are defined as unary right/left associative for convenience
-    [operators addObject:[self infoForOperatorFunction:DDOperatorParenthesisOpen token:@"(" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityRight]];
-    [operators addObject:[self infoForOperatorFunction:DDOperatorParenthesisClose token:@")" arity:DDOperatorArityUnary precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    [operators addObject:[self infoForOperatorFunction:DDOperatorComma token:@"," arity:DDOperatorArityUnknown precedence:precedence associativity:DDOperatorAssociativityLeft]];
-    precedence++;
-    
-    return operators;
+        
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorPower tokens:@[@"**"] arity:BINARY precedence:precedence associativity:RIGHT]];
+        precedence++;
+        
+        // ( and ) have the same precedence
+        // these are defined as unary right/left associative for convenience
+        [operators addObject:[self infoForOperatorFunction:DDOperatorParenthesisOpen tokens:@[@"("] arity:UNARY precedence:precedence associativity:RIGHT]];
+        [operators addObject:[self infoForOperatorFunction:DDOperatorParenthesisClose tokens:@[@")"] arity:UNARY precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        [operators addObject:[self infoForOperatorFunction:DDOperatorComma tokens:@[@","] arity:DDOperatorArityUnknown precedence:precedence associativity:LEFT]];
+        precedence++;
+        
+        _allOperators = [operators copy];
+        NSArray *functions = [_allOperators valueForKey:@"function"];
+        _operatorsByFunction = [NSDictionary dictionaryWithObjects:_allOperators forKeys:functions];
+        
+        
+#if DD_INCLUDE_OPERATOR_WORDS
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalOr] addTokens:@[@"or"]];
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalAnd] addTokens:@[@"and"]];
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalEqual] addTokens:@[@"eq"]];
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalNotEqual] addTokens:@[@"neq"]];
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalLessThan] addTokens:@[@"lt"]];
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalGreaterThan] addTokens:@[@"gt"]];
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalLessThanOrEqual] addTokens:@[@"lte", @"ltoe"]];
+        [[_operatorsByFunction objectForKey:DDOperatorLogicalGreaterThanOrEqual] addTokens:@[@"gte", @"gtoe"]];
+#endif
+        
+        NSMutableDictionary *lookupByToken = [NSMutableDictionary dictionary];
+        for (_DDOperatorInfo *info in _allOperators) {
+            NSArray *tokens = [info tokens];
+            for (NSString *token in tokens) {
+                NSMutableArray *infosForThisToken = [lookupByToken objectForKey:token];
+                if (infosForThisToken == nil) {
+                    infosForThisToken = [NSMutableArray array];
+                    [lookupByToken setObject:infosForThisToken forKey:token];
+                }
+                [infosForThisToken addObject:info];
+            }
+        }
+        _infosByToken = [lookupByToken copy];
+    });
 }
 
 + (NSArray *)allOperators {
-    static NSArray *_allOperators;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _allOperators = [[self _buildOperators] copy];
-    });
+    [self _buildOperators];
     return _allOperators;
 }
 
