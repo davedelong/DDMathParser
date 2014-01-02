@@ -122,36 +122,36 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
 	return self;
 }
 
-- (DDOperatorAssociativity)associativityForOperator:(NSString *)operatorType {
-    if (operatorType == DDOperatorBitwiseOr) {
+- (DDOperatorAssociativity)associativityForOperatorFunction:(NSString *)function {
+    if (function == DDOperatorBitwiseOr) {
         return bitwiseOrAssociativity;
     }
-    if (operatorType == DDOperatorBitwiseXor) {
+    if (function == DDOperatorBitwiseXor) {
         return bitwiseXorAssociativity;
     }
-    if (operatorType == DDOperatorBitwiseAnd) {
+    if (function == DDOperatorBitwiseAnd) {
         return bitwiseAndAssociativity;
     }
-    if (operatorType == DDOperatorLeftShift) {
+    if (function == DDOperatorLeftShift) {
         return bitwiseLeftShiftAssociativity;
     }
-    if (operatorType == DDOperatorRightShift) {
+    if (function == DDOperatorRightShift) {
         return bitwiseRightShiftAssociativity;
     }
-    if (operatorType == DDOperatorMinus || operatorType == DDOperatorAdd) {
+    if (function == DDOperatorMinus || function == DDOperatorAdd) {
         return additionAssociativity;
     }
-    if (operatorType == DDOperatorDivide || operatorType == DDOperatorMultiply) {
+    if (function == DDOperatorDivide || function == DDOperatorMultiply) {
         return multiplicationAssociativity;
     }
-    if (operatorType == DDOperatorModulo) {
+    if (function == DDOperatorModulo) {
         return modAssociativity;
     }
-    if (operatorType == DDOperatorPower) {
+    if (function == DDOperatorPower) {
         return powerAssociativity;
     }
     
-    return DDOperatorGetAssociativity(operatorType);
+    return DDOperatorGetAssociativity(function);
 }
 
 - (DDExpression *)parsedExpressionWithError:(NSError **)error {

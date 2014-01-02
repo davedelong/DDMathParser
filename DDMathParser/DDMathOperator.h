@@ -18,7 +18,7 @@
 @property (nonatomic, readonly) NSInteger precedence;
 
 + (NSArray *)allOperators;
-+ (instancetype)infoForOperatorFunction:(NSString *)operator;
++ (instancetype)infoForOperatorFunction:(NSString *)function;
 + (NSArray *)infosForOperatorToken:(NSString *)token;
 
 @end

@@ -180,9 +180,9 @@
     [_functionMap removeObjectForKey:alias];
 }
 
-- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template condition:(NSString *)condition {
+- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)templateString condition:(NSString *)condition {
     [self _registerStandardRewriteRules];
-    _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:template replacementPattern:rule condition:condition];
+    _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:templateString replacementPattern:rule condition:condition];
     [_rewriteRules addObject:rewriteRule];
 }
 
@@ -325,10 +325,10 @@
     _rewriteRules = [[NSMutableArray alloc] init];
     
     NSDictionary *templates = [[self class] _standardRewriteRules];
-    for (NSString *template in templates) {
-        NSString *replacement = [templates objectForKey:template];
+    for (NSString *templateString in templates) {
+        NSString *replacement = [templates objectForKey:templateString];
         
-        [self addRewriteRule:replacement forExpressionsMatchingTemplate:template condition:nil];
+        [self addRewriteRule:replacement forExpressionsMatchingTemplate:templateString condition:nil];
     }
     
     //division

@@ -99,12 +99,12 @@
 }
 
 - (DDOperatorAssociativity)operatorAssociativity {
-    if (_ambiguous) { return 0; }
+    if (_ambiguous) { return DDOperatorAssociativityLeft; }
     return [_operatorInfo defaultAssociativity];
 }
 
-- (void)resolveToOperator:(NSString *)operator {
-    _operatorInfo = [DDMathOperator infoForOperatorFunction:operator];
+- (void)resolveToOperatorFunction:(NSString *)function {
+    _operatorInfo = [DDMathOperator infoForOperatorFunction:function];
     _ambiguous = (_operatorInfo == nil);
 }
 

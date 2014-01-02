@@ -33,6 +33,6 @@ typedef enum {
 
 @property (nonatomic, readonly) NSNumber *numberValue;
 
-- (void)resolveToOperator:(NSString *)operator;
+- (void)resolveToOperatorFunction:(NSString *)function;
 
 @end

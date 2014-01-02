@@ -41,7 +41,7 @@
 
 - (DDExpressionType)expressionType {
 	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)];
-	return 0;
+	return DDExpressionTypeNumber;
 }
 - (NSNumber *)evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
 	return [evaluator evaluateExpression:self withSubstitutions:substitutions error:error];

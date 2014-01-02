@@ -54,11 +54,11 @@
     static dispatch_once_t onceToken;
     static NSCharacterSet *legal = nil;
     dispatch_once(&onceToken, ^{
-        NSMutableCharacterSet *mutable = [NSMutableCharacterSet characterSetWithCharactersInString:@"$."];
-        [mutable formUnionWithCharacterSet:[self _operatorCharacterSet]];
-        [mutable formUnionWithCharacterSet:[self _functionCharacterSet]];
-        [mutable formUnionWithCharacterSet:[self _singleCharacterFunctionCharacterSet]];
-        legal = [mutable copy];
+        NSMutableCharacterSet *mutableCharacters = [NSMutableCharacterSet characterSetWithCharactersInString:@"$."];
+        [mutableCharacters formUnionWithCharacterSet:[self _operatorCharacterSet]];
+        [mutableCharacters formUnionWithCharacterSet:[self _functionCharacterSet]];
+        [mutableCharacters formUnionWithCharacterSet:[self _singleCharacterFunctionCharacterSet]];
+        legal = [mutableCharacters copy];
     });
     return legal;
 }
@@ -104,8 +104,8 @@
     if (self) {
         
         _length = [expressionString length];
-        _characters = calloc(_length+1, sizeof(unichar));
-        _caseInsensitiveCharacters = calloc(_length+1, sizeof(unichar));
+        _characters = (unichar *)calloc(_length+1, sizeof(unichar));
+        _caseInsensitiveCharacters = (unichar *)calloc(_length+1, sizeof(unichar));
         
         [expressionString getCharacters:_characters];
         [[expressionString lowercaseString] getCharacters:_caseInsensitiveCharacters];
@@ -213,7 +213,7 @@
             }
         }
         
-        [token resolveToOperator:resolvedOperator];
+        [token resolveToOperatorFunction:resolvedOperator];
         
         if ([token operatorType] == DDOperatorInvalid) {
             if (error != nil) {
