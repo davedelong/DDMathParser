@@ -14,11 +14,23 @@
 @property (nonatomic, readonly, strong) NSString *function;
 @property (nonatomic, readonly, strong) NSArray *tokens;
 @property (nonatomic, readonly) DDOperatorArity arity;
-@property (nonatomic, assign) DDOperatorAssociativity defaultAssociativity;
-@property (nonatomic, readonly) NSInteger precedence;
+@property (nonatomic, readonly) DDOperatorAssociativity associativity;
 
 + (NSArray *)allOperators;
 + (instancetype)infoForOperatorFunction:(NSString *)function;
 + (NSArray *)infosForOperatorToken:(NSString *)token;
+
+// the only reason you'd want to init a new Operator is so you can pass it to the +addOperator:... methods
+- (id)initWithOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity;
+
+
+// modifying operators is not a threadsafe operation
+// if you want to do this, you should do it before any evaluation occurs
+
++ (void)addTokens:(NSArray *)tokens forOperatorFunction:(NSString *)operatorFunction;
+
++ (void)addOperator:(DDMathOperator *)newOperator withSamePrecedenceAsOperator:(DDMathOperator *)existingOperator;
++ (void)addOperator:(DDMathOperator *)newOperator withLowerPrecedenceThanOperator:(DDMathOperator *)existingOperator;
++ (void)addOperator:(DDMathOperator *)newOperator withHigherPrecedenceThanOperator:(DDMathOperator *)existingOperator;
 
 @end

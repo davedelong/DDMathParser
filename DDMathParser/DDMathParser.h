@@ -10,6 +10,7 @@
 #import "DDExpression.h"
 #import "DDParser.h"
 #import "DDTypes.h"
+#import "DDMathOperator.h"
 #import "NSString+DDMathParsing.h"
 
 #define DDRuleTemplateAnyNumber @"__num"
@@ -21,6 +22,3 @@
 // please see the wiki for more information about what this switch means:
 // https://github.com/davedelong/DDMathParser/wiki
 #define DD_INTERPRET_PERCENT_SIGN_AS_MOD 1
-
-// change this to 1 if want "a or b" to be equivalent to "a || b"
-#define DD_INCLUDE_OPERATOR_WORDS 0

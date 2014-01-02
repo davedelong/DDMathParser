@@ -8,7 +8,7 @@
 
 #import "DDMathParser.h"
 #import "DDMathStringToken.h"
-#import "DDMathOperator.h"
+#import "DDMathOperator_Internal.h"
 
 @implementation DDMathStringToken {
 	DDTokenType _tokenType;
@@ -100,7 +100,7 @@
 
 - (DDOperatorAssociativity)operatorAssociativity {
     if (_ambiguous) { return DDOperatorAssociativityLeft; }
-    return [_operatorInfo defaultAssociativity];
+    return [_operatorInfo associativity];
 }
 
 - (void)resolveToOperatorFunction:(NSString *)function {

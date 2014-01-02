@@ -15,16 +15,16 @@
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
-#import "DDMathOperator.h"
+#import "DDMathOperator_Internal.h"
 
 static inline void DDOperatorSetAssociativity(NSString *o, DDOperatorAssociativity a) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
-    info.defaultAssociativity = a;
+    info.associativity = a;
 }
 
 static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
-    return info.defaultAssociativity;
+    return info.associativity;
 }
 
 @implementation DDParser

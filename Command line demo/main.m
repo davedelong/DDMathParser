@@ -1,9 +1,11 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
 #import "DDMathStringTokenizer.h"
+#import "DDMathOperator.h"
 
 NSString* readLine(void);
 void listFunctions(void);
+void listOperators(void);
 
 NSString* readLine() {
     NSMutableData *data = [NSMutableData data];
@@ -27,16 +29,28 @@ void listFunctions() {
 	}
 }
 
+void listOperators() {
+	printf("\nOperators available:\n");
+    NSArray *knownOperators = [DDMathOperator allOperators];
+    for (DDMathOperator *op in knownOperators) {
+        printf("\t%s (%s, %s associative) invokes %s()\n",
+               [[op.tokens componentsJoinedByString:@", "] UTF8String],
+               op.arity == DDOperatorArityBinary ? "binary" : (op.arity == DDOperatorArityUnary ? "unary" : "unknown"),
+               op.associativity == DDOperatorAssociativityLeft ? "left" : "right",
+               [op.function UTF8String]);
+	}
+}
+
 int main (int argc, const char * argv[]) {
 #pragma unused(argc, argv)
     
     @autoreleasepool {
         
         printf("Math Evaluator!\n");
-        printf("\ttype a mathematical expression to evaluate it.\n");
-        printf("\nStandard operators available: + - * / %% ! & | ~ ^ << >>\n");
-        printf("\nType \"list\" to show available functions\n");
-        printf("Type \"exit\" to quit\n");
+        printf("\tType a mathematical expression to evaluate it.\n");
+        printf("\tType \"list\" to show available functions\n");
+        printf("\tType \"operators\" to show available operators\n");
+        printf("\tType \"exit\" to quit\n");
         
         [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
@@ -52,6 +66,7 @@ int main (int argc, const char * argv[]) {
             line = readLine();
             if ([line isEqual:@"exit"]) { break; }
             if ([line isEqual:@"list"]) { listFunctions(); continue; }
+            if ([line isEqual:@"operators"]) { listOperators(); continue; }
             
             NSError *error = nil;
             
