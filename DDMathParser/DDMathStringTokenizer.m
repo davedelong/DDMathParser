@@ -347,11 +347,7 @@
         token = [self _parseVariableWithError:error];
     }
     
-<<<<<<< HEAD
     if (token == nil && (next == '"' || next == '\'')) {
-=======
-    if (token == nil && next == '"') {
->>>>>>> Exploring parsing strings as variables.
         token = [self _parseStringVariableWithError:error];
     }
     
@@ -522,7 +518,7 @@
             } else if (next != quoteChar) {
                 [cleaned appendFormat:@"%C", [self _nextCharacter]];
             } else {
-                // it's a double quote
+                // it's a single/double quote
                 break;
             }
         } else {
