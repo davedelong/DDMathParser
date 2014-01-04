@@ -21,19 +21,6 @@
 @synthesize variableList;
 @synthesize orderedVariables;
 
-#if !DD_HAS_ARC
-- (void)dealloc {
-	[inputField release];
-	[answerField release];
-	[variableList release];
-	[orderedVariables release];
-	
-	[variables release];
-    [evaluator release];
-	[super dealloc];
-}
-#endif
-
 - (void)awakeFromNib {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:NSControlTextDidChangeNotification object:inputField];
 	[answerField setStringValue:@""];
@@ -42,25 +29,26 @@
 
 - (DDMathEvaluator *)evaluator {
     if (evaluator == nil) {
-        __block DemoController *blockSelf = self;
-        
         evaluator = [[DDMathEvaluator alloc] init];
-        [evaluator setFunctionResolver:^DDMathFunction(NSString *name) {
-            NSLog(@"resolving function: %@", name);
-            
-            DDMathFunction resolved = ^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *evaluator, NSError **error) {
-                if ([args count] > 0) {
-                    if (error) {
-                        *error = [NSError errorWithDomain:@"com.davedelong.ddmathparser.demo" code:-1 userInfo:nil];
-                    }
-                    return nil;
+        
+        __weak __typeof(self) weakSelf = self;
+        [evaluator setVariableResolver:^(NSString *variable) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf) {
+                return (NSNumber *)[strongSelf->variables objectForKey:variable];
+            }
+            return @0;
+        }];
+        
+        [evaluator setFunctionResolver:^(NSString *functionName) {
+            return ^(NSArray *args, NSDictionary *vars, DDMathEvaluator *eval, NSError **error) {
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                NSNumber *number = @0;
+                if (strongSelf) {
+                    number = [strongSelf->variables objectForKey:functionName];
                 }
-                NSDictionary *vars = blockSelf->variables;
-                NSNumber *n = [vars objectForKey:name];
-                return [DDExpression numberExpressionWithNumber:n];
+                return [DDExpression numberExpressionWithNumber:number];
             };
-
-            return DD_AUTORELEASE([resolved copy]);
         }];
     }
     
