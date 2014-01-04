@@ -15,6 +15,9 @@ static NSMutableDictionary *_operatorsByToken;
 @implementation DDMathOperator
 
 - (id)initWithOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity {
+    if (arity == DDOperatorArityUnknown) {
+        [NSException raise:NSInvalidArgumentException format:@"Unable to create operator with unknown arity"];
+    }
     return [self initWithOperatorFunction:function tokens:tokens arity:arity precedence:0 associativity:associativity];
 }
 
@@ -46,7 +49,7 @@ static NSMutableDictionary *_operatorsByToken;
 
 + (NSArray *)infosForOperatorToken:(NSString *)token {
     [self _buildOperators];
-    return [_operatorsByToken objectForKey:token];
+    return [_operatorsByToken objectForKey:[token lowercaseString]];
 }
 
 + (void)_processNewOperator:(DDMathOperator *)newOperator relative:(NSComparisonResult)relative {
@@ -60,6 +63,15 @@ static NSMutableDictionary *_operatorsByToken;
         [existingOperatorForFunction addTokens:newOperator.tokens];
     } else {
         // there is not.  this is a genuinely new operator
+        
+        // first, make sure the tokens involved in this new operator are unique
+        for (NSString *token in newOperator.tokens) {
+            DDMathOperator *existing = [_operatorsByToken objectForKey:[token lowercaseString]];
+            if (existing != nil) {
+                [NSException raise:NSInvalidArgumentException format:@"An operator is already defined for '%@'", token];
+            }
+        }
+        
         [_allOperators addObject:newOperator];
         
         if (relative != NSOrderedSame) {
@@ -90,17 +102,18 @@ static NSMutableDictionary *_operatorsByToken;
     }
     
     for (NSString *token in newOperator.tokens) {
-        NSMutableArray *operatorsForToken = [_operatorsByToken objectForKey:token];
+        NSString *lowercaseToken = [token lowercaseString];
+        NSMutableArray *operatorsForToken = [_operatorsByToken objectForKey:lowercaseToken];
         if (operatorsForToken == nil) {
             operatorsForToken = [NSMutableArray array];
-            [_operatorsByToken setObject:operatorsForToken forKey:token];
+            [_operatorsByToken setObject:operatorsForToken forKey:lowercaseToken];
         }
         [operatorsForToken addObject:resolvedOperator];
     }
 }
 
 + (void)addTokens:(NSArray *)tokens forOperatorFunction:(NSString *)operatorFunction {
-    DDMathOperator *newOperator = [[DDMathOperator alloc] initWithOperatorFunction:operatorFunction tokens:tokens arity:0 associativity:0];
+    DDMathOperator *newOperator = [[DDMathOperator alloc] initWithOperatorFunction:operatorFunction tokens:tokens arity:0 precedence:0 associativity:0];
     DDMathOperator *existing = [self infoForOperatorFunction:operatorFunction];
     if (existing == nil) {
         [NSException raise:NSInvalidArgumentException format:@"No operator is defined for function '%@'", operatorFunction];
@@ -236,10 +249,11 @@ static NSMutableDictionary *_operatorsByToken;
         for (DDMathOperator *op in _allOperators) {
             NSArray *tokens = [op tokens];
             for (NSString *token in tokens) {
-                NSMutableArray *operatorsForThisToken = [_operatorsByToken objectForKey:token];
+                NSString *lowercaseToken = [token lowercaseString];
+                NSMutableArray *operatorsForThisToken = [_operatorsByToken objectForKey:lowercaseToken];
                 if (operatorsForThisToken == nil) {
                     operatorsForThisToken = [NSMutableArray array];
-                    [_operatorsByToken setObject:operatorsForThisToken forKey:token];
+                    [_operatorsByToken setObject:operatorsForThisToken forKey:lowercaseToken];
                 }
                 [operatorsForThisToken addObject:op];
             }
