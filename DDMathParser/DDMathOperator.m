@@ -102,6 +102,9 @@ static NSMutableDictionary *_operatorsByToken;
 + (void)addTokens:(NSArray *)tokens forOperatorFunction:(NSString *)operatorFunction {
     DDMathOperator *newOperator = [[DDMathOperator alloc] initWithOperatorFunction:operatorFunction tokens:tokens arity:0 associativity:0];
     DDMathOperator *existing = [self infoForOperatorFunction:operatorFunction];
+    if (existing == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"No operator is defined for function '%@'", operatorFunction];
+    }
     [self addOperator:newOperator withSamePrecedenceAsOperator:existing];
 }
 
