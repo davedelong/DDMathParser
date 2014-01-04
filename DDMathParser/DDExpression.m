@@ -81,6 +81,16 @@
 	[NSException raise:NSInvalidArgumentException format:@"This is not a variable expression"]; 
 	return nil; 
 }
+- (NSUInteger)hash {
+    if ([self expressionType] == DDExpressionTypeNumber) {
+        return [[self number] hash];
+    } else if ([self expressionType] == DDExpressionTypeVariable) {
+        return [[self variable] hash];
+    } else if ([self expressionType] == DDExpressionTypeFunction) {
+        return [[self function] hash];
+    }
+    return [super hash];
+}
 - (BOOL)isEqual:(id)object {
 	if ([object isKindOfClass:[DDExpression class]] == NO) { return NO; }
 	DDExpression * expression = (DDExpression *)object;
