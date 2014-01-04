@@ -109,6 +109,9 @@
         // see if we have a variable value with the same name as the function
         id variableValue = [variables objectForKey:functionName];
         NSNumber *n = [self _evaluateValue:variableValue withSubstitutions:variables error:error];
+        if (n == nil) {
+            n = [self variableWithName:functionName];
+        }
         if (n != nil) {
             e = [DDExpression numberExpressionWithNumber:n];
         }

@@ -30,6 +30,7 @@
 - (DDMathEvaluator *)evaluator {
     if (evaluator == nil) {
         evaluator = [[DDMathEvaluator alloc] init];
+        evaluator.resolvesFunctionsAsVariables = YES;
         
         __weak __typeof(self) weakSelf = self;
         [evaluator setVariableResolver:^(NSString *variable) {
@@ -38,17 +39,6 @@
                 return (NSNumber *)[strongSelf->variables objectForKey:variable];
             }
             return @0;
-        }];
-        
-        [evaluator setFunctionResolver:^(NSString *functionName) {
-            return ^(NSArray *args, NSDictionary *vars, DDMathEvaluator *eval, NSError **error) {
-                __strong __typeof(weakSelf) strongSelf = weakSelf;
-                NSNumber *number = @0;
-                if (strongSelf) {
-                    number = [strongSelf->variables objectForKey:functionName];
-                }
-                return [DDExpression numberExpressionWithNumber:number];
-            };
         }];
     }
     
