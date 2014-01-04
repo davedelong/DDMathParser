@@ -54,10 +54,17 @@ int main (int argc, const char * argv[]) {
         
         [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
+        
         [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
-            return [^DDExpression* (NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
+            printf("\tResolving unknown function: %s\n", [name UTF8String]);
+            return ^(NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
                 return [DDExpression numberExpressionWithNumber:@42];
-            } copy];
+            };
+        }];
+        
+        [evaluator setVariableResolver:^(NSString *variable) {
+            printf("\tResolving unknown variable: %s\n", [variable UTF8String]);
+            return @1;
         }];
         
         NSString * line = nil;
