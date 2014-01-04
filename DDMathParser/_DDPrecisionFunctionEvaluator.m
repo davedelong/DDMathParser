@@ -86,8 +86,24 @@
 	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
     
-#warning FIXME: use high precision math
-    NSNumber *result = @(tgamma([firstValue doubleValue]+1));
+    NSNumber *result = nil;
+    NSDecimal decimal = [firstValue decimalValue];
+    if (DDDecimalIsInteger(decimal)) {
+        if (DDDecimalIsNegative(decimal) == NO) {
+            NSDecimal total = DDDecimalOne();
+            NSDecimal one = DDDecimalOne();
+            while (NSDecimalCompare(&decimal, &one) == NSOrderedDescending /* decimal > 1 */) {
+                total = DDDecimalMultiply(total, decimal);
+                decimal = DDDecimalSubtract(decimal, one);
+            }
+            result = [NSDecimalNumber decimalNumberWithDecimal:decimal];
+        } else {
+            result = @(NAN);
+        }
+    } else {
+        result = @(tgamma([firstValue doubleValue]+1));
+    }
+    
     return [DDExpression numberExpressionWithNumber:result];
 }
 
@@ -240,7 +256,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning FIXME: use high precision math
+    // FIXME: use high precision math
     NSNumber *result = @(log10([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
@@ -249,7 +265,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning FIXME: use high precision math
+    // FIXME: use high precision math
 	return [DDExpression numberExpressionWithNumber:@(log([n doubleValue]))];
 }
 
@@ -257,7 +273,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning FIXME: use high precision math
+    // FIXME: use high precision math
     NSNumber *result = @(log2([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
@@ -266,7 +282,7 @@
 	REQUIRE_N_ARGS(1);
 	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
-#warning FIXME: use high precision math
+    // FIXME: use high precision math
     NSNumber *result = @(exp([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
 }
@@ -336,8 +352,11 @@
     RETURN_IF_NIL(context);
     RETURN_IF_NIL(percent);
     
-#warning FIXME: use high precision math
-    NSNumber *result = @([context doubleValue] * ([percent doubleValue] / 100.0));
+    NSDecimal decimal = [percent decimalValue];
+    NSDecimal oneHundred = DDDecimalFromInteger(100);
+    decimal = DDDecimalDivide(decimal, oneHundred);
+    decimal = DDDecimalMultiply([context decimalValue], decimal);
+    NSNumber *result = [NSDecimalNumber decimalNumberWithDecimal:decimal];
     return [DDExpression numberExpressionWithNumber:result];
 }
 

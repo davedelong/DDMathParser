@@ -172,8 +172,19 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	REQUIRE_N_ARGS(1);
 	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
-#warning FIXME: Issue #31
-    NSNumber *result = @(tgamma([firstValue doubleValue]+1));
+    
+    NSNumber *result = nil;
+    if (round([firstValue doubleValue]) == [firstValue doubleValue] && [firstValue doubleValue] > 0) {
+        // it's a positive integer
+        NSUInteger total = 1;
+        NSUInteger integer = [firstValue unsignedIntegerValue];
+        while (integer > 1) {
+            total *= integer--;
+        }
+        result = @(total);
+    } else {
+        result = @(tgamma([firstValue doubleValue]+1));
+    }
     return [DDExpression numberExpressionWithNumber:result];
 }
 
