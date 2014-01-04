@@ -126,7 +126,7 @@
         e = function([functionExpression arguments], variables, self, error);
     }
     
-	if (e == nil && error != nil) {
+	if (e == nil && error != nil && *error == nil) {
         *error = [NSError errorWithDomain:DDMathParserErrorDomain
                                      code:DDErrorCodeUnresolvedFunction
                                  userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"unable to resolve function: %@", functionName],
