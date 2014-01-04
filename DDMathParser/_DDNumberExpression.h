@@ -13,6 +13,6 @@
 	NSNumber * number;
 }
 
-- (id) initWithNumber:(NSNumber *)n;
+- (id)initWithNumber:(NSNumber *)n;
 
 @end

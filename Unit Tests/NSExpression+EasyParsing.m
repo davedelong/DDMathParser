@@ -11,7 +11,7 @@
 
 @implementation NSExpression (EasyParsing)
 
-+ (NSExpression *) expressionWithString:(NSString *)string {
++ (NSExpression *)expressionWithString:(NSString *)string {
 	NSString * format = [NSString stringWithFormat:@"%@ = 0", string];
 	NSComparisonPredicate * p = (NSComparisonPredicate *)[NSPredicate predicateWithFormat:format];
 	return [p leftExpression];

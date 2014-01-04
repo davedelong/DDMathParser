@@ -42,7 +42,7 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
 @synthesize modAssociativity;
 @synthesize powerAssociativity;
 
-+ (void) initialize {
++ (void)initialize {
 	if (self == [DDParser class]) {
 		//determine what associativity NSPredicate/NSExpression is using
 		//mathematically, it should be right associative, but it's usually parsed as left associative
@@ -56,45 +56,45 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     [super initialize];
 }
 
-+ (DDOperatorAssociativity) defaultBitwiseOrAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseOr); }
-+ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity {  DDOperatorSetAssociativity(DDOperatorBitwiseOr, newAssociativity); }
++ (DDOperatorAssociativity)defaultBitwiseOrAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseOr); }
++ (void)setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity {  DDOperatorSetAssociativity(DDOperatorBitwiseOr, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseXorAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseXor); }
-+ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseXor, newAssociativity); }
++ (DDOperatorAssociativity)defaultBitwiseXorAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseXor); }
++ (void)setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseXor, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseAndAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseAnd); }
-+ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseAnd, newAssociativity); }
++ (DDOperatorAssociativity)defaultBitwiseAndAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseAnd); }
++ (void)setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseAnd, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorLeftShift); }
-+ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorLeftShift, newAssociativity); }
++ (DDOperatorAssociativity)defaultBitwiseLeftShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorLeftShift); }
++ (void)setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorLeftShift, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorRightShift); }
-+ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorRightShift, newAssociativity); }
++ (DDOperatorAssociativity)defaultBitwiseRightShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorRightShift); }
++ (void)setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorRightShift, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultAdditionAssociativity { return DDOperatorGetAssociativity(DDOperatorAdd); }
-+ (void) setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity {
++ (DDOperatorAssociativity)defaultAdditionAssociativity { return DDOperatorGetAssociativity(DDOperatorAdd); }
++ (void)setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity {
     DDOperatorSetAssociativity(DDOperatorAdd, newAssociativity);
     DDOperatorSetAssociativity(DDOperatorMinus, newAssociativity);
 }
 
-+ (DDOperatorAssociativity) defaultMultiplicationAssociativity { return DDOperatorGetAssociativity(DDOperatorMultiply); }
-+ (void) setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity {
++ (DDOperatorAssociativity)defaultMultiplicationAssociativity { return DDOperatorGetAssociativity(DDOperatorMultiply); }
++ (void)setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity {
     DDOperatorSetAssociativity(DDOperatorMultiply, newAssociativity);
     DDOperatorSetAssociativity(DDOperatorDivide, newAssociativity);
 }
 
-+ (DDOperatorAssociativity) defaultModAssociativity { return DDOperatorGetAssociativity(DDOperatorModulo); }
-+ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorModulo, newAssociativity); }
++ (DDOperatorAssociativity)defaultModAssociativity { return DDOperatorGetAssociativity(DDOperatorModulo); }
++ (void)setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorModulo, newAssociativity); }
 
-+ (DDOperatorAssociativity) defaultPowerAssociativity { return DDOperatorGetAssociativity(DDOperatorPower); }
-+ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorPower, newAssociativity); }
++ (DDOperatorAssociativity)defaultPowerAssociativity { return DDOperatorGetAssociativity(DDOperatorPower); }
++ (void)setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorPower, newAssociativity); }
 
 
-+ (id) parserWithString:(NSString *)string error:(NSError **)error {
++ (id)parserWithString:(NSString *)string error:(NSError **)error {
     return DD_AUTORELEASE([[self alloc] initWithString:string error:error]);
 }
 
-- (id) initWithString:(NSString *)string error:(NSError **)error {
+- (id)initWithString:(NSString *)string error:(NSError **)error {
     DDMathStringTokenizer *t = [DDMathStringTokenizer tokenizerWithString:string error:error];
     return [self initWithTokenizer:t error:error];
 }
@@ -127,13 +127,13 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
 }
 
 #if !DD_HAS_ARC
-- (void) dealloc {
+- (void)dealloc {
 	[tokenizer release];
 	[super dealloc];
 }
 #endif
 
-- (DDOperatorAssociativity) associativityForOperator:(NSString *)operatorType {
+- (DDOperatorAssociativity)associativityForOperator:(NSString *)operatorType {
     if (operatorType == DDOperatorBitwiseOr) {
         return bitwiseOrAssociativity;
     }
@@ -165,7 +165,7 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     return DDOperatorGetAssociativity(operatorType);
 }
 
-- (DDExpression *) parsedExpressionWithError:(NSError **)error {
+- (DDExpression *)parsedExpressionWithError:(NSError **)error {
 	ERR_ASSERT(error);
 	[tokenizer reset]; //reset the token stream
     

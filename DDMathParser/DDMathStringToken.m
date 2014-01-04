@@ -14,14 +14,14 @@
 @synthesize token, tokenType;
 
 #if !DD_HAS_ARC
-- (void) dealloc {
+- (void)dealloc {
     [token release];
     [numberValue release];
 	[super dealloc];
 }
 #endif
 
-- (id) initWithToken:(NSString *)t type:(DDTokenType)type {
+- (id)initWithToken:(NSString *)t type:(DDTokenType)type {
 	self = [super init];
 	if (self) {
         token = [t copy];
@@ -43,11 +43,11 @@
 	return self;
 }
 
-+ (id) mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type {
++ (id)mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type {
 	return DD_AUTORELEASE([[self alloc] initWithToken:t type:type]);
 }
 
-- (NSNumber *) numberValue {
+- (NSNumber *)numberValue {
 	if ([self tokenType] != DDTokenTypeNumber) { return nil; }
 	if (numberValue == nil) {
         numberValue = [[NSDecimalNumber alloc] initWithString:[self token]];
@@ -59,7 +59,7 @@
 	return numberValue;
 }
 
-- (NSString *) description {
+- (NSString *)description {
 	NSMutableString * d = [NSMutableString string];
 	if (tokenType == DDTokenTypeVariable) {
 		[d appendString:@"$"];

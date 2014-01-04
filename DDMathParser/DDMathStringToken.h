@@ -27,7 +27,7 @@ typedef enum {
     BOOL ambiguous;
 }
 
-+ (id) mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type;
++ (id)mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type;
 
 @property (nonatomic,readonly) NSString * token;
 @property (nonatomic,readonly) DDTokenType tokenType;
@@ -37,7 +37,7 @@ typedef enum {
 @property (nonatomic,readonly) NSInteger operatorPrecedence;
 @property (nonatomic,readonly) NSString *operatorFunction;
 
-- (NSNumber *) numberValue;
+- (NSNumber *)numberValue;
 
 - (void)resolveToOperator:(NSString *)operator;
 

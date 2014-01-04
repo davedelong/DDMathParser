@@ -278,7 +278,7 @@
 - (NSArray *)tokens {
     return DD_AUTORELEASE([_tokens copy]);
 }
-- (DDMathStringToken *) nextToken {
+- (DDMathStringToken *)nextToken {
     DDMathStringToken *t = [self peekNextToken];
     if (t != nil) {
         _tokenIndex++;
@@ -286,25 +286,25 @@
     return t;
 }
 
-- (DDMathStringToken *) currentToken {
+- (DDMathStringToken *)currentToken {
     if (_tokenIndex > [_tokens count]) { return nil; }
     if (_tokenIndex == 0) { return nil; }
     
     return [_tokens objectAtIndex:(_tokenIndex-1)];
 }
 
-- (DDMathStringToken *) peekNextToken {
+- (DDMathStringToken *)peekNextToken {
     if (_tokenIndex >= [_tokens count]) { return nil; }
     return [_tokens objectAtIndex:_tokenIndex];
 }
 
-- (DDMathStringToken *) previousToken {
+- (DDMathStringToken *)previousToken {
     if (_tokenIndex <= 1) { return nil; }
     if (_tokenIndex > [_tokens count]+1) { return nil; }
     return [_tokens objectAtIndex:_tokenIndex-2];
 }
 
-- (void) reset {
+- (void)reset {
 	_tokenIndex = 0;
     _characterIndex = 0;
 }

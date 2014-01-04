@@ -13,52 +13,52 @@
 
 @implementation EvaluationTests
 
-- (void) testSimple {
+- (void)testSimple {
     TEST(@"1", 1);
     TEST(@"1000000000000000", 1000000000000000);
 }
 
-- (void) testAddition {
+- (void)testAddition {
     TEST(@"1+1", 2);
     TEST(@"1+1+1", 3);
     TEST(@"1+1+1+1", 4);
     TEST(@"1+1+1+1+1", 5);
 }
 
-- (void) testSubtraction {
+- (void)testSubtraction {
     TEST(@"1-1", 0);
     TEST(@"1-1-1", -1);
     TEST(@"1-1-1-1", -2);
     TEST(@"1-1-1-1-1", -3);
 }
 
-- (void) testMultiplication {
+- (void)testMultiplication {
     TEST(@"2*2", 4);
     TEST(@"2*2*2", 8);
     TEST(@"2*2*2*2", 16);
     TEST(@"2*2*2*2*2", 32);
 }
 
-- (void) testDivision {
+- (void)testDivision {
     TEST(@"2/2", 1);
     TEST(@"2/2/2", 0.5);
     TEST(@"2/2/2/2", 0.25);
     TEST(@"2/2/2/2/2", 0.125);
 }
 
-- (void) testPower {
+- (void)testPower {
     TEST(@"2**2", 4);
     TEST(@"2**2**2", 16);
     TEST(@"2**3**2", 512);
 }
 
-- (void) testNegation {
+- (void)testNegation {
     TEST(@"-1", -1);
     TEST(@"1+-1", 0);
     TEST(@"-1+1", 0);
 }
 
-- (void) testFactorial {
+- (void)testFactorial {
     TEST(@"4!", 24);
     TEST(@"-4!", -24);
     TEST(@"3!!", 720);

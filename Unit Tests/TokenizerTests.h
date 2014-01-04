@@ -14,6 +14,6 @@
 
 }
 
-- (void) testTokenizer;
+- (void)testTokenizer;
 
 @end

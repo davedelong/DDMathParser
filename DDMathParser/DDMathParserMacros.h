@@ -17,3 +17,5 @@
 #ifndef ERR
 #define ERR(_c,_f,...) [NSError errorWithDomain:DDMathParserErrorDomain code:(_c) userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:(_f), ##__VA_ARGS__] forKey:NSLocalizedDescriptionKey]]
 #endif
+
+#define DDMathParserDeprecated(_r) __attribute__((deprecated(_r)))

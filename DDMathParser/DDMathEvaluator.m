@@ -11,32 +11,21 @@
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
 #import "DDExpression.h"
-#import "_DDFunctionUtilities.h"
-#import "_DDFunctionContainer.h"
+#import "_DDFunctionEvaluator.h"
+#import "_DDPrecisionFunctionEvaluator.h"
 #import "_DDRewriteRule.h"
 #import <objc/runtime.h>
 
-@interface DDMathEvaluator ()
 
-+ (NSSet *) _standardFunctions;
-+ (NSDictionary *) _standardAliases;
-+ (NSSet *)_standardNames;
-- (void) _registerStandardFunctions;
-- (void)_registerStandardRewriteRules;
-- (_DDFunctionContainer *)functionContainerWithName:(NSString *)functionName;
-
-@end
-
-
-@implementation DDMathEvaluator
-
-@synthesize angleMeasurementMode=angleMeasurementMode;
-@synthesize functionResolver=functionResolver;
-@synthesize variableResolver=variableResolver;
+@implementation DDMathEvaluator {
+	NSMutableDictionary * _functionMap;
+    NSMutableArray *_rewriteRules;
+    _DDFunctionEvaluator *_functionEvaluator;
+}
 
 static DDMathEvaluator * _sharedEvaluator = nil;
 
-+ (id) sharedMathEvaluator {
++ (id)sharedMathEvaluator {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
 		_sharedEvaluator = [[DDMathEvaluator alloc] init];
@@ -44,82 +33,109 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	return _sharedEvaluator;
 }
 
-- (id) init {
+- (id)init {
 	self = [super init];
 	if (self) {
-		functions = [[NSMutableArray alloc] init];
-        functionMap = [[NSMutableDictionary alloc] init];
-        angleMeasurementMode = DDAngleMeasurementModeRadians;
+        _functionMap = [[NSMutableDictionary alloc] init];
+        _angleMeasurementMode = DDAngleMeasurementModeRadians;
+        _functionEvaluator = [[_DDFunctionEvaluator alloc] initWithMathEvaluator:self];
         
-		[self _registerStandardFunctions];
+        NSDictionary *aliases = [[self class] _standardAliases];
+        for (NSString *alias in aliases) {
+            NSString *function = [aliases objectForKey:alias];
+            [self addAlias:alias forFunctionName:function];
+        }
 	}
 	return self;
 }
 
-- (void) dealloc {
+- (void)dealloc {
 	if (self == _sharedEvaluator) {
 		_sharedEvaluator = nil;
 	}
 #if !DD_HAS_ARC
-	[functions release];
-    [functionMap release];
-    [rewriteRules release];
-    [functionResolver release];
-    [variableResolver release];
+    [_functionEvaluator release];
+    [_functionMap release];
+    [_rewriteRules release];
+    [_functionResolver release];
+    [_variableResolver release];
 	[super dealloc];
 #endif
 }
 
+#pragma mark - Properties
+
+- (void)setUsesHighPrecisionEvaluation:(BOOL)usesHighPrecisionEvaluation {
+    if (usesHighPrecisionEvaluation != _usesHighPrecisionEvaluation) {
+        _usesHighPrecisionEvaluation = usesHighPrecisionEvaluation;
+        DD_RELEASE(_functionEvaluator);
+        
+        if (_usesHighPrecisionEvaluation) {
+            _functionEvaluator = [[_DDPrecisionFunctionEvaluator alloc] initWithMathEvaluator:self];
+        } else {
+            _functionEvaluator = [[_DDFunctionEvaluator alloc] initWithMathEvaluator:self];
+        }
+    }
+}
+
 #pragma mark - Functions
 
-- (BOOL) registerFunction:(DDMathFunction)function forName:(NSString *)functionName {
-    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
+- (BOOL)registerFunction:(DDMathFunction)function forName:(NSString *)functionName {
+    functionName = [functionName lowercaseString];
     
-	if ([self functionWithName:functionName] != nil) { return NO; }
-	if ([[[self class] _standardNames] containsObject:name]) { return NO; }
+    // we cannot re-register a standard function
+    if ([_DDFunctionEvaluator isStandardFunction:functionName]) {
+        return NO;
+    }
     
-    _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:name];
-    [functions addObject:container];
-    [functionMap setObject:container forKey:name];
-    DD_RELEASE(container);
-	
-	return YES;
-}
-
-- (void) unregisterFunctionWithName:(NSString *)functionName {
-    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
-	//can't unregister built-in functions
-	if ([[[self class] _standardNames] containsObject:name]) { return; }
-	
-    _DDFunctionContainer *container = [self functionContainerWithName:functionName];
-    for (NSString *alias in [container aliases]) {
-        [functionMap removeObjectForKey:name];
+    // we cannot register something that is already registered
+    if ([_functionMap objectForKey:functionName] != nil) {
+        return NO;
     }
-    [functions removeObject:container];
+    
+    function = [function copy];
+    [_functionMap setObject:function forKey:functionName];
+    DD_RELEASE(function);
+    
+    return YES;
 }
 
-- (_DDFunctionContainer *)functionContainerWithName:(NSString *)functionName {
-    NSString *name = [_DDFunctionContainer normalizedAlias:functionName];
-    _DDFunctionContainer *container = [functionMap objectForKey:name];
-    return container;
+- (void)unregisterFunctionWithName:(NSString *)functionName {
+    functionName = [functionName lowercaseString];
+    [_functionMap removeObjectForKey:functionName];
 }
 
-- (DDMathFunction) functionWithName:(NSString *)functionName {
-    _DDFunctionContainer *container = [self functionContainerWithName:functionName];
-    DDMathFunction function = [container function];
-    if (function == nil && functionResolver != nil) {
-        function = functionResolver(functionName);
-    }
-    return function;
+- (NSArray *)registeredFunctions {
+    NSMutableArray *array = [NSMutableArray array];
+    
+    [array addObjectsFromArray:[[_DDFunctionEvaluator standardFunctions] array]];
+    [array addObjectsFromArray:[_functionMap allKeys]];
+    
+    [array sortUsingSelector:@selector(compare:)];
+    
+    return array;
 }
 
-- (NSArray *) registeredFunctions {
-	return [functionMap allKeys];
-}
+#pragma mark - Lazy Resolution
 
-- (BOOL) functionExpressionFailedToResolve:(_DDFunctionExpression *)functionExpression error:(NSError **)error {
+- (DDExpression *)resolveFunction:(_DDFunctionExpression *)functionExpression variables:(NSDictionary *)variables error:(NSError **)error {
     NSString *functionName = [functionExpression function];
-	if (error) {
+    
+    DDExpression *e = nil;
+    DDMathFunction function = [_functionMap objectForKey:functionName];
+    
+    if (function == nil && _functionResolver != nil) {
+        function = _functionResolver(functionName);
+        if (function) {
+            [self registerFunction:function forName:functionName];
+        }
+    }
+    
+    if (function != nil) {
+        e = function([functionExpression arguments], [NSDictionary dictionary], self, error);
+    }
+    
+	if (e == nil && error != nil) {
         *error = [NSError errorWithDomain:DDMathParserErrorDomain 
                                      code:DDErrorCodeUnresolvedFunction 
                                  userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -127,46 +143,58 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                                            functionName, DDUnknownFunctionKey,
                                            nil]];
 	}
-	return NO;
+	return e;
 }
 
-- (id) variableWithName:(NSString *)variableName {
+- (id)variableWithName:(NSString *)variableName {
     id value = nil;
-    if (variableResolver != nil) {
-        value = variableResolver(variableName);
+    if (_variableResolver != nil) {
+        value = _variableResolver(variableName);
     }
     return value;
 }
 
-- (BOOL) addAlias:(NSString *)alias forFunctionName:(NSString *)functionName {
-	//we can't add an alias for a function that already exists
-	DDMathFunction function = [self functionWithName:alias];
-	if (function != nil) { return NO; }
+#pragma mark - Aliases
+
+- (BOOL)addAlias:(NSString *)alias forFunctionName:(NSString *)functionName {
+    alias = [alias lowercaseString];
     
-    _DDFunctionContainer *container = [self functionContainerWithName:functionName];
-    alias = [_DDFunctionContainer normalizedAlias:alias];
-    [container addAlias:alias];
-    [functionMap setObject:container forKey:alias];
+	//we can't add an alias for a function that already exists
+    if ([_DDFunctionEvaluator isStandardFunction:alias]) {
+        return NO;
+    }
+    
+    if ([_functionMap objectForKey:alias] != nil) {
+        return NO;
+    }
+    
+    DDMathFunction function = ^DDExpression* (NSArray *args, NSDictionary *vars, DDMathEvaluator *eval, NSError **error) {
+        DDExpression *e = [DDExpression functionExpressionWithFunction:functionName arguments:args error:error];
+        NSNumber *n = [eval evaluateExpression:e withSubstitutions:vars error:error];
+        return [DDExpression numberExpressionWithNumber:n];
+    };
+    
+    function = [function copy];
+    [_functionMap setObject:function forKey:alias];
+    DD_RELEASE(function);
     
     return YES;
 }
 
-- (void) removeAlias:(NSString *)alias {
-    alias = [_DDFunctionContainer normalizedAlias:alias];
-	//you can't unregister a standard alias (like "avg")
-	if ([[[self class] _standardNames] containsObject:alias]) { return; }
-    [self unregisterFunctionWithName:alias];
+- (void)removeAlias:(NSString *)alias {
+    alias = [alias lowercaseString];
+    [_functionMap removeObjectForKey:alias];
 }
 
 - (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)template condition:(NSString *)condition {
     [self _registerStandardRewriteRules];
     _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:template replacementPattern:rule condition:condition];
-    [rewriteRules addObject:rewriteRule];
+    [_rewriteRules addObject:rewriteRule];
 }
 
-#pragma mark Evaluation
+#pragma mark - Evaluation
 
-- (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions {
+- (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions {
 	NSError *error = nil;
 	NSNumber *returnValue = [self evaluateString:expressionString withSubstitutions:substitutions error:&error];
 	if (!returnValue) {
@@ -175,44 +203,78 @@ static DDMathEvaluator * _sharedEvaluator = nil;
 	return returnValue;
 }
 
-- (NSNumber *) evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
-	DDParser * parser = [DDParser parserWithString:expressionString error:error];
-	if (!parser) {
+- (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
+    DDExpression *expression = [DDExpression expressionFromString:expressionString error:error];
+	if (!expression) {
 		return nil;
 	}
-	DDExpression * parsedExpression = [parser parsedExpressionWithError:error];
-	if (!parsedExpression) {
-		return nil;
-	}
-	return [parsedExpression evaluateWithSubstitutions:substitutions evaluator:self error:error];
+    return [self evaluateExpression:expression withSubstitutions:substitutions error:error];
 }
 
-#pragma mark Built-In Functions
+- (NSNumber *)evaluateExpression:(DDExpression *)expression withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
+    if ([expression expressionType] == DDExpressionTypeNumber) {
+        return [expression number];
+    } else if ([expression expressionType] == DDExpressionTypeVariable) {
+        return [self _evaluateVariableExpression:expression withSubstitutions:substitutions error:error];
+    } else if ([expression expressionType] == DDExpressionTypeFunction) {
+        return [self _evaluateFunctionExpression:(_DDFunctionExpression *)expression withSubstitutions:substitutions error:error];
+    }
+    return nil;
+}
 
-+ (NSSet *) _standardFunctions {
-    static dispatch_once_t onceToken;
-    static NSSet *standardFunctions = nil;
-    dispatch_once(&onceToken, ^{
-        NSMutableSet *names = [NSMutableSet set];
-        
-        Class utilitiesMetaClass = objc_getMetaClass("_DDFunctionUtilities");
-        unsigned int count = 0;
-        Method *methods = class_copyMethodList(utilitiesMetaClass, &count);
-        for (unsigned int i = 0; i < count; ++i) {
-            NSString *methodName = NSStringFromSelector(method_getName(methods[i]));
-            if ([methodName hasSuffix:@"Function"]) {
-                NSString *functionName = [methodName substringToIndex:[methodName length] - 8]; // 8 == [@"Function" length]
-                [names addObject:functionName];
-            }
+- (NSNumber *)_evaluateVariableExpression:(DDExpression *)e withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
+	id variableValue = [substitutions objectForKey:[e variable]];
+    
+    if (variableValue == nil) {
+        variableValue = [self variableWithName:[e variable]];
+    }
+    
+	if ([variableValue isKindOfClass:[DDExpression class]]) {
+        return [self evaluateExpression:variableValue withSubstitutions:substitutions error:error];
+	}
+    if ([variableValue isKindOfClass:[NSString class]]) {
+        return [self evaluateString:variableValue withSubstitutions:substitutions error:error];
+    }
+	if ([variableValue isKindOfClass:[NSNumber class]]) {
+		return variableValue;
+	}
+	if (error != nil) {
+        *error = [NSError errorWithDomain:DDMathParserErrorDomain
+                                     code:DDErrorCodeUnresolvedVariable
+                                 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSString stringWithFormat:@"unable to resolve variable: %@", e], NSLocalizedDescriptionKey,
+                                           [e variable], DDUnknownVariableKey,
+                                           nil]];
+	}
+	return nil;
+    
+}
+
+- (NSNumber *)_evaluateFunctionExpression:(_DDFunctionExpression *)e withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
+    
+    id result = [_functionEvaluator evaluateFunction:e variables:substitutions error:error];
+    
+    if (!result) { return nil; }
+		
+    NSNumber *numberValue = nil;
+    if ([result isKindOfClass:[DDExpression class]]) {
+        numberValue = [self evaluateExpression:result withSubstitutions:substitutions error:error];
+    } else if ([result isKindOfClass:[NSNumber class]]) {
+        numberValue = result;
+    } else if ([result isKindOfClass:[NSString class]]) {
+        numberValue = [self evaluateString:result withSubstitutions:substitutions error:error];
+    } else {
+        if (error != nil) {
+            *error = ERR(DDErrorCodeInvalidFunctionReturnType, @"invalid return type from %@ function", [e function]);
         }
-        
-        free(methods);
-        standardFunctions = [names copy];
-    });
-	return standardFunctions;
+        return nil;
+    }
+    return numberValue;
 }
 
-+ (NSDictionary *) _standardAliases {
+#pragma mark - Built-In Functions
+
++ (NSDictionary *)_standardAliases {
     static dispatch_once_t onceToken;
     static NSDictionary *standardAliases = nil;
     dispatch_once(&onceToken, ^{
@@ -235,19 +297,6 @@ static DDMathEvaluator * _sharedEvaluator = nil;
                            nil];
     });
     return standardAliases;
-}
-
-+ (NSSet *)_standardNames {
-    static dispatch_once_t onceToken;
-    static NSSet *names = nil;
-    dispatch_once(&onceToken, ^{
-        NSSet *functions = [self _standardFunctions];
-        NSDictionary *aliases = [self _standardAliases];
-        NSMutableSet *both = [NSMutableSet setWithSet:functions];
-        [both addObjectsFromArray:[aliases allKeys]];
-        names = [both copy];
-    });
-    return names;
 }
 
 + (NSDictionary *)_standardRewriteRules {
@@ -287,36 +336,10 @@ static DDMathEvaluator * _sharedEvaluator = nil;
     return rules;
 }
 
-- (void) _registerStandardFunctions {
-	for (NSString *functionName in [[self class] _standardFunctions]) {
-		
-		NSString *methodName = [NSString stringWithFormat:@"%@Function", functionName];
-		SEL methodSelector = NSSelectorFromString(methodName);
-		if ([_DDFunctionUtilities respondsToSelector:methodSelector]) {
-			DDMathFunction function = [_DDFunctionUtilities performSelector:methodSelector];
-			if (function != nil) {
-                _DDFunctionContainer *container = [[_DDFunctionContainer alloc] initWithFunction:function name:functionName];
-                [functions addObject:container];
-                [functionMap setObject:container forKey:functionName];
-                DD_RELEASE(container);
-			} else {
-                // this would only happen when a function name has been misspelled = programmer error = raise an exception
-                [NSException raise:NSInvalidArgumentException format:@"error registering function: %@", functionName];
-			}
-		}
-	}
-	
-	NSDictionary *aliases = [[self class] _standardAliases];
-	for (NSString *alias in aliases) {
-		NSString *function = [aliases objectForKey:alias];
-		(void)[self addAlias:alias forFunctionName:function];
-	}
-}
-
 - (void)_registerStandardRewriteRules {
-    if (rewriteRules != nil) { return; }
+    if (_rewriteRules != nil) { return; }
     
-    rewriteRules = [[NSMutableArray alloc] init];
+    _rewriteRules = [[NSMutableArray alloc] init];
     
     NSDictionary *templates = [[self class] _standardRewriteRules];
     for (NSString *template in templates) {
@@ -368,7 +391,7 @@ static DDMathEvaluator * _sharedEvaluator = nil;
         expression = tmp;
         BOOL changed = NO;
         
-        for (_DDRewriteRule *rule in rewriteRules) {
+        for (_DDRewriteRule *rule in _rewriteRules) {
             DDExpression *rewritten = [self _rewriteExpression:tmp usingRule:rule];
             if (rewritten != tmp) {
                 tmp = rewritten;

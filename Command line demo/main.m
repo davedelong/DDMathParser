@@ -68,7 +68,7 @@ int main (int argc, const char * argv[]) {
             DDExpression *expression = [parser parsedExpressionWithError:&error];
             DDExpression *rewritten = [evaluator expressionByRewritingExpression:expression];
             
-            NSNumber *value = [rewritten evaluateWithSubstitutions:nil evaluator:evaluator error:&error];
+            NSNumber *value = [evaluator evaluateExpression:rewritten withSubstitutions:nil error:&error];
             DD_RELEASE(tokenizer);
             
             if (value == nil) {

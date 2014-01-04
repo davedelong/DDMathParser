@@ -37,40 +37,40 @@
 @property DDOperatorAssociativity modAssociativity;
 @property DDOperatorAssociativity powerAssociativity;
 
-+ (DDOperatorAssociativity) defaultBitwiseOrAssociativity;
-+ (void) setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultBitwiseOrAssociativity;
++ (void)setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultBitwiseXorAssociativity;
-+ (void) setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultBitwiseXorAssociativity;
++ (void)setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultBitwiseAndAssociativity;
-+ (void) setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultBitwiseAndAssociativity;
++ (void)setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultBitwiseLeftShiftAssociativity;
-+ (void) setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultBitwiseLeftShiftAssociativity;
++ (void)setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultBitwiseRightShiftAssociativity;
-+ (void) setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultBitwiseRightShiftAssociativity;
++ (void)setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultAdditionAssociativity;
-+ (void) setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultAdditionAssociativity;
++ (void)setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultMultiplicationAssociativity;
-+ (void) setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultMultiplicationAssociativity;
++ (void)setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultModAssociativity;
-+ (void) setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultModAssociativity;
++ (void)setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity;
 
-+ (DDOperatorAssociativity) defaultPowerAssociativity;
-+ (void) setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity;
++ (DDOperatorAssociativity)defaultPowerAssociativity;
++ (void)setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity;
 
 + (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 - (id)initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
 
-+ (id) parserWithString:(NSString *)string error:(NSError **)error;
-- (id) initWithString:(NSString *)string error:(NSError **)error;
++ (id)parserWithString:(NSString *)string error:(NSError **)error;
+- (id)initWithString:(NSString *)string error:(NSError **)error;
 
-- (DDExpression *) parsedExpressionWithError:(NSError **)error;
-- (DDOperatorAssociativity) associativityForOperator:(NSString *)operator;
+- (DDExpression *)parsedExpressionWithError:(NSError **)error;
+- (DDOperatorAssociativity)associativityForOperator:(NSString *)operator;
 
 @end

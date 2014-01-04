@@ -12,7 +12,7 @@
 
 @implementation ParserTests
 
-- (void) testSimpleParsing {
+- (void)testSimpleParsing {
 	
 	NSLog(@"%@", [DDExpression expressionFromString:@"1" error:nil]);
 	NSLog(@"%@", [DDExpression expressionFromString:@"1 + 2" error:nil]);

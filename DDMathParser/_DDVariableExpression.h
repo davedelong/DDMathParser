@@ -14,6 +14,6 @@
 	NSString * variable;
 }
 
-- (id) initWithVariable:(NSString *)v;
+- (id)initWithVariable:(NSString *)v;
 
 @end

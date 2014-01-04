@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DDMathParserMacros.h"
 
 typedef enum {
 	DDExpressionTypeNumber = 0,
@@ -22,28 +23,28 @@ typedef enum {
 
 @property (nonatomic, readonly) DDExpression *parentExpression;
 
-+ (id) expressionFromString:(NSString *)expressionString error:(NSError **)error;
++ (id)expressionFromString:(NSString *)expressionString error:(NSError **)error;
 
-+ (id) numberExpressionWithNumber:(NSNumber *)number;
-+ (id) functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError **)error;
-+ (id) variableExpressionWithVariable:(NSString *)variable;
++ (id)numberExpressionWithNumber:(NSNumber *)number;
++ (id)functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError **)error;
++ (id)variableExpressionWithVariable:(NSString *)variable;
 
-- (DDExpressionType) expressionType;
+- (DDExpressionType)expressionType;
 
-- (NSNumber *) evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error;
+- (NSNumber *)evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error DDMathParserDeprecated("use -[DDMathEvaluator evaluateExpression:withSubstitutions:error:] instead");
 
-- (DDExpression *) simplifiedExpression;
-- (DDExpression *) simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error;
+- (DDExpression *)simplifiedExpression;
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error;
 
 #pragma mark Number methods
-- (NSNumber *) number;
+- (NSNumber *)number;
 
 #pragma mark Function methods
-- (NSString *) function;
+- (NSString *)function;
 //returns an array of DDExpression objects
-- (NSArray *) arguments;
+- (NSArray *)arguments;
 
 #pragma mark Variable
-- (NSString *) variable;
+- (NSString *)variable;
 
 @end

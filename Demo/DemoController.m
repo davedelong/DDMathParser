@@ -11,7 +11,7 @@
 
 @interface DemoController()
 
-- (void) textChanged:(NSNotification *)note;
+- (void)textChanged:(NSNotification *)note;
 
 @end
 
@@ -22,7 +22,7 @@
 @synthesize orderedVariables;
 
 #if !DD_HAS_ARC
-- (void) dealloc {
+- (void)dealloc {
 	[inputField release];
 	[answerField release];
 	[variableList release];
@@ -34,7 +34,7 @@
 }
 #endif
 
-- (void) awakeFromNib {
+- (void)awakeFromNib {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChanged:) name:NSControlTextDidChangeNotification object:inputField];
 	[answerField setStringValue:@""];
 	variables = [[NSMutableDictionary alloc] init];
@@ -67,7 +67,7 @@
     return evaluator;
 }
 
-- (NSArray *) variablesAndFunctionsInExpression:(DDExpression *)e {
+- (NSArray *)variablesAndFunctionsInExpression:(DDExpression *)e {
 	NSMutableArray * v = [NSMutableArray array];
     BOOL shouldRecurse = NO;
 	if ([e expressionType] == DDExpressionTypeVariable) {
@@ -89,7 +89,7 @@
 	return v;
 }
 
-- (void) updateVariablesWithExpression:(DDExpression *)e {
+- (void)updateVariablesWithExpression:(DDExpression *)e {
 	NSArray * v = [self variablesAndFunctionsInExpression:e];
 	
 	NSMutableSet * keysThatShouldBeRemoved = [NSMutableSet setWithArray:[variables allKeys]];
@@ -106,7 +106,7 @@
 	[self setOrderedVariables:orderedKeys];
 }
 
-- (void) evaluate {
+- (void)evaluate {
     DDMathEvaluator *eval = [self evaluator];
     
 	NSString * string = [inputField stringValue];
@@ -116,7 +116,7 @@
 		if (error == nil) {
 			NSLog(@"parsed: %@", expression);
 			[self updateVariablesWithExpression:expression];
-			NSNumber * result = [expression evaluateWithSubstitutions:variables evaluator:eval error:&error];
+            NSNumber *result = [eval evaluateExpression:expression withSubstitutions:variables error:&error];
 			if (error == nil) {
 				[answerField setTextColor:[NSColor blackColor]];
 				[answerField setStringValue:[result description]];
@@ -134,7 +134,7 @@
 	[variableList reloadData];		
 }
 
-- (void) textChanged:(NSNotification *)note {
+- (void)textChanged:(NSNotification *)note {
 	[self evaluate];
 }
 
@@ -144,19 +144,19 @@
 	return [variables count];
 }
 
-- (id) tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	NSString * variable = [orderedVariables objectAtIndex:row];
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+	NSString *variable = [orderedVariables objectAtIndex:row];
 	if ([[tableColumn identifier] isEqual:@"variable"]) {
 		return variable;
 	}
 	return [variables objectForKey:variable];
 }
 
-- (BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+- (BOOL)tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	return [[tableColumn identifier] isEqual:@"value"];
 }
 
-- (void) tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+- (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	NSString * variable = [orderedVariables objectAtIndex:row];
 	if (![object isKindOfClass:[NSNumber class]]) {
 		NSLog(@"invalid object: %@", object);

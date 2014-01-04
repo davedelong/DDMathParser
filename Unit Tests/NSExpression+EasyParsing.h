@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "DDMathParserMacros.h"
 
 @interface NSExpression (EasyParsing)
 
-+ (NSExpression *) expressionWithString:(NSString *)string;
++ (NSExpression *)expressionWithString:(NSString *)string DDMathParserDeprecated("use -[NSExpression expressionWithFormat:] instead");
 
 @end
