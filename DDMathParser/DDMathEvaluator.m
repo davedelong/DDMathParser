@@ -117,9 +117,6 @@
     DDMathFunction function = [_functionMap objectForKey:functionName];
     if (e == nil && function == nil && _functionResolver != nil) {
         function = _functionResolver(functionName);
-        if (function) {
-            [self registerFunction:function forName:functionName];
-        }
     }
     
     if (e == nil && function != nil) {
