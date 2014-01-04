@@ -48,7 +48,7 @@ int main (int argc, const char * argv[]) {
         
         printf("Math Evaluator!\n");
         printf("\tType a mathematical expression to evaluate it.\n");
-        printf("\tType \"list\" to show available functions\n");
+        printf("\tType \"functions\" to show available functions\n");
         printf("\tType \"operators\" to show available operators\n");
         printf("\tType \"exit\" to quit\n");
         
@@ -65,7 +65,7 @@ int main (int argc, const char * argv[]) {
             printf("> ");
             line = readLine();
             if ([line isEqual:@"exit"]) { break; }
-            if ([line isEqual:@"list"]) { listFunctions(); continue; }
+            if ([line isEqual:@"functions"]) { listFunctions(); continue; }
             if ([line isEqual:@"operators"]) { listOperators(); continue; }
             
             NSError *error = nil;
@@ -76,15 +76,18 @@ int main (int argc, const char * argv[]) {
             DDExpression *expression = [parser parsedExpressionWithError:&error];
             DDExpression *rewritten = [[DDExpressionRewriter defaultRewriter] expressionByRewritingExpression:expression withEvaluator:evaluator];
             
+            printf("\tParsed: %s\n", [[expression description] UTF8String]);
+            
+            if ([expression isEqual:rewritten] == NO) {
+                printf("\tRewritten as: %s\n", [[rewritten description] UTF8String]);
+            }
+            
             NSNumber *value = [evaluator evaluateExpression:rewritten withSubstitutions:nil error:&error];
             
             if (value == nil) {
                 printf("\tERROR: %s\n", [[error description] UTF8String]);
             } else {
-                if (rewritten != expression) {
-                    printf("\t%s REWRITTEN AS %s\n", [[expression description] UTF8String], [[rewritten description] UTF8String]);
-                }
-                printf("\t%s = %s\n", [[rewritten description] UTF8String], [[value description] UTF8String]);
+                printf("\tEvaluated: %s\n", [[value description] UTF8String]);
             }
             
             

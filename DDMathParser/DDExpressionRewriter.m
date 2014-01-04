@@ -92,6 +92,8 @@
     NSUInteger iterationCount = 0;
     
     do {
+        NSError *simplificationError = nil;
+        tmp = [tmp simplifiedExpressionWithEvaluator:evaluator error:&simplificationError];
         expression = tmp;
         BOOL changed = NO;
         
