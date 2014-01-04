@@ -14,9 +14,28 @@ static NSMutableDictionary *_operatorsByToken;
 
 @implementation DDMathOperator
 
++ (BOOL)_isValidToken:(NSString *)token {
+    unichar firstChar = [token characterAtIndex:0];
+    if ((firstChar >= '0' && firstChar <= '9' ) || firstChar == '.' || firstChar == '$' || firstChar == '\'' || firstChar == '"') {
+        return NO;
+    }
+    
+    NSString *trimmed = [token stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([trimmed isEqual:token] == NO) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (id)initWithOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity {
     if (arity == DDOperatorArityUnknown) {
         [NSException raise:NSInvalidArgumentException format:@"Unable to create operator with unknown arity"];
+    }
+    for (NSString *token in tokens) {
+        if ([DDMathOperator _isValidToken:token] == NO) {
+            [NSException raise:NSInvalidArgumentException format:@"Invalid operator token: %@", token];
+        }
     }
     return [self initWithOperatorFunction:function tokens:tokens arity:arity precedence:0 associativity:associativity];
 }
