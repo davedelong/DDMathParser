@@ -11,6 +11,7 @@
 #import "DDParser.h"
 #import "DDTypes.h"
 #import "DDMathOperator.h"
+#import "DDExpressionRewriter.h"
 #import "NSString+DDMathParsing.h"
 
 #define DDRuleTemplateAnyNumber @"__num"

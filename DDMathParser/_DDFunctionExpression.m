@@ -94,7 +94,7 @@
 		}		
 	}
 	
-	return [_DDFunctionExpression functionExpressionWithFunction:[self function] arguments:newSubexpressions error:error];
+	return [DDExpression functionExpressionWithFunction:[self function] arguments:newSubexpressions error:error];
 }
 
 - (NSString *)description {

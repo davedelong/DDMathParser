@@ -74,7 +74,7 @@ int main (int argc, const char * argv[]) {
             DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
             
             DDExpression *expression = [parser parsedExpressionWithError:&error];
-            DDExpression *rewritten = [evaluator expressionByRewritingExpression:expression];
+            DDExpression *rewritten = [[DDExpressionRewriter defaultRewriter] expressionByRewritingExpression:expression withEvaluator:evaluator];
             
             NSNumber *value = [evaluator evaluateExpression:rewritten withSubstitutions:nil error:&error];
             

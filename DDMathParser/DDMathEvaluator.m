@@ -13,19 +13,13 @@
 #import "DDExpression.h"
 #import "_DDFunctionEvaluator.h"
 #import "_DDPrecisionFunctionEvaluator.h"
-#import "_DDRewriteRule.h"
+#import "DDExpressionRewriter.h"
 #import <objc/runtime.h>
 
 
 @implementation DDMathEvaluator {
 	NSMutableDictionary * _functionMap;
-    NSMutableArray *_rewriteRules;
     _DDFunctionEvaluator *_functionEvaluator;
-}
-
-
-+ (id)sharedMathEvaluator {
-    return [self defaultMathEvaluator];
 }
 
 + (instancetype)defaultMathEvaluator {
@@ -180,12 +174,6 @@
     [_functionMap removeObjectForKey:alias];
 }
 
-- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)templateString condition:(NSString *)condition {
-    [self _registerStandardRewriteRules];
-    _DDRewriteRule *rewriteRule = [_DDRewriteRule rewriteRuleWithTemplate:templateString replacementPattern:rule condition:condition];
-    [_rewriteRules addObject:rewriteRule];
-}
-
 #pragma mark - Evaluation
 
 - (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions {
@@ -285,113 +273,18 @@
     return standardAliases;
 }
 
-+ (NSDictionary *)_standardRewriteRules {
-    static dispatch_once_t onceToken;
-    static NSDictionary *rules = nil;
-    dispatch_once(&onceToken, ^{
-        rules = @{@"0+__exp1": @"__exp1",
-                  @"__exp1+0": @"__exp1",
-                  @"__exp1 + __exp1": @"2*__exp1",
-                  
-                  //subtraction
-                  @"__exp1 - __exp1": @"0",
-                  
-                  //multiplication
-                  @"1 * __exp1": @"__exp1",
-                  @"__exp1 * 1": @"__exp1",
-                  @"__exp1 * __exp1": @"pow(__exp1, 2)",
-                  @"multiply(__num1, __var1)": @"multiply(__var1, __num1)",
-                  @"0 * __exp1": @"0",
-                  @"__exp1 * 0": @"0",
-                  
-                  //other stuff
-                  @"--__exp1": @"__exp1",
-                  @"abs(-__exp1)": @"abs(__exp1)",
-                  @"exp(__exp1) * exp(__exp2)": @"exp(__exp1 + __exp2)",
-                  @"pow(__exp1, __exp3) * pow(__exp2, __exp3)": @"pow(__exp1 * __exp2, __exp3)",
-                  @"pow(__exp1, 0)": @"1",
-                  @"pow(__exp1, 1)": @"__exp1",
-                  @"sqrt(pow(__exp1, 2))": @"abs(__exp1)",
-                  
-                  //
-                  @"dtor(rtod(__exp1))": @"__exp1"};
-    });
-    return rules;
-}
+#pragma mark - Deprecated Methods
 
-- (void)_registerStandardRewriteRules {
-    if (_rewriteRules != nil) { return; }
-    
-    _rewriteRules = [[NSMutableArray alloc] init];
-    
-    NSDictionary *templates = [[self class] _standardRewriteRules];
-    for (NSString *templateString in templates) {
-        NSString *replacement = [templates objectForKey:templateString];
-        
-        [self addRewriteRule:replacement forExpressionsMatchingTemplate:templateString condition:nil];
-    }
-    
-    //division
-    [self addRewriteRule:@"1" forExpressionsMatchingTemplate:@"__exp1 / __exp1" condition:@"__exp1 != 0"];
-    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"(__exp1 * __exp2) / __exp2" condition:@"__exp2 != 0"];
-    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"(__exp2 * __exp1) / __exp2" condition:@"__exp2 != 0"];
-    [self addRewriteRule:@"1/__exp1" forExpressionsMatchingTemplate:@"__exp2 / (__exp2 * __exp1)" condition:@"__exp2 != 0"];
-    [self addRewriteRule:@"1/__exp1" forExpressionsMatchingTemplate:@"__exp2 / (__exp1 * __exp2)" condition:@"__exp2 != 0"];
-    
-    //exponents and roots
-    [self addRewriteRule:@"abs(__exp1)" forExpressionsMatchingTemplate:@"nthroot(pow(__exp1, __exp2), __exp2)" condition:@"__exp2 % 2 == 0"];
-    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"nthroot(pow(__exp1, __exp2), __exp2)" condition:@"__exp2 % 2 == 1"];
-    [self addRewriteRule:@"__exp1" forExpressionsMatchingTemplate:@"abs(__exp1)" condition:@"__exp1 >= 0"];
-}
-
-- (DDExpression *)_rewriteExpression:(DDExpression *)expression usingRule:(_DDRewriteRule *)rule {
-    DDExpression *rewritten = [rule expressionByRewritingExpression:expression withEvaluator:self];
-    
-    // if the rule did not match, return the expression
-    if (rewritten == expression && [expression expressionType] == DDExpressionTypeFunction) {
-        NSMutableArray *newArguments = [NSMutableArray array];
-        BOOL argsChanged = NO;
-        for (DDExpression *arg in [expression arguments]) {
-            DDExpression *newArg = [self _rewriteExpression:arg usingRule:rule];
-            argsChanged |= (newArg != arg);
-            [newArguments addObject:newArg];
-        }
-        
-        if (argsChanged) {
-            rewritten = [_DDFunctionExpression functionExpressionWithFunction:[expression function] arguments:newArguments error:nil];
-        }
-    }
-    
-    return rewritten;
++ (id)sharedMathEvaluator {
+    return [self defaultMathEvaluator];
 }
 
 - (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression {
-    [self _registerStandardRewriteRules];
-    DDExpression *tmp = expression;
-    NSUInteger iterationCount = 0;
-    
-    do {
-        expression = tmp;
-        BOOL changed = NO;
-        
-        for (_DDRewriteRule *rule in _rewriteRules) {
-            DDExpression *rewritten = [self _rewriteExpression:tmp usingRule:rule];
-            if (rewritten != tmp) {
-                tmp = rewritten;
-                changed = YES;
-            }
-        }
-        
-        // we applied all the rules and nothing changed
-        if (!changed) { break; }
-        iterationCount++;
-    } while (tmp != nil && iterationCount < 256);
-    
-    if (iterationCount >= 256) {
-        NSLog(@"ABORT: replacement limit reached");
-    }
-    
-    return expression;
+    return [[DDExpressionRewriter defaultRewriter] expressionByRewritingExpression:expression withEvaluator:self];
+}
+
+- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)templateString condition:(NSString *)condition {
+    [[DDExpressionRewriter defaultRewriter] addRewriteRule:rule forExpressionsMatchingTemplate:templateString condition:condition];
 }
 
 @end

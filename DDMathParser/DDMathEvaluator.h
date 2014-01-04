@@ -24,7 +24,6 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 @property (nonatomic, copy) DDFunctionResolver functionResolver;
 @property (nonatomic, copy) DDVariableResolver variableResolver;
 
-+ (id)sharedMathEvaluator __attribute__((deprecated("Use +defaultMathEvaluator instead")));
 + (instancetype)defaultMathEvaluator;
 
 - (BOOL)registerFunction:(DDMathFunction)function forName:(NSString *)functionName;
@@ -39,7 +38,14 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 - (BOOL)addAlias:(NSString *)alias forFunctionName:(NSString *)functionName;
 - (void)removeAlias:(NSString *)alias;
 
-- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)templateString condition:(NSString *)condition;
-- (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression;
+@end
+
+@interface DDMathEvaluator (Deprecated)
+
++ (id)sharedMathEvaluator __attribute__((deprecated("Use +defaultMathEvaluator instead")));
+
+- (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)templateString condition:(NSString *)condition __attribute__((deprecated("Use -[DDExpressionRewriter addRewriteRule:forExpressionsMatchingTemplate:condition:] instead")));
+
+- (DDExpression *)expressionByRewritingExpression:(DDExpression *)expression __attribute__((deprecated("Use -[DDExpressionRewriter expressionByRewritingExpression:withEvaluator:] instead")));
 
 @end
