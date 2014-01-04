@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParserMacros.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, DDExpressionType) {
 	DDExpressionTypeNumber = 0,
 	DDExpressionTypeFunction = 1,
 	DDExpressionTypeVariable = 2
-} DDExpressionType;
+};
 
 @class DDMathEvaluator, DDParser;
 

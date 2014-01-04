@@ -15,13 +15,13 @@
 @class DDParser;
 @class DDExpression;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, DDParserTermType) {
     DDParserTermTypeNumber = 1,
     DDParserTermTypeVariable,
     DDParserTermTypeOperator,
     DDParserTermTypeFunction,
     DDParserTermTypeGroup
-} DDParserTermType;
+};
 
 @interface _DDParserTerm : NSObject
 

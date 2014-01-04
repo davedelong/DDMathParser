@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "DDParserTypes.h"
 
-typedef enum {
+typedef NS_ENUM(NSInteger, DDTokenType) {
 	DDTokenTypeNumber = 0,
 	DDTokenTypeOperator = 1,
 	DDTokenTypeFunction = 2,
 	DDTokenTypeVariable = 3
-} DDTokenType;
+};
 
 @class DDMathOperator;
 
