@@ -104,8 +104,9 @@
     NSString *functionName = [functionExpression function];
     
     DDExpression *e = nil;
+    DDMathFunction function = [_functionMap objectForKey:functionName];
     
-    if ([self resolvesFunctionsAsVariables]) {
+    if (function == nil && [self resolvesFunctionsAsVariables]) {
         // see if we have a variable value with the same name as the function
         id variableValue = [variables objectForKey:functionName];
         NSNumber *n = [self _evaluateValue:variableValue withSubstitutions:variables error:error];
@@ -117,7 +118,6 @@
         }
     }
     
-    DDMathFunction function = [_functionMap objectForKey:functionName];
     if (e == nil && function == nil && _functionResolver != nil) {
         function = _functionResolver(functionName);
     }

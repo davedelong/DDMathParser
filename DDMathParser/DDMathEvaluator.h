@@ -27,7 +27,6 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 + (instancetype)defaultMathEvaluator;
 
 - (BOOL)registerFunction:(DDMathFunction)function forName:(NSString *)functionName;
-- (void)unregisterFunctionWithName:(NSString *)functionName;
 - (NSArray *)registeredFunctions;
 
 - (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions;
@@ -43,6 +42,8 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 @interface DDMathEvaluator (Deprecated)
 
 + (id)sharedMathEvaluator __attribute__((deprecated("Use +defaultMathEvaluator instead")));
+
+- (void)unregisterFunctionWithName:(NSString *)functionName __attribute__((deprecated("You should almost never need to unregister a function")));
 
 - (void)addRewriteRule:(NSString *)rule forExpressionsMatchingTemplate:(NSString *)templateString condition:(NSString *)condition __attribute__((deprecated("Use -[DDExpressionRewriter addRewriteRule:forExpressionsMatchingTemplate:condition:] instead")));
 
