@@ -39,8 +39,13 @@
 #pragma mark -
 #pragma mark Abstract method implementations
 
+- (id)copyWithZone:(NSZone *)zone {
+	[NSException raise:NSInternalInconsistencyException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)];
+    return nil;
+}
+
 - (DDExpressionType)expressionType {
-	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)];
+	[NSException raise:NSInternalInconsistencyException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)];
 	return DDExpressionTypeNumber;
 }
 - (NSNumber *)evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
@@ -61,7 +66,7 @@
 	return nil; 
 }
 - (NSNumber *)number { 
-	[NSException raise:NSInvalidArgumentException format:@"This is not a numeric expression"]; 
+	[NSException raise:NSInternalInconsistencyException format:@"This is not a numeric expression"]; 
 	return nil; 
 }
 - (NSString *)function { 

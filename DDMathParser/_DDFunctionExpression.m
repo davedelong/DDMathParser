@@ -57,6 +57,15 @@
     [aCoder encodeObject:[self arguments] forKey:@"arguments"];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    NSMutableArray *newArguments = [NSMutableArray array];
+    for (id<NSCopying> arg in [self arguments]) {
+        [newArguments addObject:[arg copyWithZone:zone]];
+    }
+    
+    return [[[self class] alloc] initWithFunction:[self function] arguments:newArguments error:nil];
+}
+
 - (DDExpressionType)expressionType { return DDExpressionTypeFunction; }
 
 - (NSString *)function { return [_function lowercaseString]; }

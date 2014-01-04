@@ -38,6 +38,10 @@
     [aCoder encodeObject:[self variable] forKey:@"variable"];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    return [[[self class] alloc] initWithVariable:[self variable]];
+}
+
 - (DDExpressionType)expressionType { return DDExpressionTypeVariable; }
 
 - (NSString *)variable { return _variable; }

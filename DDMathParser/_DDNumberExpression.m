@@ -30,6 +30,10 @@
     [aCoder encodeObject:[self number] forKey:@"number"];
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    return [[[self class] alloc] initWithNumber:[self number]];
+}
+
 - (DDExpressionType)expressionType { return DDExpressionTypeNumber; }
 
 - (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
