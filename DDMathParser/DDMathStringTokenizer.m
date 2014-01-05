@@ -18,6 +18,8 @@
 
 @interface DDMathStringTokenizer ()
 
+@property (nonatomic, readonly) NSCharacterSet *operatorCharacters;
+
 - (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error;
 - (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error;
 - (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError **)error;
@@ -31,10 +33,6 @@
 - (DDMathStringToken *)_parseFunctionWithError:(NSError **)error;
 - (DDMathStringToken *)_parseVariableWithError:(NSError **)error;
 - (DDMathStringToken *)_parseOperatorWithError:(NSError **)error;
-
-+ (NSCharacterSet *)_operatorCharacterSet;
-+ (NSCharacterSet *)_functionCharacterSet;
-+ (NSCharacterSet *)_singleCharacterFunctionCharacterSet;
 
 @end
 
@@ -50,38 +48,14 @@
     
 }
 
-+ (NSCharacterSet *)legalCharacters {
-    static dispatch_once_t onceToken;
-    static NSCharacterSet *legal = nil;
-    dispatch_once(&onceToken, ^{
-        NSMutableCharacterSet *mutableCharacters = [NSMutableCharacterSet characterSetWithCharactersInString:@"$."];
-        [mutableCharacters formUnionWithCharacterSet:[self _operatorCharacterSet]];
-        [mutableCharacters formUnionWithCharacterSet:[self _functionCharacterSet]];
-        [mutableCharacters formUnionWithCharacterSet:[self _singleCharacterFunctionCharacterSet]];
-        legal = [mutableCharacters copy];
-    });
-    return legal;
-}
-
-+ (NSCharacterSet *)_operatorCharacterSet {
-    static dispatch_once_t onceToken;
-    static NSCharacterSet *_operatorSet = nil;
-    dispatch_once(&onceToken, ^{
-        NSArray *allOperators = [DDMathOperator allOperators];
-        NSArray *operatorTokens = [allOperators valueForKeyPath:@"@distinctUnionOfArrays.tokens"];
-        NSString *operatorString = [operatorTokens componentsJoinedByString:@""];
-        _operatorSet = [NSCharacterSet characterSetWithCharactersInString:operatorString];
-    });
-    return _operatorSet;
-}
-
-+ (NSCharacterSet *)_functionCharacterSet {
-    static dispatch_once_t onceToken;
-    static NSCharacterSet *_functionSet = nil;
-    dispatch_once(&onceToken, ^{
-        _functionSet = [NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01233456789_"];
-    });
-    return _functionSet;
+@synthesize operatorCharacters=_operatorCharacters;
+- (NSCharacterSet *)operatorCharacters {
+    if (_operatorCharacters == nil) {
+        NSArray *tokens = [self.operatorSet valueForKeyPath:@"operators.@unionOfArrays.tokens"];
+        NSString *tokenString = [tokens componentsJoinedByString:@""];
+        _operatorCharacters = [NSCharacterSet characterSetWithCharactersInString:tokenString];
+    }
+    return _operatorCharacters;
 }
 
 + (NSCharacterSet *)_singleCharacterFunctionCharacterSet {
@@ -94,14 +68,14 @@
     return _singleCharFunctionSet;
 }
 
-+ (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error {
-    return [[self alloc] initWithString:expressionString error:error];
-}
-
-- (id)initWithString:(NSString *)expressionString error:(NSError **)error {
+- (instancetype)initWithString:(NSString *)expressionString operatorSet:(DDMathOperatorSet *)operatorSet error:(NSError *__autoreleasing *)error {
 	ERR_ASSERT(error);
     self = [super init];
     if (self) {
+        _operatorSet = operatorSet;
+        if (_operatorSet == nil) {
+            _operatorSet = [DDMathOperatorSet defaultOperatorSet];
+        }
         
         _length = [expressionString length];
         _characters = (unichar *)calloc(_length+1, sizeof(unichar));
@@ -465,8 +439,11 @@
         length++;
         _characterIndex++;
     } else {
-        NSCharacterSet *functionSet = [[self class] _functionCharacterSet];
-        while ([functionSet characterIsMember:[self _peekNextCharacter]]) {
+        NSCharacterSet *operatorSet = self.operatorCharacters;
+        while ([operatorSet characterIsMember:[self _peekNextCharacter]] == NO &&
+               DD_IS_WHITESPACE([self _peekNextCharacter]) == NO &&
+               [self _peekNextCharacter] != '\0') {
+            
             length++;
             _characterIndex++;
         }
@@ -546,12 +523,10 @@
     
     unichar character = [self _next:_caseInsensitiveCharacters];
     
-    NSCharacterSet *operatorCharacters = [[self class] _operatorCharacterSet];
-    
     NSString *lastGood = nil;
     NSUInteger lastGoodLength = length;
     
-    while ([operatorCharacters characterIsMember:character]) {
+    while ([self.operatorCharacters characterIsMember:character]) {
         NSString *tmp = [NSString stringWithCharacters:(_caseInsensitiveCharacters+start) length:length];
         NSArray *operators = [DDMathOperator infosForOperatorToken:tmp];
         if ([operators count] > 0) {
@@ -571,6 +546,18 @@
     _characterIndex = start;
     *error = ERR(DDErrorCodeInvalidOperator, @"%C is not a valid operator", character);
     return nil;
+}
+
+@end
+
+@implementation DDMathStringTokenizer (Deprecated)
+
++ (id)tokenizerWithString:(NSString *)expressionString error:(NSError *__autoreleasing *)error {
+    return [[self alloc] initWithString:expressionString operatorSet:nil error:error];
+}
+
+- (id)initWithString:(NSString *)expressionString error:(NSError *__autoreleasing *)error {
+    return [self initWithString:expressionString operatorSet:nil error:error];
 }
 
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DDTypes.h"
 
-@class DDMathEvaluator;
+@class DDMathOperatorSet;
 @class DDExpression;
 
 typedef DDMathFunction (^DDFunctionResolver)(NSString *);
@@ -19,6 +19,7 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 
 @property (nonatomic) BOOL usesHighPrecisionEvaluation; // default is NO
 @property (nonatomic) BOOL resolvesFunctionsAsVariables; // default is NO
+@property (nonatomic, strong) DDMathOperatorSet *operatorSet;
 
 @property (nonatomic) DDAngleMeasurementMode angleMeasurementMode; // default is Radians
 @property (nonatomic, copy) DDFunctionResolver functionResolver;

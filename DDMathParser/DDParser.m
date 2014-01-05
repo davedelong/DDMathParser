@@ -27,72 +27,16 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     return info.associativity;
 }
 
-@implementation DDParser
-
-@synthesize bitwiseOrAssociativity;
-@synthesize bitwiseXorAssociativity;
-@synthesize bitwiseAndAssociativity;
-@synthesize bitwiseLeftShiftAssociativity;
-@synthesize bitwiseRightShiftAssociativity;
-@synthesize additionAssociativity;
-@synthesize multiplicationAssociativity;
-@synthesize modAssociativity;
-@synthesize powerAssociativity;
-
-+ (void)initialize {
-	if (self == [DDParser class]) {
-		//determine what associativity NSPredicate/NSExpression is using
-		//mathematically, it should be right associative, but it's usually parsed as left associative
-		//rdar://problem/8692313
-		NSExpression * powerExpression = [(NSComparisonPredicate *)[NSPredicate predicateWithFormat:@"2 ** 3 ** 2 == 0"] leftExpression];
-		NSNumber * powerResult = [powerExpression expressionValueWithObject:nil context:nil];
-		if ([powerResult intValue] == 512) {
-			[self setDefaultPowerAssociativity:DDOperatorAssociativityRight];
-		}
-	}
-    [super initialize];
+@implementation DDParser {
+	DDMathStringTokenizer * _tokenizer;
 }
-
-+ (DDOperatorAssociativity)defaultBitwiseOrAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseOr); }
-+ (void)setDefaultBitwiseOrAssociativity:(DDOperatorAssociativity)newAssociativity {  DDOperatorSetAssociativity(DDOperatorBitwiseOr, newAssociativity); }
-
-+ (DDOperatorAssociativity)defaultBitwiseXorAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseXor); }
-+ (void)setDefaultBitwiseXorAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseXor, newAssociativity); }
-
-+ (DDOperatorAssociativity)defaultBitwiseAndAssociativity { return DDOperatorGetAssociativity(DDOperatorBitwiseAnd); }
-+ (void)setDefaultBitwiseAndAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorBitwiseAnd, newAssociativity); }
-
-+ (DDOperatorAssociativity)defaultBitwiseLeftShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorLeftShift); }
-+ (void)setDefaultBitwiseLeftShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorLeftShift, newAssociativity); }
-
-+ (DDOperatorAssociativity)defaultBitwiseRightShiftAssociativity { return DDOperatorGetAssociativity(DDOperatorRightShift); }
-+ (void)setDefaultBitwiseRightShiftAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorRightShift, newAssociativity); }
-
-+ (DDOperatorAssociativity)defaultAdditionAssociativity { return DDOperatorGetAssociativity(DDOperatorAdd); }
-+ (void)setDefaultAdditionAssociativity:(DDOperatorAssociativity)newAssociativity {
-    DDOperatorSetAssociativity(DDOperatorAdd, newAssociativity);
-    DDOperatorSetAssociativity(DDOperatorMinus, newAssociativity);
-}
-
-+ (DDOperatorAssociativity)defaultMultiplicationAssociativity { return DDOperatorGetAssociativity(DDOperatorMultiply); }
-+ (void)setDefaultMultiplicationAssociativity:(DDOperatorAssociativity)newAssociativity {
-    DDOperatorSetAssociativity(DDOperatorMultiply, newAssociativity);
-    DDOperatorSetAssociativity(DDOperatorDivide, newAssociativity);
-}
-
-+ (DDOperatorAssociativity)defaultModAssociativity { return DDOperatorGetAssociativity(DDOperatorModulo); }
-+ (void)setDefaultModAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorModulo, newAssociativity); }
-
-+ (DDOperatorAssociativity)defaultPowerAssociativity { return DDOperatorGetAssociativity(DDOperatorPower); }
-+ (void)setDefaultPowerAssociativity:(DDOperatorAssociativity)newAssociativity { DDOperatorSetAssociativity(DDOperatorPower, newAssociativity); }
-
 
 + (id)parserWithString:(NSString *)string error:(NSError **)error {
     return [[self alloc] initWithString:string error:error];
 }
 
 - (id)initWithString:(NSString *)string error:(NSError **)error {
-    DDMathStringTokenizer *t = [DDMathStringTokenizer tokenizerWithString:string error:error];
+    DDMathStringTokenizer *t = [[DDMathStringTokenizer alloc] initWithString:string operatorSet:nil error:error];
     return [self initWithTokenizer:t error:error];
 }
 
@@ -104,63 +48,27 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
-		tokenizer = t;
-		if (!tokenizer) {
+        _operatorSet = t.operatorSet;
+		_tokenizer = t;
+		if (!_tokenizer) {
 			return nil;
 		}
-		
-		bitwiseOrAssociativity = [[self class] defaultBitwiseOrAssociativity];
-		bitwiseXorAssociativity = [[self class] defaultBitwiseXorAssociativity];
-		bitwiseAndAssociativity = [[self class] defaultBitwiseAndAssociativity];
-		bitwiseLeftShiftAssociativity = [[self class] defaultBitwiseLeftShiftAssociativity];
-		bitwiseRightShiftAssociativity = [[self class] defaultBitwiseRightShiftAssociativity];
-		additionAssociativity = [[self class] defaultAdditionAssociativity];
-		multiplicationAssociativity = [[self class] defaultMultiplicationAssociativity];
-		modAssociativity = [[self class] defaultModAssociativity];
-		powerAssociativity = [[self class] defaultPowerAssociativity];
 	}
 	return self;
 }
 
 - (DDOperatorAssociativity)associativityForOperatorFunction:(NSString *)function {
-    if (function == DDOperatorBitwiseOr) {
-        return bitwiseOrAssociativity;
-    }
-    if (function == DDOperatorBitwiseXor) {
-        return bitwiseXorAssociativity;
-    }
-    if (function == DDOperatorBitwiseAnd) {
-        return bitwiseAndAssociativity;
-    }
-    if (function == DDOperatorLeftShift) {
-        return bitwiseLeftShiftAssociativity;
-    }
-    if (function == DDOperatorRightShift) {
-        return bitwiseRightShiftAssociativity;
-    }
-    if (function == DDOperatorMinus || function == DDOperatorAdd) {
-        return additionAssociativity;
-    }
-    if (function == DDOperatorDivide || function == DDOperatorMultiply) {
-        return multiplicationAssociativity;
-    }
-    if (function == DDOperatorModulo) {
-        return modAssociativity;
-    }
-    if (function == DDOperatorPower) {
-        return powerAssociativity;
-    }
-    
-    return DDOperatorGetAssociativity(function);
+    DDMathOperator *operator = [_operatorSet operatorForFunction:function];
+    return operator.associativity;
 }
 
 - (DDExpression *)parsedExpressionWithError:(NSError **)error {
 	ERR_ASSERT(error);
-	[tokenizer reset]; //reset the token stream
+	[_tokenizer reset]; //reset the token stream
     
     DDExpression *expression = nil;
     
-    _DDParserTerm *root = [_DDParserTerm rootTermWithTokenizer:tokenizer error:error];
+    _DDParserTerm *root = [_DDParserTerm rootTermWithTokenizer:_tokenizer error:error];
     if ([root resolveWithParser:self error:error]) {
         expression = [root expressionWithError:error];
     }

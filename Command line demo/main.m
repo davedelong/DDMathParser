@@ -31,7 +31,7 @@ void listFunctions() {
 
 void listOperators() {
 	printf("\nOperators available:\n");
-    NSArray *knownOperators = [DDMathOperator allOperators];
+    NSArray *knownOperators = [[DDMathOperatorSet defaultOperatorSet] operators];
     for (DDMathOperator *op in knownOperators) {
         printf("\t%s (%s, %s associative) invokes %s()\n",
                [[op.tokens componentsJoinedByString:@", "] UTF8String],
@@ -48,11 +48,16 @@ int main (int argc, const char * argv[]) {
         
         printf("Math Evaluator!\n");
         printf("\tType a mathematical expression to evaluate it.\n");
-        printf("\tType \"functions\" to show available functions\n");
+        printf("\tType \"list\" to show available functions\n");
         printf("\tType \"operators\" to show available operators\n");
         printf("\tType \"exit\" to quit\n");
         
-        [DDParser setDefaultPowerAssociativity:DDOperatorAssociativityRight];
+        DDMathOperatorSet *defaultOperators = [DDMathOperatorSet defaultOperatorSet];
+        defaultOperators.interpretsPercentSignAsModulo = NO;
+        
+        DDMathOperator *powerOperator = [defaultOperators operatorForFunction:DDOperatorPower];
+        powerOperator.associativity = DDOperatorAssociativityRight;
+        
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
         
         [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
@@ -77,7 +82,7 @@ int main (int argc, const char * argv[]) {
             
             NSError *error = nil;
             
-            DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:line error:&error];
+            DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:line operatorSet:nil error:&error];
             DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
             
             DDExpression *expression = [parser parsedExpressionWithError:&error];

@@ -8,9 +8,8 @@
 
 #import "DDMathOperator.h"
 
-@interface DDMathOperator ()
+@interface DDMathOperator (Internal)
 
-@property (nonatomic, assign) DDOperatorAssociativity associativity;
-@property (nonatomic, assign) NSInteger precedence;
+@property (readonly) NSInteger precedence;
 
 @end

@@ -9,28 +9,44 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
 
-@interface DDMathOperator : NSObject
+@interface DDMathOperator : NSObject <NSCopying>
 
 @property (nonatomic, readonly, strong) NSString *function;
 @property (nonatomic, readonly, strong) NSArray *tokens;
 @property (nonatomic, readonly) DDOperatorArity arity;
-@property (nonatomic, readonly) DDOperatorAssociativity associativity;
+@property (nonatomic, assign) DDOperatorAssociativity associativity;
 
-+ (NSArray *)allOperators;
 + (instancetype)infoForOperatorFunction:(NSString *)function;
 + (NSArray *)infosForOperatorToken:(NSString *)token;
 
-// the only reason you'd want to init a new Operator is so you can pass it to the +addOperator:... methods
-- (id)initWithOperatorFunction:(NSString *)function tokens:(NSArray *)tokens arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity;
+// the only reason you'd want to init a new \c MathOperator is so you can pass it to the -[DDMathOperatorSet addOperator:...] methods
+- (id)initWithOperatorFunction:(NSString *)function
+                        tokens:(NSArray *)tokens
+                         arity:(DDOperatorArity)arity
+                 associativity:(DDOperatorAssociativity)associativity;
 
+@end
 
-// modifying operators is not a threadsafe operation
-// if you want to do this, you should do it before any evaluation occurs
+/*!
+ * Maintains a collection of \c DDMathOperators.
+ * Modifications to an Operator Set are not thread-safe.
+ */
+@interface DDMathOperatorSet : NSObject <NSFastEnumeration, NSCopying>
 
-+ (void)addTokens:(NSArray *)tokens forOperatorFunction:(NSString *)operatorFunction;
+@property (readonly, copy) NSArray *operators;
+@property (nonatomic) BOOL interpretsPercentSignAsModulo; // default is YES
 
-+ (void)addOperator:(DDMathOperator *)newOperator withSamePrecedenceAsOperator:(DDMathOperator *)existingOperator;
-+ (void)addOperator:(DDMathOperator *)newOperator withLowerPrecedenceThanOperator:(DDMathOperator *)existingOperator;
-+ (void)addOperator:(DDMathOperator *)newOperator withHigherPrecedenceThanOperator:(DDMathOperator *)existingOperator;
++ (instancetype)defaultOperatorSet;
+
+- (instancetype)init;
+
+- (DDMathOperator *)operatorForFunction:(NSString *)function;
+- (NSArray *)operatorsForToken:(NSString *)token;
+
+- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceSameAsOperator:(DDMathOperator *)existingOperator;
+- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceLowerThanOperator:(DDMathOperator *)existingOperator;
+- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceHigherThanOperator:(DDMathOperator *)existingOperator;
+
+- (void)addTokens:(NSArray *)newTokens forOperatorFunction:(NSString *)operatorFunction;
 
 @end

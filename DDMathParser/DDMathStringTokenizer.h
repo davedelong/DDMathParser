@@ -8,14 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class DDMathStringToken;
+@class DDMathStringToken, DDMathOperatorSet;
 
 @interface DDMathStringTokenizer : NSEnumerator
 
-+ (NSCharacterSet *)legalCharacters;
+@property (readonly) DDMathOperatorSet *operatorSet;
 
-+ (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error;
-- (id)initWithString:(NSString *)expressionString error:(NSError **)error;
+- (instancetype)initWithString:(NSString *)expressionString operatorSet:(DDMathOperatorSet *)operatorSet error:(NSError **)error;
 
 - (DDMathStringToken *)peekNextObject;
 
@@ -26,5 +25,12 @@
 
 // methods that can be used by subclasses
 - (void)appendToken:(DDMathStringToken *)token;
+
+@end
+
+@interface DDMathStringTokenizer (Deprecated)
+
++ (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));
+- (id)initWithString:(NSString *)expressionString error:(NSError **)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));
 
 @end

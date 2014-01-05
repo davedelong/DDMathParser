@@ -8,6 +8,7 @@
 #import "DDMathParser.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
+#import "DDMathStringTokenizer.h"
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
 #import "DDExpression.h"
@@ -37,6 +38,7 @@
         _functionMap = [[NSMutableDictionary alloc] init];
         _angleMeasurementMode = DDAngleMeasurementModeRadians;
         _functionEvaluator = [[_DDFunctionEvaluator alloc] initWithMathEvaluator:self];
+        _operatorSet = [DDMathOperatorSet defaultOperatorSet];
         
         NSDictionary *aliases = [[self class] _standardAliases];
         for (NSString *alias in aliases) {
@@ -186,10 +188,15 @@
 }
 
 - (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
-    DDExpression *expression = [DDExpression expressionFromString:expressionString error:error];
-	if (!expression) {
-		return nil;
-	}
+    DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:expressionString operatorSet:self.operatorSet error:error];
+    if (!tokenizer) { return nil; }
+    
+    DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:error];
+    if (!parser) { return nil; }
+    
+    DDExpression *expression = [parser parsedExpressionWithError:error];
+    if (!expression) { return nil; }
+    
     return [self evaluateExpression:expression withSubstitutions:substitutions error:error];
 }
 
