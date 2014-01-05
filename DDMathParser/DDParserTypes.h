@@ -50,3 +50,5 @@ extern NSString *const DDOperatorParenthesisClose;
 extern NSString *const DDOperatorComma;
 extern NSString *const DDOperatorUnaryMinus;
 extern NSString *const DDOperatorUnaryPlus;
+extern NSString *const DDOperatorSquareRoot;
+extern NSString *const DDOperatorCubeRoot;

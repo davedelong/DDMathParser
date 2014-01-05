@@ -210,6 +210,15 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
+- (DDExpression *)cuberoot:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
+	REQUIRE_N_ARGS(1);
+	NSNumber *base = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	RETURN_IF_NIL(base);
+    
+    NSNumber *result = @(pow([base doubleValue], 1.0/3.0));
+	return [DDExpression numberExpressionWithNumber:result];
+}
+
 - (DDExpression *)and:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
 	NSNumber *first = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];

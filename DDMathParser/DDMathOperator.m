@@ -103,13 +103,17 @@
         // \u2212 is −
         [operators addObject:OPERATOR(DDOperatorUnaryMinus, (@[@"-", @"\u2212"]), UNARY, precedence, RIGHT)];
         [operators addObject:OPERATOR(DDOperatorUnaryPlus, (@[@"+"]), UNARY, precedence, RIGHT)];
+        // \u221a is √
+        [operators addObject:OPERATOR(DDOperatorSquareRoot, (@[@"\u221a"]), UNARY, precedence, RIGHT)];
+        // \u221b is ∛
+        [operators addObject:OPERATOR(DDOperatorCubeRoot, (@[@"\u221b"]), UNARY, precedence, RIGHT)];
         precedence++;
         
         // all the left associative unary operators have the same precedence
         [operators addObject:OPERATOR(DDOperatorFactorial, (@[@"!"]), UNARY, precedence, LEFT)];
         // \u00ba is º (option-0); not necessary a degree sign (acutally masculine ordinal), but common enough for it
         // \u00b0 is °
-        [operators addObject:OPERATOR(DDOperatorDegree, (@[@"\u00ba", @"\u00b0"]), UNARY, precedence, LEFT)];
+        [operators addObject:OPERATOR(DDOperatorDegree, (@[@"\u00ba", @"\u00b0", @"\u2218"]), UNARY, precedence, LEFT)];
         
         // NOTE: percent-as-percent precedence goes here (same as Factorial)
         precedence++;

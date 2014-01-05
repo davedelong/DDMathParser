@@ -38,4 +38,5 @@ NSString *const DDOperatorParenthesisClose = @"close_paren";
 NSString *const DDOperatorComma = @"comma";
 NSString *const DDOperatorUnaryMinus = @"negate";
 NSString *const DDOperatorUnaryPlus = @"positive";
-
+NSString *const DDOperatorSquareRoot = @"sqrt";
+NSString *const DDOperatorCubeRoot = @"cuberoot";

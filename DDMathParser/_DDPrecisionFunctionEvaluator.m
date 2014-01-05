@@ -132,6 +132,17 @@
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
+- (DDExpression *)cuberoot:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
+	REQUIRE_N_ARGS(1);
+	NSNumber *base = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	RETURN_IF_NIL(base);
+    
+    NSDecimal exponent = DDDecimalInverse(DDDecimalFromInteger(3));
+    NSDecimal decimal = DDDecimalPower([base decimalValue], exponent);
+    NSDecimalNumber *result = [NSDecimalNumber decimalNumberWithDecimal:decimal];
+	return [DDExpression numberExpressionWithNumber:result];
+}
+
 /**
  binary and, or, not, xor
  are not implemented with NSDecimal equivalents

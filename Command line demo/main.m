@@ -48,7 +48,7 @@ int main (int argc, const char * argv[]) {
         
         printf("Math Evaluator!\n");
         printf("\tType a mathematical expression to evaluate it.\n");
-        printf("\tType \"list\" to show available functions\n");
+        printf("\tType \"functions\" to show available functions\n");
         printf("\tType \"operators\" to show available operators\n");
         printf("\tType \"exit\" to quit\n");
         
