@@ -14,27 +14,15 @@
 
 - (DDParserTermType)type { return DDParserTermTypeOperator; }
 
-- (NSString *)operatorType {
-    return [[self token] operatorType];
-}
-
-- (NSInteger)operatorPrecedence {
-    return [[self token] operatorPrecedence];
-}
-
-- (DDOperatorArity)operatorArity {
-    return [[self token] operatorArity];
-}
-
-- (NSString *)operatorFunction {
-    return [[self token] operatorFunction];
+- (DDMathOperator *)mathOperator {
+    return self.token.mathOperator;
 }
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError *__autoreleasing *)error {
 #pragma unused(parser)
     ERR_ASSERT(error);
-    if ([self operatorArity] == DDOperatorArityUnary) {
-        if ([[self token] operatorAssociativity] == DDOperatorAssociativityLeft) {
+    if (self.mathOperator.arity == DDOperatorArityUnary) {
+        if (self.mathOperator.associativity == DDOperatorAssociativityLeft) {
             *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", [self token]);
         } else {
             *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", [self token]);

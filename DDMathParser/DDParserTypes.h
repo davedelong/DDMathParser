@@ -20,7 +20,6 @@ typedef NS_ENUM(NSInteger, DDOperatorArity) {
     DDOperatorArityBinary
 };
 
-extern NSString *const DDOperatorInvalid;
 extern NSString *const DDOperatorLogicalOr;
 extern NSString *const DDOperatorLogicalAnd;
 extern NSString *const DDOperatorLogicalNot;

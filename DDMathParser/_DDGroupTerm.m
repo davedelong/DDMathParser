@@ -46,7 +46,7 @@
     if (self) {
         NSMutableArray *terms = [NSMutableArray array];
         DDMathStringToken *nextToken = [tokenizer peekNextObject];
-        while (nextToken && [nextToken operatorType] != DDOperatorParenthesisClose) {
+        while (nextToken && nextToken.mathOperator.function != DDOperatorParenthesisClose) {
             _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
             if (nextTerm) {
                 [terms addObject:nextTerm];
@@ -91,7 +91,7 @@
                 // use a different index if the operator is right associative
                 _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
                 
-                if ([parser associativityForOperatorFunction:[operatorTerm operatorType]] == DDOperatorAssociativityRight) {
+                if (operatorTerm.mathOperator.associativity == DDOperatorAssociativityRight) {
                     index = [operatorIndices lastIndex];
                 }
             }
@@ -127,11 +127,12 @@
 #pragma unused(stop)
         _DDParserTerm *term = obj;
         if ([term type] == DDParserTermTypeOperator) {
-            if ([(_DDOperatorTerm *)term operatorPrecedence] > currentPrecedence) {
-                currentPrecedence = [(_DDOperatorTerm *)term operatorPrecedence];
+            _DDOperatorTerm *operatorTerm = obj;
+            if (operatorTerm.mathOperator.precedence > currentPrecedence) {
+                currentPrecedence = operatorTerm.mathOperator.precedence;
                 [indices removeAllIndexes];
                 [indices addIndex:idx];
-            } else if ([(_DDOperatorTerm *)term operatorPrecedence] == currentPrecedence) {
+            } else if (operatorTerm.mathOperator.precedence == currentPrecedence) {
                 [indices addIndex:idx];
             }
         }
@@ -143,9 +144,9 @@
     ERR_ASSERT(error);
     _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
     
-    if ([operatorTerm operatorArity] == DDOperatorArityBinary) {
+    if (operatorTerm.mathOperator.arity == DDOperatorArityBinary) {
         return [self _reduceBinaryOperatorAtIndex:index withParser:parser error:error];
-    } else if ([operatorTerm operatorArity] == DDOperatorArityUnary) {
+    } else if (operatorTerm.mathOperator.arity == DDOperatorArityUnary) {
         return [self _reduceUnaryOperatorAtIndex:index withParser:parser error:error];
     }
     
@@ -173,7 +174,7 @@
     _DDParserTerm *rightmostOperand = [[self subterms] objectAtIndex:index+1];
     
     NSRange rightOperandRange = NSMakeRange(index+1, 1);
-    while ([rightmostOperand type] == DDParserTermTypeOperator && [(_DDOperatorTerm *)rightmostOperand operatorArity] == DDOperatorArityUnary) {
+    while ([rightmostOperand type] == DDParserTermTypeOperator && [(_DDOperatorTerm *)rightmostOperand mathOperator].arity == DDOperatorArityUnary) {
         // this should really only happen when operator is the power operator and the exponent has 1+ negations
         rightOperandRange.length++;
         if (NSMaxRange(rightOperandRange)-1 >= [[self subterms] count]) {
@@ -192,7 +193,7 @@
     }
     
     NSArray *parameters = @[leftOperand, rightmostOperand];
-    _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operatorTerm operatorFunction] subterms:parameters error:error];
+    _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:operatorTerm.mathOperator.function subterms:parameters error:error];
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:@[function]];
     
@@ -202,7 +203,7 @@
 - (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
     ERR_ASSERT(error);
     _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
-    DDOperatorAssociativity associativity = [parser associativityForOperatorFunction:[operatorTerm operatorType]];
+    DDOperatorAssociativity associativity = operatorTerm.mathOperator.associativity;
     
     NSRange replacementRange;
     _DDParserTerm *parameter = nil;
@@ -230,7 +231,7 @@
     }
     
     NSArray *parameters = @[parameter];
-    _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:[operatorTerm operatorFunction] subterms:parameters error:error];
+    _DDFunctionTerm *function = [[_DDFunctionTerm alloc] _initWithFunction:operatorTerm.mathOperator.function subterms:parameters error:error];
     
     [[self subterms] replaceObjectsInRange:replacementRange withObjectsFromArray:@[function]];
     

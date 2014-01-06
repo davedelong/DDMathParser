@@ -14,6 +14,7 @@
 @property (nonatomic, readonly, strong) NSString *function;
 @property (nonatomic, readonly, strong) NSArray *tokens;
 @property (nonatomic, readonly) DDOperatorArity arity;
+@property (nonatomic, readonly) NSInteger precedence;
 @property (nonatomic, assign) DDOperatorAssociativity associativity;
 
 + (instancetype)infoForOperatorFunction:(NSString *)function;
@@ -42,6 +43,8 @@
 
 - (DDMathOperator *)operatorForFunction:(NSString *)function;
 - (NSArray *)operatorsForToken:(NSString *)token;
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity;
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity;
 
 - (void)addOperator:(DDMathOperator *)newOperator withPrecedenceSameAsOperator:(DDMathOperator *)existingOperator;
 - (void)addOperator:(DDMathOperator *)newOperator withPrecedenceLowerThanOperator:(DDMathOperator *)existingOperator;

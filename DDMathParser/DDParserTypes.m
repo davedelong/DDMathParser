@@ -8,7 +8,6 @@
 
 #import "DDParserTypes.h"
 
-NSString *const DDOperatorInvalid = @"invalid";
 NSString *const DDOperatorLogicalOr = @"l_or";
 NSString *const DDOperatorLogicalAnd = @"l_and";
 NSString *const DDOperatorLogicalNot = @"l_not";

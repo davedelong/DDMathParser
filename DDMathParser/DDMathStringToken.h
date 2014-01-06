@@ -20,19 +20,13 @@ typedef NS_ENUM(NSInteger, DDTokenType) {
 
 @interface DDMathStringToken : NSObject
 
-+ (id)mathStringTokenWithToken:(NSString *)t type:(DDTokenType)type;
+- (id)initWithToken:(NSString *)t type:(DDTokenType)type operator:(DDMathOperator *)op;
 
+@property (readonly, getter = isAmbiguous) BOOL ambiguous;
 @property (nonatomic, readonly) NSString *token;
 @property (nonatomic, readonly) DDTokenType tokenType;
 
-@property (nonatomic, readonly) NSString *operatorType;
-@property (nonatomic, readonly) DDOperatorArity operatorArity;
-@property (nonatomic, readonly) DDOperatorAssociativity operatorAssociativity;
-@property (nonatomic, readonly) NSInteger operatorPrecedence;
-@property (nonatomic, readonly) NSString *operatorFunction;
-
+@property (nonatomic, strong) DDMathOperator *mathOperator;
 @property (nonatomic, readonly) NSNumber *numberValue;
-
-- (void)resolveToOperatorFunction:(NSString *)function;
 
 @end

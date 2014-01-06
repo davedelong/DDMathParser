@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "DDMathOperator_Internal.h"
+#import "DDMathOperator.h"
 
 @interface DDMathOperator ()
 
@@ -199,7 +199,7 @@
                                             associativity:_associativity];
 }
 
-- (NSString *)description {
+- (NSString *)debugDescription {
     static NSString *ArityDesc[] = {
         @"Unknown",
         @"Unary",
@@ -211,13 +211,19 @@
         @"Right"
     };
     
-    return [NSString stringWithFormat:@"%@ {(%@) => %@(), Arity: %@, Assoc: %@, Precedence: %ld}",
-            [super description],
+    return [NSString stringWithFormat:@"{(%@) => %@(), Arity: %@, Assoc: %@, Precedence: %ld}",
             [_tokens componentsJoinedByString:@", "],
             _function,
             ArityDesc[_arity],
             AssocDesc[_associativity],
             (long)_precedence];
+}
+
+- (NSString *)description {
+    
+    return [NSString stringWithFormat:@"%@ %@",
+            [super description],
+            [self debugDescription]];
 }
 
 @end
@@ -345,6 +351,26 @@
     token = [token lowercaseString];
     NSOrderedSet *operators = [_operatorsByToken objectForKey:token];
     return operators.array;
+}
+
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity {
+    NSArray *operators = [self operatorsForToken:token];
+    for (DDMathOperator *op in operators) {
+        if (op.arity == arity) {
+            return op;
+        }
+    }
+    return nil;
+}
+
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity {
+    NSArray *operators = [self operatorsForToken:token];
+    for (DDMathOperator *op in operators) {
+        if (op.arity == arity && op.associativity == associativity) {
+            return op;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - Private
