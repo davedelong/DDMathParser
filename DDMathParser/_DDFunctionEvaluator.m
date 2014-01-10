@@ -402,8 +402,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 		[params addObject:value];
 	}
 	
-    long long lowerBound = LONG_LONG_MIN;
-    long long upperBound = LONG_LONG_MAX;
+    long long lowerBound = LLONG_MIN;
+    long long upperBound = LLONG_MAX;
 	
 	if ([params count] > 0) {
         lowerBound = [[params objectAtIndex:0] longLongValue];
