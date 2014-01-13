@@ -1061,4 +1061,20 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
+- (DDExpression *)l_if:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
+	REQUIRE_N_ARGS(3);
+	NSNumber *condition = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    RETURN_IF_NIL(condition);
+    
+    NSNumber *result = nil;
+    if ([condition boolValue] != NO) {
+        result = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+    } else {
+        result = [[self evaluator] evaluateExpression:[arguments objectAtIndex:2] withSubstitutions:variables error:error];
+    }
+    
+    RETURN_IF_NIL(result);
+	return [DDExpression numberExpressionWithNumber:result];
+}
+
 @end

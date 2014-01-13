@@ -881,7 +881,7 @@
 	return [DDExpression numberExpressionWithNumber:result];
 }
 /**
- The logical and, or, not, eq, neq, lt, gt, ltoe, and gtoe functions
+ The logical and, or, not, eq, neq, lt, gt, ltoe, gtoe, and if functions
  don't need to be implemented in terms of NSDecimal
  */
 
