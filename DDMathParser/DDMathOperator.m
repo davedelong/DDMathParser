@@ -24,6 +24,17 @@
     return [[DDMathOperatorSet defaultOperatorSet] operatorsForToken:token];
 }
 
++ (DDOperatorAssociativity)associativityForPowerExpressions {
+    NSExpression *powerExpression = [NSExpression expressionWithFormat:@"2 ** 3 ** 2"];
+    NSNumber *powerResult = [powerExpression expressionValueWithObject:nil context:nil];
+    DDOperatorAssociativity powerAssociativity = DDOperatorAssociativityLeft;
+    if ([powerResult intValue] == 512) {
+        powerAssociativity = DDOperatorAssociativityRight;
+    }
+
+    return powerAssociativity;
+}
+
 #define UNARY DDOperatorArityUnary
 #define BINARY DDOperatorArityBinary
 #define LEFT DDOperatorAssociativityLeft
@@ -117,13 +128,7 @@
 		//determine what associativity NSPredicate/NSExpression is using
 		//mathematically, it should be right associative, but it's usually parsed as left associative
 		//rdar://problem/8692313
-		NSExpression *powerExpression = [NSExpression expressionWithFormat:@"2 ** 3 ** 2"];
-		NSNumber *powerResult = [powerExpression expressionValueWithObject:nil context:nil];
-        DDOperatorAssociativity powerAssociativity = LEFT;
-		if ([powerResult intValue] == 512) {
-			powerAssociativity = RIGHT;
-		}
-        
+        DDOperatorAssociativity powerAssociativity = [self associativityForPowerExpressions];
         [operators addObject:OPERATOR(DDOperatorPower, (@[@"**"]), BINARY, precedence, powerAssociativity)];
         precedence++;
         

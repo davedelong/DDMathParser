@@ -18,6 +18,7 @@
 
 + (instancetype)infoForOperatorFunction:(NSString *)function;
 + (NSArray *)infosForOperatorToken:(NSString *)token;
++ (DDOperatorAssociativity)associativityForPowerExpressions;
 
 // the only reason you'd want to init a new \c MathOperator is so you can pass it to the -[DDMathOperatorSet addOperator:...] methods
 - (id)initWithOperatorFunction:(NSString *)function
