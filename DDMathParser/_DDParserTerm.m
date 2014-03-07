@@ -21,13 +21,13 @@
 
 @interface _DDParserTerm ()
 
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
+- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error;
 
 @end
 
 @implementation _DDParserTerm
 
-+ (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
++ (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error {
     NSMutableArray *terms = [NSMutableArray array];
     while ([tokenizer peekNextObject] != nil) {
         _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
@@ -41,7 +41,7 @@
     return [[_DDGroupTerm alloc] _initWithSubterms:terms error:error];
 }
 
-+ (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
++ (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     DDMathStringToken *next = [tokenizer peekNextObject];
     if (next) {
@@ -67,7 +67,7 @@
     return nil;
 }
 
-- (id)_initWithToken:(DDMathStringToken *)t error:(NSError **)error {
+- (id)_initWithToken:(DDMathStringToken *)t error:(NSError * __autoreleasing *)error {
 #pragma unused(error)
     self = [super init];
     if (self) {
@@ -77,16 +77,16 @@
     return self;
 }
 
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error {
     return [self _initWithToken:[tokenizer nextObject] error:error];
 }
 
-- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError * __autoreleasing *)error {
 #pragma unused(parser,error)
     return NO;
 }
 
-- (DDExpression *)expressionWithError:(NSError **)error {
+- (DDExpression *)expressionWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     [NSException raise:NSInvalidArgumentException format:@"Subclasses must override the -%@ method", NSStringFromSelector(_cmd)];
     return nil;
