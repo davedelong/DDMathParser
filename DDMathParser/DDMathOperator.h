@@ -33,7 +33,7 @@
  */
 @interface DDMathOperatorSet : NSObject <NSFastEnumeration, NSCopying>
 
-@property (readonly, copy) NSArray *operators;
+@property (nonatomic, readonly, copy) NSArray *operators;
 @property (nonatomic) BOOL interpretsPercentSignAsModulo; // default is YES
 
 + (instancetype)defaultOperatorSet;
