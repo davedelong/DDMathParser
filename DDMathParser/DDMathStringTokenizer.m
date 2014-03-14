@@ -507,7 +507,7 @@
     
     if ([self _peekNextCharacter] != quoteChar) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidVariable, @"Unable to parsed quoted variable name");
+        *error = ERR(DDErrorCodeInvalidVariable, @"unable to parse quoted variable name");
         return nil;
     } else {
         _characterIndex++;
