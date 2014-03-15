@@ -75,10 +75,10 @@ NSDecimal DDDecimalPi() {
 NSDecimal DDDecimal2Pi() {
 	static NSDecimalNumber * _2pi = nil;
 	if (_2pi == nil) {
-		NSDecimal pi = DDDecimalPi();
+		NSDecimal mpi = DDDecimalPi();
 		NSDecimal two = DDDecimalTwo();
 		NSDecimal tpi;
-		NSDecimalMultiply(&tpi, &pi, &two, NSRoundBankers);
+		NSDecimalMultiply(&tpi, &mpi, &two, NSRoundBankers);
 		_2pi = [[NSDecimalNumber alloc] initWithDecimal:tpi];
 	}
 	return [_2pi decimalValue];
@@ -239,10 +239,10 @@ NSDecimal DDDecimalMod(NSDecimal a, NSDecimal b) {
 
 NSDecimal DDDecimalMod2Pi(NSDecimal a) {
     // returns a number in the range of -π to π
-    NSDecimal pi = DDDecimalPi();
+    NSDecimal mpi = DDDecimalPi();
     NSDecimal tpi = DDDecimal2Pi();
 	a = DDDecimalMod(a, tpi);
-    if (NSDecimalCompare(&a, &pi) == NSOrderedDescending) {
+    if (NSDecimalCompare(&a, &mpi) == NSOrderedDescending) {
         //a > pi
         NSDecimalSubtract(&a, &a, &tpi, NSRoundBankers);
     }
