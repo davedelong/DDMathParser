@@ -155,6 +155,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
+#pragma unused(zone)
     return [[[self class] alloc] initWithOperatorFunction:_function
                                                    tokens:_tokens
                                                     arity:_arity
