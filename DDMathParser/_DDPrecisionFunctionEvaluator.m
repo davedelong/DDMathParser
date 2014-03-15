@@ -217,11 +217,11 @@
 	
 	NSNumber *median = nil;
 	if (([evaluatedNumbers count] % 2) == 1) {
-		NSUInteger index = floor([evaluatedNumbers count] / 2);
+		NSUInteger index = [evaluatedNumbers count] / 2;
 		median = [evaluatedNumbers objectAtIndex:index];
 	} else {
-		NSUInteger lowIndex = floor([evaluatedNumbers count] / 2);
-		NSUInteger highIndex = ceil([evaluatedNumbers count] / 2);
+		NSUInteger highIndex = [evaluatedNumbers count] / 2;
+		NSUInteger lowIndex = highIndex - 1;
         NSNumber *low = [evaluatedNumbers objectAtIndex:lowIndex];
         NSNumber *high = [evaluatedNumbers objectAtIndex:highIndex];
         NSDecimal decimal = DDDecimalAverage2([low decimalValue], [high decimalValue]);
