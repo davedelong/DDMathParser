@@ -423,14 +423,14 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 		upperBound = [[params objectAtIndex:1] intValue];
 	}
 
-	if (lowerBound > upperBound) {
+	if (lowerBound >= upperBound) {
 		if (error != nil) {
-			*error = ERR(DDErrorCodeInvalidArgument, @"upper bound (%d) of random() must be greater than or equal to lower bound (%d)", upperBound, lowerBound);
+			*error = ERR(DDErrorCodeInvalidArgument, @"upper bound (%d) of random() must be greater than lower bound (%d)", upperBound, lowerBound);
 		}
 		return nil;
 	}
 
-	int32_t random = (signed)arc4random_uniform((unsigned)(upperBound - lowerBound + 1)) + lowerBound;
+	int32_t random = (signed)arc4random_uniform((unsigned)(upperBound - lowerBound)) + lowerBound;
 	
 	return [DDExpression numberExpressionWithNumber:@(random)];
 }
