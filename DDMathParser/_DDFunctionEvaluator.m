@@ -401,21 +401,26 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 		RETURN_IF_NIL(value);
 		[params addObject:value];
 	}
-	
-    long long lowerBound = LLONG_MIN;
-    long long upperBound = LLONG_MAX;
+
+	int32_t lowerBound = INT32_MIN;
+	int32_t upperBound = INT32_MAX;
 	
 	if ([params count] > 0) {
-        lowerBound = [[params objectAtIndex:0] longLongValue];
-    }
-    if ([params count] > 1) {
-        upperBound = [[params objectAtIndex:1] longLongValue];
-    }
-    
-    long long random = arc4random_uniform(upperBound);
-    while (random < lowerBound) {
-        random = arc4random_uniform(upperBound);
-    }
+		lowerBound = [[params objectAtIndex:0] intValue];
+	}
+
+	if ([params count] > 1) {
+		upperBound = [[params objectAtIndex:1] intValue];
+	}
+
+	if (lowerBound > upperBound) {
+		if (error != nil) {
+			*error = ERR(DDErrorCodeInvalidArgument, @"upper bound (%d) of random() must be greater than or equal to lower bound (%d)", upperBound, lowerBound);
+		}
+		return nil;
+	}
+
+	int32_t random = (signed)arc4random_uniform((unsigned)(upperBound - lowerBound + 1)) + lowerBound;
 	
 	return [DDExpression numberExpressionWithNumber:@(random)];
 }
