@@ -17,6 +17,7 @@
 #import "DDExpression.h"
 #import "DDMathOperator_Internal.h"
 
+/*
 static inline void DDOperatorSetAssociativity(NSString *o, DDOperatorAssociativity a) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
     info.associativity = a;
@@ -26,6 +27,7 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
     return info.associativity;
 }
+ */
 
 @implementation DDParser {
 	DDMathStringTokenizer * _tokenizer;
