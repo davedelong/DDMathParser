@@ -247,7 +247,7 @@
 - (instancetype)initWithOperators:(NSArray *)operators {
     self = [super init];
     if (self) {
-        _operators = [NSMutableOrderedSet orderedSetWithArray:[DDMathOperator _defaultOperators]];
+        _operators = [NSMutableOrderedSet orderedSetWithArray:operators];
         _operatorsByFunction = [NSMutableDictionary dictionary];
         _operatorsByToken = [NSMutableDictionary dictionary];
         
