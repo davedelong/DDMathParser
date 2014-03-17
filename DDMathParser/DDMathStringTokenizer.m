@@ -201,6 +201,7 @@
 }
 
 - (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError * __autoreleasing *)error {
+#pragma unused(error)
     // See: https://github.com/davedelong/DDMathParser/wiki/Implicit-Multiplication
     
     DDMathStringToken *previousToken = [_tokens lastObject];
@@ -228,6 +229,7 @@
 }
 
 - (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError * __autoreleasing *)error {
+#pragma unused(error)
     DDMathStringToken *previousToken = [_tokens lastObject];
     if (previousToken != nil && [previousToken tokenType] == DDTokenTypeFunction) {
         if ([token tokenType] != DDTokenTypeOperator || [token operatorType] != DDOperatorParenthesisOpen || token == nil) {

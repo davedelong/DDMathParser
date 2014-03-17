@@ -188,6 +188,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
+#pragma unused(zone)
     return [[[self class] alloc] initWithOperatorFunction:_function
                                                    tokens:_tokens
                                                     arity:_arity
@@ -271,6 +272,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
+#pragma unused(zone)
     DDMathOperatorSet *dupe = [[[self class] alloc] initWithOperators:_operators.array];
     dupe.interpretsPercentSignAsModulo = self.interpretsPercentSignAsModulo;
     return dupe;
@@ -374,6 +376,7 @@
                 // all operators that have an equivalent (or higher) precedence need to be bumped up one
                 // to accomodate the new operator
                 [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                #pragma unused(idx, stop)
                     DDMathOperator *op = obj;
                     if (op.precedence >= newPrecedence) {
                         op.precedence++;
@@ -381,6 +384,7 @@
                 }];
             } else {
                 [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                #pragma unused(idx, stop)
                     DDMathOperator *op = obj;
                     if (op.precedence > newPrecedence || op == newOperator) {
                         op.precedence++;
