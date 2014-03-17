@@ -375,21 +375,17 @@
                 // the new operator has a precedence higher than the original operator
                 // all operators that have an equivalent (or higher) precedence need to be bumped up one
                 // to accomodate the new operator
-                [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                #pragma unused(idx, stop)
-                    DDMathOperator *op = obj;
+                for (DDMathOperator *op in _operators) {
                     if (op.precedence >= newPrecedence) {
                         op.precedence++;
                     }
-                }];
+                }
             } else {
-                [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                #pragma unused(idx, stop)
-                    DDMathOperator *op = obj;
+                for (DDMathOperator *op in _operators) {
                     if (op.precedence > newPrecedence || op == newOperator) {
                         op.precedence++;
                     }
-                }];
+                }
             }
         }
         
