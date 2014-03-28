@@ -50,7 +50,7 @@
     TEST(@"2**2", 4);
     TEST(@"2**2**2", 16);
 
-    if ([DDMathOperator associativityForPowerExpressions] == DDOperatorAssociativityRight) {
+    if ([DDMathOperator associativityForPowerExpressions] == DDMathOperatorAssociativityRight) {
         TEST(@"2**3**2", 512);
     } else {
         TEST(@"2**3**2", 64);
