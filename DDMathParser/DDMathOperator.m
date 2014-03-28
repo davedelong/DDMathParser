@@ -25,13 +25,20 @@
 }
 
 + (DDOperatorAssociativity)associativityForPowerExpressions {
-    NSExpression *powerExpression = [NSExpression expressionWithFormat:@"2 ** 3 ** 2"];
-    NSNumber *powerResult = [powerExpression expressionValueWithObject:nil context:nil];
-    DDOperatorAssociativity powerAssociativity = DDOperatorAssociativityLeft;
-    if ([powerResult intValue] == 512) {
-        powerAssociativity = DDOperatorAssociativityRight;
-    }
-
+    static DDOperatorAssociativity powerAssociativity = -1;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSExpression *powerExpression = [NSExpression expressionWithFormat:@"2 ** 3 ** 2"];
+        NSNumber *powerResult = [powerExpression expressionValueWithObject:nil
+                                                                   context:nil];
+        int result = [powerResult intValue];
+        if (result == 512) {
+            powerAssociativity = DDOperatorAssociativityRight;
+        }
+        else if (result == 64) {
+            powerAssociativity = DDOperatorAssociativityLeft;
+        }
+    });
     return powerAssociativity;
 }
 
