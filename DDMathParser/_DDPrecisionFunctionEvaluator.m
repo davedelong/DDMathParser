@@ -96,7 +96,7 @@
                 total = DDDecimalMultiply(total, decimal);
                 decimal = DDDecimalSubtract(decimal, one);
             }
-            result = [NSDecimalNumber decimalNumberWithDecimal:decimal];
+            result = [NSDecimalNumber decimalNumberWithDecimal:total];
         } else {
             result = @(NAN);
         }
