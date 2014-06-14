@@ -163,6 +163,7 @@
                 // or a right-assoc unary operator (assuming implicit multiplication)
                 // we'll prefer them from left-to-right:
                 // left-assoc unary, binary, right-assoc unary
+                // TODO: is this correct?? should we be looking at precedence instead?
                 resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityUnary associativity:DDOperatorAssociativityLeft];
                 if (resolvedOperator == nil) {
                     resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityBinary];
@@ -184,6 +185,7 @@
         // or a right-assoc unary operator (assuming implicit multiplication)
         // we'll prefer them from left-to-right:
         // left-assoc unary, binary, right-assoc unary
+        // TODO: is this correct?? should we be looking at precedence instead?
         resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityUnary associativity:DDOperatorAssociativityLeft];
         if (resolvedOperator == nil) {
             resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityBinary];
