@@ -35,12 +35,12 @@
     ERR_ASSERT(error);
     if ([self operatorArity] == DDOperatorArityUnary) {
         if ([[self token] operatorAssociativity] == DDOperatorAssociativityLeft) {
-            *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", [self token]);
+            *error = DD_ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", [self token]);
         } else {
-            *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", [self token]);
+            *error = DD_ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", [self token]);
         }
     } else {
-        *error = ERR(DDErrorCodeOperatorMissingOperands, @"missing operands for operator: %@", [self token]);
+        *error = DD_ERR(DDErrorCodeOperatorMissingOperands, @"missing operands for operator: %@", [self token]);
     }
     return NO;
 }

@@ -13,7 +13,7 @@
 #define REQUIRE_N_ARGS(__n) { \
 if ([arguments count] != (__n)) { \
 if (error != nil) { \
-*error = ERR(DDErrorCodeInvalidNumberOfArguments, @"%@ requires %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
+*error = DD_ERR(DDErrorCodeInvalidNumberOfArguments, @"%@ requires %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
 } \
 return nil; \
 } \
@@ -22,7 +22,7 @@ return nil; \
 #define REQUIRE_GTOE_N_ARGS(__n) { \
 if ([arguments count] < (__n)) { \
 if (error != nil) { \
-*error = ERR(DDErrorCodeInvalidNumberOfArguments, @"%@ requires at least %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
+*error = DD_ERR(DDErrorCodeInvalidNumberOfArguments, @"%@ requires at least %d argument%@", NSStringFromSelector(_cmd), (__n), ((__n) == 1 ? @"" : @"s")); \
 } \
 return nil; \
 } \

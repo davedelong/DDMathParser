@@ -19,9 +19,9 @@
 @interface _DDGroupTerm ()
 
 - (NSIndexSet *)_indicesOfOperatorsWithHighestPrecedence;
-- (BOOL)_reduceTermsAroundOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error;
-- (BOOL)_reduceBinaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error;
-- (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error;
+- (BOOL)_reduceTermsAroundOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError *__autoreleasing*)error;
+- (BOOL)_reduceBinaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError *__autoreleasing*)error;
+- (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError *__autoreleasing*)error;
 
 @end
 
@@ -31,7 +31,7 @@
     _subterms = [newTerms mutableCopy];
 }
 
-- (id)_initWithSubterms:(NSArray *)terms error:(NSError **)error {
+- (id)_initWithSubterms:(NSArray *)terms error:(NSError *__autoreleasing*)error {
 #pragma unused(error)
     self = [super init];
     if (self) {
@@ -40,7 +40,7 @@
     return self;
 }
 
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError *__autoreleasing*)error {
     ERR_ASSERT(error);
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {
@@ -59,7 +59,7 @@
         
         // consume the closing parenthesis and verify it exists
         if ([tokenizer nextObject] == nil) {
-            *error = ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
+            *error = DD_ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
             return nil;
         }
         
@@ -78,7 +78,7 @@
 
 #pragma mark - Resolution
 
-- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError *__autoreleasing*)error {
     if ([self isResolved]) { return YES; }
     ERR_ASSERT(error);
     
@@ -104,7 +104,7 @@
         } else {
             // more than one term is left
             // but there are no more operators
-            *error = ERR(DDErrorCodeInvalidFormat, @"invalid format: %@", self);
+            *error = DD_ERR(DDErrorCodeInvalidFormat, @"invalid format: %@", self);
             return NO;
         }
     }
@@ -139,7 +139,7 @@
 	return indices;
 }
 
-- (BOOL)_reduceTermsAroundOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL)_reduceTermsAroundOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError *__autoreleasing*)error {
     ERR_ASSERT(error);
     _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
     
@@ -149,21 +149,21 @@
         return [self _reduceUnaryOperatorAtIndex:index withParser:parser error:error];
     }
     
-    *error = ERR(DDErrorCodeInvalidOperatorArity, @"unknown arity for operator: %@", operatorTerm);
+    *error = DD_ERR(DDErrorCodeInvalidOperatorArity, @"unknown arity for operator: %@", operatorTerm);
     return NO;
 }
 
-- (BOOL)_reduceBinaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL)_reduceBinaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError *__autoreleasing*)error {
     ERR_ASSERT(error);
 #pragma unused(parser)
     _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
     
     if (index == 0) {
-        *error = ERR(DDErrorCodeBinaryOperatorMissingLeftOperand, @"no left operand to binary %@", operatorTerm);
+        *error = DD_ERR(DDErrorCodeBinaryOperatorMissingLeftOperand, @"no left operand to binary %@", operatorTerm);
         return NO;
     }
     if (index == [[self subterms] count] - 1) {
-        *error = ERR(DDErrorCodeBinaryOperatorMissingRightOperand, @"no right operand to binary %@", operatorTerm);
+        *error = DD_ERR(DDErrorCodeBinaryOperatorMissingRightOperand, @"no right operand to binary %@", operatorTerm);
         return NO;
     }
     
@@ -177,7 +177,7 @@
         // this should really only happen when operator is the power operator and the exponent has 1+ negations
         rightOperandRange.length++;
         if (NSMaxRange(rightOperandRange)-1 >= [[self subterms] count]) {
-            *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", rightmostOperand);
+            *error = DD_ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", rightmostOperand);
             return NO;
         }
         rightmostOperand = [[self subterms] objectAtIndex:NSMaxRange(rightOperandRange)-1];
@@ -199,7 +199,7 @@
     return YES;
 }
 
-- (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError *__autoreleasing*)error {
     ERR_ASSERT(error);
     _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
     DDOperatorAssociativity associativity = [parser associativityForOperatorFunction:[operatorTerm operatorType]];
@@ -210,7 +210,7 @@
     if (associativity == DDOperatorAssociativityRight) {
         // right associative unary operator (negate, not)
         if (index == [[self subterms] count] - 1) {
-            *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", operatorTerm);
+            *error = DD_ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", operatorTerm);
             return NO;
         }
         
@@ -220,7 +220,7 @@
     } else {
         // left associative unary operator (factorial)
         if (index == 0) {
-            *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", operatorTerm);
+            *error = DD_ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", operatorTerm);
             return NO;
         }
         
@@ -239,13 +239,13 @@
 
 #pragma mark - Expressions
 
-- (DDExpression *)expressionWithError:(NSError **)error {
+- (DDExpression *)expressionWithError:(NSError *__autoreleasing*)error {
     ERR_ASSERT(error);
     if ([[self subterms] count] == 1) {
         _DDParserTerm *term = [[self subterms] objectAtIndex:0];
         return [term expressionWithError:error];
     }
-    *error = ERR(DDErrorCodeInvalidFormat, @"Unable to create expression from term: %@", self);
+    *error = DD_ERR(DDErrorCodeInvalidFormat, @"Unable to create expression from term: %@", self);
     return nil;
 }
 
