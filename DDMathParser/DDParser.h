@@ -17,13 +17,13 @@
 
 @property (readonly) DDMathOperatorSet *operatorSet;
 
-+ (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
-- (id)initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
++ (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError *__autoreleasing*)error;
+- (id)initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError *__autoreleasing*)error;
 
-+ (id)parserWithString:(NSString *)string error:(NSError **)error;
-- (id)initWithString:(NSString *)string error:(NSError **)error;
++ (id)parserWithString:(NSString *)string error:(NSError *__autoreleasing*)error;
+- (id)initWithString:(NSString *)string error:(NSError *__autoreleasing*)error;
 
-- (DDExpression *)parsedExpressionWithError:(NSError **)error;
+- (DDExpression *)parsedExpressionWithError:(NSError *__autoreleasing*)error;
 - (DDOperatorAssociativity)associativityForOperatorFunction:(NSString *)function;
 
 @end

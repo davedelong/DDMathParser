@@ -44,6 +44,6 @@ extern DDExpression* _DDRTOD(DDExpression *e, DDMathEvaluator *evaluator, NSErro
 
 @property (readonly, weak) DDMathEvaluator *evaluator;
 
-- (DDExpression *)evaluateFunction:(_DDFunctionExpression *)expression variables:(NSDictionary *)variables error:(NSError **)error;
+- (DDExpression *)evaluateFunction:(_DDFunctionExpression *)expression variables:(NSDictionary *)variables error:(NSError *__autoreleasing*)error;
 
 @end
