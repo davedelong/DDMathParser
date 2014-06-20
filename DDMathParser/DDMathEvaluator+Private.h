@@ -12,6 +12,6 @@
 
 @interface DDMathEvaluator ()
 
-- (DDExpression *)resolveFunction:(_DDFunctionExpression *)functionExpression variables:(NSDictionary *)variables error:(NSError **)error;
+- (DDExpression *)resolveFunction:(_DDFunctionExpression *)functionExpression variables:(NSDictionary *)variables error:(NSError *__autoreleasing*)error;
 
 @end

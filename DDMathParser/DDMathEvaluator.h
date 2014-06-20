@@ -31,9 +31,9 @@ typedef NSNumber* (^DDVariableResolver)(NSString *);
 - (NSArray *)registeredFunctions;
 
 - (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions;
-- (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error;
+- (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error;
 
-- (NSNumber *)evaluateExpression:(DDExpression *)expression withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error;
+- (NSNumber *)evaluateExpression:(DDExpression *)expression withSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error;
 
 - (BOOL)addAlias:(NSString *)alias forFunctionName:(NSString *)functionName;
 - (void)removeAlias:(NSString *)alias;
