@@ -17,7 +17,7 @@
 
 @implementation _DDFunctionTerm
 
-- (id)_initWithFunction:(NSString *)function subterms:(NSArray *)terms error:(NSError **)error {
+- (id)_initWithFunction:(NSString *)function subterms:(NSArray *)terms error:(NSError *__autoreleasing*)error {
     self = [super _initWithSubterms:terms error:error];
     if (self) {
         _functionName = [function copy];
@@ -25,7 +25,7 @@
     return self;
 }
 
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError *__autoreleasing*)error {
     ERR_ASSERT(error);
     DDMathStringToken *t = [tokenizer nextObject];
     
@@ -71,7 +71,7 @@
         
         [self _setSubterms:newSubterms];
     } else {
-        *error = ERR(DDErrorCodeImbalancedParentheses, @"missing parentheses after function \"%@\"", t);
+        *error = DD_ERR(DDErrorCodeImbalancedParentheses, @"missing parentheses after function \"%@\"", t);
     }
     return self;
 }
@@ -84,7 +84,7 @@
     return [NSString stringWithFormat:@"%@(%@)", _functionName, parameters];
 }
 
-- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError *__autoreleasing*)error {
     if ([self isResolved]) { return YES; }
     
     for (_DDParserTerm *term in [self subterms]) {
@@ -97,7 +97,7 @@
     return YES;
 }
 
-- (DDExpression *)expressionWithError:(NSError **)error {
+- (DDExpression *)expressionWithError:(NSError *__autoreleasing*)error {
     ERR_ASSERT(error);
     
     NSMutableArray *parameters = [NSMutableArray array];
