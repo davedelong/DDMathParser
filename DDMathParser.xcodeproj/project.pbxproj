@@ -82,6 +82,9 @@
 		55F9EFEE1295AF7500F4A9FD /* _DDNumberExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFED1295AF7500F4A9FD /* _DDNumberExpression.m */; };
 		55F9EFF11295AFB500F4A9FD /* _DDVariableExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */; };
 		55F9F0141295C19900F4A9FD /* NSExpression+EasyParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */; };
+		73539837177F468D00ADD246 /* KVTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 73539836177F466400ADD246 /* KVTestObject.m */; };
+		73539838177F468D00ADD246 /* KVTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 73539836177F466400ADD246 /* KVTestObject.m */; };
+		73539839177F468E00ADD246 /* KVTestObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 73539836177F466400ADD246 /* KVTestObject.m */; };
 		8DD76F9A0486AA7600D96B5E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB779EFE84155DC02AAC07 /* Foundation.framework */; };
 		8DD76F9F0486AA7600D96B5E /* DDMathParser.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859EA3029092ED04C91782 /* DDMathParser.1 */; };
@@ -172,6 +175,8 @@
 		55F9EFF01295AFB500F4A9FD /* _DDVariableExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = _DDVariableExpression.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		55F9F0121295C19900F4A9FD /* NSExpression+EasyParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSExpression+EasyParsing.h"; sourceTree = "<group>"; };
 		55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSExpression+EasyParsing.m"; sourceTree = "<group>"; };
+		73539835177F466400ADD246 /* KVTestObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVTestObject.h; sourceTree = "<group>"; };
+		73539836177F466400ADD246 /* KVTestObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVTestObject.m; sourceTree = "<group>"; };
 		8DD76FA10486AA7600D96B5E /* DDMathParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DDMathParser; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6859EA3029092ED04C91782 /* DDMathParser.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = DDMathParser.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -385,6 +390,8 @@
 				55F795F11293235A00EF2716 /* TokenizerTests.m */,
 				55D2AD4E1295834600BA2905 /* EvaluationTests.h */,
 				55D2AD4F1295834600BA2905 /* EvaluationTests.m */,
+				73539835177F466400ADD246 /* KVTestObject.h */,
+				73539836177F466400ADD246 /* KVTestObject.m */,
 			);
 			path = "Unit Tests";
 			sourceTree = "<group>";
@@ -528,6 +535,7 @@
 				118ADCED13F69A69002C3CDA /* _DDOperatorTerm.m in Sources */,
 				5537E36012AB20F30000CFED /* DDParser.m in Sources */,
 				5537E36412AB20F30000CFED /* DDMathStringToken.m in Sources */,
+				73539839177F468E00ADD246 /* KVTestObject.m in Sources */,
 				5537E36512AB20F30000CFED /* NSString+DDMathParsing.m in Sources */,
 				5537E36712AB20F30000CFED /* DDMathEvaluator.m in Sources */,
 				5537E36912AB20F30000CFED /* DDExpression.m in Sources */,
@@ -571,6 +579,7 @@
 				552532B912C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */,
 				5514EF161347EBA10010B9D8 /* DDTypes.m in Sources */,
 				550C416913BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */,
+				73539838177F468D00ADD246 /* KVTestObject.m in Sources */,
 				55F99B2F1434FA9900817F7A /* _DDRewriteRule.m in Sources */,
 				554243581437654800BA293D /* DDMathOperator.m in Sources */,
 				556E126D149D2D5000859AD8 /* DDParserTypes.m in Sources */,
@@ -585,6 +594,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD76F9A0486AA7600D96B5E /* main.m in Sources */,
+				73539837177F468D00ADD246 /* KVTestObject.m in Sources */,
 				55F795F3129323B200EF2716 /* DDMathStringToken.m in Sources */,
 				5554D58C12944AFD00A62529 /* DDMathEvaluator.m in Sources */,
 				554DA12B12985DAE00433840 /* DDExpression.m in Sources */,

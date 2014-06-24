@@ -15,4 +15,7 @@
 - (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions;
 - (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions error:(NSError **)error;
 
+- (NSNumber *)numberByEvaluatingStringAgainstObject:(id)object;
+- (NSNumber *)numberByEvaluatingStringAgainstObject:(id)object error:(NSError **)error;
+
 @end
