@@ -348,8 +348,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 		NSUInteger index = floor([evaluatedNumbers count] / 2);
 		median = [evaluatedNumbers objectAtIndex:index];
 	} else {
-		NSUInteger lowIndex = floor([evaluatedNumbers count] / 2);
-		NSUInteger highIndex = ceil([evaluatedNumbers count] / 2);
+		NSUInteger lowIndex = floor(([evaluatedNumbers count]-1) / 2.0f);
+		NSUInteger highIndex = ceil(([evaluatedNumbers count]-1) / 2.0f);
         NSNumber *low = [evaluatedNumbers objectAtIndex:lowIndex];
         NSNumber *high = [evaluatedNumbers objectAtIndex:highIndex];
         median = @(([low doubleValue] + [high doubleValue])/2);
