@@ -64,7 +64,6 @@
 		556E126C149D2D4F00859AD8 /* DDMathOperatorTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 551C8C49144E5CFC00520BDA /* DDMathOperatorTypes.m */; };
 		556E126D149D2D5000859AD8 /* DDMathOperatorTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 551C8C49144E5CFC00520BDA /* DDMathOperatorTypes.m */; };
 		557067B813CC0D19004CB1B2 /* _DDParserTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 557067B713CC0D19004CB1B2 /* _DDParserTerm.m */; };
-		558A285714A2EEE9000FBE0C /* UnitTestMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 558A285614A2EEE9000FBE0C /* UnitTestMacros.m */; };
 		55ABBAAB142ECB1300BDF29A /* _DDRewriteRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */; };
 		55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55BA67A11299FAEF002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
@@ -142,7 +141,6 @@
 		557067B713CC0D19004CB1B2 /* _DDParserTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = _DDParserTerm.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		5570E3B112AA2D8D002FE945 /* DDMathOperatorTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathOperatorTypes.h; sourceTree = "<group>"; };
 		558A285514A2ED36000FBE0C /* UnitTestMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTestMacros.h; sourceTree = "<group>"; };
-		558A285614A2EEE9000FBE0C /* UnitTestMacros.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnitTestMacros.m; sourceTree = "<group>"; };
 		55ABBAA9142ECB1300BDF29A /* _DDRewriteRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _DDRewriteRule.h; path = DDMathParser/_DDRewriteRule.h; sourceTree = "<group>"; };
 		55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = _DDRewriteRule.m; path = DDMathParser/_DDRewriteRule.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		55B303E414428310003D7FEC /* Demo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Demo-Info.plist"; sourceTree = "<group>"; };
@@ -389,7 +387,6 @@
 			children = (
 				55BFA9A7128CDDEB00A80228 /* UnitTests-Info.plist */,
 				558A285514A2ED36000FBE0C /* UnitTestMacros.h */,
-				558A285614A2EEE9000FBE0C /* UnitTestMacros.m */,
 				55F9F0121295C19900F4A9FD /* NSExpression+EasyParsing.h */,
 				55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */,
 				55BFA9AE128CDE7600A80228 /* ParserTests.h */,
@@ -460,7 +457,7 @@
 			name = UnitTests;
 			productName = UnitTests;
 			productReference = 55BFA9A6128CDDEB00A80228 /* UnitTests.octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		8DD76F960486AA7600D96B5E /* DDMathParser */ = {
 			isa = PBXNativeTarget;
@@ -589,7 +586,6 @@
 				55F99B2F1434FA9900817F7A /* _DDRewriteRule.m in Sources */,
 				554243581437654800BA293D /* DDMathOperator.m in Sources */,
 				556E126D149D2D5000859AD8 /* DDMathOperatorTypes.m in Sources */,
-				558A285714A2EEE9000FBE0C /* UnitTestMacros.m in Sources */,
 				55F3918B1633349100AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */,
 				55F391901634AAB100AB28B1 /* _DDDecimalFunctions.m in Sources */,
 			);
@@ -752,7 +748,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;
@@ -764,11 +760,8 @@
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
-					"-framework",
-					SenTestingKit,
 				);
 				PRODUCT_NAME = UnitTests;
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -779,7 +772,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -789,11 +782,8 @@
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
-					"-framework",
-					SenTestingKit,
 				);
 				PRODUCT_NAME = UnitTests;
-				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
 			};
 			name = Release;
