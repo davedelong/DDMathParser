@@ -56,9 +56,6 @@ int main (int argc, const char * argv[]) {
         DDMathOperatorSet *defaultOperators = [DDMathOperatorSet defaultOperatorSet];
         defaultOperators.interpretsPercentSignAsModulo = NO;
         
-        DDMathOperator *powerOperator = [defaultOperators operatorForFunction:DDMathOperatorPower];
-        powerOperator.associativity = DDMathOperatorAssociativityRight;
-        
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
         
         [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {

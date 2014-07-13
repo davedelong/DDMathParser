@@ -16,11 +16,8 @@
 
 + (NSArray *)defaultOperators;
 
-@property (nonatomic, readonly, strong) NSString *function;
-@property (nonatomic, readonly, strong) NSArray *tokens;
-@property (nonatomic, readonly) DDMathOperatorArity arity;
-@property (nonatomic, assign) NSInteger precedence;
-@property (nonatomic, assign) DDMathOperatorAssociativity associativity;
++ (instancetype)moduloOperator;
++ (instancetype)percentOperator;
 
 // the only reason you'd want to init a new \c MathOperator is so you can pass it to the -[DDMathOperatorSet addOperator:...] methods
 - (id)initWithOperatorFunction:(NSString *)function
@@ -29,6 +26,10 @@
                     precedence:(NSInteger)precedence
                  associativity:(DDMathOperatorAssociativity)associativity;
 
-- (void)addTokens:(NSArray *)moreTokens;
+@property (nonatomic, readonly, strong) NSString *function;
+@property (nonatomic, readonly, strong) NSArray *tokens;
+@property (nonatomic, readonly) DDMathOperatorArity arity;
+@property (nonatomic, readonly) NSInteger precedence;
+@property (nonatomic, readonly) DDMathOperatorAssociativity associativity;
 
 @end

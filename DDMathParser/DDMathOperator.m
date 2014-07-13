@@ -9,7 +9,21 @@
 #import "DDMathOperator.h"
 #import "DDMathOperatorSet.h"
 
+@interface DDMathOperator ()
+
+@property (nonatomic, assign) NSInteger precedence;
+
+@end
+
 @implementation DDMathOperator
+
++ (instancetype)moduloOperator {
+    return OPERATOR(DDMathOperatorModulo, @[@"%"], BINARY, 0, LEFT);
+}
+
++ (instancetype)percentOperator {
+    return OPERATOR(DDMathOperatorPercent, @[@"%"], BINARY, 0, LEFT);
+}
 
 + (NSArray *)defaultOperators {
     static NSArray *defaultOperators = nil;
@@ -18,86 +32,44 @@
         NSMutableArray *operators = [NSMutableArray array];
         NSInteger precedence = 0;
         
-        [operators addObject:OPERATOR(DDMathOperatorLogicalOr, (@[@"||", @"\u2228"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        [operators addObject:OPERATOR(DDMathOperatorLogicalAnd, (@[@"&&", @"\u2227"]), BINARY, precedence, LEFT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorLogicalOr, (@[@"||", @"∨"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorLogicalAnd, (@[@"&&", @"∧"]), BINARY, precedence++, LEFT)];
         
         // == and != have the same precedence
-        [operators addObject:OPERATOR(DDMathOperatorLogicalEqual, (@[@"==", @"="]), BINARY, precedence, LEFT)];
-        [operators addObject:OPERATOR(DDMathOperatorLogicalNotEqual, (@[@"!="]), BINARY, precedence, LEFT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorLogicalEqual, (@[@"==", @"="]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorLogicalNotEqual, (@[@"!="]), BINARY, precedence++, LEFT)];
         
-        [operators addObject:OPERATOR(DDMathOperatorLogicalLessThan, (@[@"<"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        [operators addObject:OPERATOR(DDMathOperatorLogicalGreaterThan, (@[@">"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        // \u2264 is ≤, \u226f is ≯ (not greater than)
-        [operators addObject:OPERATOR(DDMathOperatorLogicalLessThanOrEqual, (@[@"<=", @"=<", @"\u2264", @"\u226f"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        // \u2265 is ≥, \u226e is ≮ (not less than)
-        [operators addObject:OPERATOR(DDMathOperatorLogicalGreaterThanOrEqual, (@[@">=", @"=>", @"\u2265", @"\u226e"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        // \u00AC is ¬
-        [operators addObject:OPERATOR(DDMathOperatorLogicalNot, (@[@"!", @"\u00ac"]), UNARY, precedence, RIGHT)];
-        precedence++;
-        
-        [operators addObject:OPERATOR(DDMathOperatorBitwiseOr, (@[@"|"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        [operators addObject:OPERATOR(DDMathOperatorBitwiseXor, (@[@"^"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        [operators addObject:OPERATOR(DDMathOperatorBitwiseAnd, (@[@"&"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        [operators addObject:OPERATOR(DDMathOperatorLeftShift, (@[@"<<"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        [operators addObject:OPERATOR(DDMathOperatorRightShift, (@[@">>"]), BINARY, precedence, LEFT)];
-        precedence++;
-        
-        // addition and subtraction have the same precedence
+        [operators addObject:OPERATOR(DDMathOperatorLogicalLessThan, (@[@"<"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorLogicalGreaterThan, (@[@">"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorLogicalLessThanOrEqual, (@[@"<=", @"=<", @"≤", @"≯"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorLogicalGreaterThanOrEqual, (@[@">=", @"=>", @"≥", @"≮"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorLogicalNot, (@[@"!", @"¬"]), UNARY, precedence++, RIGHT)];
+        [operators addObject:OPERATOR(DDMathOperatorBitwiseOr, (@[@"|"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorBitwiseXor, (@[@"^"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorBitwiseAnd, (@[@"&"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorLeftShift, (@[@"<<"]), BINARY, precedence++, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorRightShift, (@[@">>"]), BINARY, precedence++, LEFT)];
         [operators addObject:OPERATOR(DDMathOperatorAdd, (@[@"+"]), BINARY, precedence, LEFT)];
-        // \u2212 is −
-        [operators addObject:OPERATOR(DDMathOperatorMinus, (@[@"-", @"\u2212"]), BINARY, precedence, LEFT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorMinus, (@[@"-", @"−"]), BINARY, precedence++, LEFT)];
         
-        // multiplication and division have the same precedence
-        // \u00d7 is ×
-        [operators addObject:OPERATOR(DDMathOperatorMultiply, (@[@"*", @"\u00d7"]), BINARY, precedence, LEFT)];
-        // \u00f7 is ÷
-        [operators addObject:OPERATOR(DDMathOperatorDivide, (@[@"/", @"\u00f7"]), BINARY, precedence, LEFT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorMultiply, (@[@"*", @"×"]), BINARY, precedence, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorDivide, (@[@"/", @"÷"]), BINARY, precedence++, LEFT)];
         
         // NOTE: percent-as-modulo precedence goes here (between Multiply and Bitwise Not)
         
-        [operators addObject:OPERATOR(DDMathOperatorBitwiseNot, (@[@"~"]), UNARY, precedence, RIGHT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorBitwiseNot, (@[@"~"]), UNARY, precedence++, RIGHT)];
         
-        // right associative unary operators have the same precedence
-        // \u2212 is −
-        [operators addObject:OPERATOR(DDMathOperatorUnaryMinus, (@[@"-", @"\u2212"]), UNARY, precedence, RIGHT)];
+        // all right associative unary operators have the same precedence
+        [operators addObject:OPERATOR(DDMathOperatorUnaryMinus, (@[@"-", @"−"]), UNARY, precedence, RIGHT)];
         [operators addObject:OPERATOR(DDMathOperatorUnaryPlus, (@[@"+"]), UNARY, precedence, RIGHT)];
-        // \u221a is √
-        [operators addObject:OPERATOR(DDMathOperatorSquareRoot, (@[@"\u221a"]), UNARY, precedence, RIGHT)];
-        // \u221b is ∛
-        [operators addObject:OPERATOR(DDMathOperatorCubeRoot, (@[@"\u221b"]), UNARY, precedence, RIGHT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorSquareRoot, (@[@"√"]), UNARY, precedence, RIGHT)];
+        [operators addObject:OPERATOR(DDMathOperatorCubeRoot, (@[@"∛"]), UNARY, precedence++, RIGHT)];
         
-        // all the left associative unary operators have the same precedence
+        // all left associative unary operators have the same precedence
         [operators addObject:OPERATOR(DDMathOperatorFactorial, (@[@"!"]), UNARY, precedence, LEFT)];
-        // \u00ba is º (option-0); not necessary a degree sign (acutally masculine ordinal), but common enough for it
-        // \u00b0 is °
-        [operators addObject:OPERATOR(DDMathOperatorDegree, (@[@"\u00ba", @"\u00b0", @"\u2218"]), UNARY, precedence, LEFT)];
-        
         // NOTE: percent-as-percent precedence goes here (same as Factorial)
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorDegree, (@[@"º", @"°", @"∘"]), UNARY, precedence++, LEFT)];
+        
         
 		//determine what associativity NSPredicate/NSExpression is using
 		//mathematically, it should be right associative, but it's usually parsed as left associative
@@ -109,17 +81,13 @@
 			powerAssociativity = RIGHT;
 		}
         
-        [operators addObject:OPERATOR(DDMathOperatorPower, (@[@"**"]), BINARY, precedence, powerAssociativity)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorPower, (@[@"**"]), BINARY, precedence++, powerAssociativity)];
         
-        // ( and ) have the same precedence
         // these are defined as unary right/left associative for convenience
         [operators addObject:OPERATOR(DDMathOperatorParenthesisOpen, (@[@"("]), UNARY, precedence, RIGHT)];
-        [operators addObject:OPERATOR(DDMathOperatorParenthesisClose, (@[@")"]), UNARY, precedence, LEFT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorParenthesisClose, (@[@")"]), UNARY, precedence++, LEFT)];
         
-        [operators addObject:OPERATOR(DDMathOperatorComma, (@[@","]), DDMathOperatorArityUnknown, precedence, LEFT)];
-        precedence++;
+        [operators addObject:OPERATOR(DDMathOperatorComma, (@[@","]), BINARY, precedence++, LEFT)];
         
         defaultOperators = [operators copy];
     });

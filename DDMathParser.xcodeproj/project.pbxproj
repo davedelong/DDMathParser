@@ -23,6 +23,8 @@
 		550C416913BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
 		550C416A13BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 550C416713BA8BCA00A041BC /* DDMathStringTokenizer.m */; };
 		550ED41F1972CCA400E7D173 /* DDMathOperatorSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 550ED41E1972CCA400E7D173 /* DDMathOperatorSet.m */; };
+		550ED42019733CE400E7D173 /* DDMathOperatorSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 550ED41E1972CCA400E7D173 /* DDMathOperatorSet.m */; };
+		550ED42119733CE400E7D173 /* DDMathOperatorSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 550ED41E1972CCA400E7D173 /* DDMathOperatorSet.m */; };
 		5514EF161347EBA10010B9D8 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
 		5514EF171347EBA20010B9D8 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
 		551AFD0818785F340081DFDA /* DDExpressionRewriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 551AFD0718785F340081DFDA /* DDExpressionRewriter.m */; };
@@ -550,6 +552,7 @@
 				552532B812C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */,
 				5514EF171347EBA20010B9D8 /* DDTypes.m in Sources */,
 				550C416A13BA8BCA00A041BC /* DDMathStringTokenizer.m in Sources */,
+				550ED42119733CE400E7D173 /* DDMathOperatorSet.m in Sources */,
 				55F99B301434FA9A00817F7A /* _DDRewriteRule.m in Sources */,
 				554243591437654800BA293D /* DDMathOperator.m in Sources */,
 				556E126C149D2D4F00859AD8 /* DDMathOperatorTypes.m in Sources */,
@@ -570,6 +573,7 @@
 				118ADCE613F69A60002C3CDA /* _DDOperatorTerm.m in Sources */,
 				55F795E31293175B00EF2716 /* DDMathStringToken.m in Sources */,
 				55F7963712934A1400EF2716 /* DDExpression.m in Sources */,
+				550ED42019733CE400E7D173 /* DDMathOperatorSet.m in Sources */,
 				5554D58B12944AFD00A62529 /* DDMathEvaluator.m in Sources */,
 				55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */,
 				55F9EFEB1295AF3D00F4A9FD /* _DDFunctionExpression.m in Sources */,

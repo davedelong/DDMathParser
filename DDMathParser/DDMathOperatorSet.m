@@ -9,12 +9,33 @@
 #import "DDMathOperatorSet.h"
 #import "DDMathOperator.h"
 
+@interface DDMathOperator (DDMathOperatorSet)
+
+@property (nonatomic, assign) NSInteger precedence;
+@property (nonatomic, assign) DDMathOperatorAssociativity associativity;
+
+- (void)addTokens:(NSArray *)moreTokens;
+
+@end
+
+@interface _DDMathOperatorTokenMap : NSObject
+
+- (void)addOperator:(DDMathOperator *)operator;
+- (void)removeOperator:(DDMathOperator *)operator;
+- (BOOL)isOperatorCharacter:(unichar)character;
+- (BOOL)hasOperatorsForPrefix:(NSString *)prefix;
+- (NSArray *)operatorsForToken:(NSString *)token;
+- (NSString *)existingTokenForOperatorTokens:(DDMathOperator *)operator;
+- (void)addTokens:(NSArray *)tokens forOperator:(DDMathOperator *)operator;
+
+@end
+
 @implementation DDMathOperatorSet {
     NSMutableOrderedSet *_operators;
+    _DDMathOperatorTokenMap *_operatorsByToken;
     NSMutableDictionary *_operatorsByFunction;
-    NSMutableDictionary *_operatorsByToken;
     
-    DDMathOperator *_percentTokenOperator;
+    DDMathOperator *_percentOperator;
 }
 
 + (instancetype)defaultOperatorSet {
@@ -28,100 +49,59 @@
 
 - (instancetype)init {
     // not actually the designated initializer
-    return [self initWithOperators:[DDMathOperator defaultOperators]];
+    return [self initWithOperators:[DDMathOperator defaultOperators] interpretPercentSignAsModulo:YES];
 }
 
-/*!
- * The actual designated initializer
- */
-- (instancetype)initWithOperators:(NSArray *)operators {
+- (instancetype)initWithOperators:(NSArray *)operators interpretPercentSignAsModulo:(BOOL)percentAsMod {
     self = [super init];
     if (self) {
-        _operators = [NSMutableOrderedSet orderedSetWithArray:[DDMathOperator defaultOperators]];
+        _operators = [NSMutableOrderedSet orderedSetWithArray:operators];
         _operatorsByFunction = [NSMutableDictionary dictionary];
-        _operatorsByToken = [NSMutableDictionary dictionary];
+        _operatorsByToken = [[_DDMathOperatorTokenMap alloc] init];
         
         for (DDMathOperator *op in _operators) {
             [_operatorsByFunction setObject:op forKey:op.function];
-            for (NSString *token in op.tokens) {
-                NSMutableOrderedSet *operatorsForToken = [_operatorsByToken objectForKey:token];
-                if (operatorsForToken == nil) {
-                    operatorsForToken = [NSMutableOrderedSet orderedSet];
-                    [_operatorsByToken setObject:operatorsForToken forKey:token];
-                }
-                [operatorsForToken addObject:op];
-            }
+            [_operatorsByToken addOperator:op];
         }
         
-        _interpretsPercentSignAsModulo = YES;
-        _percentTokenOperator = OPERATOR(DDMathOperatorModulo, @[@"%"], BINARY, 0, LEFT);
-        DDMathOperator *multiply = [self operatorForFunction:DDMathOperatorMultiply];
-        [self addOperator:_percentTokenOperator withPrecedenceHigherThanOperator:multiply];
+        self.interpretsPercentSignAsModulo = percentAsMod;
     }
     return self;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    DDMathOperatorSet *dupe = [[[self class] alloc] initWithOperators:_operators.array];
+    DDMathOperatorSet *dupe = [[[self class] alloc] initWithOperators:_operators.array interpretPercentSignAsModulo:self.interpretsPercentSignAsModulo];
     dupe.interpretsPercentSignAsModulo = self.interpretsPercentSignAsModulo;
     return dupe;
 }
 
-- (NSArray *)operators {
-    return [_operators.array copy];
-}
-
 - (void)setInterpretsPercentSignAsModulo:(BOOL)interpretsPercentSignAsModulo {
-    if (interpretsPercentSignAsModulo != _interpretsPercentSignAsModulo) {
-        _interpretsPercentSignAsModulo = interpretsPercentSignAsModulo;
-        
-        [_operators removeObject:_percentTokenOperator];
-        [_operatorsByFunction removeObjectForKey:_percentTokenOperator.function];
-        for (NSString *token in _percentTokenOperator.tokens) {
-            NSMutableOrderedSet *operatorsForToken = [_operatorsByToken objectForKey:token];
-            [operatorsForToken removeObject:_percentTokenOperator];
-            if ([operatorsForToken count] == 0) {
-                [_operatorsByToken removeObjectForKey:token];
-            }
-        }
-        
-        DDMathOperator *relative = nil;
-        if (_interpretsPercentSignAsModulo) {
-            _percentTokenOperator = OPERATOR(DDMathOperatorModulo, @[@"%"], BINARY, 0, LEFT);
-            relative = [self operatorForFunction:DDMathOperatorMultiply];
-        } else {
-            _percentTokenOperator = OPERATOR(DDMathOperatorPercent, @[@"%"], UNARY, 0, LEFT);
-            // this will put it at the same precedence as factorial and dtor
-            relative = [self operatorForFunction:DDMathOperatorUnaryMinus];
-        }
-        [self addOperator:_percentTokenOperator withPrecedenceHigherThanOperator:relative];
-    }
-}
-
-- (void)addTokens:(NSArray *)newTokens forOperatorFunction:(NSString *)operatorFunction {
-    DDMathOperator *existing = [self operatorForFunction:operatorFunction];
-    if (existing == nil) {
-        [NSException raise:NSInvalidArgumentException format:@"No operator is defined for function '%@'", operatorFunction];
-        return;
+    _interpretsPercentSignAsModulo = interpretsPercentSignAsModulo;
+    if (_percentOperator != nil) {
+        [self removeOperator:_percentOperator];
     }
     
-    DDMathOperator *newOperator = [[DDMathOperator alloc] initWithOperatorFunction:operatorFunction tokens:newTokens arity:0 precedence:0 associativity:0];
-    [self addOperator:newOperator withPrecedenceSameAsOperator:existing];
+    if (_interpretsPercentSignAsModulo == YES) {
+        _percentOperator = [DDMathOperator moduloOperator];
+        DDMathOperator *divide = [self operatorForFunction:DDMathOperatorDivide];
+        [self addOperator:_percentOperator withPrecedenceHigherThanOperator:divide];
+    } else {
+        _percentOperator = [DDMathOperator percentOperator];
+        DDMathOperator *factorial = [self operatorForFunction:DDMathOperatorFactorial];
+        [self addOperator:_percentOperator withPrecedenceSameAsOperator:factorial];
+    }
 }
 
-- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceHigherThanOperator:(DDMathOperator *)existingOperator {
-    newOperator.precedence = existingOperator.precedence + 1;
-    [self _processNewOperator:newOperator relativity:NSOrderedAscending];
+- (NSArray *)operators {
+    return _operators.array.copy;
 }
 
-- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceSameAsOperator:(DDMathOperator *)existingOperator {
-    newOperator.precedence = existingOperator.precedence;
-    [self _processNewOperator:newOperator relativity:NSOrderedSame];
+- (BOOL)isOperatorCharacter:(unichar)character {
+    return [_operatorsByToken isOperatorCharacter:character];
 }
 
-- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceLowerThanOperator:(DDMathOperator *)existingOperator {
-    newOperator.precedence = existingOperator.precedence - 1;
-    [self _processNewOperator:newOperator relativity:NSOrderedDescending];
+- (BOOL)anyOperatorHasPrefix:(NSString *)prefix {
+    return [_operatorsByToken hasOperatorsForPrefix:prefix];
 }
 
 - (DDMathOperator *)operatorForFunction:(NSString *)function {
@@ -129,94 +109,198 @@
 }
 
 - (NSArray *)operatorsForToken:(NSString *)token {
-    token = [token lowercaseString];
-    NSOrderedSet *operators = [_operatorsByToken objectForKey:token];
-    return operators.array;
+    return [_operatorsByToken operatorsForToken:token];
 }
 
 - (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDMathOperatorArity)arity {
     NSArray *operators = [self operatorsForToken:token];
-    for (DDMathOperator *op in operators) {
-        if (op.arity == arity) {
-            return op;
-        }
+    for (DDMathOperator *operator in operators) {
+        if (operator.arity == arity) { return operator; }
     }
     return nil;
 }
 
 - (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDMathOperatorArity)arity associativity:(DDMathOperatorAssociativity)associativity {
     NSArray *operators = [self operatorsForToken:token];
-    for (DDMathOperator *op in operators) {
-        if (op.arity == arity && op.associativity == associativity) {
-            return op;
-        }
+    for (DDMathOperator *operator in operators) {
+        if (operator.arity == arity && operator.associativity == associativity) { return operator; }
     }
     return nil;
 }
 
-#pragma mark - Private
-
-- (void)_processNewOperator:(DDMathOperator *)newOperator relativity:(NSComparisonResult)relativity {
-    // first, see if there's an operator for this function already
-    DDMathOperator *existingOperatorForFunction = [_operatorsByFunction objectForKey:newOperator.function];
-    DDMathOperator *resolvedOperator = newOperator;
-    if (existingOperatorForFunction != nil) {
-        resolvedOperator = existingOperatorForFunction;
-        // there is; just add new tokens; don't change any precedence
-        [existingOperatorForFunction addTokens:newOperator.tokens];
+- (void)addTokens:(NSArray *)newTokens forOperatorFunction:(NSString *)operatorFunction {
+    DDMathOperator *existing = [self operatorForFunction:operatorFunction];
+    if (existing != nil) {
+        DDMathOperator *tmp = OPERATOR(operatorFunction, newTokens, existing.arity, existing.precedence, existing.associativity);
+        [self addOperator:tmp withPrecedenceSameAsOperator:existing];
     } else {
-        // there is not.  this is a genuinely new operator
-        
-        // first, make sure the tokens involved in this new operator are unique
-        for (NSString *token in newOperator.tokens) {
-            DDMathOperator *existing = [_operatorsByToken objectForKey:[token lowercaseString]];
-            if (existing != nil) {
-                [NSException raise:NSInvalidArgumentException format:@"An operator is already defined for '%@'", token];
-            }
-        }
-        
-        [_operators addObject:newOperator];
-        
-        if (relativity != NSOrderedSame) {
-            NSInteger newPrecedence = newOperator.precedence;
-            
-            if (relativity == NSOrderedAscending) {
-                // the new operator has a precedence higher than the original operator
-                // all operators that have an equivalent (or higher) precedence need to be bumped up one
-                // to accomodate the new operator
-                [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    DDMathOperator *op = obj;
-                    if (op.precedence >= newPrecedence) {
-                        op.precedence++;
-                    }
-                }];
-            } else {
-                [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    DDMathOperator *op = obj;
-                    if (op.precedence > newPrecedence || op == newOperator) {
-                        op.precedence++;
-                    }
-                }];
-            }
-        }
-        
-        [_operators sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"precedence" ascending:YES]]];
-        [_operatorsByFunction setObject:newOperator forKey:newOperator.function];
+        [NSException raise:NSInternalInconsistencyException format:@"No operators defined for %@ function", operatorFunction];
     }
-    
-    for (NSString *token in newOperator.tokens) {
-        NSString *lowercaseToken = [token lowercaseString];
-        NSMutableOrderedSet *operatorsForToken = [_operatorsByToken objectForKey:lowercaseToken];
-        if (operatorsForToken == nil) {
-            operatorsForToken = [NSMutableOrderedSet orderedSet];
-            [_operatorsByToken setObject:operatorsForToken forKey:lowercaseToken];
+}
+
+- (void)removeOperator:(DDMathOperator *)operator {
+    if ([_operators containsObject:operator]) {
+        [_operators removeObject:operator];
+        
+        [_operatorsByFunction removeObjectForKey:operator.function];
+        [_operatorsByToken removeOperator:operator];
+    }
+}
+
+- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceSameAsOperator:(DDMathOperator *)existingOperator {
+    newOperator.precedence = existingOperator.precedence;
+    [self _processOperator:newOperator sorter:^BOOL(DDMathOperator *other) {
+        return NO;
+    }];
+}
+
+- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceLowerThanOperator:(DDMathOperator *)existingOperator {
+    newOperator.precedence = existingOperator.precedence;
+    [self _processOperator:newOperator sorter:^BOOL(DDMathOperator *other) {
+        return other.precedence >= existingOperator.precedence;
+    }];
+}
+
+- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceHigherThanOperator:(DDMathOperator *)existingOperator {
+    newOperator.precedence = existingOperator.precedence;
+    [self _processOperator:newOperator sorter:^BOOL(DDMathOperator *other) {
+        return other.precedence > existingOperator.precedence;
+    }];
+}
+
+- (void)_processOperator:(DDMathOperator *)operator sorter:(BOOL(^)(DDMathOperator *other))sorter {
+    if ([_operatorsByFunction objectForKey:operator.function] != nil) {
+        // existing operator to which we are adding tokens
+        DDMathOperator *existing = [_operatorsByFunction objectForKey:operator.function];
+        [existing addTokens:operator.tokens];
+        [_operatorsByToken addTokens:operator.tokens forOperator:existing];
+        
+    } else {
+        NSString *existingToken = [_operatorsByToken existingTokenForOperatorTokens:operator];
+        if (existingToken != nil) {
+            [NSException raise:NSInvalidArgumentException format:@"An operator is already defined for %@", existingToken];
         }
-        [operatorsForToken addObject:resolvedOperator];
+        
+        for (DDMathOperator *other in _operators) {
+            if (sorter(other)) {
+                other.precedence++;
+            }
+        }
+        
+        [_operators addObject:operator];
+        [_operatorsByFunction setObject:operator forKey:operator.function];
+        [_operatorsByToken addOperator:operator];
     }
 }
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len {
     return [_operators countByEnumeratingWithState:state objects:buffer count:len];
+}
+
+@end
+
+@implementation _DDMathOperatorTokenMap {
+    NSMutableDictionary *_map;
+    NSCountedSet *_tokenCharacters;
+    NSCharacterSet *_allowedTokenCharacters;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _map = [NSMutableDictionary dictionary];
+        _tokenCharacters = [NSCountedSet set];
+        _allowedTokenCharacters = [NSCharacterSet alphanumericCharacterSet].invertedSet;
+    }
+    return self;
+}
+
+- (NSString *)_convertTokenCharacter:(unichar)character {
+    if ([_allowedTokenCharacters characterIsMember:character]) {
+        return [NSString stringWithFormat:@"%C", character];
+    }
+    return nil;
+}
+
+- (void)addToken:(NSString *)token {
+    for (NSUInteger i = 0; i < token.length; ++i) {
+        NSString *tokenCharacter = [self _convertTokenCharacter:[token characterAtIndex:i]];
+        if (tokenCharacter) {
+            [_tokenCharacters addObject:tokenCharacter];
+        }
+    }
+}
+
+- (void)removeToken:(NSString *)token {
+    for (NSUInteger i = 0; i < token.length; ++i) {
+        NSString *tokenCharacter = [self _convertTokenCharacter:[token characterAtIndex:i]];
+        if (tokenCharacter) {
+            [_tokenCharacters removeObject:tokenCharacter];
+        }
+    }
+}
+
+- (void)addTokens:(NSArray *)tokens forOperator:(DDMathOperator *)operator {
+    for (NSString *token in tokens) {
+        NSString *lowercaseToken = token.lowercaseString;
+        
+        NSMutableOrderedSet *existingOperators = [_map objectForKey:lowercaseToken];
+        if (existingOperators == nil) {
+            existingOperators = [NSMutableOrderedSet orderedSet];
+            [_map setObject:existingOperators forKey:lowercaseToken];
+        }
+        
+        if ([existingOperators containsObject:operator] == NO) {
+            [existingOperators addObject:operator];
+        }
+        [self addToken:lowercaseToken];
+    }
+}
+
+- (void)addOperator:(DDMathOperator *)operator {
+    [self addTokens:operator.tokens forOperator:operator];
+}
+
+- (void)removeOperator:(DDMathOperator *)operator {
+    for (NSString *token in operator.tokens) {
+        NSMutableOrderedSet *existingOperators = [_map objectForKey:token.lowercaseString];
+        if (existingOperators) {
+            [existingOperators removeObject:operator];
+            [self removeToken:token.lowercaseString];
+        }
+    }
+}
+
+- (NSString *)existingTokenForOperatorTokens:(DDMathOperator *)operator {
+    for (NSString *token in operator.tokens) {
+        if ([_map objectForKey:token.lowercaseString] != nil) {
+            return token.lowercaseString;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)isOperatorCharacter:(unichar)character {
+    NSString *converted = [self _convertTokenCharacter:character];
+    if (converted != nil) {
+        return [_tokenCharacters containsObject:converted];
+    }
+    return NO;
+}
+
+- (BOOL)hasOperatorsForPrefix:(NSString *)prefix {
+    NSString *lowercasePrefix = prefix.lowercaseString;
+    for (NSString *token in _map) {
+        if ([token hasPrefix:lowercasePrefix]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (NSArray *)operatorsForToken:(NSString *)token {
+    NSMutableOrderedSet *existing = [_map objectForKey:token.lowercaseString];
+    return existing.array.copy;
 }
 
 @end
