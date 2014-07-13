@@ -11,15 +11,15 @@
 #import "DDMathParserMacros.h"
 #import "_DDParserTerm.h"
 #import "DDMathOperatorTypes.h"
-#import "DDMathStringTokenizer.h"
-#import "DDMathStringTokenizer.h"
+#import "DDMathTokenizer.h"
+#import "DDMathTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
 #import "DDMathOperator.h"
 #import "DDMathOperatorSet.h"
 
 @implementation DDParser {
-	DDMathStringTokenizer * _tokenizer;
+	DDMathTokenizer * _tokenizer;
 }
 
 + (id)parserWithString:(NSString *)string error:(NSError **)error {
@@ -27,15 +27,15 @@
 }
 
 - (id)initWithString:(NSString *)string error:(NSError **)error {
-    DDMathStringTokenizer *t = [[DDMathStringTokenizer alloc] initWithString:string operatorSet:nil error:error];
+    DDMathTokenizer *t = [[DDMathTokenizer alloc] initWithString:string operatorSet:nil error:error];
     return [self initWithTokenizer:t error:error];
 }
 
-+ (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
++ (id)parserWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
 	return [[self alloc] initWithTokenizer:tokenizer error:error];
 }
 
-- (id)initWithTokenizer:(DDMathStringTokenizer *)t error:(NSError **)error {
+- (id)initWithTokenizer:(DDMathTokenizer *)t error:(NSError **)error {
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {

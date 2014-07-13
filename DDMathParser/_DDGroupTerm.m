@@ -8,7 +8,7 @@
 
 #import "DDMathParser.h"
 #import "_DDGroupTerm.h"
-#import "DDMathStringTokenizer.h"
+#import "DDMathTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDMathParserMacros.h"
 
@@ -40,7 +40,7 @@
     return self;
 }
 
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+- (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
     ERR_ASSERT(error);
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {

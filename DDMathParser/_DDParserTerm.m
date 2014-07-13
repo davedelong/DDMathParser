@@ -8,7 +8,7 @@
 
 #import "DDMathParser.h"
 #import "_DDParserTerm.h"
-#import "DDMathStringTokenizer.h"
+#import "DDMathTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
@@ -21,13 +21,13 @@
 
 @interface _DDParserTerm ()
 
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
+- (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
 
 @end
 
 @implementation _DDParserTerm
 
-+ (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
++ (id)rootTermWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
     NSMutableArray *terms = [NSMutableArray array];
     while ([tokenizer peekNextObject] != nil) {
         _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
@@ -41,7 +41,7 @@
     return [[_DDGroupTerm alloc] _initWithSubterms:terms error:error];
 }
 
-+ (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
++ (id)termWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
     ERR_ASSERT(error);
     DDMathStringToken *next = [tokenizer peekNextObject];
     if (next) {
@@ -77,7 +77,7 @@
     return self;
 }
 
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
+- (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
     return [self _initWithToken:[tokenizer nextObject] error:error];
 }
 

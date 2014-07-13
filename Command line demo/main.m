@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
-#import "DDMathStringTokenizer.h"
+#import "DDMathTokenizer.h"
 #import "DDMathOperator.h"
 #import "DDMathOperatorSet.h"
 
@@ -80,7 +80,7 @@ int main (int argc, const char * argv[]) {
             
             NSError *error = nil;
             
-            DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:line operatorSet:nil error:&error];
+            DDMathTokenizer *tokenizer = [[DDMathTokenizer alloc] initWithString:line operatorSet:nil error:&error];
             DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
             
             DDExpression *expression = [parser parsedExpressionWithError:&error];

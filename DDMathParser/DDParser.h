@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DDMathOperatorTypes.h"
 
-@class DDMathStringTokenizer;
+@class DDMathTokenizer;
 @class DDMathOperatorSet;
 @class DDExpression;
 
@@ -17,8 +17,8 @@
 
 @property (readonly) DDMathOperatorSet *operatorSet;
 
-+ (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
-- (id)initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
++ (id)parserWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
+- (id)initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
 
 + (id)parserWithString:(NSString *)string error:(NSError **)error;
 - (id)initWithString:(NSString *)string error:(NSError **)error;

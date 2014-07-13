@@ -7,14 +7,14 @@
 //
 
 #import "TokenizerTests.h"
-#import "DDMathStringTokenizer.h"
+#import "DDMathTokenizer.h"
 #import "DDMathStringToken.h"
 
 @implementation TokenizerTests
 
 - (void)evaluate:(NSArray *)bits {
 	
-	DDMathStringTokenizer * tokenizer = [[DDMathStringTokenizer alloc] initWithString:[bits componentsJoinedByString:@""]];
+	DDMathTokenizer * tokenizer = [[DDMathTokenizer alloc] initWithString:[bits componentsJoinedByString:@""]];
 	NSArray * tokens = [[tokenizer tokens] valueForKey:@"token"];
 	
 	STAssertTrue([tokens isEqualToArray:bits], @"mismatched tokens.  expected %@, given %@", bits, tokens);
@@ -23,7 +23,7 @@
 
 - (void)testTokenizer {
     
-	DDMathStringTokenizer * tokenizer = [[DDMathStringTokenizer alloc] initWithString:@"1"];
+	DDMathTokenizer * tokenizer = [[DDMathTokenizer alloc] initWithString:@"1"];
 	NSArray * tokens = [tokenizer tokens];
 	
 	STAssertTrue([tokens count] == 1, @"should have 1 token.  Given: %d", [tokens count]);
@@ -79,14 +79,14 @@
 }
 
 - (void)testTokenizer10 {
-	DDMathStringTokenizer * tokenizer = [[DDMathStringTokenizer alloc] initWithString:@"3 x 9"];
+	DDMathTokenizer * tokenizer = [[DDMathTokenizer alloc] initWithString:@"3 x 9"];
 	NSArray * tokens = [[tokenizer tokens] valueForKey:@"token"];
 	NSArray * expected = [NSArray arrayWithObjects:@"3", @"*", @"9", nil];
 	STAssertEqualObjects(tokens, expected, @"unexpected tokens.  expected: %@, given: %@", expected, tokens);
 }
 
 - (void)testInvalidNumber {
-	STAssertThrows([[[DDMathStringTokenizer alloc] initWithString:@"10e2e2"] autorelease], @"expected exception, none thrown");
+	STAssertThrows([[[DDMathTokenizer alloc] initWithString:@"10e2e2"] autorelease], @"expected exception, none thrown");
 }
 
 @end

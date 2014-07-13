@@ -11,7 +11,7 @@
 #import "DDMathParser.h"
 
 @class DDMathStringToken;
-@class DDMathStringTokenizer;
+@class DDMathTokenizer;
 @class DDParser;
 @class DDExpression;
 
@@ -29,9 +29,9 @@ typedef NS_ENUM(NSInteger, DDParserTermType) {
 @property (nonatomic,readonly) DDParserTermType type;
 @property (nonatomic,readonly,strong) DDMathStringToken *token;
 
-+ (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
-+ (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error;
++ (id)rootTermWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
++ (id)termWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
+- (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
 
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error;
 - (DDExpression *)expressionWithError:(NSError **)error;

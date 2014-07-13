@@ -1,5 +1,5 @@
 //
-//  DDMathParserTokenizer.m
+//  DDMathTokenizer.m
 //  DDMathParser
 //
 //  Created by Dave DeLong on 6/28/11.
@@ -7,7 +7,7 @@
 //
 
 #import "DDMathParser.h"
-#import "DDMathStringTokenizer.h"
+#import "DDMathTokenizer.h"
 #import "DDMathParserMacros.h"
 #import "DDMathStringToken.h"
 #import "DDMathOperator.h"
@@ -17,7 +17,7 @@
 #define DD_IS_HEX(_c) (((_c) >= '0' && (_c) <= '9') || ((_c) >= 'a' && (_c) <= 'f') || ((_c) >= 'A' && (_c) <= 'F'))
 #define DD_IS_WHITESPACE(_c) ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:(_c)])
 
-@interface DDMathStringTokenizer ()
+@interface DDMathTokenizer ()
 
 @property (nonatomic, readonly) NSCharacterSet *operatorCharacters;
 
@@ -37,7 +37,7 @@
 
 @end
 
-@implementation DDMathStringTokenizer {
+@implementation DDMathTokenizer {
     unichar *_characters;
     unichar *_caseInsensitiveCharacters;
     
@@ -566,7 +566,7 @@
 
 @end
 
-@implementation DDMathStringTokenizer (Deprecated)
+@implementation DDMathTokenizer (Deprecated)
 
 + (id)tokenizerWithString:(NSString *)expressionString error:(NSError *__autoreleasing *)error {
     return [[self alloc] initWithString:expressionString operatorSet:nil error:error];

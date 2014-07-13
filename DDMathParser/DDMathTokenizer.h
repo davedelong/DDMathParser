@@ -1,5 +1,5 @@
 //
-//  DDMathParserTokenizer.h
+//  DDMathTokenizer.h
 //  DDMathParser
 //
 //  Created by Dave DeLong on 6/28/11.
@@ -10,7 +10,7 @@
 
 @class DDMathStringToken, DDMathOperatorSet;
 
-@interface DDMathStringTokenizer : NSEnumerator
+@interface DDMathTokenizer : NSEnumerator
 
 @property (readonly) DDMathOperatorSet *operatorSet;
 
@@ -28,7 +28,7 @@
 
 @end
 
-@interface DDMathStringTokenizer (Deprecated)
+@interface DDMathTokenizer (Deprecated)
 
 + (id)tokenizerWithString:(NSString *)expressionString error:(NSError **)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));
 - (id)initWithString:(NSString *)expressionString error:(NSError **)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));

@@ -9,7 +9,7 @@
 #import "DDMathOperatorSet.h"
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
-#import "DDMathStringTokenizer.h"
+#import "DDMathTokenizer.h"
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
 #import "DDExpression.h"
@@ -189,7 +189,7 @@
 }
 
 - (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
-    DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:expressionString operatorSet:self.operatorSet error:error];
+    DDMathTokenizer *tokenizer = [[DDMathTokenizer alloc] initWithString:expressionString operatorSet:self.operatorSet error:error];
     if (!tokenizer) { return nil; }
     
     DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:error];
