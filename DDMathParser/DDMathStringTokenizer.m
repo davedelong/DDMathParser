@@ -114,7 +114,7 @@
     //figure out if "-" and "+" are unary or binary
     (void)[self _processUnknownOperatorToken:token withError:error];
     
-    if (token.mathOperator.function == DDOperatorUnaryPlus) {
+    if (token.mathOperator.function == DDMathOperatorUnaryPlus) {
         // the unary + operator is a no-op operator.  It does nothing, so we'll throw it out
         return YES;
     }
@@ -136,26 +136,26 @@
     DDMathStringToken *previousToken = [_tokens lastObject];
     DDMathOperator *resolvedOperator = nil;
     
-    DDOperatorArity arity = DDOperatorArityBinary;
+    DDMathOperatorArity arity = DDMathOperatorArityBinary;
     
     if (previousToken == nil) {
         // this is the first token in the stream
         // and of necessity must be a unary token
-        arity = DDOperatorArityUnary;
+        arity = DDMathOperatorArityUnary;
         
     } else if (previousToken.tokenType == DDTokenTypeOperator) {
         DDMathOperator *previousOperator = previousToken.mathOperator;
         
-        if (previousOperator.arity == DDOperatorArityBinary) {
+        if (previousOperator.arity == DDMathOperatorArityBinary) {
             // a binary operator can't be followed by a binary operator
             // therefore this is a unary operator
-            arity = DDOperatorArityUnary;
+            arity = DDMathOperatorArityUnary;
             
-        } else if (previousOperator.arity == DDOperatorArityUnary) {
-            if (previousOperator.associativity == DDOperatorAssociativityRight) {
+        } else if (previousOperator.arity == DDMathOperatorArityUnary) {
+            if (previousOperator.associativity == DDMathOperatorAssociativityRight) {
                 // a right-assoc unary operator can't be followed by a binary operator
                 // therefore this needs to be a unary operator
-                arity = DDOperatorArityUnary;
+                arity = DDMathOperatorArityUnary;
                 
             } else {
                 // a left-assoc unary operator can be followed by:
@@ -165,18 +165,18 @@
                 // we'll prefer them from left-to-right:
                 // left-assoc unary, binary, right-assoc unary
                 // TODO: is this correct?? should we be looking at precedence instead?
-                resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityUnary associativity:DDOperatorAssociativityLeft];
+                resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityLeft];
                 if (resolvedOperator == nil) {
-                    resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityBinary];
+                    resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityBinary];
                 }
                 if (resolvedOperator == nil) {
-                    resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityUnary associativity:DDOperatorAssociativityRight];
+                    resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityRight];
                 }
             }
-        } else if (previousOperator.arity == DDOperatorArityUnknown) {
+        } else if (previousOperator.arity == DDMathOperatorArityUnknown) {
             // the previous operator has unknown arity. this should only happen when preceded by a comma
             // we'll assume this should be a unary operator
-            arity = DDOperatorArityUnary;
+            arity = DDMathOperatorArityUnary;
             
         }
     } else if (previousToken.tokenType == DDTokenTypeNumber || previousToken.tokenType == DDTokenTypeVariable) {
@@ -187,12 +187,12 @@
         // we'll prefer them from left-to-right:
         // left-assoc unary, binary, right-assoc unary
         // TODO: is this correct?? should we be looking at precedence instead?
-        resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityUnary associativity:DDOperatorAssociativityLeft];
+        resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityLeft];
         if (resolvedOperator == nil) {
-            resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityBinary];
+            resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityBinary];
         }
         if (resolvedOperator == nil) {
-            resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDOperatorArityUnary associativity:DDOperatorAssociativityRight];
+            resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityRight];
         }
     } else if (previousToken.tokenType == DDTokenTypeFunction) {
         // default to binary
@@ -222,10 +222,10 @@
         BOOL shouldInsertMultiplier = NO;
         if (previousToken.tokenType == DDTokenTypeNumber ||
             previousToken.tokenType == DDTokenTypeVariable ||
-            (previousToken.mathOperator.arity == DDOperatorArityUnary && previousToken.mathOperator.associativity == DDOperatorAssociativityLeft)) {
+            (previousToken.mathOperator.arity == DDMathOperatorArityUnary && previousToken.mathOperator.associativity == DDMathOperatorAssociativityLeft)) {
             
             if (token.tokenType != DDTokenTypeOperator ||
-                (token.mathOperator.arity == DDOperatorArityUnary && token.mathOperator.associativity == DDOperatorAssociativityRight)) {
+                (token.mathOperator.arity == DDMathOperatorArityUnary && token.mathOperator.associativity == DDMathOperatorAssociativityRight)) {
                 //inject a "multiplication" token:
                 shouldInsertMultiplier = YES;
             }
@@ -233,7 +233,7 @@
         }
         
         if (shouldInsertMultiplier) {
-            DDMathStringToken *multiply = [[DDMathStringToken alloc] initWithToken:@"*" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDOperatorMultiply]];
+            DDMathStringToken *multiply = [[DDMathStringToken alloc] initWithToken:@"*" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDMathOperatorMultiply]];
             
             [self appendToken:multiply];
         }
@@ -244,11 +244,11 @@
 - (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError **)error {
     DDMathStringToken *previousToken = [_tokens lastObject];
     if (previousToken != nil && previousToken.tokenType == DDTokenTypeFunction) {
-        if (token == nil || token.tokenType != DDTokenTypeOperator || token.mathOperator.function != DDOperatorParenthesisOpen) {
-            DDMathStringToken *openParen = [[DDMathStringToken alloc] initWithToken:@"(" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDOperatorParenthesisOpen]];
+        if (token == nil || token.tokenType != DDTokenTypeOperator || token.mathOperator.function != DDMathOperatorParenthesisOpen) {
+            DDMathStringToken *openParen = [[DDMathStringToken alloc] initWithToken:@"(" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDMathOperatorParenthesisOpen]];
             [self appendToken:openParen];
             
-            DDMathStringToken *closeParen = [[DDMathStringToken alloc] initWithToken:@")" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDOperatorParenthesisClose]];
+            DDMathStringToken *closeParen = [[DDMathStringToken alloc] initWithToken:@")" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDMathOperatorParenthesisClose]];
             [self appendToken:closeParen];
         }
     }

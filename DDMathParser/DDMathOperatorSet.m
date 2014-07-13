@@ -54,8 +54,8 @@
         }
         
         _interpretsPercentSignAsModulo = YES;
-        _percentTokenOperator = OPERATOR(DDOperatorModulo, @[@"%"], BINARY, 0, LEFT);
-        DDMathOperator *multiply = [self operatorForFunction:DDOperatorMultiply];
+        _percentTokenOperator = OPERATOR(DDMathOperatorModulo, @[@"%"], BINARY, 0, LEFT);
+        DDMathOperator *multiply = [self operatorForFunction:DDMathOperatorMultiply];
         [self addOperator:_percentTokenOperator withPrecedenceHigherThanOperator:multiply];
     }
     return self;
@@ -87,12 +87,12 @@
         
         DDMathOperator *relative = nil;
         if (_interpretsPercentSignAsModulo) {
-            _percentTokenOperator = OPERATOR(DDOperatorModulo, @[@"%"], BINARY, 0, LEFT);
-            relative = [self operatorForFunction:DDOperatorMultiply];
+            _percentTokenOperator = OPERATOR(DDMathOperatorModulo, @[@"%"], BINARY, 0, LEFT);
+            relative = [self operatorForFunction:DDMathOperatorMultiply];
         } else {
-            _percentTokenOperator = OPERATOR(DDOperatorPercent, @[@"%"], UNARY, 0, LEFT);
+            _percentTokenOperator = OPERATOR(DDMathOperatorPercent, @[@"%"], UNARY, 0, LEFT);
             // this will put it at the same precedence as factorial and dtor
-            relative = [self operatorForFunction:DDOperatorUnaryMinus];
+            relative = [self operatorForFunction:DDMathOperatorUnaryMinus];
         }
         [self addOperator:_percentTokenOperator withPrecedenceHigherThanOperator:relative];
     }
@@ -134,7 +134,7 @@
     return operators.array;
 }
 
-- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity {
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDMathOperatorArity)arity {
     NSArray *operators = [self operatorsForToken:token];
     for (DDMathOperator *op in operators) {
         if (op.arity == arity) {
@@ -144,7 +144,7 @@
     return nil;
 }
 
-- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity {
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDMathOperatorArity)arity associativity:(DDMathOperatorAssociativity)associativity {
     NSArray *operators = [self operatorsForToken:token];
     for (DDMathOperator *op in operators) {
         if (op.arity == arity && op.associativity == associativity) {

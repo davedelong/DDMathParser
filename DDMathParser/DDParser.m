@@ -48,7 +48,7 @@
 	return self;
 }
 
-- (DDOperatorAssociativity)associativityForOperatorFunction:(NSString *)function {
+- (DDMathOperatorAssociativity)associativityForOperatorFunction:(NSString *)function {
     DDMathOperator *operator = [_operatorSet operatorForFunction:function];
     return operator.associativity;
 }

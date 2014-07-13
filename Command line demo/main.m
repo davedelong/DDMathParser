@@ -36,8 +36,8 @@ void listOperators() {
     for (DDMathOperator *op in knownOperators) {
         printf("\t%s (%s, %s associative) invokes %s()\n",
                [[op.tokens componentsJoinedByString:@", "] UTF8String],
-               op.arity == DDOperatorArityBinary ? "binary" : (op.arity == DDOperatorArityUnary ? "unary" : "unknown"),
-               op.associativity == DDOperatorAssociativityLeft ? "left" : "right",
+               op.arity == DDMathOperatorArityBinary ? "binary" : (op.arity == DDMathOperatorArityUnary ? "unary" : "unknown"),
+               op.associativity == DDMathOperatorAssociativityLeft ? "left" : "right",
                [op.function UTF8String]);
 	}
 }
@@ -56,8 +56,8 @@ int main (int argc, const char * argv[]) {
         DDMathOperatorSet *defaultOperators = [DDMathOperatorSet defaultOperatorSet];
         defaultOperators.interpretsPercentSignAsModulo = NO;
         
-        DDMathOperator *powerOperator = [defaultOperators operatorForFunction:DDOperatorPower];
-        powerOperator.associativity = DDOperatorAssociativityRight;
+        DDMathOperator *powerOperator = [defaultOperators operatorForFunction:DDMathOperatorPower];
+        powerOperator.associativity = DDMathOperatorAssociativityRight;
         
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
         

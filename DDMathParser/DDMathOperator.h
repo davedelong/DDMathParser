@@ -16,16 +16,16 @@
 
 @property (nonatomic, readonly, strong) NSString *function;
 @property (nonatomic, readonly, strong) NSArray *tokens;
-@property (nonatomic, readonly) DDOperatorArity arity;
+@property (nonatomic, readonly) DDMathOperatorArity arity;
 @property (nonatomic, assign) NSInteger precedence;
-@property (nonatomic, assign) DDOperatorAssociativity associativity;
+@property (nonatomic, assign) DDMathOperatorAssociativity associativity;
 
 // the only reason you'd want to init a new \c MathOperator is so you can pass it to the -[DDMathOperatorSet addOperator:...] methods
 - (id)initWithOperatorFunction:(NSString *)function
                         tokens:(NSArray *)tokens
-                         arity:(DDOperatorArity)arity
+                         arity:(DDMathOperatorArity)arity
                     precedence:(NSInteger)precedence
-                 associativity:(DDOperatorAssociativity)associativity;
+                 associativity:(DDMathOperatorAssociativity)associativity;
 
 - (void)addTokens:(NSArray *)moreTokens;
 

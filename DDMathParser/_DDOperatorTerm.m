@@ -21,8 +21,8 @@
 - (BOOL)resolveWithParser:(DDParser *)parser error:(NSError *__autoreleasing *)error {
 #pragma unused(parser)
     ERR_ASSERT(error);
-    if (self.mathOperator.arity == DDOperatorArityUnary) {
-        if (self.mathOperator.associativity == DDOperatorAssociativityLeft) {
+    if (self.mathOperator.arity == DDMathOperatorArityUnary) {
+        if (self.mathOperator.associativity == DDMathOperatorAssociativityLeft) {
             *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", [self token]);
         } else {
             *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", [self token]);

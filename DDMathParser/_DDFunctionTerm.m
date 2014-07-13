@@ -37,7 +37,7 @@
         NSMutableArray *newSubterms = [NSMutableArray array];
         NSRange subrange = NSMakeRange(0, 0);
         for (_DDParserTerm *term in [self subterms]) {
-            if ([term type] == DDParserTermTypeOperator && ((_DDOperatorTerm *)term).mathOperator.function == DDOperatorComma) {
+            if ([term type] == DDParserTermTypeOperator && ((_DDOperatorTerm *)term).mathOperator.function == DDMathOperatorComma) {
                 NSArray *parameterGroupTerms = [[self subterms] subarrayWithRange:subrange];
                 
                 if ([parameterGroupTerms count] != 1) {

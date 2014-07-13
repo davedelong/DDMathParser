@@ -46,7 +46,7 @@
     if (self) {
         NSMutableArray *terms = [NSMutableArray array];
         DDMathStringToken *nextToken = [tokenizer peekNextObject];
-        while (nextToken && nextToken.mathOperator.function != DDOperatorParenthesisClose) {
+        while (nextToken && nextToken.mathOperator.function != DDMathOperatorParenthesisClose) {
             _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
             if (nextTerm) {
                 [terms addObject:nextTerm];
@@ -91,7 +91,7 @@
                 // use a different index if the operator is right associative
                 _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
                 
-                if (operatorTerm.mathOperator.associativity == DDOperatorAssociativityRight) {
+                if (operatorTerm.mathOperator.associativity == DDMathOperatorAssociativityRight) {
                     index = [operatorIndices lastIndex];
                 }
             }
@@ -144,9 +144,9 @@
     ERR_ASSERT(error);
     _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
     
-    if (operatorTerm.mathOperator.arity == DDOperatorArityBinary) {
+    if (operatorTerm.mathOperator.arity == DDMathOperatorArityBinary) {
         return [self _reduceBinaryOperatorAtIndex:index withParser:parser error:error];
-    } else if (operatorTerm.mathOperator.arity == DDOperatorArityUnary) {
+    } else if (operatorTerm.mathOperator.arity == DDMathOperatorArityUnary) {
         return [self _reduceUnaryOperatorAtIndex:index withParser:parser error:error];
     }
     
@@ -174,7 +174,7 @@
     _DDParserTerm *rightmostOperand = [[self subterms] objectAtIndex:index+1];
     
     NSRange rightOperandRange = NSMakeRange(index+1, 1);
-    while ([rightmostOperand type] == DDParserTermTypeOperator && [(_DDOperatorTerm *)rightmostOperand mathOperator].arity == DDOperatorArityUnary) {
+    while ([rightmostOperand type] == DDParserTermTypeOperator && [(_DDOperatorTerm *)rightmostOperand mathOperator].arity == DDMathOperatorArityUnary) {
         // this should really only happen when operator is the power operator and the exponent has 1+ negations
         rightOperandRange.length++;
         if (NSMaxRange(rightOperandRange)-1 >= [[self subterms] count]) {
@@ -203,12 +203,12 @@
 - (BOOL)_reduceUnaryOperatorAtIndex:(NSUInteger)index withParser:(DDParser *)parser error:(NSError **)error {
     ERR_ASSERT(error);
     _DDOperatorTerm *operatorTerm = [[self subterms] objectAtIndex:index];
-    DDOperatorAssociativity associativity = operatorTerm.mathOperator.associativity;
+    DDMathOperatorAssociativity associativity = operatorTerm.mathOperator.associativity;
     
     NSRange replacementRange;
     _DDParserTerm *parameter = nil;
     
-    if (associativity == DDOperatorAssociativityRight) {
+    if (associativity == DDMathOperatorAssociativityRight) {
         // right associative unary operator (negate, not)
         if (index == [[self subterms] count] - 1) {
             *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", operatorTerm);

@@ -346,8 +346,8 @@
     
     NSNumber *context = @1;
     
-    if ([operatorInfo arity] == DDOperatorArityBinary) {
-        if ([parentFunction isEqualToString:DDOperatorAdd] || [parentFunction isEqualToString:DDOperatorMinus]) {
+    if ([operatorInfo arity] == DDMathOperatorArityBinary) {
+        if ([parentFunction isEqualToString:DDMathOperatorAdd] || [parentFunction isEqualToString:DDMathOperatorMinus]) {
             
             BOOL percentIsRightArgument = ([[percentContext arguments] objectAtIndex:1] == percentExpression);
             

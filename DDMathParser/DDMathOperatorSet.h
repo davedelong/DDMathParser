@@ -26,8 +26,8 @@
 
 - (DDMathOperator *)operatorForFunction:(NSString *)function;
 - (NSArray *)operatorsForToken:(NSString *)token;
-- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity;
-- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity;
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDMathOperatorArity)arity;
+- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDMathOperatorArity)arity associativity:(DDMathOperatorAssociativity)associativity;
 
 - (void)addOperator:(DDMathOperator *)newOperator withPrecedenceSameAsOperator:(DDMathOperator *)existingOperator;
 - (void)addOperator:(DDMathOperator *)newOperator withPrecedenceLowerThanOperator:(DDMathOperator *)existingOperator;

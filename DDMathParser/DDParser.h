@@ -24,6 +24,6 @@
 - (id)initWithString:(NSString *)string error:(NSError **)error;
 
 - (DDExpression *)parsedExpressionWithError:(NSError **)error;
-- (DDOperatorAssociativity)associativityForOperatorFunction:(NSString *)function;
+- (DDMathOperatorAssociativity)associativityForOperatorFunction:(NSString *)function;
 
 @end

@@ -51,7 +51,7 @@
         } else if ([next tokenType] == DDTokenTypeVariable) {
             term = [[_DDVariableTerm alloc] _initWithTokenizer:tokenizer error:error];
         } else if ([next tokenType] == DDTokenTypeOperator) {
-            if (next.mathOperator.function == DDOperatorParenthesisOpen) {
+            if (next.mathOperator.function == DDMathOperatorParenthesisOpen) {
                 term = [[_DDGroupTerm alloc] _initWithTokenizer:tokenizer error:error];
             } else {
                 term = [[_DDOperatorTerm alloc] _initWithTokenizer:tokenizer error:error];

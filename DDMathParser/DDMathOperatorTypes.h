@@ -8,52 +8,52 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, DDOperatorAssociativity) {
-	DDOperatorAssociativityLeft = 0,
-	DDOperatorAssociativityRight = 1
+typedef NS_ENUM(NSInteger, DDMathOperatorAssociativity) {
+	DDMathOperatorAssociativityLeft = 0,
+	DDMathOperatorAssociativityRight = 1
 };
 
-typedef NS_ENUM(NSInteger, DDOperatorArity) {
-    DDOperatorArityUnknown = 0,
+typedef NS_ENUM(NSInteger, DDMathOperatorArity) {
+    DDMathOperatorArityUnknown = 0,
     
-    DDOperatorArityUnary,
-    DDOperatorArityBinary
+    DDMathOperatorArityUnary,
+    DDMathOperatorArityBinary
 };
 
-extern NSString *const DDOperatorLogicalOr;
-extern NSString *const DDOperatorLogicalAnd;
-extern NSString *const DDOperatorLogicalNot;
-extern NSString *const DDOperatorLogicalEqual;
-extern NSString *const DDOperatorLogicalNotEqual;
-extern NSString *const DDOperatorLogicalLessThan;
-extern NSString *const DDOperatorLogicalGreaterThan;
-extern NSString *const DDOperatorLogicalLessThanOrEqual;
-extern NSString *const DDOperatorLogicalGreaterThanOrEqual;
-extern NSString *const DDOperatorBitwiseOr;
-extern NSString *const DDOperatorBitwiseXor;
-extern NSString *const DDOperatorBitwiseAnd;
-extern NSString *const DDOperatorLeftShift;
-extern NSString *const DDOperatorRightShift;
-extern NSString *const DDOperatorMinus;
-extern NSString *const DDOperatorAdd;
-extern NSString *const DDOperatorDivide;
-extern NSString *const DDOperatorMultiply;
-extern NSString *const DDOperatorModulo;
-extern NSString *const DDOperatorBitwiseNot;
-extern NSString *const DDOperatorFactorial;
-extern NSString *const DDOperatorDegree;
-extern NSString *const DDOperatorPercent;
-extern NSString *const DDOperatorPower;
-extern NSString *const DDOperatorParenthesisOpen;
-extern NSString *const DDOperatorParenthesisClose;
-extern NSString *const DDOperatorComma;
-extern NSString *const DDOperatorUnaryMinus;
-extern NSString *const DDOperatorUnaryPlus;
-extern NSString *const DDOperatorSquareRoot;
-extern NSString *const DDOperatorCubeRoot;
+extern NSString *const DDMathOperatorLogicalOr;
+extern NSString *const DDMathOperatorLogicalAnd;
+extern NSString *const DDMathOperatorLogicalNot;
+extern NSString *const DDMathOperatorLogicalEqual;
+extern NSString *const DDMathOperatorLogicalNotEqual;
+extern NSString *const DDMathOperatorLogicalLessThan;
+extern NSString *const DDMathOperatorLogicalGreaterThan;
+extern NSString *const DDMathOperatorLogicalLessThanOrEqual;
+extern NSString *const DDMathOperatorLogicalGreaterThanOrEqual;
+extern NSString *const DDMathOperatorBitwiseOr;
+extern NSString *const DDMathOperatorBitwiseXor;
+extern NSString *const DDMathOperatorBitwiseAnd;
+extern NSString *const DDMathOperatorLeftShift;
+extern NSString *const DDMathOperatorRightShift;
+extern NSString *const DDMathOperatorMinus;
+extern NSString *const DDMathOperatorAdd;
+extern NSString *const DDMathOperatorDivide;
+extern NSString *const DDMathOperatorMultiply;
+extern NSString *const DDMathOperatorModulo;
+extern NSString *const DDMathOperatorBitwiseNot;
+extern NSString *const DDMathOperatorFactorial;
+extern NSString *const DDMathOperatorDegree;
+extern NSString *const DDMathOperatorPercent;
+extern NSString *const DDMathOperatorPower;
+extern NSString *const DDMathOperatorParenthesisOpen;
+extern NSString *const DDMathOperatorParenthesisClose;
+extern NSString *const DDMathOperatorComma;
+extern NSString *const DDMathOperatorUnaryMinus;
+extern NSString *const DDMathOperatorUnaryPlus;
+extern NSString *const DDMathOperatorSquareRoot;
+extern NSString *const DDMathOperatorCubeRoot;
 
-#define UNARY DDOperatorArityUnary
-#define BINARY DDOperatorArityBinary
-#define LEFT DDOperatorAssociativityLeft
-#define RIGHT DDOperatorAssociativityRight
+#define UNARY DDMathOperatorArityUnary
+#define BINARY DDMathOperatorArityBinary
+#define LEFT DDMathOperatorAssociativityLeft
+#define RIGHT DDMathOperatorAssociativityRight
 #define OPERATOR(_func, _toks, _arity, _prec, _assoc) [[DDMathOperator alloc] initWithOperatorFunction:(_func) tokens:(_toks) arity:(_arity) precedence:(_prec) associativity:(_assoc)]
