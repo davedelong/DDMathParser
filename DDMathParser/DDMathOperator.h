@@ -10,6 +10,8 @@
 #import "DDMathParser.h"
 #import "DDMathOperatorTypes.h"
 
+#define OPERATOR(_func, _toks, _arity, _prec, _assoc) [[DDMathOperator alloc] initWithOperatorFunction:(_func) tokens:(_toks) arity:(_arity) precedence:(_prec) associativity:(_assoc)]
+
 @interface DDMathOperator : NSObject <NSCopying>
 
 + (NSArray *)defaultOperators;

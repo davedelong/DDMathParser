@@ -13,12 +13,18 @@ typedef NS_ENUM(NSInteger, DDMathOperatorAssociativity) {
 	DDMathOperatorAssociativityRight = 1
 };
 
+#define UNARY DDMathOperatorArityUnary
+#define BINARY DDMathOperatorArityBinary
+
 typedef NS_ENUM(NSInteger, DDMathOperatorArity) {
     DDMathOperatorArityUnknown = 0,
     
     DDMathOperatorArityUnary,
     DDMathOperatorArityBinary
 };
+
+#define LEFT DDMathOperatorAssociativityLeft
+#define RIGHT DDMathOperatorAssociativityRight
 
 extern NSString *const DDMathOperatorLogicalOr;
 extern NSString *const DDMathOperatorLogicalAnd;
@@ -51,9 +57,3 @@ extern NSString *const DDMathOperatorUnaryMinus;
 extern NSString *const DDMathOperatorUnaryPlus;
 extern NSString *const DDMathOperatorSquareRoot;
 extern NSString *const DDMathOperatorCubeRoot;
-
-#define UNARY DDMathOperatorArityUnary
-#define BINARY DDMathOperatorArityBinary
-#define LEFT DDMathOperatorAssociativityLeft
-#define RIGHT DDMathOperatorAssociativityRight
-#define OPERATOR(_func, _toks, _arity, _prec, _assoc) [[DDMathOperator alloc] initWithOperatorFunction:(_func) tokens:(_toks) arity:(_arity) precedence:(_prec) associativity:(_assoc)]
