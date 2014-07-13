@@ -1,5 +1,5 @@
 //
-//  DDMathStringToken.m
+//  DDMathToken.m
 //  DDMathParser
 //
 //  Created by Dave DeLong on 11/16/10.
@@ -7,10 +7,10 @@
 //
 
 #import "DDMathParser.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 #import "DDMathOperator.h"
 
-@implementation DDMathStringToken
+@implementation DDMathToken
 
 - (id)initWithToken:(NSString *)t type:(DDTokenType)type operator:(DDMathOperator *)op {
 	self = [super init];

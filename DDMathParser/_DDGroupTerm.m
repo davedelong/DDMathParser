@@ -9,7 +9,7 @@
 #import "DDMathParser.h"
 #import "_DDGroupTerm.h"
 #import "DDMathTokenizer.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 #import "DDMathParserMacros.h"
 
 #import "DDParser.h"
@@ -45,7 +45,7 @@
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {
         NSMutableArray *terms = [NSMutableArray array];
-        DDMathStringToken *nextToken = [tokenizer peekNextObject];
+        DDMathToken *nextToken = [tokenizer peekNextObject];
         while (nextToken && nextToken.mathOperator.function != DDMathOperatorParenthesisClose) {
             _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
             if (nextTerm) {

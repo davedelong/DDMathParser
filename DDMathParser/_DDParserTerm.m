@@ -9,7 +9,7 @@
 #import "DDMathParser.h"
 #import "_DDParserTerm.h"
 #import "DDMathTokenizer.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
 
@@ -43,7 +43,7 @@
 
 + (id)termWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
     ERR_ASSERT(error);
-    DDMathStringToken *next = [tokenizer peekNextObject];
+    DDMathToken *next = [tokenizer peekNextObject];
     if (next) {
         _DDParserTerm *term = nil;
         if ([next tokenType] == DDTokenTypeNumber) {
@@ -67,7 +67,7 @@
     return nil;
 }
 
-- (id)_initWithToken:(DDMathStringToken *)t error:(NSError **)error {
+- (id)_initWithToken:(DDMathToken *)t error:(NSError **)error {
 #pragma unused(error)
     self = [super init];
     if (self) {

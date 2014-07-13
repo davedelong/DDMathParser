@@ -8,7 +8,7 @@
 
 #import "DDMathParser.h"
 #import "_DDFunctionTerm.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 #import "DDMathTokenizer.h"
 #import "DDMathParserMacros.h"
 #import "_DDOperatorTerm.h"
@@ -27,7 +27,7 @@
 
 - (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
     ERR_ASSERT(error);
-    DDMathStringToken *t = [tokenizer nextObject];
+    DDMathToken *t = [tokenizer nextObject];
     
     self = [super _initWithTokenizer:tokenizer error:error];
     if (self) {

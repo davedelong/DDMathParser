@@ -8,7 +8,7 @@
 
 #import "_DDVariableTerm.h"
 #import "DDMathParserMacros.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 #import "DDExpression.h"
 
 @implementation _DDVariableTerm

@@ -10,7 +10,7 @@
 
 #import "DDMathParser.h"
 
-@class DDMathStringToken;
+@class DDMathToken;
 @class DDMathTokenizer;
 @class DDParser;
 @class DDExpression;
@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, DDParserTermType) {
 
 @property (nonatomic,getter=isResolved) BOOL resolved;
 @property (nonatomic,readonly) DDParserTermType type;
-@property (nonatomic,readonly,strong) DDMathStringToken *token;
+@property (nonatomic,readonly,strong) DDMathToken *token;
 
 + (id)rootTermWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
 + (id)termWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;

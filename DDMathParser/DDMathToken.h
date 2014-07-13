@@ -1,5 +1,5 @@
 //
-//  DDMathStringToken.h
+//  DDMathToken.h
 //  DDMathParser
 //
 //  Created by Dave DeLong on 11/16/10.
@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, DDTokenType) {
 
 @class DDMathOperator;
 
-@interface DDMathStringToken : NSObject
+@interface DDMathToken : NSObject
 
 - (id)initWithToken:(NSString *)t type:(DDTokenType)type operator:(DDMathOperator *)op;
 

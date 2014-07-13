@@ -7,7 +7,7 @@
 //
 
 #import "_DDOperatorTerm.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 #import "DDMathParserMacros.h"
 
 @implementation _DDOperatorTerm

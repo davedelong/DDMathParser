@@ -13,7 +13,7 @@
 #import "DDMathOperatorTypes.h"
 #import "DDMathTokenizer.h"
 #import "DDMathTokenizer.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 #import "DDExpression.h"
 #import "DDMathOperator.h"
 #import "DDMathOperatorSet.h"

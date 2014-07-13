@@ -8,7 +8,7 @@
 
 #import "TokenizerTests.h"
 #import "DDMathTokenizer.h"
-#import "DDMathStringToken.h"
+#import "DDMathToken.h"
 
 @implementation TokenizerTests
 
@@ -28,7 +28,7 @@
 	
 	STAssertTrue([tokens count] == 1, @"should have 1 token.  Given: %d", [tokens count]);
 	
-	DDMathStringToken * token = [tokens objectAtIndex:0];
+	DDMathToken * token = [tokens objectAtIndex:0];
 	
 	STAssertNotNil(token, @"token should not be nil");
 	STAssertEqualObjects([token token], @"1", @"token should be 1.  Given: %@", [token token]);

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class DDMathStringToken, DDMathOperatorSet;
+@class DDMathToken, DDMathOperatorSet;
 
 @interface DDMathTokenizer : NSEnumerator
 
@@ -16,15 +16,15 @@
 
 - (instancetype)initWithString:(NSString *)expressionString operatorSet:(DDMathOperatorSet *)operatorSet error:(NSError **)error;
 
-- (DDMathStringToken *)peekNextObject;
+- (DDMathToken *)peekNextObject;
 
 - (void)reset;
 
 // methods overridable by subclasses
-- (void)didParseToken:(DDMathStringToken *)token;
+- (void)didParseToken:(DDMathToken *)token;
 
 // methods that can be used by subclasses
-- (void)appendToken:(DDMathStringToken *)token;
+- (void)appendToken:(DDMathToken *)token;
 
 @end
 
