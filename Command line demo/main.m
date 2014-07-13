@@ -2,6 +2,7 @@
 #import "DDMathParser.h"
 #import "DDMathStringTokenizer.h"
 #import "DDMathOperator.h"
+#import "DDMathOperatorSet.h"
 
 NSString* readLine(void);
 void listFunctions(void);

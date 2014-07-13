@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
+#import "DDMathOperatorTypes.h"
 
 @interface DDMathOperator : NSObject <NSCopying>
+
++ (NSArray *)defaultOperators;
 
 @property (nonatomic, readonly, strong) NSString *function;
 @property (nonatomic, readonly, strong) NSArray *tokens;
 @property (nonatomic, readonly) DDOperatorArity arity;
-@property (nonatomic, readonly) NSInteger precedence;
+@property (nonatomic, assign) NSInteger precedence;
 @property (nonatomic, assign) DDOperatorAssociativity associativity;
 
 + (instancetype)infoForOperatorFunction:(NSString *)function;
@@ -24,32 +27,9 @@
 - (id)initWithOperatorFunction:(NSString *)function
                         tokens:(NSArray *)tokens
                          arity:(DDOperatorArity)arity
+                    precedence:(NSInteger)precedence
                  associativity:(DDOperatorAssociativity)associativity;
 
-@end
-
-/*!
- * Maintains a collection of \c DDMathOperators.
- * Modifications to an Operator Set are not thread-safe.
- */
-@interface DDMathOperatorSet : NSObject <NSFastEnumeration, NSCopying>
-
-@property (readonly, copy) NSArray *operators;
-@property (nonatomic) BOOL interpretsPercentSignAsModulo; // default is YES
-
-+ (instancetype)defaultOperatorSet;
-
-- (instancetype)init;
-
-- (DDMathOperator *)operatorForFunction:(NSString *)function;
-- (NSArray *)operatorsForToken:(NSString *)token;
-- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity;
-- (DDMathOperator *)operatorForToken:(NSString *)token arity:(DDOperatorArity)arity associativity:(DDOperatorAssociativity)associativity;
-
-- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceSameAsOperator:(DDMathOperator *)existingOperator;
-- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceLowerThanOperator:(DDMathOperator *)existingOperator;
-- (void)addOperator:(DDMathOperator *)newOperator withPrecedenceHigherThanOperator:(DDMathOperator *)existingOperator;
-
-- (void)addTokens:(NSArray *)newTokens forOperatorFunction:(NSString *)operatorFunction;
+- (void)addTokens:(NSArray *)moreTokens;
 
 @end

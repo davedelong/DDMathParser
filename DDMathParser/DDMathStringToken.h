@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DDParserTypes.h"
+#import "DDMathOperatorTypes.h"
 
 typedef NS_ENUM(NSInteger, DDTokenType) {
 	DDTokenTypeNumber = 0,

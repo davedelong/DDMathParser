@@ -11,6 +11,7 @@
 #import "DDMathParserMacros.h"
 #import "DDMathStringToken.h"
 #import "DDMathOperator.h"
+#import "DDMathOperatorSet.h"
 
 #define DD_IS_DIGIT(_c) ((_c) >= '0' && (_c) <= '9')
 #define DD_IS_HEX(_c) (((_c) >= '0' && (_c) <= '9') || ((_c) >= 'a' && (_c) <= 'f') || ((_c) >= 'A' && (_c) <= 'F'))

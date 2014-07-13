@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DDParserTypes.h"
+#import "DDMathOperatorTypes.h"
 
 @class DDMathStringTokenizer;
 @class DDMathOperatorSet;

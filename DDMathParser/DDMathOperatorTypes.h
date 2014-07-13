@@ -1,5 +1,5 @@
 //
-//  DDParserTypes.h
+//  DDMathOperatorTypes.h
 //  DDMathParser
 //
 //  Created by Dave DeLong on 12/4/10.
@@ -51,3 +51,9 @@ extern NSString *const DDOperatorUnaryMinus;
 extern NSString *const DDOperatorUnaryPlus;
 extern NSString *const DDOperatorSquareRoot;
 extern NSString *const DDOperatorCubeRoot;
+
+#define UNARY DDOperatorArityUnary
+#define BINARY DDOperatorArityBinary
+#define LEFT DDOperatorAssociativityLeft
+#define RIGHT DDOperatorAssociativityRight
+#define OPERATOR(_func, _toks, _arity, _prec, _assoc) [[DDMathOperator alloc] initWithOperatorFunction:(_func) tokens:(_toks) arity:(_arity) precedence:(_prec) associativity:(_assoc)]

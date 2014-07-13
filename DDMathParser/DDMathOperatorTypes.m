@@ -1,12 +1,12 @@
 //
-//  DDParserTypes.m
+//  DDMathOperatorTypes.m
 //  DDMathParser
 //
 //  Created by Dave DeLong on 10/18/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "DDParserTypes.h"
+#import "DDMathOperatorTypes.h"
 
 NSString *const DDOperatorLogicalOr = @"l_or";
 NSString *const DDOperatorLogicalAnd = @"l_and";

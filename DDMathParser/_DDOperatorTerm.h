@@ -7,7 +7,8 @@
 //
 
 #import "_DDParserTerm.h"
-#import "DDParserTypes.h"
+
+@class DDMathOperator;
 
 @interface _DDOperatorTerm : _DDParserTerm
 

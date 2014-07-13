@@ -10,12 +10,13 @@
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
 #import "_DDParserTerm.h"
-#import "DDParserTypes.h"
+#import "DDMathOperatorTypes.h"
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringTokenizer.h"
 #import "DDMathStringToken.h"
 #import "DDExpression.h"
 #import "DDMathOperator.h"
+#import "DDMathOperatorSet.h"
 
 @implementation DDParser {
 	DDMathStringTokenizer * _tokenizer;
