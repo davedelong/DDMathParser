@@ -10,6 +10,7 @@
 #import "DDExpression.h"
 #import "DDMathEvaluator+Private.h"
 #import "DDMathOperator.h"
+#import "DDMathOperatorSet.h"
 #import "_DDDecimalFunctions.h"
 
 @implementation _DDPrecisionFunctionEvaluator
@@ -341,7 +342,7 @@
     DDExpression *percentContext = [percentExpression parentExpression];
     
     NSString *parentFunction = [percentContext function];
-    DDMathOperator *operatorInfo = [DDMathOperator infoForOperatorFunction:parentFunction];
+    DDMathOperator *operatorInfo = [self.evaluator.operatorSet operatorForFunction:parentFunction];
     
     NSNumber *context = @1;
     

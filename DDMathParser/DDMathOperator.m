@@ -11,14 +11,6 @@
 
 @implementation DDMathOperator
 
-+ (instancetype)infoForOperatorFunction:(NSString *)function {
-    return [[DDMathOperatorSet defaultOperatorSet] operatorForFunction:function];
-}
-
-+ (NSArray *)infosForOperatorToken:(NSString *)token {
-    return [[DDMathOperatorSet defaultOperatorSet] operatorsForToken:token];
-}
-
 + (NSArray *)defaultOperators {
     static NSArray *defaultOperators = nil;
     static dispatch_once_t onceToken;

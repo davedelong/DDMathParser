@@ -12,6 +12,7 @@
 #import "DDMathParserMacros.h"
 #import "DDMathEvaluator+Private.h"
 #import "DDMathOperator.h"
+#import "DDMathOperatorSet.h"
 #import <objc/runtime.h>
 
 
@@ -497,7 +498,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
     DDExpression *percentContext = [percentExpression parentExpression];
     
     NSString *parentFunction = [percentContext function];
-    DDMathOperator *operatorInfo = [DDMathOperator infoForOperatorFunction:parentFunction];
+    DDMathOperator *operatorInfo = [self.evaluator.operatorSet operatorForFunction:parentFunction];
     
     NSNumber *context = @1;
     

@@ -543,7 +543,7 @@
     
     while ([self.operatorCharacters characterIsMember:character]) {
         NSString *tmp = [NSString stringWithCharacters:(_caseInsensitiveCharacters+start) length:length];
-        NSArray *operators = [DDMathOperator infosForOperatorToken:tmp];
+        NSArray *operators = [self.operatorSet operatorsForToken:tmp];
         if (operators.count > 0) {
             lastGood = tmp;
             lastGoodLength = length;
