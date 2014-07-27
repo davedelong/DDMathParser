@@ -102,7 +102,7 @@
 
 #pragma mark - Lazy Resolution
 
-- (DDExpression *)resolveFunction:(_DDFunctionExpression *)functionExpression variables:(NSDictionary *)variables error:(NSError *__autoreleasing*)error {
+- (DDExpression *)resolveFunction:(_DDFunctionExpression *)functionExpression variables:(NSDictionary *)variables error:(NSError * __autoreleasing *)error {
     NSString *functionName = [functionExpression function];
     
     DDExpression *e = nil;
@@ -187,7 +187,7 @@
 	return returnValue;
 }
 
-- (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error {
+- (NSNumber *)evaluateString:(NSString *)expressionString withSubstitutions:(NSDictionary *)substitutions error:(NSError * __autoreleasing *)error {
     DDMathStringTokenizer *tokenizer = [[DDMathStringTokenizer alloc] initWithString:expressionString operatorSet:self.operatorSet error:error];
     if (!tokenizer) { return nil; }
     
@@ -200,7 +200,7 @@
     return [self evaluateExpression:expression withSubstitutions:substitutions error:error];
 }
 
-- (NSNumber *)evaluateExpression:(DDExpression *)expression withSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error {
+- (NSNumber *)evaluateExpression:(DDExpression *)expression withSubstitutions:(NSDictionary *)substitutions error:(NSError * __autoreleasing *)error {
     if ([expression expressionType] == DDExpressionTypeNumber) {
         return [expression number];
     } else if ([expression expressionType] == DDExpressionTypeVariable) {
@@ -211,7 +211,7 @@
     return nil;
 }
 
-- (NSNumber *)_evaluateVariableExpression:(DDExpression *)e withSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error {
+- (NSNumber *)_evaluateVariableExpression:(DDExpression *)e withSubstitutions:(NSDictionary *)substitutions error:(NSError * __autoreleasing *)error {
 	id variableValue = [substitutions objectForKey:[e variable]];
     
     if (variableValue == nil) {
@@ -231,7 +231,7 @@
     
 }
 
-- (NSNumber *)_evaluateFunctionExpression:(_DDFunctionExpression *)e withSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error {
+- (NSNumber *)_evaluateFunctionExpression:(_DDFunctionExpression *)e withSubstitutions:(NSDictionary *)substitutions error:(NSError * __autoreleasing *)error {
     
     id result = [_functionEvaluator evaluateFunction:e variables:substitutions error:error];
     
@@ -244,7 +244,7 @@
     return numberValue;
 }
 
-- (NSNumber *)_evaluateValue:(id)value withSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error {
+- (NSNumber *)_evaluateValue:(id)value withSubstitutions:(NSDictionary *)substitutions error:(NSError * __autoreleasing *)error {
     // given an object of unknown type, this evaluates it as best as it can
     if ([value isKindOfClass:[DDExpression class]]) {
         return [self evaluateExpression:value withSubstitutions:substitutions error:error];

@@ -36,7 +36,7 @@
 
 - (DDExpressionType)expressionType { return DDExpressionTypeNumber; }
 
-- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError *__autoreleasing*)error {
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error {
 #pragma unused(evaluator, error)
 	return self;
 }

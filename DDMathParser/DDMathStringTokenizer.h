@@ -14,7 +14,7 @@
 
 @property (readonly) DDMathOperatorSet *operatorSet;
 
-- (instancetype)initWithString:(NSString *)expressionString operatorSet:(DDMathOperatorSet *)operatorSet error:(NSError *__autoreleasing*)error;
+- (instancetype)initWithString:(NSString *)expressionString operatorSet:(DDMathOperatorSet *)operatorSet error:(NSError * __autoreleasing *)error;
 
 - (DDMathStringToken *)peekNextObject;
 
@@ -30,7 +30,7 @@
 
 @interface DDMathStringTokenizer (Deprecated)
 
-+ (id)tokenizerWithString:(NSString *)expressionString error:(NSError *__autoreleasing*)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));
-- (id)initWithString:(NSString *)expressionString error:(NSError *__autoreleasing*)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));
++ (id)tokenizerWithString:(NSString *)expressionString error:(NSError * __autoreleasing *)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));
+- (id)initWithString:(NSString *)expressionString error:(NSError * __autoreleasing *)error __attribute__((deprecated("Use -initWithString:operatorSet:error: instead")));
 
 @end

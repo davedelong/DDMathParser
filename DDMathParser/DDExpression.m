@@ -19,7 +19,7 @@
 
 @implementation DDExpression
 
-+ (id)expressionFromString:(NSString *)expressionString error:(NSError *__autoreleasing*)error {
++ (id)expressionFromString:(NSString *)expressionString error:(NSError * __autoreleasing *)error {
     DDParser *parser = [DDParser parserWithString:expressionString error:error];
     return [parser parsedExpressionWithError:error];
 }
@@ -28,7 +28,7 @@
 	return [[_DDNumberExpression alloc] initWithNumber:number];
 }
 
-+ (id)functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError *__autoreleasing*)error {
++ (id)functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError * __autoreleasing *)error {
 	return [[_DDFunctionExpression alloc] initWithFunction:function arguments:arguments error:error];
 }
 
@@ -48,7 +48,7 @@
 	[NSException raise:NSInternalInconsistencyException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)];
 	return DDExpressionTypeNumber;
 }
-- (NSNumber *)evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError *__autoreleasing*)error {
+- (NSNumber *)evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error {
 	return [evaluator evaluateExpression:self withSubstitutions:substitutions error:error];
 }
 - (DDExpression *)simplifiedExpression {
@@ -60,7 +60,7 @@
 	}
 	return simplified;
 }
-- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError *__autoreleasing*)error {
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error {
 #pragma unused(evaluator, error)
 	[NSException raise:NSInvalidArgumentException format:@"this method should be overridden: %@", NSStringFromSelector(_cmd)]; 
 	return nil; 

@@ -13,6 +13,6 @@
 
 - (NSNumber *)numberByEvaluatingString;
 - (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions;
-- (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions error:(NSError *__autoreleasing*)error;
+- (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions error:(NSError * __autoreleasing *)error;
 
 @end

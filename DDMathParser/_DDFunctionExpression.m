@@ -71,7 +71,7 @@
 - (NSString *)function { return [_function lowercaseString]; }
 - (NSArray *)arguments { return _arguments; }
 
-- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError *__autoreleasing*)error {
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error {
 	BOOL canSimplify = YES;
     
     NSMutableArray *newSubexpressions = [NSMutableArray array];

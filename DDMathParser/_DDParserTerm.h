@@ -29,11 +29,11 @@ typedef NS_ENUM(NSInteger, DDParserTermType) {
 @property (nonatomic,readonly) DDParserTermType type;
 @property (nonatomic,readonly,strong) DDMathStringToken *token;
 
-+ (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError *__autoreleasing*)error;
-+ (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError *__autoreleasing*)error;
-- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError *__autoreleasing*)error;
++ (id)rootTermWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error;
++ (id)termWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error;
+- (id)_initWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error;
 
-- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError *__autoreleasing*)error;
-- (DDExpression *)expressionWithError:(NSError *__autoreleasing*)error;
+- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError * __autoreleasing *)error;
+- (DDExpression *)expressionWithError:(NSError * __autoreleasing *)error;
 
 @end

@@ -11,6 +11,6 @@
 
 @interface _DDFunctionExpression : DDExpression
 
-- (id)initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError *__autoreleasing*)error;
+- (id)initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError * __autoreleasing *)error;
 
 @end

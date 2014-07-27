@@ -21,18 +21,18 @@ typedef NS_ENUM(NSInteger, DDExpressionType) {
 
 @property (nonatomic, readonly, weak) DDExpression *parentExpression;
 
-+ (id)expressionFromString:(NSString *)expressionString error:(NSError *__autoreleasing*)error;
++ (id)expressionFromString:(NSString *)expressionString error:(NSError * __autoreleasing *)error;
 
 + (id)numberExpressionWithNumber:(NSNumber *)number;
-+ (id)functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError *__autoreleasing*)error;
++ (id)functionExpressionWithFunction:(NSString *)function arguments:(NSArray *)arguments error:(NSError * __autoreleasing *)error;
 + (id)variableExpressionWithVariable:(NSString *)variable;
 
 - (DDExpressionType)expressionType;
 
-- (NSNumber *)evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError *__autoreleasing*)error DDMathParserDeprecated("use -[DDMathEvaluator evaluateExpression:withSubstitutions:error:] instead");
+- (NSNumber *)evaluateWithSubstitutions:(NSDictionary *)substitutions evaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error DDMathParserDeprecated("use -[DDMathEvaluator evaluateExpression:withSubstitutions:error:] instead");
 
 - (DDExpression *)simplifiedExpression;
-- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError *__autoreleasing*)error;
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error;
 
 #pragma mark Number methods
 @property (readonly) NSNumber *number;
