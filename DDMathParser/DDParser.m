@@ -17,6 +17,7 @@
 #import "DDExpression.h"
 #import "DDMathOperator_Internal.h"
 
+/*
 static inline void DDOperatorSetAssociativity(NSString *o, DDOperatorAssociativity a) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
     info.associativity = a;
@@ -26,25 +27,26 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
     return info.associativity;
 }
+ */
 
 @implementation DDParser {
 	DDMathStringTokenizer * _tokenizer;
 }
 
-+ (id)parserWithString:(NSString *)string error:(NSError **)error {
++ (id)parserWithString:(NSString *)string error:(NSError * __autoreleasing *)error {
     return [[self alloc] initWithString:string error:error];
 }
 
-- (id)initWithString:(NSString *)string error:(NSError **)error {
+- (id)initWithString:(NSString *)string error:(NSError * __autoreleasing *)error {
     DDMathStringTokenizer *t = [[DDMathStringTokenizer alloc] initWithString:string operatorSet:nil error:error];
     return [self initWithTokenizer:t error:error];
 }
 
-+ (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError **)error {
++ (id)parserWithTokenizer:(DDMathStringTokenizer *)tokenizer error:(NSError * __autoreleasing *)error {
 	return [[self alloc] initWithTokenizer:tokenizer error:error];
 }
 
-- (id)initWithTokenizer:(DDMathStringTokenizer *)t error:(NSError **)error {
+- (id)initWithTokenizer:(DDMathStringTokenizer *)t error:(NSError * __autoreleasing *)error {
 	ERR_ASSERT(error);
 	self = [super init];
 	if (self) {
@@ -62,7 +64,7 @@ static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     return operator.associativity;
 }
 
-- (DDExpression *)parsedExpressionWithError:(NSError **)error {
+- (DDExpression *)parsedExpressionWithError:(NSError * __autoreleasing *)error {
 	ERR_ASSERT(error);
 	[_tokenizer reset]; //reset the token stream
     

@@ -25,7 +25,7 @@
 	NSArray *_arguments;
 }
 
-- (id)initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError **)error {
+- (id)initWithFunction:(NSString *)f arguments:(NSArray *)a error:(NSError * __autoreleasing *)error {
 	self = [super init];
 	if (self) {
 		for (id arg in a) {
@@ -71,7 +71,7 @@
 - (NSString *)function { return [_function lowercaseString]; }
 - (NSArray *)arguments { return _arguments; }
 
-- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error {
 	BOOL canSimplify = YES;
     
     NSMutableArray *newSubexpressions = [NSMutableArray array];

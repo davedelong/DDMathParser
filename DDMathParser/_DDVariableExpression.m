@@ -39,6 +39,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
+#pragma unused(zone)
     return [[[self class] alloc] initWithVariable:[self variable]];
 }
 
@@ -46,7 +47,7 @@
 
 - (NSString *)variable { return _variable; }
 
-- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error {
+- (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError * __autoreleasing *)error {
 #pragma unused(evaluator, error)
 	return self;
 }

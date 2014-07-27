@@ -35,15 +35,15 @@ typedef NS_ENUM(NSInteger, DDExpressionType) {
 - (DDExpression *)simplifiedExpressionWithEvaluator:(DDMathEvaluator *)evaluator error:(NSError **)error;
 
 #pragma mark Number methods
-@property (readonly) NSNumber *number;
+@property (nonatomic, readonly) NSNumber *number;
 
 #pragma mark Function methods
 
-@property (readonly) NSString *function;
-@property (readonly) NSArray *arguments; // an array of DDExpressions
+@property (nonatomic, readonly) NSString *function;
+@property (nonatomic, readonly) NSArray *arguments; // an array of DDExpressions
 
 #pragma mark Variable
 
-@property (readonly) NSString *variable;
+@property (nonatomic, readonly) NSString *variable;
 
 @end

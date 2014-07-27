@@ -11,8 +11,8 @@
 
 @interface DDMathOperator : NSObject <NSCopying>
 
-@property (nonatomic, readonly, strong) NSString *function;
-@property (nonatomic, readonly, strong) NSArray *tokens;
+@property (nonatomic, readonly) NSString *function;
+@property (nonatomic, readonly) NSArray *tokens;
 @property (nonatomic, readonly) DDOperatorArity arity;
 @property (nonatomic, assign) DDOperatorAssociativity associativity;
 
@@ -33,7 +33,7 @@
  */
 @interface DDMathOperatorSet : NSObject <NSFastEnumeration, NSCopying>
 
-@property (readonly, copy) NSArray *operators;
+@property (nonatomic, readonly, copy) NSArray *operators;
 @property (nonatomic) BOOL interpretsPercentSignAsModulo; // default is YES
 
 + (instancetype)defaultOperatorSet;
