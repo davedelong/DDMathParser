@@ -12,6 +12,6 @@
 
 @property (nonatomic,readonly) NSString *functionName;
 
-- (id)_initWithFunction:(NSString *)function subterms:(NSArray *)terms error:(NSError **)error;
+- (id)_initWithFunction:(NSString *)function subterms:(NSArray *)terms error:(NSError * __autoreleasing *)error;
 
 @end

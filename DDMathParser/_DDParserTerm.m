@@ -62,7 +62,7 @@
         
         return term;
     } else {
-        *error = ERR(DDErrorCodeInvalidFormat, @"can't create a term with a nil token");
+        *error = DD_ERR(DDErrorCodeInvalidFormat, @"can't create a term with a nil token");
     }
     return nil;
 }

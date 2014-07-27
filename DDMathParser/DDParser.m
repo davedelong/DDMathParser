@@ -18,16 +18,20 @@
 #import "DDMathOperator_Internal.h"
 
 /*
+KTAM REMOVE COMMENTED OUT CODE
 static inline void DDOperatorSetAssociativity(NSString *o, DDOperatorAssociativity a) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
     info.associativity = a;
 }
+*/
 
+/*
+KTAM REMOVE COMMENTED OUT CODE
 static inline DDOperatorAssociativity DDOperatorGetAssociativity(NSString *o) {
     DDMathOperator *info = [DDMathOperator infoForOperatorFunction:o];
     return info.associativity;
 }
- */
+*/
 
 @implementation DDParser {
 	DDMathStringTokenizer * _tokenizer;

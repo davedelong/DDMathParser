@@ -14,8 +14,8 @@
 #define ERR_ASSERT(_e) NSAssert((_e) != nil, @"NULL out error")
 #endif
 
-#ifndef ERR
-#define ERR(_c,_f,...) [NSError errorWithDomain:DDMathParserErrorDomain code:(_c) userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:(_f), ##__VA_ARGS__]}]
+#ifndef DD_ERR
+#define DD_ERR(_c,_f,...) [NSError errorWithDomain:DDMathParserErrorDomain code:(_c) userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:(_f), ##__VA_ARGS__]}]
 #endif
 
 #define DDMathParserDeprecated(_r) __attribute__((deprecated(_r)))

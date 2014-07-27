@@ -191,7 +191,7 @@
         
         if ([token operatorType] == DDOperatorInvalid) {
             if (error != nil) {
-                *error = ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
+                *error = DD_ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
             }
             return NO;
         }
@@ -401,7 +401,7 @@
     
     if (!token) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidNumber, @"unable to parse number");
+        *error = DD_ERR(DDErrorCodeInvalidNumber, @"unable to parse number");
     }
     return token;
 }
@@ -426,7 +426,7 @@
     
     if (!token) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidNumber, @"unable to parse hex number");
+        *error = DD_ERR(DDErrorCodeInvalidNumber, @"unable to parse hex number");
     }
     return token;
 }
@@ -457,7 +457,7 @@
     }
     
     _characterIndex = start;
-    *error = ERR(DDErrorCodeInvalidIdentifier, @"unable to parse identifier");
+    *error = DD_ERR(DDErrorCodeInvalidIdentifier, @"unable to parse identifier");
     return nil;
 }
 
@@ -468,7 +468,7 @@
     DDMathStringToken *token = [self _parseFunctionWithError:error];
     if (token == nil) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidVariable, @"variable names must be at least 1 character long");
+        *error = DD_ERR(DDErrorCodeInvalidVariable, @"variable names must be at least 1 character long");
     } else {
         token = [DDMathStringToken mathStringTokenWithToken:[token token] type:DDTokenTypeVariable];
         *error = nil;
@@ -509,7 +509,7 @@
     
     if ([self _peekNextCharacter] != quoteChar) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidVariable, @"unable to parse quoted variable name");
+        *error = DD_ERR(DDErrorCodeInvalidVariable, @"Unable to parsed quoted variable name");
         return nil;
     } else {
         _characterIndex++;
@@ -546,7 +546,7 @@
     }
     
     _characterIndex = start;
-    *error = ERR(DDErrorCodeInvalidOperator, @"%C is not a valid operator", character);
+    *error = DD_ERR(DDErrorCodeInvalidOperator, @"%C is not a valid operator", character);
     return nil;
 }
 
