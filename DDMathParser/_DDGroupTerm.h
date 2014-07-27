@@ -9,9 +9,9 @@
 
 @interface _DDGroupTerm : _DDParserTerm
 
-@property (nonatomic,readonly,strong) NSMutableArray *subterms;
+@property (nonatomic,readonly) NSMutableArray *subterms;
 
-- (id)_initWithSubterms:(NSArray *)terms error:(NSError **)error;
+- (id)_initWithSubterms:(NSArray *)terms error:(NSError * __autoreleasing *)error;
 - (void)_setSubterms:(NSArray *)newTerms;
 
 @end

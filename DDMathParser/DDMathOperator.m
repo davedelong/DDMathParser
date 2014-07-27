@@ -24,6 +24,24 @@
     return [[DDMathOperatorSet defaultOperatorSet] operatorsForToken:token];
 }
 
++ (DDOperatorAssociativity)associativityForPowerExpressions {
+    static DDOperatorAssociativity powerAssociativity = -1;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSExpression *powerExpression = [NSExpression expressionWithFormat:@"2 ** 3 ** 2"];
+        NSNumber *powerResult = [powerExpression expressionValueWithObject:nil
+                                                                   context:nil];
+        int result = [powerResult intValue];
+        if (result == 512) {
+            powerAssociativity = DDOperatorAssociativityRight;
+        }
+        else if (result == 64) {
+            powerAssociativity = DDOperatorAssociativityLeft;
+        }
+    });
+    return powerAssociativity;
+}
+
 #define UNARY DDOperatorArityUnary
 #define BINARY DDOperatorArityBinary
 #define LEFT DDOperatorAssociativityLeft
@@ -117,13 +135,7 @@
 		//determine what associativity NSPredicate/NSExpression is using
 		//mathematically, it should be right associative, but it's usually parsed as left associative
 		//rdar://problem/8692313
-		NSExpression *powerExpression = [NSExpression expressionWithFormat:@"2 ** 3 ** 2"];
-		NSNumber *powerResult = [powerExpression expressionValueWithObject:nil context:nil];
-        DDOperatorAssociativity powerAssociativity = LEFT;
-		if ([powerResult intValue] == 512) {
-			powerAssociativity = RIGHT;
-		}
-        
+        DDOperatorAssociativity powerAssociativity = [self associativityForPowerExpressions];
         [operators addObject:OPERATOR(DDOperatorPower, (@[@"**"]), BINARY, precedence, powerAssociativity)];
         precedence++;
         
@@ -188,6 +200,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
+#pragma unused(zone)
     return [[[self class] alloc] initWithOperatorFunction:_function
                                                    tokens:_tokens
                                                     arity:_arity
@@ -246,7 +259,7 @@
 - (instancetype)initWithOperators:(NSArray *)operators {
     self = [super init];
     if (self) {
-        _operators = [NSMutableOrderedSet orderedSetWithArray:[DDMathOperator _defaultOperators]];
+        _operators = [NSMutableOrderedSet orderedSetWithArray:operators];
         _operatorsByFunction = [NSMutableDictionary dictionary];
         _operatorsByToken = [NSMutableDictionary dictionary];
         
@@ -271,6 +284,7 @@
 }
 
 - (id)copyWithZone:(NSZone *)zone {
+#pragma unused(zone)
     DDMathOperatorSet *dupe = [[[self class] alloc] initWithOperators:_operators.array];
     dupe.interpretsPercentSignAsModulo = self.interpretsPercentSignAsModulo;
     return dupe;
@@ -373,19 +387,17 @@
                 // the new operator has a precedence higher than the original operator
                 // all operators that have an equivalent (or higher) precedence need to be bumped up one
                 // to accomodate the new operator
-                [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    DDMathOperator *op = obj;
+                for (DDMathOperator *op in _operators) {
                     if (op.precedence >= newPrecedence) {
                         op.precedence++;
                     }
-                }];
+                }
             } else {
-                [_operators enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    DDMathOperator *op = obj;
+                for (DDMathOperator *op in _operators) {
                     if (op.precedence > newPrecedence || op == newOperator) {
                         op.precedence++;
                     }
-                }];
+                }
             }
         }
         

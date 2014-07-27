@@ -20,19 +20,19 @@
 
 @property (nonatomic, readonly) NSCharacterSet *operatorCharacters;
 
-- (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error;
-- (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error;
-- (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError **)error;
-- (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError **)error;
+- (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError * __autoreleasing *)error;
+- (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError * __autoreleasing *)error;
+- (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError * __autoreleasing *)error;
+- (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError * __autoreleasing *)error;
 
 - (unichar)_peekNextCharacter;
 - (unichar)_nextCharacter;
 
-- (DDMathStringToken *)_nextTokenWithError:(NSError **)error;
-- (DDMathStringToken *)_parseNumberWithError:(NSError **)error;
-- (DDMathStringToken *)_parseFunctionWithError:(NSError **)error;
-- (DDMathStringToken *)_parseVariableWithError:(NSError **)error;
-- (DDMathStringToken *)_parseOperatorWithError:(NSError **)error;
+- (DDMathStringToken *)_nextTokenWithError:(NSError * __autoreleasing *)error;
+- (DDMathStringToken *)_parseNumberWithError:(NSError * __autoreleasing *)error;
+- (DDMathStringToken *)_parseFunctionWithError:(NSError * __autoreleasing *)error;
+- (DDMathStringToken *)_parseVariableWithError:(NSError * __autoreleasing *)error;
+- (DDMathStringToken *)_parseOperatorWithError:(NSError * __autoreleasing *)error;
 
 @end
 
@@ -109,7 +109,7 @@
     free(_caseInsensitiveCharacters);
 }
 
-- (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError **)error {
+- (BOOL)_processToken:(DDMathStringToken *)token withError:(NSError * __autoreleasing *)error {
     //figure out if "-" and "+" are unary or binary
     (void)[self _processUnknownOperatorToken:token withError:error];
     
@@ -128,7 +128,7 @@
     return YES;
 }
 
-- (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError **)error {
+- (BOOL)_processUnknownOperatorToken:(DDMathStringToken *)token withError:(NSError * __autoreleasing *)error {
     DDMathStringToken *previousToken = [_tokens lastObject];
     if ([token tokenType] == DDTokenTypeOperator && [token operatorType] == DDOperatorInvalid) {
         NSString *resolvedOperator = DDOperatorInvalid;
@@ -191,7 +191,7 @@
         
         if ([token operatorType] == DDOperatorInvalid) {
             if (error != nil) {
-                *error = ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
+                *error = DD_ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
             }
             return NO;
         }
@@ -200,7 +200,8 @@
     return YES;
 }
 
-- (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError **)error {
+- (BOOL)_processImplicitMultiplicationWithToken:(DDMathStringToken *)token error:(NSError * __autoreleasing *)error {
+#pragma unused(error)
     // See: https://github.com/davedelong/DDMathParser/wiki/Implicit-Multiplication
     
     DDMathStringToken *previousToken = [_tokens lastObject];
@@ -227,7 +228,8 @@
     return YES;
 }
 
-- (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError **)error {
+- (BOOL)_processArgumentlessFunctionWithToken:(DDMathStringToken *)token error:(NSError * __autoreleasing *)error {
+#pragma unused(error)
     DDMathStringToken *previousToken = [_tokens lastObject];
     if (previousToken != nil && [previousToken tokenType] == DDTokenTypeFunction) {
         if ([token tokenType] != DDTokenTypeOperator || [token operatorType] != DDOperatorParenthesisOpen || token == nil) {
@@ -303,7 +305,7 @@
     return character;
 }
 
-- (DDMathStringToken *)_nextTokenWithError:(NSError **)error {
+- (DDMathStringToken *)_nextTokenWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     unichar next = [self _peekNextCharacter];
     while (DD_IS_WHITESPACE(next)) {
@@ -339,7 +341,7 @@
     return token;
 }
 
-- (DDMathStringToken *)_parseNumberWithError:(NSError **)error {
+- (DDMathStringToken *)_parseNumberWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     DDMathStringToken *token = nil;
@@ -399,12 +401,12 @@
     
     if (!token) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidNumber, @"unable to parse number");
+        *error = DD_ERR(DDErrorCodeInvalidNumber, @"unable to parse number");
     }
     return token;
 }
 
-- (DDMathStringToken *)_parseHexNumberWithError:(NSError **)error {
+- (DDMathStringToken *)_parseHexNumberWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     DDMathStringToken *token = nil;
     NSUInteger start = _characterIndex;
@@ -424,12 +426,12 @@
     
     if (!token) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidNumber, @"unable to parse hex number");
+        *error = DD_ERR(DDErrorCodeInvalidNumber, @"unable to parse hex number");
     }
     return token;
 }
 
-- (DDMathStringToken *)_parseFunctionWithError:(NSError **)error {
+- (DDMathStringToken *)_parseFunctionWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     NSUInteger length = 0;
@@ -455,18 +457,18 @@
     }
     
     _characterIndex = start;
-    *error = ERR(DDErrorCodeInvalidIdentifier, @"unable to parse identifier");
+    *error = DD_ERR(DDErrorCodeInvalidIdentifier, @"unable to parse identifier");
     return nil;
 }
 
-- (DDMathStringToken *)_parseVariableWithError:(NSError **)error {
+- (DDMathStringToken *)_parseVariableWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     _characterIndex++; // consume the $
     DDMathStringToken *token = [self _parseFunctionWithError:error];
     if (token == nil) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidVariable, @"variable names must be at least 1 character long");
+        *error = DD_ERR(DDErrorCodeInvalidVariable, @"variable names must be at least 1 character long");
     } else {
         token = [DDMathStringToken mathStringTokenWithToken:[token token] type:DDTokenTypeVariable];
         *error = nil;
@@ -474,7 +476,7 @@
     return token;
 }
 
-- (DDMathStringToken *)_parseStringVariableWithError:(NSError **)error {
+- (DDMathStringToken *)_parseStringVariableWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     unichar quoteChar = [self _peekNextCharacter];
@@ -507,7 +509,7 @@
     
     if ([self _peekNextCharacter] != quoteChar) {
         _characterIndex = start;
-        *error = ERR(DDErrorCodeInvalidVariable, @"Unable to parsed quoted variable name");
+        *error = DD_ERR(DDErrorCodeInvalidVariable, @"Unable to parsed quoted variable name");
         return nil;
     } else {
         _characterIndex++;
@@ -516,7 +518,7 @@
     }
 }
 
-- (DDMathStringToken *)_parseOperatorWithError:(NSError **)error {
+- (DDMathStringToken *)_parseOperatorWithError:(NSError * __autoreleasing *)error {
     ERR_ASSERT(error);
     NSUInteger start = _characterIndex;
     NSUInteger length = 1;
@@ -544,7 +546,7 @@
     }
     
     _characterIndex = start;
-    *error = ERR(DDErrorCodeInvalidOperator, @"%C is not a valid operator", character);
+    *error = DD_ERR(DDErrorCodeInvalidOperator, @"%C is not a valid operator", character);
     return nil;
 }
 

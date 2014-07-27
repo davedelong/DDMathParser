@@ -11,13 +11,14 @@
 
 @interface DDMathOperator : NSObject <NSCopying>
 
-@property (nonatomic, readonly, strong) NSString *function;
-@property (nonatomic, readonly, strong) NSArray *tokens;
+@property (nonatomic, readonly) NSString *function;
+@property (nonatomic, readonly) NSArray *tokens;
 @property (nonatomic, readonly) DDOperatorArity arity;
 @property (nonatomic, assign) DDOperatorAssociativity associativity;
 
 + (instancetype)infoForOperatorFunction:(NSString *)function;
 + (NSArray *)infosForOperatorToken:(NSString *)token;
++ (DDOperatorAssociativity)associativityForPowerExpressions;
 
 // the only reason you'd want to init a new \c MathOperator is so you can pass it to the -[DDMathOperatorSet addOperator:...] methods
 - (id)initWithOperatorFunction:(NSString *)function
@@ -33,7 +34,7 @@
  */
 @interface DDMathOperatorSet : NSObject <NSFastEnumeration, NSCopying>
 
-@property (readonly, copy) NSArray *operators;
+@property (nonatomic, readonly, copy) NSArray *operators;
 @property (nonatomic) BOOL interpretsPercentSignAsModulo; // default is YES
 
 + (instancetype)defaultOperatorSet;
