@@ -48,6 +48,10 @@
         } else {
             // nil gets returned to indicate the closure of a group
             [currentGroups removeLastObject];
+            
+            if (currentGroups.count == 0) {
+                *error = ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
+            }
         }
     }
     

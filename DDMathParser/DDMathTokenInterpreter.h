@@ -10,10 +10,16 @@
 
 @class DDMathTokenizer;
 
+typedef NS_OPTIONS(NSInteger, DDMathTokenInterpreterOptions) {
+    DDMathTokenInterpreterOptionsAllowsArgumentlessFunctions = 1 << 0,
+    DDMathTokenInterpreterOptionsAllowsImplicitMultiplication = 1 << 1,
+};
+
 @interface DDMathTokenInterpreter : NSObject
 
 @property (readonly) NSArray *tokens;
 
 - (instancetype)initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
+- (instancetype)initWithTokenizer:(DDMathTokenizer *)tokenizer options:(DDMathTokenInterpreterOptions)options error:(NSError **)error;
 
 @end

@@ -17,6 +17,9 @@
 @property (readonly) DDMathTokenizer *tokenizer;
 @property (readonly) DDMathOperatorSet *operatorSet;
 
+@property (readonly) BOOL allowsArgumentlessFunctions;
+@property (readonly) BOOL allowsImplicitMultiplication;
+
 @end
 
 @implementation DDMathTokenInterpreter {
@@ -24,11 +27,19 @@
 }
 
 - (instancetype)initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError *__autoreleasing *)error {
+    DDMathTokenInterpreterOptions options = DDMathTokenInterpreterOptionsAllowsArgumentlessFunctions | DDMathTokenInterpreterOptionsAllowsImplicitMultiplication;
+    return [self initWithTokenizer:tokenizer options:options error:error];
+}
+
+- (instancetype)initWithTokenizer:(DDMathTokenizer *)tokenizer options:(DDMathTokenInterpreterOptions)options error:(NSError *__autoreleasing *)error {
     self = [super init];
     if (self) {
         _tokens = [NSMutableArray array];
         _tokenizer = tokenizer;
         _operatorSet = tokenizer.operatorSet;
+        
+        _allowsArgumentlessFunctions = !!(options & DDMathTokenInterpreterOptionsAllowsArgumentlessFunctions);
+        _allowsImplicitMultiplication = !!(options & DDMathTokenInterpreterOptionsAllowsImplicitMultiplication);
         
         NSError *localError = nil;
         if ([self _interpretTokens:tokenizer error:&localError] == NO) {
@@ -71,16 +82,20 @@
     
     NSMutableArray *tokens = [NSMutableArray array];
     
-    // this checks to see if the previous token was a function that takes no arguments
-    NSArray *cleaned = [self extraTokensForArgumentlessFunction:replacement previousToken:lastToken error:error];
-    if (cleaned == nil) { return nil; }
-    [tokens addObjectsFromArray:cleaned];
+    if (self.allowsArgumentlessFunctions) {
+        // this checks to see if the previous token was a function that takes no arguments
+        NSArray *cleaned = [self extraTokensForArgumentlessFunction:replacement previousToken:lastToken error:error];
+        if (cleaned == nil) { return nil; }
+        [tokens addObjectsFromArray:cleaned];
+    }
     
-    // this checks to see if we need to inject a multiplication token
-    lastToken = tokens.lastObject ?: lastToken;
-    cleaned = [self extraTokensForImplicitMultiplication:replacement previousToken:lastToken error:error];
-    if (cleaned == nil) { return nil; }
-    [tokens addObjectsFromArray:cleaned];
+    if (self.allowsImplicitMultiplication) {
+        // this checks to see if we need to inject a multiplication token
+        lastToken = tokens.lastObject ?: lastToken;
+        NSArray *cleaned = [self extraTokensForImplicitMultiplication:replacement previousToken:lastToken error:error];
+        if (cleaned == nil) { return nil; }
+        [tokens addObjectsFromArray:cleaned];
+    }
     
     
     [tokens addObject:token];
