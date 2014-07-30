@@ -21,11 +21,6 @@
 
 @property (nonatomic, readonly) NSCharacterSet *operatorCharacters;
 
-- (BOOL)_processToken:(DDMathToken *)token withError:(NSError **)error;
-- (BOOL)_processUnknownOperatorToken:(DDMathToken *)token withError:(NSError **)error;
-- (BOOL)_processImplicitMultiplicationWithToken:(DDMathToken *)token error:(NSError **)error;
-- (BOOL)_processArgumentlessFunctionWithToken:(DDMathToken *)token error:(NSError **)error;
-
 - (unichar)_peekNextCharacter;
 - (unichar)_nextCharacter;
 
@@ -44,7 +39,7 @@
     NSUInteger _length;
     NSUInteger _characterIndex;
     
-    NSArray *_tokens;
+    NSMutableArray *_tokens;
     NSUInteger _tokenIndex;
     
 }
@@ -90,12 +85,8 @@
         _tokens = [[NSMutableArray alloc] init];
         DDMathToken *token = nil;
         while((token = [self _nextTokenWithError:error]) != nil) {
-            if (![self _processToken:token withError:error]) {
-                return nil;
-            }
+            [_tokens addObject:token];
         }
-        
-        [self _processToken:nil withError:error];
 		
         if (error && *error) {
             self = nil;
@@ -108,166 +99,6 @@
 - (void)dealloc {
     free(_characters);
     free(_caseInsensitiveCharacters);
-}
-
-- (BOOL)_processToken:(DDMathToken *)token withError:(NSError **)error {
-    //figure out if "-" and "+" are unary or binary
-    (void)[self _processUnknownOperatorToken:token withError:error];
-    
-    if (token.mathOperator.function == DDMathOperatorUnaryPlus) {
-        // the unary + operator is a no-op operator.  It does nothing, so we'll throw it out
-        return YES;
-    }
-    
-    //this adds support for not adding parentheses to functions
-    (void)[self _processArgumentlessFunctionWithToken:token error:error];
-    
-    //this adds support for implicit multiplication
-    (void)[self _processImplicitMultiplicationWithToken:token error:error];
-    
-    [self appendToken:token];
-    return YES;
-}
-
-- (BOOL)_processUnknownOperatorToken:(DDMathToken *)token withError:(NSError **)error {
-    // short circuit if this isn't an unknown operator
-    if (token.tokenType != DDTokenTypeOperator || (token.tokenType == DDTokenTypeOperator && token.ambiguous == NO)) { return YES; }
-    
-    DDMathToken *previousToken = [_tokens lastObject];
-    DDMathOperator *resolvedOperator = nil;
-    
-    DDMathOperatorArity arity = DDMathOperatorArityBinary;
-    
-    if (previousToken == nil) {
-        // this is the first token in the stream
-        // and of necessity must be a unary token
-        arity = DDMathOperatorArityUnary;
-        
-    } else if (previousToken.tokenType == DDTokenTypeOperator) {
-        DDMathOperator *previousOperator = previousToken.mathOperator;
-        
-        if (previousOperator.arity == DDMathOperatorArityBinary) {
-            // a binary operator can't be followed by a binary operator
-            // therefore this is a unary operator
-            arity = DDMathOperatorArityUnary;
-            
-        } else if (previousOperator.arity == DDMathOperatorArityUnary) {
-            if (previousOperator.associativity == DDMathOperatorAssociativityRight) {
-                // a right-assoc unary operator can't be followed by a binary operator
-                // therefore this needs to be a unary operator
-                arity = DDMathOperatorArityUnary;
-                
-            } else {
-                // a left-assoc unary operator can be followed by:
-                // another left-assoc unary operator,
-                // a binary operator,
-                // or a right-assoc unary operator (assuming implicit multiplication)
-                // we'll prefer them from left-to-right:
-                // left-assoc unary, binary, right-assoc unary
-                // TODO: is this correct?? should we be looking at precedence instead?
-                resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityLeft];
-                if (resolvedOperator == nil) {
-                    resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityBinary];
-                }
-                if (resolvedOperator == nil) {
-                    resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityRight];
-                }
-            }
-        } else if (previousOperator.arity == DDMathOperatorArityUnknown) {
-            // the previous operator has unknown arity. this should only happen when preceded by a comma
-            // we'll assume this should be a unary operator
-            arity = DDMathOperatorArityUnary;
-            
-        }
-    } else if (previousToken.tokenType == DDTokenTypeNumber || previousToken.tokenType == DDTokenTypeVariable) {
-        // a number/variable can be followed by:
-        // a left-assoc unary operator,
-        // a binary operator,
-        // or a right-assoc unary operator (assuming implicit multiplication)
-        // we'll prefer them from left-to-right:
-        // left-assoc unary, binary, right-assoc unary
-        // TODO: is this correct?? should we be looking at precedence instead?
-        resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityLeft];
-        if (resolvedOperator == nil) {
-            resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityBinary];
-        }
-        if (resolvedOperator == nil) {
-            resolvedOperator = [self.operatorSet operatorForToken:token.token arity:DDMathOperatorArityUnary associativity:DDMathOperatorAssociativityRight];
-        }
-    } else if (previousToken.tokenType == DDTokenTypeFunction) {
-        // default to binary
-    }
-    
-    if (resolvedOperator == nil) {
-        resolvedOperator = [self.operatorSet operatorForToken:token.token arity:arity];
-    }
-    
-    token.mathOperator = resolvedOperator;
-    
-    if (token.ambiguous == YES) {
-        if (error != nil) {
-            *error = ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
-        }
-        return NO;
-    }
-    
-    return YES;
-}
-
-- (BOOL)_processImplicitMultiplicationWithToken:(DDMathToken *)token error:(NSError **)error {
-    // See: https://github.com/davedelong/DDMathParser/wiki/Implicit-Multiplication
-    
-    DDMathToken *previousToken = [_tokens lastObject];
-    if (previousToken != nil && token != nil) {
-        BOOL shouldInsertMultiplier = NO;
-        if (previousToken.tokenType == DDTokenTypeNumber ||
-            previousToken.tokenType == DDTokenTypeVariable ||
-            (previousToken.mathOperator.arity == DDMathOperatorArityUnary && previousToken.mathOperator.associativity == DDMathOperatorAssociativityLeft)) {
-            
-            if (token.tokenType != DDTokenTypeOperator ||
-                (token.mathOperator.arity == DDMathOperatorArityUnary && token.mathOperator.associativity == DDMathOperatorAssociativityRight)) {
-                //inject a "multiplication" token:
-                shouldInsertMultiplier = YES;
-            }
-            
-        }
-        
-        if (shouldInsertMultiplier) {
-            DDMathToken *multiply = [[DDMathToken alloc] initWithToken:@"*" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDMathOperatorMultiply]];
-            
-            [self appendToken:multiply];
-        }
-    }
-    return YES;
-}
-
-- (BOOL)_processArgumentlessFunctionWithToken:(DDMathToken *)token error:(NSError **)error {
-    DDMathToken *previousToken = [_tokens lastObject];
-    if (previousToken != nil && previousToken.tokenType == DDTokenTypeFunction) {
-        if (token == nil || token.tokenType != DDTokenTypeOperator || token.mathOperator.function != DDMathOperatorParenthesisOpen) {
-            DDMathToken *openParen = [[DDMathToken alloc] initWithToken:@"(" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDMathOperatorParenthesisOpen]];
-            [self appendToken:openParen];
-            
-            DDMathToken *closeParen = [[DDMathToken alloc] initWithToken:@")" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDMathOperatorParenthesisClose]];
-            [self appendToken:closeParen];
-        }
-    }
-    return YES;
-}
-
-// methods overridable by subclasses
-- (void)didParseToken:(DDMathToken *)token {
-    // default implementation does nothing
-#pragma unused(token)
-    return;
-}
-
-// methods that can be used by subclasses
-- (void)appendToken:(DDMathToken *)token {
-    [self didParseToken:token];
-    if (token) {
-        [(NSMutableArray *)_tokens addObject:token];
-    }
 }
 
 #pragma mark NSEnumerator methods

@@ -20,12 +20,6 @@
 
 - (void)reset;
 
-// methods overridable by subclasses
-- (void)didParseToken:(DDMathToken *)token;
-
-// methods that can be used by subclasses
-- (void)appendToken:(DDMathToken *)token;
-
 @end
 
 @interface DDMathTokenizer (Deprecated)
