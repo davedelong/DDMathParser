@@ -16,6 +16,8 @@ typedef NS_OPTIONS(NSInteger, DDMathTokenInterpreterOptions) {
     DDMathTokenInterpreterOptionsImplicitMultiplicationHasHigherPrecedence = 1 << 2,
 };
 
+extern const DDMathTokenInterpreterOptions DDMathTokenInterpreterDefaultOptions;
+
 @interface DDMathTokenInterpreter : NSObject
 
 @property (readonly) NSArray *tokens;

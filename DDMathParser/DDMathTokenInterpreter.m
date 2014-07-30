@@ -12,6 +12,8 @@
 #import "DDMathOperator.h"
 #import "DDMathOperatorSet.h"
 
+const DDMathTokenInterpreterOptions DDMathTokenInterpreterDefaultOptions = DDMathTokenInterpreterOptionsAllowsArgumentlessFunctions | DDMathTokenInterpreterOptionsAllowsImplicitMultiplication;
+
 @interface DDMathTokenInterpreter ()
 
 @property (readonly) DDMathTokenizer *tokenizer;
@@ -28,8 +30,7 @@
 }
 
 - (instancetype)initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError *__autoreleasing *)error {
-    DDMathTokenInterpreterOptions options = DDMathTokenInterpreterOptionsAllowsArgumentlessFunctions | DDMathTokenInterpreterOptionsAllowsImplicitMultiplication;
-    return [self initWithTokenizer:tokenizer options:options error:error];
+    return [self initWithTokenizer:tokenizer options:DDMathTokenInterpreterDefaultOptions error:error];
 }
 
 - (instancetype)initWithTokenizer:(DDMathTokenizer *)tokenizer options:(DDMathTokenInterpreterOptions)options error:(NSError *__autoreleasing *)error {
@@ -56,13 +57,12 @@
 
 - (BOOL)_interpretTokens:(DDMathTokenizer *)tokenizer error:(NSError **)error {
     
-    for (DDMathToken *token in tokenizer) {
+    for (DDMathToken *token in tokenizer.tokens) {
         NSArray *newTokens = [self tokensForToken:token error:error];
         if (newTokens == nil) { return NO; }
         [_tokens addObjectsFromArray:newTokens];
     }
     
-    // pass "nil" to indicate the last token:
     NSArray *newTokens = [self tokensForToken:nil error:error];
     if (newTokens == nil) { return NO; }
     [_tokens addObjectsFromArray:newTokens];
@@ -72,10 +72,13 @@
 
 - (NSArray *)tokensForToken:(DDMathToken *)token error:(NSError **)error {
     DDMathToken *lastToken = self.tokens.lastObject;
+    DDMathToken *replacement = token;
     
-    //figure out if "-" and "+" are unary or binary
-    DDMathToken *replacement = [self replacementTokenForAmbiguousOperator:token previousToken:lastToken error:error];
-    if (replacement == nil) { return nil; }
+    if (token != nil) {
+        //figure out if "-" and "+" are unary or binary
+        replacement = [self replacementTokenForAmbiguousOperator:token previousToken:lastToken error:error];
+        if (replacement == nil) { return nil; }
+    }
     
     if (replacement.mathOperator.function == DDMathOperatorUnaryPlus) {
         // the unary + operator is a no-op operator.  It does nothing, so we'll throw it out
@@ -99,8 +102,9 @@
         [tokens addObjectsFromArray:cleaned];
     }
     
-    
-    [tokens addObject:token];
+    if (replacement) {
+        [tokens addObject:replacement];
+    }
     return tokens;
 }
 
