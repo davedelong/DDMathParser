@@ -101,32 +101,6 @@
     free(_caseInsensitiveCharacters);
 }
 
-#pragma mark NSEnumerator methods
-
-- (NSArray *)allObjects {
-    NSRange r = NSMakeRange(_tokenIndex, [_tokens count] - _tokenIndex);
-    if (_tokenIndex >= [_tokens count]) { r.length = 0; }
-    return [_tokens subarrayWithRange:r];
-}
-
-- (DDMathToken *)nextObject {
-    DDMathToken *t = [self peekNextObject];
-    if (t != nil) {
-        _tokenIndex++;
-    }
-    return t;
-}
-
-- (DDMathToken *)peekNextObject {
-    if (_tokenIndex >= [_tokens count]) { return nil; }
-    return [_tokens objectAtIndex:_tokenIndex];
-}
-
-- (void)reset {
-	_tokenIndex = 0;
-    _characterIndex = 0;
-}
-
 #pragma mark Character methods
 
 - (unichar)_peekNextCharacter {

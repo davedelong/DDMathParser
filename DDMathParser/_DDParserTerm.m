@@ -52,8 +52,8 @@
     NSMutableArray *_subterms;
 }
 
-- (instancetype)init {
-    self = [super init];
+- (instancetype)initWithToken:(DDMathToken *)token {
+    self = [super initWithToken:token];
     if (self) {
         _subterms = [NSMutableArray array];
     }
@@ -104,6 +104,7 @@
 - (NSString *)description {
     NSArray *parameterDescriptions = [[self subterms] valueForKey:@"description"];
     NSString *parameters = [parameterDescriptions componentsJoinedByString:@","];
+    parameters = parameters ?: @"";
     return [NSString stringWithFormat:@"%@(%@)", _functionName, parameters];
 }
 
