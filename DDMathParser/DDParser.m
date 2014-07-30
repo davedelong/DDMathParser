@@ -9,62 +9,52 @@
 #import "DDMathParser.h"
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
-#import "_DDParserTerm.h"
-#import "DDMathOperatorTypes.h"
-#import "DDMathTokenizer.h"
-#import "DDMathTokenizer.h"
+#import "DDMathTokenInterpreter.h"
 #import "DDMathToken.h"
 #import "DDExpression.h"
-#import "DDMathOperator.h"
-#import "DDMathOperatorSet.h"
+
+#import "_DDParserTerm.h"
+
+#import "_DDMathTermResolver.h"
 
 @implementation DDParser {
-	DDMathTokenizer * _tokenizer;
+    DDMathTokenInterpreter *_interpreter;
 }
 
-+ (id)parserWithString:(NSString *)string error:(NSError **)error {
-    return [[self alloc] initWithString:string error:error];
-}
-
-- (id)initWithString:(NSString *)string error:(NSError **)error {
-    DDMathTokenizer *t = [[DDMathTokenizer alloc] initWithString:string operatorSet:nil error:error];
-    return [self initWithTokenizer:t error:error];
-}
-
-+ (id)parserWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
-	return [[self alloc] initWithTokenizer:tokenizer error:error];
-}
-
-- (id)initWithTokenizer:(DDMathTokenizer *)t error:(NSError **)error {
-	ERR_ASSERT(error);
-	self = [super init];
-	if (self) {
-        _operatorSet = t.operatorSet;
-		_tokenizer = t;
-		if (!_tokenizer) {
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (DDMathOperatorAssociativity)associativityForOperatorFunction:(NSString *)function {
-    DDMathOperator *operator = [_operatorSet operatorForFunction:function];
-    return operator.associativity;
+- (instancetype)initWithTokenInterpreter:(DDMathTokenInterpreter *)interpreter {
+    NSParameterAssert(interpreter);
+    self = [super init];
+    if (self) {
+        _interpreter = interpreter;
+    }
+    return self;
 }
 
 - (DDExpression *)parsedExpressionWithError:(NSError **)error {
 	ERR_ASSERT(error);
-	[_tokenizer reset]; //reset the token stream
     
-    DDExpression *expression = nil;
+    _DDGroupTerm *root = [[_DDGroupTerm alloc] init];
+    NSMutableArray *currentGroups = [NSMutableArray arrayWithObject:root];
     
-    _DDParserTerm *root = [_DDParserTerm rootTermWithTokenizer:_tokenizer error:error];
-    if ([root resolveWithParser:self error:error]) {
-        expression = [root expressionWithError:error];
+    for (DDMathToken *token in _interpreter.tokens) {
+        _DDParserTerm *term = [_DDParserTerm termForToken:token];
+        
+        if (term != nil) {
+            [currentGroups.lastObject addSubterm:term];
+            
+            if ([term isKindOfClass:[_DDGroupTerm class]]) {
+                [currentGroups addObject:term];
+            }
+        } else {
+            // nil gets returned to indicate the closure of a group
+            [currentGroups removeLastObject];
+        }
     }
     
-	return expression;
+    _DDMathTermResolver *resolver = [[_DDMathTermResolver alloc] initWithTerm:root error:error];
+    DDExpression *expression = [resolver expressionWithError:error];
+    
+    return expression;
 }
 
 @end

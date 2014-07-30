@@ -6,90 +6,146 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "DDMathParser.h"
-#import "_DDParserTerm.h"
-#import "DDMathTokenizer.h"
 #import "DDMathToken.h"
-#import "DDParser.h"
-#import "DDMathParserMacros.h"
 
-#import "_DDGroupTerm.h"
-#import "_DDFunctionTerm.h"
-#import "_DDNumberTerm.h"
-#import "_DDVariableTerm.h"
-#import "_DDOperatorTerm.h"
-
-@interface _DDParserTerm ()
-
-- (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
-
-@end
+#import "_DDParserTerm.h"
 
 @implementation _DDParserTerm
 
-+ (id)rootTermWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
-    NSMutableArray *terms = [NSMutableArray array];
-    while ([tokenizer peekNextObject] != nil) {
-        _DDParserTerm *nextTerm = [_DDParserTerm termWithTokenizer:tokenizer error:error];
-        if (!nextTerm) {
-            return nil;
-        }
-        
-        [terms addObject:nextTerm];
-    }
-    
-    return [[_DDGroupTerm alloc] _initWithSubterms:terms error:error];
-}
-
-+ (id)termWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
-    ERR_ASSERT(error);
-    DDMathToken *next = [tokenizer peekNextObject];
-    if (next) {
-        _DDParserTerm *term = nil;
-        if ([next tokenType] == DDTokenTypeNumber) {
-            term = [[_DDNumberTerm alloc] _initWithTokenizer:tokenizer error:error];
-        } else if ([next tokenType] == DDTokenTypeVariable) {
-            term = [[_DDVariableTerm alloc] _initWithTokenizer:tokenizer error:error];
-        } else if ([next tokenType] == DDTokenTypeOperator) {
-            if (next.mathOperator.function == DDMathOperatorParenthesisOpen) {
-                term = [[_DDGroupTerm alloc] _initWithTokenizer:tokenizer error:error];
-            } else {
-                term = [[_DDOperatorTerm alloc] _initWithTokenizer:tokenizer error:error];
-            }
-        } else if ([next tokenType] == DDTokenTypeFunction) {
-            term = [[_DDFunctionTerm alloc] _initWithTokenizer:tokenizer error:error];
-        }
-        
-        return term;
++ (instancetype)termForToken:(DDMathToken *)token {
+    if (token.tokenType == DDTokenTypeNumber) {
+        return [[_DDNumberTerm alloc] initWithToken:token];
+    } else if (token.tokenType == DDTokenTypeVariable) {
+        return [[_DDVariableTerm alloc] initWithToken:token];
+    } else if (token.tokenType == DDTokenTypeFunction) {
+        return [[_DDFunctionTerm alloc] initWithToken:token];
+    } else if (token.mathOperator.function == DDMathOperatorParenthesisOpen) {
+        return [[_DDGroupTerm alloc] init];
+    } else if (token.mathOperator.function != DDMathOperatorParenthesisClose) {
+        // it's an operator that's not an open paren
+        return [[_DDOperatorTerm alloc] initWithToken:token];
     } else {
-        *error = ERR(DDErrorCodeInvalidFormat, @"can't create a term with a nil token");
+        // it's a close paren
+        return nil;
     }
-    return nil;
 }
 
-- (id)_initWithToken:(DDMathToken *)t error:(NSError **)error {
-#pragma unused(error)
+- (instancetype)init {
+    return [self initWithToken:nil];
+}
+
+- (instancetype)initWithToken:(DDMathToken *)token {
     self = [super init];
     if (self) {
-        _resolved = NO;
-        _token = t;
+        _token = token;
     }
     return self;
 }
 
-- (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error {
-    return [self _initWithToken:[tokenizer nextObject] error:error];
+- (DDMathOperator *)mathOperator {
+    return self.token.mathOperator;
 }
 
-- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error {
-#pragma unused(parser,error)
-    return NO;
+@end
+
+@implementation _DDGroupTerm {
+    NSMutableArray *_subterms;
 }
 
-- (DDExpression *)expressionWithError:(NSError **)error {
-    ERR_ASSERT(error);
-    [NSException raise:NSInvalidArgumentException format:@"Subclasses must override the -%@ method", NSStringFromSelector(_cmd)];
-    return nil;
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _subterms = [NSMutableArray array];
+    }
+    return self;
+}
+
+- (void)addSubterm:(_DDParserTerm *)term {
+    [_subterms addObject:term];
+}
+
+- (void)setSubterms:(NSArray *)subterms {
+    _subterms = [subterms mutableCopy];
+}
+
+- (void)replaceTermsInRange:(NSRange)range withTerm:(_DDParserTerm *)replacement {
+    [_subterms replaceObjectsInRange:range withObjectsFromArray:@[replacement]];
+}
+
+- (DDParserTermType)type { return DDParserTermTypeGroup; }
+
+- (NSString *)description {
+    NSArray *descriptions = [[self subterms] valueForKey:@"description"];
+    NSString *description = [descriptions componentsJoinedByString:@""];
+    return [NSString stringWithFormat:@"(%@)", description];
+}
+
+@end
+
+
+@implementation _DDFunctionTerm
+
+- (instancetype)initWithToken:(DDMathToken *)token {
+    self = [super initWithToken:token];
+    if (self) {
+        if (token.tokenType == DDTokenTypeFunction) {
+            _functionName = token.token;
+        } else if (token.tokenType == DDTokenTypeOperator) {
+            _functionName = token.mathOperator.function;
+        } else {
+            [NSException raise:NSInternalInconsistencyException format:@"Cannot create a function term from non-function token"];
+        }
+    }
+    return self;
+}
+
+- (DDParserTermType)type { return DDParserTermTypeFunction; }
+
+- (NSString *)description {
+    NSArray *parameterDescriptions = [[self subterms] valueForKey:@"description"];
+    NSString *parameters = [parameterDescriptions componentsJoinedByString:@","];
+    return [NSString stringWithFormat:@"%@(%@)", _functionName, parameters];
+}
+
+@end
+
+
+@implementation _DDNumberTerm
+
+- (instancetype)initWithToken:(DDMathToken *)token {
+    self = [super initWithToken:token];
+    self.resolved = YES;
+    return self;
+}
+- (DDParserTermType)type { return DDParserTermTypeNumber; }
+- (NSString *)description {
+    return [[self token] description];
+}
+
+@end
+
+
+@implementation _DDVariableTerm
+
+- (instancetype)initWithToken:(DDMathToken *)token {
+    self = [super initWithToken:token];
+    self.resolved = YES;
+    return self;
+}
+- (DDParserTermType)type { return DDParserTermTypeVariable; }
+- (NSString *)description {
+    return [NSString stringWithFormat:@"$%@", [[self token] token]];
+}
+
+@end
+
+
+@implementation _DDOperatorTerm
+
+- (DDParserTermType)type { return DDParserTermTypeOperator; }
+
+- (NSString *)description {
+    return [[self token] token];
 }
 
 @end

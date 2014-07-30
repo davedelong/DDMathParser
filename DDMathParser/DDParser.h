@@ -7,23 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DDMathOperatorTypes.h"
 
-@class DDMathTokenizer;
-@class DDMathOperatorSet;
+@class DDMathTokenInterpreter;
 @class DDExpression;
 
 @interface DDParser : NSObject
 
-@property (readonly) DDMathOperatorSet *operatorSet;
-
-+ (id)parserWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
-- (id)initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
-
-+ (id)parserWithString:(NSString *)string error:(NSError **)error;
-- (id)initWithString:(NSString *)string error:(NSError **)error;
+- (instancetype)initWithTokenInterpreter:(DDMathTokenInterpreter *)interpreter;
 
 - (DDExpression *)parsedExpressionWithError:(NSError **)error;
-- (DDMathOperatorAssociativity)associativityForOperatorFunction:(NSString *)function;
 
 @end

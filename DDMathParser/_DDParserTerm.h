@@ -11,9 +11,6 @@
 #import "DDMathParser.h"
 
 @class DDMathToken;
-@class DDMathTokenizer;
-@class DDParser;
-@class DDExpression;
 
 typedef NS_ENUM(NSInteger, DDParserTermType) {
     DDParserTermTypeNumber = 1,
@@ -25,15 +22,43 @@ typedef NS_ENUM(NSInteger, DDParserTermType) {
 
 @interface _DDParserTerm : NSObject
 
-@property (nonatomic,getter=isResolved) BOOL resolved;
++ (instancetype)termForToken:(DDMathToken *)token;
+- (instancetype)initWithToken:(DDMathToken *)token;
+
 @property (nonatomic,readonly) DDParserTermType type;
 @property (nonatomic,readonly,strong) DDMathToken *token;
+@property (nonatomic,getter=isResolved) BOOL resolved;
+@property (nonatomic, readonly) DDMathOperator *mathOperator;
 
-+ (id)rootTermWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
-+ (id)termWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
-- (id)_initWithTokenizer:(DDMathTokenizer *)tokenizer error:(NSError **)error;
+@end
 
-- (BOOL)resolveWithParser:(DDParser *)parser error:(NSError **)error;
-- (DDExpression *)expressionWithError:(NSError **)error;
+
+@interface _DDGroupTerm : _DDParserTerm
+
+@property (nonatomic, copy) NSArray *subterms;
+- (void)addSubterm:(_DDParserTerm *)term;
+- (void)replaceTermsInRange:(NSRange)range withTerm:(_DDParserTerm *)replacement;
+
+@end
+
+
+@interface _DDFunctionTerm : _DDGroupTerm
+
+@property (nonatomic,readonly,strong) NSString *functionName;
+
+@end
+
+
+@interface _DDNumberTerm : _DDParserTerm
+
+@end
+
+
+@interface _DDVariableTerm : _DDParserTerm
+
+@end
+
+
+@interface _DDOperatorTerm : _DDParserTerm
 
 @end
