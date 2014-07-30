@@ -55,7 +55,7 @@
         [operators addObject:OPERATOR(DDMathOperatorMultiply, (@[@"*", @"×"]), BINARY, precedence, LEFT)];
         [operators addObject:OPERATOR(DDMathOperatorDivide, (@[@"/", @"÷"]), BINARY, precedence++, LEFT)];
         
-        [operators addObject:OPERATOR(DDMathOperatorImplicitMultiply, (@[@""]), BINARY, precedence, LEFT)];
+        [operators addObject:OPERATOR(DDMathOperatorImplicitMultiply, nil, BINARY, precedence, LEFT)];
         
         // NOTE: percent-as-modulo precedence goes here (between ImplicitMultiply and Bitwise Not)
         
@@ -97,6 +97,8 @@
 }
 
 + (BOOL)_isValidToken:(NSString *)token {
+    if (token.length == 0) { return YES; }
+    
     unichar firstChar = [token characterAtIndex:0];
     if ((firstChar >= '0' && firstChar <= '9' ) || firstChar == '.' || firstChar == '$' || firstChar == '\'' || firstChar == '"') {
         return NO;
