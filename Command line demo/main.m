@@ -84,7 +84,9 @@ int main (int argc, const char * argv[]) {
             NSError *error = nil;
             
             DDMathTokenizer *tokenizer = [[DDMathTokenizer alloc] initWithString:line operatorSet:nil error:&error];
-            DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:&error];
+            
+            DDMathTokenInterpreter *interpreter = [[DDMathTokenInterpreter alloc] initWithTokenizer:tokenizer error:&error];
+            DDParser *parser = [[DDParser alloc] initWithTokenInterpreter:interpreter];
             
             DDExpression *expression = [parser parsedExpressionWithError:&error];
             DDExpression *rewritten = [[DDExpressionRewriter defaultRewriter] expressionByRewritingExpression:expression withEvaluator:evaluator];
