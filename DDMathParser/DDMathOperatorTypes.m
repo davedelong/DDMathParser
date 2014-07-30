@@ -26,6 +26,7 @@ NSString *const DDMathOperatorMinus = @"subtract";
 NSString *const DDMathOperatorAdd = @"add";
 NSString *const DDMathOperatorDivide = @"divide";
 NSString *const DDMathOperatorMultiply = @"multiply";
+NSString *const DDMathOperatorImplicitMultiply = @"implicitMultiply";
 NSString *const DDMathOperatorModulo = @"mod";
 NSString *const DDMathOperatorBitwiseNot = @"not";
 NSString *const DDMathOperatorFactorial = @"factorial";

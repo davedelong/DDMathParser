@@ -44,6 +44,7 @@ extern NSString *const DDMathOperatorMinus;
 extern NSString *const DDMathOperatorAdd;
 extern NSString *const DDMathOperatorDivide;
 extern NSString *const DDMathOperatorMultiply;
+extern NSString *const DDMathOperatorImplicitMultiply;
 extern NSString *const DDMathOperatorModulo;
 extern NSString *const DDMathOperatorBitwiseNot;
 extern NSString *const DDMathOperatorFactorial;

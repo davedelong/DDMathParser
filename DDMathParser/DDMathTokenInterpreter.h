@@ -13,6 +13,7 @@
 typedef NS_OPTIONS(NSInteger, DDMathTokenInterpreterOptions) {
     DDMathTokenInterpreterOptionsAllowsArgumentlessFunctions = 1 << 0,
     DDMathTokenInterpreterOptionsAllowsImplicitMultiplication = 1 << 1,
+    DDMathTokenInterpreterOptionsImplicitMultiplicationHasHigherPrecedence = 1 << 2,
 };
 
 @interface DDMathTokenInterpreter : NSObject

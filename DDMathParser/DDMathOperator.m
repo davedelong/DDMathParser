@@ -55,7 +55,9 @@
         [operators addObject:OPERATOR(DDMathOperatorMultiply, (@[@"*", @"×"]), BINARY, precedence, LEFT)];
         [operators addObject:OPERATOR(DDMathOperatorDivide, (@[@"/", @"÷"]), BINARY, precedence++, LEFT)];
         
-        // NOTE: percent-as-modulo precedence goes here (between Multiply and Bitwise Not)
+        [operators addObject:OPERATOR(DDMathOperatorImplicitMultiply, (@[@""]), BINARY, precedence, LEFT)];
+        
+        // NOTE: percent-as-modulo precedence goes here (between ImplicitMultiply and Bitwise Not)
         
         [operators addObject:OPERATOR(DDMathOperatorBitwiseNot, (@[@"~"]), UNARY, precedence++, RIGHT)];
         

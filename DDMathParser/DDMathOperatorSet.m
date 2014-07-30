@@ -83,8 +83,8 @@
     
     if (_interpretsPercentSignAsModulo == YES) {
         _percentOperator = [DDMathOperator moduloOperator];
-        DDMathOperator *divide = [self operatorForFunction:DDMathOperatorDivide];
-        [self addOperator:_percentOperator withPrecedenceHigherThanOperator:divide];
+        DDMathOperator *implicitMultiply = [self operatorForFunction:DDMathOperatorImplicitMultiply];
+        [self addOperator:_percentOperator withPrecedenceHigherThanOperator:implicitMultiply];
     } else {
         _percentOperator = [DDMathOperator percentOperator];
         DDMathOperator *factorial = [self operatorForFunction:DDMathOperatorFactorial];

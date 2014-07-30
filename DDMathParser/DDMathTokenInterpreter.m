@@ -19,6 +19,7 @@
 
 @property (readonly) BOOL allowsArgumentlessFunctions;
 @property (readonly) BOOL allowsImplicitMultiplication;
+@property (readonly) BOOL usesHighPrecedenceImplicitMultiplication;
 
 @end
 
@@ -40,6 +41,7 @@
         
         _allowsArgumentlessFunctions = !!(options & DDMathTokenInterpreterOptionsAllowsArgumentlessFunctions);
         _allowsImplicitMultiplication = !!(options & DDMathTokenInterpreterOptionsAllowsImplicitMultiplication);
+        _usesHighPrecedenceImplicitMultiplication = !!(options & DDMathTokenInterpreterOptionsImplicitMultiplicationHasHigherPrecedence);
         
         NSError *localError = nil;
         if ([self _interpretTokens:tokenizer error:&localError] == NO) {
@@ -220,8 +222,14 @@
         }
         
         if (shouldInsertMultiplier) {
-            DDMathToken *multiply = [[DDMathToken alloc] initWithToken:@"*" type:DDTokenTypeOperator operator:[self.operatorSet operatorForFunction:DDMathOperatorMultiply]];
+            DDMathOperator *multiplyOperator = nil;
+            if (self.usesHighPrecedenceImplicitMultiplication) {
+                multiplyOperator = [self.operatorSet operatorForFunction:DDMathOperatorImplicitMultiply];
+            } else {
+                multiplyOperator = [self.operatorSet operatorForFunction:DDMathOperatorMultiply];
+            }
             
+            DDMathToken *multiply = [[DDMathToken alloc] initWithToken:@"*" type:DDTokenTypeOperator operator:multiplyOperator];
             replacements = @[multiply];
         }
     }
