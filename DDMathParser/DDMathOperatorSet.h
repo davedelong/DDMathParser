@@ -18,11 +18,14 @@
 @interface DDMathOperatorSet : NSObject <NSFastEnumeration, NSCopying>
 
 @property (readonly, copy) NSArray *operators;
+@property (nonatomic, readonly) NSCharacterSet *operatorCharacters;
 @property (nonatomic) BOOL interpretsPercentSignAsModulo; // default is YES
 
 + (instancetype)defaultOperatorSet;
 
 - (instancetype)init;
+
+- (BOOL)hasOperatorWithPrefix:(NSString *)prefix;
 
 - (DDMathOperator *)operatorForFunction:(NSString *)function;
 - (NSArray *)operatorsForToken:(NSString *)token;

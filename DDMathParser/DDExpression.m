@@ -12,6 +12,9 @@
 #import "DDMathEvaluator+Private.h"
 #import "DDParser.h"
 
+#import "DDMathTokenizer.h"
+#import "DDMathTokenInterpreter.h"
+
 #import "_DDNumberExpression.h"
 #import "_DDFunctionExpression.h"
 #import "_DDVariableExpression.h"
@@ -20,7 +23,9 @@
 @implementation DDExpression
 
 + (id)expressionFromString:(NSString *)expressionString error:(NSError **)error {
-    DDParser *parser = [DDParser parserWithString:expressionString error:error];
+    DDMathTokenizer *tokenizer = [[DDMathTokenizer alloc] initWithString:expressionString operatorSet:nil error:error];
+    DDMathTokenInterpreter *interpreter = [[DDMathTokenInterpreter alloc] initWithTokenizer:tokenizer error:error];
+    DDParser *parser = [[DDParser alloc] initWithTokenInterpreter:interpreter];
     return [parser parsedExpressionWithError:error];
 }
 

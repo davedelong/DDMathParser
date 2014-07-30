@@ -20,6 +20,7 @@
 
 @interface _DDMathOperatorTokenMap : NSObject
 
+@property (nonatomic, readonly) NSCharacterSet *tokenCharacterSet;
 - (void)addOperator:(DDMathOperator *)operator;
 - (void)removeOperator:(DDMathOperator *)operator;
 - (BOOL)isOperatorCharacter:(unichar)character;
@@ -96,11 +97,15 @@
     return _operators.array.copy;
 }
 
+- (NSCharacterSet *)operatorCharacters {
+    return _operatorsByToken.tokenCharacterSet;
+}
+
 - (BOOL)isOperatorCharacter:(unichar)character {
     return [_operatorsByToken isOperatorCharacter:character];
 }
 
-- (BOOL)anyOperatorHasPrefix:(NSString *)prefix {
+- (BOOL)hasOperatorWithPrefix:(NSString *)prefix {
     return [_operatorsByToken hasOperatorsForPrefix:prefix];
 }
 
@@ -203,6 +208,8 @@
     NSMutableDictionary *_map;
     NSCountedSet *_tokenCharacters;
     NSCharacterSet *_allowedTokenCharacters;
+    
+    NSCharacterSet *_tokenCharacterSet;
 }
 
 - (instancetype)init {
@@ -259,6 +266,9 @@
 
 - (void)addOperator:(DDMathOperator *)operator {
     [self addTokens:operator.tokens forOperator:operator];
+    
+    NSString *tokenCharacters = [_tokenCharacters.allObjects componentsJoinedByString:@""];
+    _tokenCharacterSet = [NSCharacterSet characterSetWithCharactersInString:tokenCharacters];
 }
 
 - (void)removeOperator:(DDMathOperator *)operator {
@@ -269,11 +279,14 @@
             [self removeToken:token.lowercaseString];
         }
     }
+    
+    NSString *tokenCharacters = [_tokenCharacters.allObjects componentsJoinedByString:@""];
+    _tokenCharacterSet = [NSCharacterSet characterSetWithCharactersInString:tokenCharacters];
 }
 
 - (NSString *)existingTokenForOperatorTokens:(DDMathOperator *)operator {
     for (NSString *token in operator.tokens) {
-        if ([_map objectForKey:token.lowercaseString] != nil) {
+        if ([[_map objectForKey:token.lowercaseString] count] > 0) {
             return token.lowercaseString;
         }
     }

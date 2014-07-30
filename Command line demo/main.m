@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "DDMathParser.h"
 #import "DDMathTokenizer.h"
+#import "DDMathTokenInterpreter.h"
 #import "DDMathOperator.h"
 #import "DDMathOperatorSet.h"
 
@@ -34,11 +35,13 @@ void listOperators() {
 	printf("\nOperators available:\n");
     NSArray *knownOperators = [[DDMathOperatorSet defaultOperatorSet] operators];
     for (DDMathOperator *op in knownOperators) {
-        printf("\t%s (%s, %s associative) invokes %s()\n",
-               [[op.tokens componentsJoinedByString:@", "] UTF8String],
-               op.arity == DDMathOperatorArityBinary ? "binary" : (op.arity == DDMathOperatorArityUnary ? "unary" : "unknown"),
-               op.associativity == DDMathOperatorAssociativityLeft ? "left" : "right",
-               [op.function UTF8String]);
+        if (op.tokens.count > 0) {
+            printf("\t%s (%s, %s associative) invokes %s()\n",
+                   [[op.tokens componentsJoinedByString:@", "] UTF8String],
+                   op.arity == DDMathOperatorArityBinary ? "binary" : (op.arity == DDMathOperatorArityUnary ? "unary" : "unknown"),
+                   op.associativity == DDMathOperatorAssociativityLeft ? "left" : "right",
+                   [op.function UTF8String]);
+        }
 	}
 }
 

@@ -19,8 +19,6 @@
 
 @interface DDMathTokenizer ()
 
-@property (nonatomic, readonly) NSCharacterSet *operatorCharacters;
-
 - (unichar)_peekNextCharacter;
 - (unichar)_nextCharacter;
 
@@ -42,16 +40,6 @@
     NSMutableArray *_tokens;
     NSUInteger _tokenIndex;
     
-}
-
-@synthesize operatorCharacters=_operatorCharacters;
-- (NSCharacterSet *)operatorCharacters {
-    if (_operatorCharacters == nil) {
-        NSArray *tokens = [self.operatorSet valueForKeyPath:@"operators.@unionOfArrays.tokens"];
-        NSString *tokenString = [tokens componentsJoinedByString:@""];
-        _operatorCharacters = [NSCharacterSet characterSetWithCharactersInString:tokenString];
-    }
-    return _operatorCharacters;
 }
 
 + (NSCharacterSet *)_singleCharacterFunctionCharacterSet {
@@ -258,10 +246,11 @@
         length++;
         _characterIndex++;
     } else {
-        NSCharacterSet *operatorSet = self.operatorCharacters;
-        while ([operatorSet characterIsMember:[self _peekNextCharacter]] == NO &&
-               DD_IS_WHITESPACE([self _peekNextCharacter]) == NO &&
-               [self _peekNextCharacter] != '\0') {
+        NSCharacterSet *operatorChars = self.operatorSet.operatorCharacters;
+        unichar peekNext = '\0';
+        while ((peekNext = [self _peekNextCharacter]) != '\0' &&
+               DD_IS_WHITESPACE(peekNext) == NO &&
+               [operatorChars characterIsMember:peekNext] == NO) {
             
             length++;
             _characterIndex++;
@@ -346,16 +335,20 @@
     DDMathOperator *lastGoodOperator = nil;
     NSUInteger lastGoodLength = length;
     
-    while ([self.operatorCharacters characterIsMember:character]) {
+    while (character != '\0') {
         NSString *tmp = [NSString stringWithCharacters:(_caseInsensitiveCharacters+start) length:length];
-        NSArray *operators = [self.operatorSet operatorsForToken:tmp];
-        if (operators.count > 0) {
-            lastGood = tmp;
-            lastGoodLength = length;
-            lastGoodOperator = (operators.count == 1 ? operators.firstObject : nil);
+        if ([self.operatorSet hasOperatorWithPrefix:tmp]) {
+            NSArray *operators = [self.operatorSet operatorsForToken:tmp];
+            if (operators.count > 0) {
+                lastGood = tmp;
+                lastGoodLength = length;
+                lastGoodOperator = (operators.count == 1 ? operators.firstObject : nil);
+            }
+            character = [self _next:_caseInsensitiveCharacters];
+            length++;
+        } else {
+            break;
         }
-        character = [self _next:_caseInsensitiveCharacters];
-        length++;
     }
     
     if (lastGood != nil) {
