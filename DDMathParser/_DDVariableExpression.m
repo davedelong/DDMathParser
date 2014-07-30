@@ -14,6 +14,7 @@
 
 @implementation _DDVariableExpression {
 	NSString *_variable;
+    BOOL _hasSpace;
 }
 
 - (id)initWithVariable:(NSString *)v {
@@ -26,6 +27,7 @@
             return nil;
         }
 		_variable = [v copy];
+        _hasSpace = ([_variable rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location != NSNotFound);
 	}
 	return self;
 }
@@ -52,7 +54,8 @@
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"$%@", [self variable]];
+    NSString *quote = _hasSpace ? @"\"" : @"";
+	return [NSString stringWithFormat:@"$%@%@%@", quote, [self variable], quote];
 }
 
 @end
