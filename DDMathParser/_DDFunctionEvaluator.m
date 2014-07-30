@@ -131,10 +131,6 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	return [DDExpression numberExpressionWithNumber:result];
 }
 
-- (DDExpression *)implicitMultiply:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
-    return [self multiply:arguments variables:variables error:error];
-}
-
 - (DDExpression *)multiply:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
 	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];

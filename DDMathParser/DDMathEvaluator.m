@@ -10,6 +10,7 @@
 #import "DDMathEvaluator.h"
 #import "DDMathEvaluator+Private.h"
 #import "DDMathTokenizer.h"
+#import "DDMathTokenInterpreter.h"
 #import "DDParser.h"
 #import "DDMathParserMacros.h"
 #import "DDExpression.h"
@@ -192,7 +193,10 @@
     DDMathTokenizer *tokenizer = [[DDMathTokenizer alloc] initWithString:expressionString operatorSet:self.operatorSet error:error];
     if (!tokenizer) { return nil; }
     
-    DDParser *parser = [DDParser parserWithTokenizer:tokenizer error:error];
+    DDMathTokenInterpreter *interpreter = [[DDMathTokenInterpreter alloc] initWithTokenizer:tokenizer error:error];
+    if (!interpreter) { return nil; }
+    
+    DDParser *parser = [[DDParser alloc] initWithTokenInterpreter:interpreter];
     if (!parser) { return nil; }
     
     DDExpression *expression = [parser parsedExpressionWithError:error];
@@ -271,6 +275,7 @@
                             @"tau_2": @"pi",
                             @"\u03C4": @"tau", // τ
                             @"\u03D5": @"phi", // ϕ
+                            @"implicitmultiply": @"multiply",
                             
                             @"vers": @"versin",
                             @"ver": @"versin",
