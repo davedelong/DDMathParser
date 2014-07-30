@@ -46,22 +46,19 @@
 #pragma mark Function Resolution
 
 - (BOOL)_resolveFunctionTerm:(_DDFunctionTerm *)term error:(NSError **)error {
-    
-    // first, pull out the parameters of the function and group them by comma
-    NSArray *subterms = [self _resolveFunctionParameters:term.subterms error:error];
-    if (!subterms) { return NO; }
-    
-    // resolve each parameter
-    for (_DDParserTerm *term in subterms) {
-        if (![self _resolveTerm:term error:error]) { return NO; }
+    if (term.subterms.count > 0) {
+        // resolve each parameter
+        for (_DDParserTerm *subterm in term.subterms) {
+            if (![self _resolveTerm:subterm error:error]) { return NO; }
+        }
     }
-    
-    term.subterms = subterms;
     term.resolved = YES;
     return YES;
 }
 
 - (NSArray *)_resolveFunctionParameters:(NSArray *)terms error:(NSError **)error {
+    if (terms.count == 0) { return terms; }
+    
     NSMutableArray *groups = [NSMutableArray arrayWithObject:[[_DDGroupTerm alloc] init]];
     
     for (_DDParserTerm *term in terms) {
@@ -193,10 +190,12 @@
     _DDParserTerm *leftOperand = group.subterms[operatorIndex-1];
     _DDParserTerm *rightOperand = group.subterms[operatorIndex+1];
     
+    if (![self _resolveTerm:leftOperand error:error]) { return NO; }
+    if (![self _resolveTerm:rightOperand error:error]) { return NO; }
+    
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] initWithToken:term.token];
     function.subterms = @[leftOperand, rightOperand];
-    
-    if (![self _resolveTerm:function error:error]) { return NO; }
+    function.resolved = YES;
     
     [group replaceTermsInRange:replacementRange withTerm:function];
     return YES;
@@ -242,7 +241,7 @@
         }
     }
     
-    NSInteger firstIndex = nextIndex - 1;
+    NSInteger firstIndex = nextIndex + 1;
     NSInteger delta = 0;
     for (NSUInteger currentIndex = firstIndex; currentIndex <= index; currentIndex++) {
         if (![self _reduceUnaryOperator:currentIndex inGroup:group error:error]) {
@@ -271,7 +270,7 @@
         }
         
         parameter = group.subterms[operatorIndex+1];
-        replacementRange = NSMakeRange(index, 2);
+        replacementRange = NSMakeRange(operatorIndex, 2);
         
     } else {
         // left associative unary operator (factorial)
@@ -281,7 +280,7 @@
         }
         
         parameter = group.subterms[operatorIndex-1];
-        replacementRange = NSMakeRange(index-1, 2);
+        replacementRange = NSMakeRange(operatorIndex-1, 2);
         
     }
     
@@ -290,10 +289,11 @@
         return NO;
     }
     
+    if (![self _resolveTerm:parameter error:error]) { return NO; }
+    
     _DDFunctionTerm *function = [[_DDFunctionTerm alloc] initWithToken:term.token];
     function.subterms = @[parameter];
-    
-    if (![self _resolveTerm:function error:error]) { return NO; }
+    function.resolved = YES;
     
     [group replaceTermsInRange:replacementRange withTerm:function];
     
@@ -320,7 +320,7 @@
     } else if (term.type == DDParserTermTypeGroup) {
         _DDGroupTerm *group = (_DDGroupTerm *)term;
         if (group.subterms.count != 1) {
-            *error = ERR(DDErrorCodeInvalidFormat, @"Unable to create expression from term: %@", self);
+            *error = ERR(DDErrorCodeInvalidFormat, @"Unable to create expression from term: %@", group);
             return nil;
         }
         
