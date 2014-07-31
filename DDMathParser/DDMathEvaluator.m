@@ -44,7 +44,7 @@
         
         NSDictionary *aliases = [[self class] _standardAliases];
         for (NSString *alias in aliases) {
-            NSString *function = [aliases objectForKey:alias];
+            NSString *function = aliases[alias];
             [self addAlias:alias forFunctionName:function];
         }
 	}
@@ -76,12 +76,12 @@
     }
     
     // we cannot register something that is already registered
-    if ([_functionMap objectForKey:functionName] != nil) {
+    if (_functionMap[functionName] != nil) {
         return NO;
     }
     
     function = [function copy];
-    [_functionMap setObject:function forKey:functionName];
+    _functionMap[functionName] = function;
     
     return YES;
 }
@@ -108,11 +108,11 @@
     NSString *functionName = [functionExpression function];
     
     DDExpression *e = nil;
-    DDMathFunction function = [_functionMap objectForKey:functionName];
+    DDMathFunction function = _functionMap[functionName];
     
     if (function == nil && [self resolvesFunctionsAsVariables]) {
         // see if we have a variable value with the same name as the function
-        id variableValue = [variables objectForKey:functionName];
+        id variableValue = variables[functionName];
         NSNumber *n = [self _evaluateValue:variableValue withSubstitutions:variables error:error];
         if (n == nil) {
             n = [self variableWithName:functionName];
@@ -157,7 +157,7 @@
         return NO;
     }
     
-    if ([_functionMap objectForKey:alias] != nil) {
+    if (_functionMap[alias] != nil) {
         return NO;
     }
     
@@ -168,7 +168,7 @@
     };
     
     function = [function copy];
-    [_functionMap setObject:function forKey:alias];
+    _functionMap[alias] = function;
     
     return YES;
 }
@@ -217,7 +217,7 @@
 }
 
 - (NSNumber *)_evaluateVariableExpression:(DDExpression *)e withSubstitutions:(NSDictionary *)substitutions error:(NSError **)error {
-	id variableValue = [substitutions objectForKey:[e variable]];
+	id variableValue = substitutions[[e variable]];
     
     if (variableValue == nil) {
         // the substitutions dictionary was insufficient

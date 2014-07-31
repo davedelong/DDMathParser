@@ -112,10 +112,10 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)add:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *firstValue = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
 	
-	NSNumber *secondValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *secondValue = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(secondValue);
     NSNumber *result = @([firstValue doubleValue] + [secondValue doubleValue]);
     return [DDExpression numberExpressionWithNumber:result];
@@ -123,9 +123,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)subtract:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *firstValue = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
-	NSNumber *secondValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *secondValue = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(secondValue);
     NSNumber *result = @([firstValue doubleValue] - [secondValue doubleValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -133,9 +133,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)multiply:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *firstValue = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
-	NSNumber *secondValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *secondValue = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(secondValue);
     NSNumber *result = @([firstValue doubleValue] * [secondValue doubleValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -143,9 +143,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)divide:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *firstValue = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
-	NSNumber *secondValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *secondValue = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(secondValue);
     NSNumber *result = @([firstValue doubleValue] / [secondValue doubleValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -153,9 +153,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)mod:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *firstValue = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
-	NSNumber *secondValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *secondValue = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(secondValue);
     NSNumber *result = @(fmod([firstValue doubleValue], [secondValue doubleValue]));
     return [DDExpression numberExpressionWithNumber:result];
@@ -163,7 +163,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)negate:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *firstValue = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
     NSNumber *result = @(-1 * [firstValue doubleValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -171,7 +171,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)factorial:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *firstValue = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *firstValue = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(firstValue);
     
     NSNumber *result = nil;
@@ -191,9 +191,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)pow:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *base = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *base = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(base);
-	NSNumber *exponent = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *exponent = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(exponent);
     
     NSNumber *result = @(pow([base doubleValue], [exponent doubleValue]));
@@ -202,9 +202,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)nthroot:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *base = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *base = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(base);
-	NSNumber *root = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *root = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(root);
     
     NSNumber *result = @(pow([base doubleValue], 1/[root doubleValue]));
@@ -213,7 +213,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)cuberoot:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *base = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *base = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(base);
     
     NSNumber *result = @(pow([base doubleValue], 1.0/3.0));
@@ -222,9 +222,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)and:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *first = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *first = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(first);
-	NSNumber *second = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *second = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(second);
     NSNumber *result = @([first integerValue] & [second integerValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -232,9 +232,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)or:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *first = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *first = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(first);
-	NSNumber *second = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *second = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(second);
     NSNumber *result = @([first integerValue] | [second integerValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -242,7 +242,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)not:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *first = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *first = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(first);
     NSNumber *result = @(~[first integerValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -250,9 +250,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)xor:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *first = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *first = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(first);
-	NSNumber *second = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *second = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(second);
     NSNumber *result = @([first integerValue] ^ [second integerValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -260,9 +260,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)rshift:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *first = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *first = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(first);
-	NSNumber *second = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *second = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(second);
     NSNumber *result = @([first integerValue] >> [second integerValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -270,9 +270,9 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)lshift:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *first = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *first = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(first);
-	NSNumber *second = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *second = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(second);
     NSNumber *result = @([first integerValue] << [second integerValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -315,7 +315,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	REQUIRE_GTOE_N_ARGS(2);
     NSNumber *result = nil;
 	for (NSUInteger index = 0; index < [arguments count]; ++index) {
-		DDExpression *e = [arguments objectAtIndex:index];
+		DDExpression *e = arguments[index];
 		NSNumber *value = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
 		RETURN_IF_NIL(value);
         if (index == 0 || [result compare:value] == NSOrderedDescending) {
@@ -331,7 +331,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	REQUIRE_GTOE_N_ARGS(2);
     NSNumber *result = nil;
 	for (NSUInteger index = 0; index < [arguments count]; ++index) {
-		DDExpression *e = [arguments objectAtIndex:index];
+		DDExpression *e = arguments[index];
 		NSNumber *value = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
 		RETURN_IF_NIL(value);
         if (index == 0 || [result compare:value] == NSOrderedAscending) {
@@ -356,12 +356,12 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	NSNumber *median = nil;
 	if (([evaluatedNumbers count] % 2) == 1) {
 		NSUInteger index = floor([evaluatedNumbers count] / 2);
-		median = [evaluatedNumbers objectAtIndex:index];
+		median = evaluatedNumbers[index];
 	} else {
 		NSUInteger lowIndex = floor([evaluatedNumbers count] / 2);
 		NSUInteger highIndex = ceil([evaluatedNumbers count] / 2);
-        NSNumber *low = [evaluatedNumbers objectAtIndex:lowIndex];
-        NSNumber *high = [evaluatedNumbers objectAtIndex:highIndex];
+        NSNumber *low = evaluatedNumbers[lowIndex];
+        NSNumber *high = evaluatedNumbers[highIndex];
         median = @(([low doubleValue] + [high doubleValue])/2);
 	}
 	return [DDExpression numberExpressionWithNumber:median];
@@ -390,7 +390,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)sqrt:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
     
     NSNumber *result = @(sqrt([n doubleValue]));
@@ -416,10 +416,10 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
     long long upperBound = LLONG_MAX;
 	
 	if ([params count] > 0) {
-        lowerBound = [[params objectAtIndex:0] longLongValue];
+        lowerBound = [params[0] longLongValue];
     }
     if ([params count] > 1) {
-        upperBound = [[params objectAtIndex:1] longLongValue];
+        upperBound = [params[1] longLongValue];
     }
     
     long long random = arc4random_uniform(upperBound);
@@ -432,7 +432,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)log:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
     
     NSNumber *result = @(log10([n doubleValue]));
@@ -441,14 +441,14 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)ln:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
 	return [DDExpression numberExpressionWithNumber:@(log([n doubleValue]))];
 }
 
 - (DDExpression *)log2:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
     
     NSNumber *result = @(log2([n doubleValue]));
@@ -457,7 +457,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)exp:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
 	RETURN_IF_NIL(n);
     
     NSNumber *result = @(exp([n doubleValue]));
@@ -466,7 +466,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)ceil:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     NSNumber *result = @(ceil([n doubleValue]));
 	return [DDExpression numberExpressionWithNumber:result];
@@ -474,7 +474,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)abs:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(llabs([n longLongValue]));
@@ -483,7 +483,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)floor:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(floor([n doubleValue]));
@@ -493,7 +493,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 - (DDExpression *)percent:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
     REQUIRE_N_ARGS(1);
     
-    DDExpression *percentArgument = [arguments objectAtIndex:0];
+    DDExpression *percentArgument = arguments[0];
     DDExpression *percentExpression = [percentArgument parentExpression];
     DDExpression *percentContext = [percentExpression parentExpression];
     
@@ -505,10 +505,10 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
     if ([operatorInfo arity] == DDMathOperatorArityBinary) {
         if ([parentFunction isEqualToString:DDMathOperatorAdd] || [parentFunction isEqualToString:DDMathOperatorMinus]) {
             
-            BOOL percentIsRightArgument = ([[percentContext arguments] objectAtIndex:1] == percentExpression);
+            BOOL percentIsRightArgument = ([percentContext arguments][1] == percentExpression);
             
             if (percentIsRightArgument) {
-                DDExpression *baseExpression = [[percentContext arguments] objectAtIndex:0];
+                DDExpression *baseExpression = [percentContext arguments][0];
                 context = [[self evaluator] evaluateExpression:baseExpression withSubstitutions:variables error:error];
             }
         }
@@ -525,7 +525,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)sin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -536,7 +536,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)cos:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -547,7 +547,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)tan:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -558,7 +558,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)asin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(asin([n doubleValue]));
@@ -567,7 +567,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)acos:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(acos([n doubleValue]));
@@ -576,7 +576,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)atan:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(atan([n doubleValue]));
@@ -585,7 +585,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)sinh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -596,7 +596,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)cosh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -607,7 +607,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)tanh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -618,7 +618,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)asinh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(asinh([n doubleValue]));
@@ -627,7 +627,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)acosh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(acosh([n doubleValue]));
@@ -636,7 +636,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)atanh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(atanh([n doubleValue]));
@@ -645,7 +645,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)csc:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -656,7 +656,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)sec:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -667,7 +667,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)cotan:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -678,7 +678,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)acsc:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(1/asin([n doubleValue]));
@@ -687,7 +687,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)asec:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(1/acos([n doubleValue]));
@@ -696,7 +696,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)acotan:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(1/atan([n doubleValue]));
@@ -705,7 +705,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)csch:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -716,7 +716,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)sech:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -727,7 +727,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)cotanh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -738,7 +738,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)acsch:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(1/sinh([n doubleValue]));
@@ -747,7 +747,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)asech:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(1/cosh([n doubleValue]));
@@ -756,7 +756,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)acotanh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @(1/atanh([n doubleValue]));
@@ -765,7 +765,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 // more trig functions
 - (DDExpression *)versin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -776,7 +776,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)vercosin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -787,7 +787,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)coversin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -798,7 +798,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)covercosin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -809,7 +809,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)haversin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -820,7 +820,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)havercosin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -831,7 +831,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)hacoversin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -842,7 +842,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)hacovercosin:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -853,7 +853,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)exsec:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -864,7 +864,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)excsc:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -875,7 +875,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)crd:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    DDExpression *e = [arguments objectAtIndex:0];
+    DDExpression *e = arguments[0];
     e = _DDDTOR(e, [self evaluator], error);
     NSNumber *n = [[self evaluator] evaluateExpression:e withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
@@ -886,7 +886,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)dtor:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @([n doubleValue]/180 * M_PI);
@@ -895,7 +895,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)rtod:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-    NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     
     NSNumber *result = @([n doubleValue]/M_PI * 180);
@@ -970,8 +970,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 // logical functions
 - (DDExpression *)l_and:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSNumber *result = @([left boolValue] && [right boolValue]);
@@ -980,8 +980,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_or:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSNumber *result = @([left boolValue] || [right boolValue]);
@@ -990,7 +990,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_not:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
-	NSNumber *n = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *n = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(n);
     NSNumber *result = @(![n boolValue]);
 	return [DDExpression numberExpressionWithNumber:result];
@@ -998,8 +998,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_eq:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSComparisonResult compare = [left compare:right];
@@ -1009,8 +1009,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_neq:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSComparisonResult compare = [left compare:right];
@@ -1020,8 +1020,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_lt:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSComparisonResult compare = [left compare:right];
@@ -1031,8 +1031,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_gt:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSComparisonResult compare = [left compare:right];
@@ -1042,8 +1042,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_ltoe:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSComparisonResult compare = [left compare:right];
@@ -1053,8 +1053,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_gtoe:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(2);
-	NSNumber *left = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
-	NSNumber *right = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+	NSNumber *left = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
+	NSNumber *right = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     RETURN_IF_NIL(left);
     RETURN_IF_NIL(right);
     NSComparisonResult compare = [left compare:right];
@@ -1064,14 +1064,14 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 
 - (DDExpression *)l_if:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(3);
-	NSNumber *condition = [[self evaluator] evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+	NSNumber *condition = [[self evaluator] evaluateExpression:arguments[0] withSubstitutions:variables error:error];
     RETURN_IF_NIL(condition);
     
     NSNumber *result = nil;
     if ([condition boolValue] != NO) {
-        result = [[self evaluator] evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+        result = [[self evaluator] evaluateExpression:arguments[1] withSubstitutions:variables error:error];
     } else {
-        result = [[self evaluator] evaluateExpression:[arguments objectAtIndex:2] withSubstitutions:variables error:error];
+        result = [[self evaluator] evaluateExpression:arguments[2] withSubstitutions:variables error:error];
     }
     
     RETURN_IF_NIL(result);

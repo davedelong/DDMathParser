@@ -53,38 +53,38 @@
     NSString *function = [rule function];
     
     if ([function hasPrefix:DDRuleTemplateAnyExpression]) {
-        DDExpression *seenBefore = [replacements objectForKey:function];
+        DDExpression *seenBefore = replacements[function];
         if (seenBefore != nil) {
             return [seenBefore isEqual:target];
         }
-        [replacements setObject:target forKey:function];
+        replacements[function] = target;
         return YES;
     }
     
     if ([function hasPrefix:DDRuleTemplateAnyNumber] && [target expressionType] == DDExpressionTypeNumber) {
-        DDExpression *seenBefore = [replacements objectForKey:function];
+        DDExpression *seenBefore = replacements[function];
         if (seenBefore != nil) {
             return [seenBefore isEqual:target];
         }
-        [replacements setObject:target forKey:function];
+        replacements[function] = target;
         return YES;
     }
     
     if ([function hasPrefix:DDRuleTemplateAnyVariable] && [target expressionType] == DDExpressionTypeVariable) {
-        DDExpression *seenBefore = [replacements objectForKey:function];
+        DDExpression *seenBefore = replacements[function];
         if (seenBefore != nil) {
             return [seenBefore isEqual:target];
         }
-        [replacements setObject:target forKey:function];
+        replacements[function] = target;
         return YES;
     }
     
     if ([function hasPrefix:DDRuleTemplateAnyFunction] && [target expressionType] == DDExpressionTypeFunction) {
-        DDExpression *seenBefore = [replacements objectForKey:function];
+        DDExpression *seenBefore = replacements[function];
         if (seenBefore != nil) {
             return [seenBefore isEqual:target];
         }
-        [replacements setObject:target forKey:function];
+        replacements[function] = target;
         return YES;        
     }
     
@@ -103,8 +103,8 @@
     
     BOOL argsMatch = YES;
     for (NSUInteger i = 0; i < [ruleArgs count]; ++i) {
-        DDExpression *ruleArg = [ruleArgs objectAtIndex:i];
-        DDExpression *targetArg = [targetArgs objectAtIndex:i];
+        DDExpression *ruleArg = ruleArgs[i];
+        DDExpression *targetArg = targetArgs[i];
         
         argsMatch &= [self _ruleExpression:ruleArg matchesExpression:targetArg withReplacements:replacements];
         
@@ -120,7 +120,7 @@
     
     NSString *pFunction = [p function];
     
-    DDExpression *functionReplacement = [replacements objectForKey:pFunction];
+    DDExpression *functionReplacement = replacements[pFunction];
     if (functionReplacement) {
         return functionReplacement;
     }

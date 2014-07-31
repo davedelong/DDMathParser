@@ -61,7 +61,7 @@
         _operatorsByToken = [[_DDMathOperatorTokenMap alloc] init];
         
         for (DDMathOperator *op in _operators) {
-            [_operatorsByFunction setObject:op forKey:op.function];
+            _operatorsByFunction[op.function] = op;
             [_operatorsByToken addOperator:op];
         }
         
@@ -110,7 +110,7 @@
 }
 
 - (DDMathOperator *)operatorForFunction:(NSString *)function {
-    return [_operatorsByFunction objectForKey:function];
+    return _operatorsByFunction[function];
 }
 
 - (NSArray *)operatorsForToken:(NSString *)token {
@@ -174,9 +174,9 @@
 }
 
 - (void)_processOperator:(DDMathOperator *)operator sorter:(BOOL(^)(DDMathOperator *other))sorter {
-    if ([_operatorsByFunction objectForKey:operator.function] != nil) {
+    if (_operatorsByFunction[operator.function] != nil) {
         // existing operator to which we are adding tokens
-        DDMathOperator *existing = [_operatorsByFunction objectForKey:operator.function];
+        DDMathOperator *existing = _operatorsByFunction[operator.function];
         [existing addTokens:operator.tokens];
         [_operatorsByToken addTokens:operator.tokens forOperator:existing];
         
@@ -193,7 +193,7 @@
         }
         
         [_operators addObject:operator];
-        [_operatorsByFunction setObject:operator forKey:operator.function];
+        _operatorsByFunction[operator.function] = operator;
         [_operatorsByToken addOperator:operator];
     }
 }
@@ -251,10 +251,10 @@
     for (NSString *token in tokens) {
         NSString *lowercaseToken = token.lowercaseString;
         
-        NSMutableOrderedSet *existingOperators = [_map objectForKey:lowercaseToken];
+        NSMutableOrderedSet *existingOperators = _map[lowercaseToken];
         if (existingOperators == nil) {
             existingOperators = [NSMutableOrderedSet orderedSet];
-            [_map setObject:existingOperators forKey:lowercaseToken];
+            _map[lowercaseToken] = existingOperators;
         }
         
         if ([existingOperators containsObject:operator] == NO) {
@@ -273,7 +273,7 @@
 
 - (void)removeOperator:(DDMathOperator *)operator {
     for (NSString *token in operator.tokens) {
-        NSMutableOrderedSet *existingOperators = [_map objectForKey:token.lowercaseString];
+        NSMutableOrderedSet *existingOperators = _map[token.lowercaseString];
         if (existingOperators) {
             [existingOperators removeObject:operator];
             [self removeToken:token.lowercaseString];
@@ -286,7 +286,7 @@
 
 - (NSString *)existingTokenForOperatorTokens:(DDMathOperator *)operator {
     for (NSString *token in operator.tokens) {
-        if ([[_map objectForKey:token.lowercaseString] count] > 0) {
+        if ([_map[token.lowercaseString] count] > 0) {
             return token.lowercaseString;
         }
     }
@@ -312,7 +312,7 @@
 }
 
 - (NSArray *)operatorsForToken:(NSString *)token {
-    NSMutableOrderedSet *existing = [_map objectForKey:token.lowercaseString];
+    NSMutableOrderedSet *existing = _map[token.lowercaseString];
     return existing.array.copy;
 }
 

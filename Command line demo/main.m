@@ -61,17 +61,16 @@ int main (int argc, const char * argv[]) {
         
         DDMathEvaluator *evaluator = [[DDMathEvaluator alloc] init];
         
-        [evaluator setFunctionResolver:^DDMathFunction (NSString *name) {
+        evaluator.functionResolver = ^DDMathFunction (NSString *name) {
             printf("\tResolving unknown function: %s\n", [name UTF8String]);
             return ^(NSArray *args, NSDictionary *substitutions, DDMathEvaluator *eval, NSError **error) {
-                return [DDExpression numberExpressionWithNumber:@42];
+                return [DDExpression numberExpressionWithNumber:@0];
             };
-        }];
-        
-        [evaluator setVariableResolver:^(NSString *variable) {
+        };
+        evaluator.variableResolver = ^(NSString *variable) {
             printf("\tResolving unknown variable: %s\n", [variable UTF8String]);
-            return @1;
-        }];
+            return @0;
+        };
         
         NSString * line = nil;
         do {
