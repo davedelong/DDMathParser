@@ -412,17 +412,17 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 		[params addObject:value];
 	}
 	
-    long long lowerBound = LLONG_MIN;
-    long long upperBound = LLONG_MAX;
+    u_int32_t lowerBound = 0;
+    u_int32_t upperBound = UINT32_MAX;
 	
 	if ([params count] > 0) {
-        lowerBound = [params[0] longLongValue];
+        lowerBound = [params[0] unsignedIntValue];
     }
     if ([params count] > 1) {
-        upperBound = [params[1] longLongValue];
+        upperBound = [params[1] unsignedIntValue];
     }
     
-    long long random = arc4random_uniform(upperBound);
+    u_int32_t random = arc4random_uniform(upperBound);
     while (random < lowerBound) {
         random = arc4random_uniform(upperBound);
     }
