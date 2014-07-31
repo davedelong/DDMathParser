@@ -400,7 +400,7 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 - (DDExpression *)random:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	if ([arguments count] > 2) {
 		if (error != nil) {
-            *error = ERR(DDErrorCodeInvalidNumberOfArguments, @"random() may only have up to 2 arguments");
+            *error = DD_ERR(DDErrorCodeInvalidNumberOfArguments, @"random() may only have up to 2 arguments");
 		}
 		return nil;
 	}

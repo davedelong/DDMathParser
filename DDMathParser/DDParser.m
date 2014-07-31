@@ -49,7 +49,7 @@
     
     // consume the closing parenthesis and verify it exists
     if (enumerator.nextObject == nil) {
-        *error = ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
+        *error = DD_ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
         return nil;
     }
     
@@ -61,7 +61,7 @@
     
     DDMathToken *openParen = enumerator.nextObject;
     if (openParen.mathOperator.function != DDMathOperatorParenthesisOpen) {
-        *error = ERR(DDErrorCodeImbalancedParentheses, @"missing opening parenthesis after function \"%@\"", function.functionName);
+        *error = DD_ERR(DDErrorCodeImbalancedParentheses, @"missing opening parenthesis after function \"%@\"", function.functionName);
         return nil;
     }
     
@@ -78,7 +78,7 @@
                     [function addSubterm:currentParameterGroup];
                     currentParameterGroup = nil;
                 } else {
-                    *error = ERR(DDErrorCodeInvalidArgument, @"invalid empty argument in function \"%@\"", function.functionName);
+                    *error = DD_ERR(DDErrorCodeInvalidArgument, @"invalid empty argument in function \"%@\"", function.functionName);
                     return nil;
                 }
             } else {
@@ -96,7 +96,7 @@
     
     // consume the closing parenthesis and verify it exists
     if (enumerator.nextObject == nil) {
-        *error = ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
+        *error = DD_ERR(DDErrorCodeImbalancedParentheses, @"imbalanced parentheses");
         return nil;
     }
     
@@ -127,7 +127,7 @@
         
         return term;
     } else {
-        *error = ERR(DDErrorCodeInvalidFormat, @"can't create a term with a nil token");
+        *error = DD_ERR(DDErrorCodeInvalidFormat, @"can't create a term with a nil token");
     }
     return nil;
 }

@@ -178,7 +178,7 @@ const DDMathTokenInterpreterOptions DDMathTokenInterpreterDefaultOptions = DDMat
     }
     
     if (resolvedOperator == nil) {
-        *error = ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
+        *error = DD_ERR(DDErrorCodeUnknownOperatorPrecedence, @"unknown precedence for token: %@", token);
         return nil;
     }
     

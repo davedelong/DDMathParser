@@ -78,7 +78,7 @@
     NSMutableArray *newParameters = [NSMutableArray array];
     for (_DDGroupTerm *group in groups) {
         if (group.subterms.count == 0) {
-            *error = ERR(DDErrorCodeInvalidFormat, @"Functions cannot have empty parameters");
+            *error = DD_ERR(DDErrorCodeInvalidFormat, @"Functions cannot have empty parameters");
             return nil;
         } else if (group.subterms.count == 1) {
             [newParameters addObject:group.subterms[0]];
@@ -96,7 +96,7 @@
     while (term.subterms.count > 1) {
         NSIndexSet *operatorIndices = [self _indicesOfOperatorsWithHighestPrecendenceInGroup:term];
         if (operatorIndices.count == 0) {
-            *error = ERR(DDErrorCodeInvalidFormat, @"invalid format: %@", term);
+            *error = DD_ERR(DDErrorCodeInvalidFormat, @"invalid format: %@", term);
             return NO;
         }
         
@@ -155,7 +155,7 @@
     } else if (operatorTerm.mathOperator.arity == DDMathOperatorArityUnary) {
         return [self _reduceUnaryOperator:operatorIndex inGroup:group error:error];
     } else {
-        *error = ERR(DDErrorCodeInvalidOperatorArity, @"unknown arity for operator: %@", operatorTerm);
+        *error = DD_ERR(DDErrorCodeInvalidOperatorArity, @"unknown arity for operator: %@", operatorTerm);
         return NO;
     }
 }
@@ -164,11 +164,11 @@
     _DDParserTerm *term = group.subterms[operatorIndex];
     
     if (operatorIndex == 0) {
-        *error = ERR(DDErrorCodeBinaryOperatorMissingLeftOperand, @"no left operand to binary %@", term);
+        *error = DD_ERR(DDErrorCodeBinaryOperatorMissingLeftOperand, @"no left operand to binary %@", term);
         return NO;
     }
     if (operatorIndex >= group.subterms.count - 1) {
-        *error = ERR(DDErrorCodeBinaryOperatorMissingRightOperand, @"no right operand to binary %@", term);
+        *error = DD_ERR(DDErrorCodeBinaryOperatorMissingRightOperand, @"no right operand to binary %@", term);
         return NO;
     }
     
@@ -265,7 +265,7 @@
     if (associativity == DDMathOperatorAssociativityRight) {
         // right associative unary operator (negate, not)
         if (operatorIndex >= group.subterms.count - 1) {
-            *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", term);
+            *error = DD_ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", term);
             return NO;
         }
         
@@ -275,7 +275,7 @@
     } else {
         // left associative unary operator (factorial)
         if (index == 0) {
-            *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", term);
+            *error = DD_ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", term);
             return NO;
         }
         
@@ -285,7 +285,7 @@
     }
     
     if (parameter.type == DDParserTermTypeOperator) {
-        *error = ERR(DDErrorCodeInvalidFormat, @"unary operator %@ is attempting to operate on another operator %@", term, parameter);
+        *error = DD_ERR(DDErrorCodeInvalidFormat, @"unary operator %@ is attempting to operate on another operator %@", term, parameter);
         return NO;
     }
     
@@ -320,7 +320,7 @@
     } else if (term.type == DDParserTermTypeGroup) {
         _DDGroupTerm *group = (_DDGroupTerm *)term;
         if (group.subterms.count != 1) {
-            *error = ERR(DDErrorCodeInvalidFormat, @"Unable to create expression from term: %@", group);
+            *error = DD_ERR(DDErrorCodeInvalidFormat, @"Unable to create expression from term: %@", group);
             return nil;
         }
         
@@ -342,12 +342,12 @@
     } else if (term.type == DDParserTermTypeOperator) {
         if (term.mathOperator.arity == DDMathOperatorArityUnary) {
             if (term.mathOperator.associativity == DDMathOperatorAssociativityLeft) {
-                *error = ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", term.token);
+                *error = DD_ERR(DDErrorCodeUnaryOperatorMissingLeftOperand, @"no left operand to unary %@", term.token);
             } else {
-                *error = ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", term.token);
+                *error = DD_ERR(DDErrorCodeUnaryOperatorMissingRightOperand, @"no right operand to unary %@", term.token);
             }
         } else {
-            *error = ERR(DDErrorCodeOperatorMissingOperands, @"missing operands for operator: %@", term.token);
+            *error = DD_ERR(DDErrorCodeOperatorMissingOperands, @"missing operands for operator: %@", term.token);
         }
     } else {
         [NSException raise:NSInternalInconsistencyException format:@"Cannot create expression from unknown term: %@", term];

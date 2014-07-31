@@ -244,7 +244,7 @@
     
     NSNumber *numberValue = [self _evaluateValue:result withSubstitutions:substitutions error:error];
     if (numberValue == nil && error != nil && *error == nil) {
-        *error = ERR(DDErrorCodeInvalidFunctionReturnType, @"invalid return type from %@ function", [e function]);
+        *error = DD_ERR(DDErrorCodeInvalidFunctionReturnType, @"invalid return type from %@ function", [e function]);
     }
     return numberValue;
 }
