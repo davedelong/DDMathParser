@@ -217,7 +217,7 @@
     if (self) {
         _map = [NSMutableDictionary dictionary];
         _tokenCharacters = [NSCountedSet set];
-        _allowedTokenCharacters = [NSCharacterSet alphanumericCharacterSet].invertedSet;
+        _allowedTokenCharacters = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
     }
     return self;
 }
