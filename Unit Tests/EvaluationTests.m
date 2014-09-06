@@ -9,7 +9,6 @@
 #import "UnitTestMacros.h"
 #import "EvaluationTests.h"
 #import "DDMathParser.h"
-#import "NSExpression+EasyParsing.h"
 
 @implementation EvaluationTests
 
@@ -50,7 +49,7 @@
     TEST(@"2**2", 4);
     TEST(@"2**2**2", 16);
 
-    // Linking against the 10.9 SDK, changes the associativity of exponentiation the to be “left”.
+    // Linking against the 10.9 SDK changes the associativity of exponentiation the to be left.
     if ([DDMathOperator associativityForPowerExpressions] == DDMathOperatorAssociativityRight) {
         // Intepreted as “2**(3**2)”.
         TEST(@"2**3**2", 512);

@@ -17,7 +17,7 @@
 	DDMathTokenizer * tokenizer = [[DDMathTokenizer alloc] initWithString:[bits componentsJoinedByString:@""]];
 	NSArray * tokens = [[tokenizer tokens] valueForKey:@"token"];
 	
-	STAssertTrue([tokens isEqualToArray:bits], @"mismatched tokens.  expected %@, given %@", bits, tokens);
+	XCTAssertTrue([tokens isEqualToArray:bits], @"mismatched tokens.  expected %@, given %@", bits, tokens);
 	[tokenizer release];	
 }
 
@@ -26,13 +26,13 @@
 	DDMathTokenizer * tokenizer = [[DDMathTokenizer alloc] initWithString:@"1"];
 	NSArray * tokens = [tokenizer tokens];
 	
-	STAssertTrue([tokens count] == 1, @"should have 1 token.  Given: %d", [tokens count]);
+	XCTAssertTrue([tokens count] == 1, @"should have 1 token.  Given: %d", [tokens count]);
 	
 	DDMathToken * token = [tokens objectAtIndex:0];
 	
-	STAssertNotNil(token, @"token should not be nil");
-	STAssertEqualObjects([token token], @"1", @"token should be 1.  Given: %@", [token token]);
-	STAssertTrue([token tokenType] == DDTokenTypeNumber, @"token type should be Number.  Given: %d", [token tokenType]);
+	XCTAssertNotNil(token, @"token should not be nil");
+	XCTAssertEqualObjects([token token], @"1", @"token should be 1.  Given: %@", [token token]);
+	XCTAssertTrue([token tokenType] == DDTokenTypeNumber, @"token type should be Number.  Given: %d", [token tokenType]);
 	
 	[tokenizer release];
     
@@ -82,11 +82,11 @@
 	DDMathTokenizer * tokenizer = [[DDMathTokenizer alloc] initWithString:@"3 x 9"];
 	NSArray * tokens = [[tokenizer tokens] valueForKey:@"token"];
 	NSArray * expected = [NSArray arrayWithObjects:@"3", @"*", @"9", nil];
-	STAssertEqualObjects(tokens, expected, @"unexpected tokens.  expected: %@, given: %@", expected, tokens);
+	XCTAssertEqualObjects(tokens, expected, @"unexpected tokens.  expected: %@, given: %@", expected, tokens);
 }
 
 - (void)testInvalidNumber {
-	STAssertThrows([[[DDMathTokenizer alloc] initWithString:@"10e2e2"] autorelease], @"expected exception, none thrown");
+	XCTAssertThrows([[[DDMathTokenizer alloc] initWithString:@"10e2e2"] autorelease], @"expected exception, none thrown");
 }
 
 @end
