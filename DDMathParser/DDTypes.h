@@ -16,6 +16,7 @@ typedef DDExpression* (^DDMathFunction)(NSArray *, NSDictionary *, DDMathEvaluat
 #pragma mark Error Codes
 
 extern NSString * const DDMathParserErrorDomain;
+extern NSString * const DDMathParserFailureReasonKey;
 
 extern NSString * const DDUnknownFunctionKey;
 extern NSString * const DDUnknownVariableKey;

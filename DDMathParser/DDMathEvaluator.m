@@ -133,7 +133,7 @@
 	if (e == nil && error != nil && *error == nil) {
         *error = [NSError errorWithDomain:DDMathParserErrorDomain
                                      code:DDErrorCodeUnresolvedFunction
-                                 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"unable to resolve function: %@", functionName],
+                                 userInfo:@{DDMathParserFailureReasonKey: [NSString stringWithFormat:@"unable to resolve function: %@", functionName],
                                             DDUnknownFunctionKey: functionName}];
 	}
 	return e;
@@ -229,7 +229,7 @@
     if (numberValue == nil && error != nil && *error == nil) {
         *error = [NSError errorWithDomain:DDMathParserErrorDomain
                                      code:DDErrorCodeUnresolvedVariable
-                                 userInfo:@{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"unable to resolve variable: %@", e],
+                                 userInfo:@{DDMathParserFailureReasonKey: [NSString stringWithFormat:@"unable to resolve variable: %@", e],
                                             DDUnknownVariableKey: [e variable]}];
 	}
 	return numberValue;

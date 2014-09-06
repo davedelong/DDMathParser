@@ -9,6 +9,7 @@
 #import "DDTypes.h"
 
 NSString * const DDMathParserErrorDomain = @"com.davedelong.ddmathparser";
+NSString * const DDMathParserFailureReasonKey = @"com.davedelong.ddmathparser.failureReason";
 
 NSString * const DDUnknownFunctionKey = @"com.davedelong.ddmathparser.Function";
 NSString * const DDUnknownVariableKey = @"com.davedelong.ddmathparser.Variable";
