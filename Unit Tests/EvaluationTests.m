@@ -49,7 +49,15 @@
 - (void)testPower {
     TEST(@"2**2", 4);
     TEST(@"2**2**2", 16);
-    TEST(@"2**3**2", 512);
+
+    // Linking against the 10.9 SDK, changes the associativity of exponentiation the to be “left”.
+    if ([DDMathOperator associativityForPowerExpressions] == DDMathOperatorAssociativityRight) {
+        // Intepreted as “2**(3**2)”.
+        TEST(@"2**3**2", 512);
+    } else {
+        // Intepreted as “(2**3)**2”.
+        TEST(@"2**3**2", 64);
+    }
 }
 
 - (void)testNegation {

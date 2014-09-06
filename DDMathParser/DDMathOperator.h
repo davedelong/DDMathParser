@@ -19,6 +19,8 @@
 + (instancetype)moduloOperator;
 + (instancetype)percentOperator;
 
++ (DDMathOperatorAssociativity)associativityForPowerExpressions;
+
 // the only reason you'd want to init a new \c MathOperator is so you can pass it to the -[DDMathOperatorSet addOperator:...] methods
 - (id)initWithOperatorFunction:(NSString *)function
                         tokens:(NSArray *)tokens
