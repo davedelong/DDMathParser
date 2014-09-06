@@ -136,7 +136,7 @@
     __block NSInteger currentPrecedence = -1;
     [group.subterms enumerateObjectsUsingBlock:^(_DDParserTerm *term, NSUInteger idx, BOOL *stop) {
         
-        if (term.type == DDParserTermTypeOperator) {
+        if (term.type == DDParserTermTypeOperator && term.resolved == NO) {
             NSInteger precedence = term.mathOperator.precedence;
             if (precedence > currentPrecedence) {
                 currentPrecedence = precedence;
@@ -180,12 +180,12 @@
         return NO;
     }
     
-    if (![self _collapseRightAssociativeUnaryOperatorsStartingAtIndex:operatorIndex inGroup:group error:error]) {
+    if (![self _collapseRightAssociativeUnaryOperatorsStartingAtIndex:operatorIndex+1 inGroup:group error:error]) {
         return NO;
     }
     
     NSInteger indexDelta = 0;
-    if (![self _collapseLeftAssociativeUnaryOperatorsStartingAtIndex:operatorIndex inGroup:group delta:&indexDelta error:error]) {
+    if (![self _collapseLeftAssociativeUnaryOperatorsStartingAtIndex:operatorIndex-1 inGroup:group delta:&indexDelta error:error]) {
         return NO;
     }
     
@@ -214,9 +214,11 @@
     NSUInteger nextIndex = index;
     
     _DDParserTerm *term = group.subterms[nextIndex];
+    if (term.resolved == YES) { return YES; }
+    
     while (term.mathOperator.associativity == DDMathOperatorAssociativityRight && term.mathOperator.arity == DDMathOperatorArityUnary) {
         nextIndex++;
-        if (nextIndex >= group.subterms.count - 1) {
+        if (nextIndex < group.subterms.count - 1) {
             term = group.subterms[nextIndex];
         } else {
             term = nil;
@@ -238,6 +240,8 @@
     NSInteger nextIndex = index;
     
     _DDParserTerm *term = group.subterms[nextIndex];
+    if (term.resolved == YES) { return YES; }
+    
     while (term.mathOperator.associativity == DDMathOperatorAssociativityLeft && term.mathOperator.arity == DDMathOperatorArityUnary) {
         nextIndex--;
         if (nextIndex >= 0) {
