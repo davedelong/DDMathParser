@@ -276,6 +276,7 @@
                             @"\u03C4": @"tau", // τ
                             @"\u03D5": @"phi", // ϕ
                             @"implicitmultiply": @"multiply",
+                            @"if": @"l_if",
                             
                             @"vers": @"versin",
                             @"ver": @"versin",
