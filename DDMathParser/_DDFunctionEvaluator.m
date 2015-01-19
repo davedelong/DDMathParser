@@ -411,12 +411,15 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
     if ([params count] > 1) {
         upperBound = [[params objectAtIndex:1] longLongValue];
     }
-    
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
     long long random = arc4random_uniform(upperBound);
     while (random < lowerBound) {
         random = arc4random_uniform(upperBound);
     }
-	
+#pragma clang diagnostic pop
+
 	return [DDExpression numberExpressionWithNumber:@(random)];
 }
 
