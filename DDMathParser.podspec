@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "DDMathParser"
-  s.version = "0.1"
+  s.version = "0.2"
   s.summary = "NSString → NSNumber"
   s.description = <<-DESC
                    * NSString → NSNumber
