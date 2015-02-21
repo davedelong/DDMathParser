@@ -174,8 +174,8 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	RETURN_IF_NIL(firstValue);
     
     NSNumber *result = nil;
-    if (round([firstValue doubleValue]) == [firstValue doubleValue] && [firstValue doubleValue] > 0) {
-        // it's a positive integer
+    if (round([firstValue doubleValue]) == [firstValue doubleValue] && [firstValue doubleValue] > 0 && [firstValue doubleValue] < 21) {
+        // it's a positive integer whose factorial can be represented in 64-bits
         NSUInteger total = 1;
         NSUInteger integer = [firstValue unsignedIntegerValue];
         while (integer > 1) {
