@@ -173,6 +173,7 @@
 		55F9F0121295C19900F4A9FD /* NSExpression+EasyParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSExpression+EasyParsing.h"; sourceTree = "<group>"; };
 		55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSExpression+EasyParsing.m"; sourceTree = "<group>"; };
 		8DD76FA10486AA7600D96B5E /* DDMathParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DDMathParser; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD8314871A5E695800C5A174 /* DDMathParser.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = DDMathParser.podspec; sourceTree = "<group>"; };
 		C6859EA3029092ED04C91782 /* DDMathParser.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = DDMathParser.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -205,6 +206,7 @@
 		08FB7794FE84155DC02AAC07 /* DDMathParser */ = {
 			isa = PBXGroup;
 			children = (
+				BD8314871A5E695800C5A174 /* DDMathParser.podspec */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859EA2029092E104C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
@@ -447,7 +449,7 @@
 			name = UnitTests;
 			productName = UnitTests;
 			productReference = 55BFA9A6128CDDEB00A80228 /* UnitTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		8DD76F960486AA7600D96B5E /* DDMathParser */ = {
 			isa = PBXNativeTarget;
