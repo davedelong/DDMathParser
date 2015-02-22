@@ -1,20 +1,19 @@
 Pod::Spec.new do |s|
-  s.name = "DDMathParser"
+  s.name = "HYPMathParser"
   s.version = "0.2"
-  s.summary = "NSString → NSNumber"
+  s.summary = "A fork of DDMathParser but with a Podfile"
   s.description = <<-DESC
                    * NSString → NSNumber
                    DESC
-  s.homepage = "https://github.com/hyperoslo/DDMathParser"
+  s.homepage = "https://github.com/hyperoslo/HYPMathParser"
   s.license = {
     :type => 'MIT',
     :file => 'LICENSE.md'
   }
   s.author = { "Hyper" => "teknologi@hyper.no" }
-  s.social_media_url = "http://twitter.com/hyperoslo"
   s.platform = :ios, '7.0'
   s.source = {
-    :git => 'https://github.com/hyperoslo/DDMathParser.git',
+    :git => 'https://github.com/hyperoslo/HYPMathParser.git',
     :tag => s.version.to_s
   }
   s.source_files = 'DDMathParser/*.{h,m}'
