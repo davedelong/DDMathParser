@@ -3,7 +3,8 @@ Pod::Spec.new do |s|
   s.version = "0.3"
   s.summary = "A fork of DDMathParser but with a Podfile"
   s.description = <<-DESC
-                   * NSString → NSNumber
+                    A fork of DDMathParser but with a Podfile,
+                    more info in https://github.com/davedelong/DDMathParser
                    DESC
   s.homepage = "https://github.com/hyperoslo/HYPMathParser"
   s.license = {
