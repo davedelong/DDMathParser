@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "HYPMathParser"
-  s.version = "0.3"
+  s.version = "0.4"
   s.summary = "A fork of DDMathParser but with a Podfile"
   s.description = <<-DESC
                     A fork of DDMathParser but with a Podfile,
