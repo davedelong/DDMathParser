@@ -573,6 +573,18 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
 	return _DDRTOD([DDExpression numberExpressionWithNumber:result], [self evaluator], error);
 }
 
+- (DDExpression *)atan2:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError *__autoreleasing*)error {
+    REQUIRE_N_ARGS(2);
+    DDMathEvaluator *evaluator = [self evaluator];
+    NSNumber *y = [evaluator evaluateExpression:[arguments objectAtIndex:0] withSubstitutions:variables error:error];
+    RETURN_IF_NIL(y);
+    NSNumber *x = [evaluator evaluateExpression:[arguments objectAtIndex:1] withSubstitutions:variables error:error];
+    RETURN_IF_NIL(x);
+    
+    NSNumber *result = @(atan2([y doubleValue], [x doubleValue]));
+    return _DDRTOD([DDExpression numberExpressionWithNumber:result], evaluator, error);
+}
+
 - (DDExpression *)sinh:(NSArray *)arguments variables:(NSDictionary *)variables error:(NSError **)error {
 	REQUIRE_N_ARGS(1);
     DDExpression *e = [arguments objectAtIndex:0];
