@@ -642,6 +642,49 @@ NSDecimal DDDecimalAtan(NSDecimal x) {
 }
 */
 
+NSDecimal DDDecimalAtan2(NSDecimal y, NSDecimal x) {
+    // from: http://en.wikipedia.org/wiki/Atan2
+    NSDecimal z;
+    NSDecimal zero = DDDecimalZero();
+    NSDecimal pi = DDDecimalPi();
+    BOOL yLessThanZero = (NSDecimalCompare(&zero, &y) == NSOrderedDescending);
+    BOOL yGreaterThanZero = (NSDecimalCompare(&zero, &y) == NSOrderedAscending);
+    
+    BOOL xEqualsZero = (NSDecimalCompare(&zero, &x) == NSOrderedSame);
+    BOOL xLessThanZero = (NSDecimalCompare(&zero, &x) == NSOrderedDescending);
+    BOOL xGreaterThanZero = (NSDecimalCompare(&zero, &x) == NSOrderedAscending);
+    
+    if (xGreaterThanZero) {
+        NSDecimal yoverx;
+        NSDecimalDivide(&yoverx, &y, &x, NSRoundBankers);
+        z = DDDecimalAtan(yoverx);
+    }
+    else if ((!yLessThanZero) && xLessThanZero) {
+        NSDecimal yoverx;
+        NSDecimalDivide(&yoverx, &y, &x, NSRoundBankers);
+        NSDecimal temp = DDDecimalAtan(yoverx);
+        NSDecimalAdd(&z, &temp, &pi, NSRoundBankers);
+    }
+    else if (yLessThanZero && xLessThanZero) {
+        NSDecimal yoverx;
+        NSDecimalDivide(&yoverx, &y, &x, NSRoundBankers);
+        NSDecimal temp = DDDecimalAtan(yoverx);
+        NSDecimalSubtract(&z, &temp, &pi, NSRoundBankers);
+    }
+    else if (yGreaterThanZero && xEqualsZero) {
+        z = DDDecimalPi_2();
+    }
+    else if (yLessThanZero && xEqualsZero) {
+        z = DDDecimalPi_2();
+        DDDecimalNegate(&z);
+    }
+    else {
+        z._isNegative = 1;
+        z._exponent = 0;
+    }
+    return z;
+}
+
 NSDecimal DDDecimalAcsc(NSDecimal d) {
     // from: http://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Infinite_series
     NSDecimal halfPi = DDDecimalPi_2();
