@@ -74,6 +74,7 @@ extern NSDecimal DDDecimalCot(NSDecimal d);
 extern NSDecimal DDDecimalAsin(NSDecimal d);
 extern NSDecimal DDDecimalAcos(NSDecimal d);
 extern NSDecimal DDDecimalAtan(NSDecimal d);
+extern NSDecimal DDDecimalAtan2(NSDecimal y, NSDecimal x);
 
 extern NSDecimal DDDecimalAcsc(NSDecimal d);
 extern NSDecimal DDDecimalAsec(NSDecimal d);
