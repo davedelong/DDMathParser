@@ -36,7 +36,7 @@
 		55325A1912A8C82C00DE9EB0 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
 		5537E36012AB20F30000CFED /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
 		5537E36412AB20F30000CFED /* DDMathStringToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F795E21293175B00EF2716 /* DDMathStringToken.m */; };
-		5537E36512AB20F30000CFED /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
+		5537E36512AB20F30000CFED /* NSString+HYPMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+HYPMathParsing.m */; };
 		5537E36712AB20F30000CFED /* DDMathEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5554D58A12944AFD00A62529 /* DDMathEvaluator.m */; };
 		5537E36912AB20F30000CFED /* DDExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F7963612934A1400EF2716 /* DDExpression.m */; };
 		5537E36A12AB20F30000CFED /* _DDFunctionExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F9EFEA1295AF3D00F4A9FD /* _DDFunctionExpression.m */; };
@@ -63,8 +63,8 @@
 		557067B813CC0D19004CB1B2 /* _DDParserTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 557067B713CC0D19004CB1B2 /* _DDParserTerm.m */; };
 		558A285714A2EEE9000FBE0C /* UnitTestMacros.m in Sources */ = {isa = PBXBuildFile; fileRef = 558A285614A2EEE9000FBE0C /* UnitTestMacros.m */; };
 		55ABBAAB142ECB1300BDF29A /* _DDRewriteRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */; };
-		55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
-		55BA67A11299FAEF002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
+		55BA67A01299FA19002279A5 /* NSString+HYPMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+HYPMathParsing.m */; };
+		55BA67A11299FAEF002279A5 /* NSString+HYPMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+HYPMathParsing.m */; };
 		55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2AD4F1295834600BA2905 /* EvaluationTests.m */; };
 		55E2FCB7129DC90400CD6023 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
 		55F3918A1632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */; };
@@ -143,8 +143,8 @@
 		55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = _DDRewriteRule.m; path = DDMathParser/_DDRewriteRule.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		55B303E414428310003D7FEC /* Demo-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Demo-Info.plist"; sourceTree = "<group>"; };
 		55BA673E1298ECA2002279A5 /* DDMathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = DDMathParser.h; path = DDMathParser/DDMathParser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDMathParsing.h"; sourceTree = "<group>"; };
-		55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DDMathParsing.m"; sourceTree = "<group>"; };
+		55BA679E1299FA19002279A5 /* NSString+HYPMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HYPMathParsing.h"; sourceTree = "<group>"; };
+		55BA679F1299FA19002279A5 /* NSString+HYPMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HYPMathParsing.m"; sourceTree = "<group>"; };
 		55BFA9A6128CDDEB00A80228 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		55BFA9A7128CDDEB00A80228 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		55BFA9AE128CDE7600A80228 /* ParserTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParserTests.h; sourceTree = "<group>"; };
@@ -173,7 +173,7 @@
 		55F9F0121295C19900F4A9FD /* NSExpression+EasyParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSExpression+EasyParsing.h"; sourceTree = "<group>"; };
 		55F9F0131295C19900F4A9FD /* NSExpression+EasyParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSExpression+EasyParsing.m"; sourceTree = "<group>"; };
 		8DD76FA10486AA7600D96B5E /* DDMathParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DDMathParser; sourceTree = BUILT_PRODUCTS_DIR; };
-		BD8314871A5E695800C5A174 /* DDMathParser.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = DDMathParser.podspec; sourceTree = "<group>"; };
+		BD8314871A5E695800C5A174 /* HYPMathParser.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = HYPMathParser.podspec; sourceTree = "<group>"; };
 		C6859EA3029092ED04C91782 /* DDMathParser.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = DDMathParser.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -206,7 +206,7 @@
 		08FB7794FE84155DC02AAC07 /* DDMathParser */ = {
 			isa = PBXGroup;
 			children = (
-				BD8314871A5E695800C5A174 /* DDMathParser.podspec */,
+				BD8314871A5E695800C5A174 /* HYPMathParser.podspec */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6859EA2029092E104C91782 /* Documentation */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
@@ -366,8 +366,8 @@
 				551C8C49144E5CFC00520BDA /* DDParserTypes.m */,
 				5570E4E412AABEF3002FE945 /* Tokens */,
 				55325A0312A8C34400DE9EB0 /* Precedence Parser */,
-				55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */,
-				55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */,
+				55BA679E1299FA19002279A5 /* NSString+HYPMathParsing.h */,
+				55BA679F1299FA19002279A5 /* NSString+HYPMathParsing.m */,
 			);
 			name = Parser;
 			path = DDMathParser;
@@ -530,7 +530,7 @@
 				118ADCED13F69A69002C3CDA /* _DDOperatorTerm.m in Sources */,
 				5537E36012AB20F30000CFED /* DDParser.m in Sources */,
 				5537E36412AB20F30000CFED /* DDMathStringToken.m in Sources */,
-				5537E36512AB20F30000CFED /* NSString+DDMathParsing.m in Sources */,
+				5537E36512AB20F30000CFED /* NSString+HYPMathParsing.m in Sources */,
 				5537E36712AB20F30000CFED /* DDMathEvaluator.m in Sources */,
 				5537E36912AB20F30000CFED /* DDExpression.m in Sources */,
 				5537E36A12AB20F30000CFED /* _DDFunctionExpression.m in Sources */,
@@ -568,7 +568,7 @@
 				55F9EFEE1295AF7500F4A9FD /* _DDNumberExpression.m in Sources */,
 				55F9EFF11295AFB500F4A9FD /* _DDVariableExpression.m in Sources */,
 				55F9F0141295C19900F4A9FD /* NSExpression+EasyParsing.m in Sources */,
-				55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */,
+				55BA67A01299FA19002279A5 /* NSString+HYPMathParsing.m in Sources */,
 				55E2FCB7129DC90400CD6023 /* DDParser.m in Sources */,
 				552532B912C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */,
 				5514EF161347EBA10010B9D8 /* DDTypes.m in Sources */,
@@ -593,7 +593,7 @@
 				554DA12E12985DB500433840 /* _DDFunctionExpression.m in Sources */,
 				554DA12F12985DB500433840 /* _DDNumberExpression.m in Sources */,
 				554DA13012985DB500433840 /* _DDVariableExpression.m in Sources */,
-				55BA67A11299FAEF002279A5 /* NSString+DDMathParsing.m in Sources */,
+				55BA67A11299FAEF002279A5 /* NSString+HYPMathParsing.m in Sources */,
 				55325A1912A8C82C00DE9EB0 /* DDParser.m in Sources */,
 				552532B712C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */,
 				5526E9E11310EF880018B4C9 /* DDTypes.m in Sources */,
