@@ -6,11 +6,11 @@
 //  Copyright 2010 Home. All rights reserved.
 //
 
-#import "NSString+DDMathParsing.h"
+#import "NSString+HYPMathParsing.h"
 #import "DDExpression.h"
 #import "DDMathEvaluator.h"
 
-@implementation NSString (DDMathParsing)
+@implementation NSString (HYPMathParsing)
 
 - (NSNumber *)numberByEvaluatingString {
 	return [self numberByEvaluatingStringWithSubstitutions:nil];

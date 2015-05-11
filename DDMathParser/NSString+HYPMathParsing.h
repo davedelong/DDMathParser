@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSString (DDMathParsing)
+@interface NSString (HYPMathParsing)
 
 - (NSNumber *)numberByEvaluatingString;
 - (NSNumber *)numberByEvaluatingStringWithSubstitutions:(NSDictionary *)substitutions;

@@ -12,7 +12,7 @@
 #import "DDTypes.h"
 #import "DDMathOperator.h"
 #import "DDExpressionRewriter.h"
-#import "NSString+DDMathParsing.h"
+#import "NSString+HYPMathParsing.h"
 
 #define DDRuleTemplateAnyNumber @"__num"
 #define DDRuleTemplateAnyFunction @"__func"
