@@ -176,12 +176,16 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
     NSNumber *result = nil;
     if (round([firstValue doubleValue]) == [firstValue doubleValue] && [firstValue doubleValue] > 0 && [firstValue doubleValue] < 21) {
         // it's a positive integer whose factorial can be represented in 64-bits
-        NSUInteger total = 1;
-        NSUInteger integer = [firstValue unsignedIntegerValue];
+        // use double type because 13! exceeds unsigned integer maximum of about 4,000 million on 32-bit platforms.
+        //        NSUInteger total = 1;
+        //        NSUInteger integer = [firstValue unsignedIntegerValue];
+        double total = 1;
+        double integer = [firstValue unsignedIntegerValue];
         while (integer > 1) {
             total *= integer--;
         }
         result = @(total);
+        
     } else {
         result = @(tgamma([firstValue doubleValue]+1));
     }
