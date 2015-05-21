@@ -175,18 +175,18 @@ static NSString *const _DDFunctionSelectorSuffix = @":variables:error:";
     
     NSNumber *result = nil;
     
-    BOOL is32Bits =(sizeof(int*) == 4) ;
-    // Use float approximation if it cannot fit in a 32 or 64 bit integer on platform
-    // >= 21! doesn't fit in 64 bit integer
-    // >= 13! doesn't fit in 32 bit integer (eg. iPhone 4)
-    if (round([firstValue doubleValue]) == [firstValue doubleValue] && [firstValue doubleValue] > 0 && [firstValue doubleValue] < (is32Bits ? 13 : 21)) {
+    if (round([firstValue doubleValue]) == [firstValue doubleValue] && [firstValue doubleValue] > 0 && [firstValue doubleValue] < 21) {
         // it's a positive integer whose factorial can be represented in 64-bits
-        NSUInteger total = 1;
-        NSUInteger integer = [firstValue unsignedIntegerValue];
+        // use double type because 13! exceeds unsigned integer maximum of about 4,000 million on 32-bit platforms.
+        //        NSUInteger total = 1;
+        //        NSUInteger integer = [firstValue unsignedIntegerValue];
+        double total = 1;
+        double integer = [firstValue unsignedIntegerValue];
         while (integer > 1) {
             total *= integer--;
         }
         result = @(total);
+        
     } else {
         result = @(tgamma([firstValue doubleValue]+1));
     }
