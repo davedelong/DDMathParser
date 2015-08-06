@@ -450,7 +450,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					556C68411989C20D00800A69 = {
 						CreatedOnToolsVersion = 6.0;
@@ -613,6 +613,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = "";
@@ -739,6 +740,7 @@
 					"-framework",
 					Cocoa,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = UnitTests;
 			};
 			name = Debug;
@@ -764,6 +766,7 @@
 					"-framework",
 					Cocoa,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = UnitTests;
 				ZERO_LINK = NO;
 			};
