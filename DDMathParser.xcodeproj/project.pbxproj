@@ -62,6 +62,7 @@
 		559B3EFC1B74063600000108 /* MathParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 559B3EFB1B74063600000108 /* MathParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		559B3F031B74063600000108 /* MathParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559B3EF91B74063600000108 /* MathParser.framework */; };
 		559B3F081B74063600000108 /* MathParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F071B74063600000108 /* MathParserTests.swift */; };
+		559B3F141B74072500000108 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F131B74072500000108 /* Token.swift */; };
 		559B3F181B7408A900000108 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F171B7408A900000108 /* Either.swift */; };
 		55ABBAAB142ECB1300BDF29A /* _DDRewriteRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */; };
 		55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
@@ -155,6 +156,7 @@
 		559B3F021B74063600000108 /* MathParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		559B3F071B74063600000108 /* MathParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathParserTests.swift; sourceTree = "<group>"; };
 		559B3F091B74063600000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		559B3F131B74072500000108 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		559B3F171B7408A900000108 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		55ABBAA9142ECB1300BDF29A /* _DDRewriteRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _DDRewriteRule.h; path = DDMathParser/_DDRewriteRule.h; sourceTree = "<group>"; };
 		55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = _DDRewriteRule.m; path = DDMathParser/_DDRewriteRule.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -392,6 +394,7 @@
 		559B3F121B74071B00000108 /* Tokenizing */ = {
 			isa = PBXGroup;
 			children = (
+				559B3F131B74072500000108 /* Token.swift */,
 				55D48BEA1B74146E0050331F /* Internal */,
 			);
 			name = Tokenizing;
@@ -672,6 +675,7 @@
 			files = (
 				559B3F181B7408A900000108 /* Either.swift in Sources */,
 				55D48BE71B740F3E0050331F /* Character.swift in Sources */,
+				559B3F141B74072500000108 /* Token.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
