@@ -21,14 +21,8 @@ internal struct VariableExtractor: TokenExtractor {
     
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
-        guard buffer.peekNext() == "$" else {
-            // variables must start with "$"
-            let range = start ..< start
-            let error = TokenizerError(kind: .CannotParseVariable, sourceRange: range)
-            return TokenGenerator.Element.Error(error)
-        }
         
-        buffer.consume()
+        buffer.consume() // consume the opening $
         
         guard identifierExtractor.matchesPreconditions(buffer) else {
             // the stuff that follow "$" must be a valid identifier

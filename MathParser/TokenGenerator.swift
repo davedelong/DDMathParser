@@ -13,6 +13,7 @@ public class TokenGenerator: GeneratorType {
     
     private let buffer: TokenCharacterBuffer
     private let extractors: Array<TokenExtractor>
+    private var hasReturnedError = false
     
     public init(string: String) {
         let operatorTokens = OperatorTokenSet(tokens: [])
@@ -29,6 +30,10 @@ public class TokenGenerator: GeneratorType {
     }
     
     public func next() -> Element? {
+        // once the generator has produced an error,
+        // it can't produce anything else
+        guard hasReturnedError == false else { return nil }
+        
         while buffer.peekNext()?.isWhitespaceOrNewline == true {
             buffer.consume()
         }
@@ -52,7 +57,10 @@ public class TokenGenerator: GeneratorType {
                 }
             }
         }
-        return errors.first
+        
+        let error = errors.first
+        hasReturnedError = (error != nil)
+        return error
     }
     
 }

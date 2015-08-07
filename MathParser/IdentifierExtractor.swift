@@ -16,7 +16,9 @@ internal struct IdentifierExtractor: TokenExtractor {
     }
     
     func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
-        return true
+        // An identifier can't start with these, because other things already do
+        let next = buffer.peekNext()
+        return next != "$" && next?.isDigit == false && next != "\"" && next != "'"
     }
     
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {

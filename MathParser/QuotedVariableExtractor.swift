@@ -16,14 +16,9 @@ internal struct QuotedVariableExtractor: TokenExtractor {
     
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
-        guard let quoteCharacter = buffer.peekNext() where quoteCharacter == "\"" || quoteCharacter == "'" else {
-            
-            let range = start ..< start
-            let error = TokenizerError(kind: .CannotParseQuotedVariable, sourceRange: range)
-            return TokenGenerator.Element.Error(error)
-        }
         
         // consume the opening quote
+        let quoteCharacter = buffer.peekNext()
         buffer.consume()
         
         var isEscaped = false
