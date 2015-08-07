@@ -56,7 +56,7 @@ internal struct NumberExtractor: TokenExtractor {
         if length > 0 {
             if length != 1 || buffer[start] != "." {
                 let raw = buffer[range]
-                result = .Value(Token(string: raw, sourceRange: range))
+                result = .Value(Token(kind: .Number, string: raw, sourceRange: range))
             }
         }
         return result

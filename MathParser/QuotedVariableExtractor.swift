@@ -59,7 +59,7 @@ internal struct QuotedVariableExtractor: TokenExtractor {
                 let error = TokenizerError(kind: .ZeroLengthVariable, sourceRange: range)
                 result = .Error(error)
             } else {
-                let token = Token(string: cleaned, sourceRange: range)
+                let token = Token(kind: .Variable, string: cleaned, sourceRange: range)
                 result = .Value(token)
             }
         }

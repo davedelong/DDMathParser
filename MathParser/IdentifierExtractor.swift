@@ -27,7 +27,7 @@ internal struct IdentifierExtractor: TokenExtractor {
         
         if start.distanceTo(buffer.currentIndex) > 0 {
             let raw = buffer[range]
-            result = .Value(Token(string: raw, sourceRange: range))
+            result = .Value(Token(kind: .Identifier, string: raw, sourceRange: range))
         } else {
             let error = TokenizerError(kind: .CannotParseIdentifier, sourceRange: range)
             result = .Error(error)
