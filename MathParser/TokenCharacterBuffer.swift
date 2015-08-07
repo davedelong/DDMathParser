@@ -28,15 +28,6 @@ internal class TokenCharacterBuffer {
         currentIndex = index
     }
     
-    func next(lowercase: Bool = false) -> Character? {
-        let chars = lowercase ? lowercaseCharacters : characters
-        
-        guard currentIndex < chars.endIndex else { return nil }
-        let character = chars[currentIndex]
-        currentIndex++
-        return character
-    }
-    
     func peekNext(delta: UInt = 0, lowercase: Bool = false) -> Character? {
         let chars = lowercase ? lowercaseCharacters : characters
         
