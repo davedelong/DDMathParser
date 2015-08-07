@@ -23,6 +23,7 @@
 		552532B912C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */; };
 		5526E9E11310EF880018B4C9 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
 		552781531B75234F0093B070 /* QuotedVariableExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552781521B75234F0093B070 /* QuotedVariableExtractor.swift */; };
+		552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552781571B752DF90093B070 /* OperatorTokenSet.swift */; };
 		55325A1912A8C82C00DE9EB0 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
 		554243571437654800BA293D /* DDMathOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 554243561437654800BA293D /* DDMathOperator.m */; };
 		554243581437654800BA293D /* DDMathOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 554243561437654800BA293D /* DDMathOperator.m */; };
@@ -145,6 +146,7 @@
 		552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDFunctionEvaluator.m; sourceTree = "<group>"; };
 		5526E9E01310EF880018B4C9 /* DDTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTypes.m; sourceTree = "<group>"; };
 		552781521B75234F0093B070 /* QuotedVariableExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuotedVariableExtractor.swift; sourceTree = "<group>"; };
+		552781571B752DF90093B070 /* OperatorTokenSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorTokenSet.swift; sourceTree = "<group>"; };
 		554243551437654800BA293D /* DDMathOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathOperator.h; sourceTree = "<group>"; };
 		554243561437654800BA293D /* DDMathOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathOperator.m; sourceTree = "<group>"; };
 		5554D58912944AFD00A62529 /* DDMathEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathEvaluator.h; sourceTree = "<group>"; };
@@ -311,6 +313,14 @@
 			name = Operators;
 			sourceTree = "<group>";
 		};
+		552781561B752C680093B070 /* Operators */ = {
+			isa = PBXGroup;
+			children = (
+				552781571B752DF90093B070 /* OperatorTokenSet.swift */,
+			);
+			name = Operators;
+			sourceTree = "<group>";
+		};
 		55325A0312A8C34400DE9EB0 /* Precedence Parser */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,6 +402,7 @@
 			children = (
 				559B3EFB1B74063600000108 /* MathParser.h */,
 				559B3F171B7408A900000108 /* Either.swift */,
+				552781561B752C680093B070 /* Operators */,
 				559B3F121B74071B00000108 /* Tokenizing */,
 				559B3EFD1B74063600000108 /* Info.plist */,
 			);
@@ -711,6 +722,7 @@
 				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */,
+				552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */,
 				55D48BE71B740F3E0050331F /* Character.swift in Sources */,
 				55D48BEC1B74147E0050331F /* String.CharacterView.Index.swift in Sources */,
 				559B3F141B74072500000108 /* Token.swift in Sources */,
