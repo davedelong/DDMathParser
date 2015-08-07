@@ -21,8 +21,11 @@ public enum Either<T, E: ErrorType> {
     
     public var error: E? {
         switch self {
-        case .Error(let e): return e
-        default: return nil
+            case .Error(let e): return e
+            default: return nil
         }
     }
+    
+    public var hasValue: Bool { return value != nil }
+    public var hasError: Bool { return error != nil }
 }

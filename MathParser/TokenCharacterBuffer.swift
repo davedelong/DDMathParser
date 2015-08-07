@@ -42,7 +42,7 @@ internal class TokenCharacterBuffer {
         
         let index = currentIndex.extendedBy(delta)
         guard index < chars.endIndex else { return nil }
-        return chars[currentIndex]
+        return chars[index]
     }
     
     func consume(delta: UInt = 1) {

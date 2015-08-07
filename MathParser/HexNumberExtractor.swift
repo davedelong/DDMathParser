@@ -13,7 +13,7 @@ internal struct HexNumberExtractor: TokenExtractor {
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
-        if buffer.peekNext() == "0" && (buffer.peekNext(1) == "x" || buffer.peekNext(1) == "X") {
+        if buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x" {
             buffer.consume(2)
             
             let indexBeforeHexNumbers = buffer.currentIndex
