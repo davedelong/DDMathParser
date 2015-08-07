@@ -67,7 +67,6 @@
 		557067B813CC0D19004CB1B2 /* _DDParserTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 557067B713CC0D19004CB1B2 /* _DDParserTerm.m */; };
 		559B3EFC1B74063600000108 /* MathParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 559B3EFB1B74063600000108 /* MathParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		559B3F031B74063600000108 /* MathParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559B3EF91B74063600000108 /* MathParser.framework */; };
-		559B3F081B74063600000108 /* MathParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F071B74063600000108 /* MathParserTests.swift */; };
 		559B3F111B7406D800000108 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F101B7406D800000108 /* Tokenizer.swift */; };
 		559B3F141B74072500000108 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F131B74072500000108 /* Token.swift */; };
 		559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F151B7407CE00000108 /* TokenGenerator.swift */; };
@@ -173,7 +172,6 @@
 		559B3EFB1B74063600000108 /* MathParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MathParser.h; sourceTree = "<group>"; };
 		559B3EFD1B74063600000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		559B3F021B74063600000108 /* MathParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		559B3F071B74063600000108 /* MathParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathParserTests.swift; sourceTree = "<group>"; };
 		559B3F091B74063600000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		559B3F101B7406D800000108 /* Tokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 		559B3F131B74072500000108 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
@@ -420,7 +418,6 @@
 		559B3F061B74063600000108 /* MathParserTests */ = {
 			isa = PBXGroup;
 			children = (
-				559B3F071B74063600000108 /* MathParserTests.swift */,
 				5527815D1B75659A0093B070 /* TokenizerTests.swift */,
 				559B3F091B74063600000108 /* Info.plist */,
 			);
@@ -750,7 +747,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				559B3F081B74063600000108 /* MathParserTests.swift in Sources */,
 				5527815E1B75659A0093B070 /* TokenizerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

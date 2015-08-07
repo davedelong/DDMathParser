@@ -10,6 +10,10 @@ import Foundation
 
 internal struct HexNumberExtractor: TokenExtractor {
     
+    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+        return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x"
+    }
+    
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         

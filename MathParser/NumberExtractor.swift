@@ -10,6 +10,10 @@ import Foundation
 
 internal struct NumberExtractor: TokenExtractor {
     
+    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+        return buffer.peekNext()?.isDigit == true
+    }
+    
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         

@@ -41,13 +41,15 @@ public class TokenGenerator: GeneratorType {
         for extractor in extractors {
             buffer.resetTo(start)
             
-            let result = extractor.extract(buffer)
-            
-            switch result {
-                case .Value(_):
-                    return result
-                case .Error(_):
-                    errors.append(result)
+            if extractor.matchesPreconditions(buffer) {
+                let result = extractor.extract(buffer)
+                
+                switch result {
+                    case .Value(_):
+                        return result
+                    case .Error(_):
+                        errors.append(result)
+                }
             }
         }
         return errors.first

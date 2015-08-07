@@ -15,6 +15,10 @@ internal struct OperatorExtractor: TokenExtractor {
         self.operatorTokens = operatorTokens
     }
     
+    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+        return true
+    }
+    
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         

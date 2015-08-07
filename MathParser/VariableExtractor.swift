@@ -15,6 +15,10 @@ internal struct VariableExtractor: TokenExtractor {
         identifierExtractor = IdentifierExtractor(operatorTokens: operatorTokens)
     }
     
+    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+        return buffer.peekNext() == "$"
+    }
+    
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         guard buffer.peekNext() == "$" else {
@@ -25,6 +29,13 @@ internal struct VariableExtractor: TokenExtractor {
         }
         
         buffer.consume()
+        
+        guard identifierExtractor.matchesPreconditions(buffer) else {
+            // the stuff that follow "$" must be a valid identifier
+            let range = start ..< start
+            let error = TokenizerError(kind: .CannotParseVariable, sourceRange: range)
+            return TokenGenerator.Element.Error(error)
+        }
     
         let identifierResult = identifierExtractor.extract(buffer)
     

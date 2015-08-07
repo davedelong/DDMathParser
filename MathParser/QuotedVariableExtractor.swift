@@ -10,6 +10,10 @@ import Foundation
 
 internal struct QuotedVariableExtractor: TokenExtractor {
     
+    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+        return buffer.peekNext() == "\"" || buffer.peekNext() == "'"
+    }
+    
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         guard let quoteCharacter = buffer.peekNext() where quoteCharacter == "\"" || quoteCharacter == "'" else {
