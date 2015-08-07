@@ -18,7 +18,8 @@ public class TokenGenerator: GeneratorType {
         buffer = TokenCharacterBuffer(string: string)
         extractors = [
             HexNumberExtractor(),
-            NumberExtractor()
+            NumberExtractor(),
+            QuotedVariableExtractor()
         ]
     }
     
