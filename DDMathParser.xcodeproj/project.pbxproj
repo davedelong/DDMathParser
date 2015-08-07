@@ -73,6 +73,9 @@
 		55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2AD4F1295834600BA2905 /* EvaluationTests.m */; };
 		55D48BE71B740F3E0050331F /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE61B740F3E0050331F /* Character.swift */; };
 		55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */; };
+		55D48BEC1B74147E0050331F /* String.CharacterView.Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BEB1B74147E0050331F /* String.CharacterView.Index.swift */; };
+		55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BED1B7415540050331F /* NumberExtractor.swift */; };
+		55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BF01B7415E80050331F /* HexNumberExtractor.swift */; };
 		55E2FCB7129DC90400CD6023 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
 		55F3918A1632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */; };
 		55F3918B1633349100AB28B1 /* _DDPrecisionFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 55F391891632FF8900AB28B1 /* _DDPrecisionFunctionEvaluator.m */; };
@@ -178,6 +181,9 @@
 		55D2AD4F1295834600BA2905 /* EvaluationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluationTests.m; sourceTree = "<group>"; };
 		55D48BE61B740F3E0050331F /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenCharacterBuffer.swift; sourceTree = "<group>"; };
+		55D48BEB1B74147E0050331F /* String.CharacterView.Index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.CharacterView.Index.swift; sourceTree = "<group>"; };
+		55D48BED1B7415540050331F /* NumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberExtractor.swift; sourceTree = "<group>"; };
+		55D48BF01B7415E80050331F /* HexNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexNumberExtractor.swift; sourceTree = "<group>"; };
 		55E2FCB5129DC90400CD6023 /* DDParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDParser.h; sourceTree = "<group>"; };
 		55E2FCB6129DC90400CD6023 /* DDParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DDParser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		55F391881632FF8800AB28B1 /* _DDPrecisionFunctionEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDPrecisionFunctionEvaluator.h; sourceTree = "<group>"; };
@@ -455,6 +461,7 @@
 				55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */,
 				55D48BEF1B7415DD0050331F /* Extractors */,
 				55D48BE61B740F3E0050331F /* Character.swift */,
+				55D48BEB1B74147E0050331F /* String.CharacterView.Index.swift */,
 			);
 			name = Internal;
 			sourceTree = "<group>";
@@ -463,6 +470,8 @@
 			isa = PBXGroup;
 			children = (
 				559B3F1B1B740C0B00000108 /* TokenExtractor.swift */,
+				55D48BED1B7415540050331F /* NumberExtractor.swift */,
+				55D48BF01B7415E80050331F /* HexNumberExtractor.swift */,
 			);
 			name = Extractors;
 			sourceTree = "<group>";
@@ -695,8 +704,11 @@
 			files = (
 				559B3F181B7408A900000108 /* Either.swift in Sources */,
 				559B3F111B7406D800000108 /* Tokenizer.swift in Sources */,
+				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,
+				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */,
 				55D48BE71B740F3E0050331F /* Character.swift in Sources */,
+				55D48BEC1B74147E0050331F /* String.CharacterView.Index.swift in Sources */,
 				559B3F141B74072500000108 /* Token.swift in Sources */,
 				55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */,
 				559B3F1C1B740C0B00000108 /* TokenExtractor.swift in Sources */,
