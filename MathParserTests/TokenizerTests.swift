@@ -27,6 +27,20 @@ class TokenizerTests: XCTestCase {
         XCTAssert(g.next() == nil, "Unexpected token")
     }
     
+    func testWhitespace() {
+        let g = Tokenizer(string: "").generate()
+        
+        XCTAssert(g.next() == nil, "Unexpected token")
+    }
+    
+    func testWhitespaceBetweenTokens() {
+        let g = Tokenizer(string: "1 2").generate()
+        
+        TestToken(g.next(), kind: .Number, string: "1")
+        TestToken(g.next(), kind: .Number, string: "2")
+        XCTAssert(g.next() == nil, "Unexpected token")
+    }
+    
     func testHexNumber() {
         let g = Tokenizer(string: "0x0123").generate()
         
@@ -124,6 +138,19 @@ class TokenizerTests: XCTestCase {
         
         let error = t?.error
         XCTAssertEqual(error?.kind, .CannotParseQuotedVariable, "Expected variable error")
+        
+        XCTAssert(g.next() == nil, "Unexpected token")
+    }
+    
+    func testEmptyQuotedVariable() {
+        let g = Tokenizer(string: "\"\"").generate()
+        
+        let t = g.next()
+        XCTAssert(t != nil, "Expected non-nil token")
+        XCTAssertEqual(t?.hasError, true, "Expected error, but got \(t?.value)")
+        
+        let error = t?.error
+        XCTAssertEqual(error?.kind, .ZeroLengthVariable, "Expected variable error")
         
         XCTAssert(g.next() == nil, "Unexpected token")
     }
