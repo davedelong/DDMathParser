@@ -15,15 +15,24 @@ public class TokenGenerator: GeneratorType {
     private let extractors: Array<TokenExtractor>
     
     public init(string: String) {
+        let operatorTokens = OperatorTokenSet(tokens: [])
+        
         buffer = TokenCharacterBuffer(string: string)
         extractors = [
             HexNumberExtractor(),
             NumberExtractor(),
-            QuotedVariableExtractor()
+            VariableExtractor(operatorTokens: operatorTokens),
+            QuotedVariableExtractor(),
+            OperatorExtractor(operatorTokens: operatorTokens),
+            IdentifierExtractor(operatorTokens: operatorTokens)
         ]
     }
     
     public func next() -> Element? {
+        while buffer.peekNext()?.isWhitespaceOrNewline == true {
+            buffer.consume()
+        }
+        
         guard buffer.isAtEnd == false else { return nil }
 
         let start = buffer.currentIndex

@@ -28,9 +28,10 @@ public struct TokenizerError: ErrorType {
         case CannotParseNumber
         case CannotParseHexNumber
         case CannotParseIdentifier
-        case ZeroLengthVariable
+        case CannotParseVariable
         case CannotParseQuotedVariable
-        case InvalidOperatorCharacter(Character)
+        case CannotParseOperator
+        case ZeroLengthVariable
     }
     
     public let kind: Kind

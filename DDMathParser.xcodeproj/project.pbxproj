@@ -22,6 +22,9 @@
 		552532B712C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */; };
 		552532B912C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */; };
 		5526E9E11310EF880018B4C9 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
+		5527814D1B751DCC0093B070 /* IdentifierExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527814C1B751DCC0093B070 /* IdentifierExtractor.swift */; };
+		5527814F1B751DD40093B070 /* VariableExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527814E1B751DD40093B070 /* VariableExtractor.swift */; };
+		552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552781501B751DDB0093B070 /* OperatorExtractor.swift */; };
 		552781531B75234F0093B070 /* QuotedVariableExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552781521B75234F0093B070 /* QuotedVariableExtractor.swift */; };
 		552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552781571B752DF90093B070 /* OperatorTokenSet.swift */; };
 		55325A1912A8C82C00DE9EB0 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
@@ -145,6 +148,9 @@
 		552532B512C1C92D00A942A7 /* _DDFunctionEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDFunctionEvaluator.h; sourceTree = "<group>"; };
 		552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDFunctionEvaluator.m; sourceTree = "<group>"; };
 		5526E9E01310EF880018B4C9 /* DDTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTypes.m; sourceTree = "<group>"; };
+		5527814C1B751DCC0093B070 /* IdentifierExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifierExtractor.swift; sourceTree = "<group>"; };
+		5527814E1B751DD40093B070 /* VariableExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableExtractor.swift; sourceTree = "<group>"; };
+		552781501B751DDB0093B070 /* OperatorExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorExtractor.swift; sourceTree = "<group>"; };
 		552781521B75234F0093B070 /* QuotedVariableExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuotedVariableExtractor.swift; sourceTree = "<group>"; };
 		552781571B752DF90093B070 /* OperatorTokenSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorTokenSet.swift; sourceTree = "<group>"; };
 		554243551437654800BA293D /* DDMathOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathOperator.h; sourceTree = "<group>"; };
@@ -486,6 +492,9 @@
 				55D48BF01B7415E80050331F /* HexNumberExtractor.swift */,
 				55D48BED1B7415540050331F /* NumberExtractor.swift */,
 				552781521B75234F0093B070 /* QuotedVariableExtractor.swift */,
+				5527814E1B751DD40093B070 /* VariableExtractor.swift */,
+				552781501B751DDB0093B070 /* OperatorExtractor.swift */,
+				5527814C1B751DCC0093B070 /* IdentifierExtractor.swift */,
 			);
 			name = Extractors;
 			sourceTree = "<group>";
@@ -717,9 +726,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				552781531B75234F0093B070 /* QuotedVariableExtractor.swift in Sources */,
+				5527814F1B751DD40093B070 /* VariableExtractor.swift in Sources */,
+				5527814D1B751DCC0093B070 /* IdentifierExtractor.swift in Sources */,
 				559B3F181B7408A900000108 /* Either.swift in Sources */,
 				559B3F111B7406D800000108 /* Tokenizer.swift in Sources */,
 				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,
+				552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */,
 				552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */,

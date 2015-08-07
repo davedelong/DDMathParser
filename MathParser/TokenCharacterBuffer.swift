@@ -10,10 +10,13 @@ import Foundation
 
 internal class TokenCharacterBuffer {
     private let characters: String.CharacterView
+    private let lowercaseCharacters: String.CharacterView
     private(set) var currentIndex: String.CharacterView.Index
     
     init(string: String) {
         characters = string.characters
+        lowercaseCharacters = string.lowercaseString.characters
+        
         currentIndex = characters.startIndex
     }
     
@@ -25,17 +28,21 @@ internal class TokenCharacterBuffer {
         currentIndex = index
     }
     
-    func next() -> Character? {
-        guard currentIndex < characters.endIndex else { return nil }
-        let character = characters[currentIndex]
+    func next(lowercase: Bool = false) -> Character? {
+        let chars = lowercase ? lowercaseCharacters : characters
+        
+        guard currentIndex < chars.endIndex else { return nil }
+        let character = chars[currentIndex]
         currentIndex++
         return character
     }
     
-    func peekNext(delta: UInt = 0) -> Character? {
+    func peekNext(delta: UInt = 0, lowercase: Bool = false) -> Character? {
+        let chars = lowercase ? lowercaseCharacters : characters
+        
         let index = currentIndex.extendedBy(delta)
-        guard index < characters.endIndex else { return nil }
-        return characters[currentIndex]
+        guard index < chars.endIndex else { return nil }
+        return chars[currentIndex]
     }
     
     func consume(delta: UInt = 1) {
