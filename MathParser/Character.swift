@@ -25,4 +25,46 @@ internal extension Character {
         }
     }
     
+    var isAlphabetic: Bool {
+        switch self {
+            case "a"..."f": return true
+            case "A"..."F": return true
+            default: return false
+        }
+    }
+    
+    var isAlphaNumeric: Bool {
+        return isAlphabetic || isDigit
+    }
+    
+    var isNewline: Bool {
+        switch self {
+            // From CoreFoundation/CFUniChar.c:292
+            case "\u{000a}"..."\u{000d}": return true
+            case "\u{0085}": return true
+            case "\u{2028}": return true
+            case "\u{2029}": return true
+            default: return false
+        }
+    }
+    
+    var isWhitespace: Bool {
+        switch self {
+            // From CoreFoundation/CFUniChar.c:288
+            case "\u{0020}": return true
+            case "\u{0009}": return true
+            case "\u{00a0}": return true
+            case "\u{1680}": return true
+            case "\u{2000}"..."\u{200b}": return true
+            case "\u{202f}": return true
+            case "\u{205f}": return true
+            case "\u{3000}": return true
+            default: return false
+        }
+    }
+    
+    var isWhitespaceOrNewline: Bool {
+        return isWhitespace || isNewline
+    }
+    
 }
