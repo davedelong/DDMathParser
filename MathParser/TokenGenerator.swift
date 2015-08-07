@@ -24,8 +24,24 @@ public class TokenGenerator: GeneratorType {
     }
     
     public func next() -> Element? {
+        guard buffer.isAtEnd == false else { return nil }
 
-        return nil
+        let start = buffer.currentIndex
+        var errors = Array<Element>()
+        
+        for extractor in extractors {
+            buffer.resetTo(start)
+            
+            let result = extractor.extract(buffer)
+            
+            switch result {
+                case .Value(_):
+                    return result
+                case .Error(_):
+                    errors.append(result)
+            }
+        }
+        return errors.first
     }
     
 }
