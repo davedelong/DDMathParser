@@ -65,6 +65,9 @@
 		556C685E1989C27D00800A69 /* _DDRewriteRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ABBAAA142ECB1300BDF29A /* _DDRewriteRule.m */; };
 		556E126D149D2D5000859AD8 /* DDMathOperatorTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 551C8C49144E5CFC00520BDA /* DDMathOperatorTypes.m */; };
 		557067B813CC0D19004CB1B2 /* _DDParserTerm.m in Sources */ = {isa = PBXBuildFile; fileRef = 557067B713CC0D19004CB1B2 /* _DDParserTerm.m */; };
+		557A80691B757C2C0014822A /* Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A80681B757C2C0014822A /* Operator.swift */; };
+		557A806B1B757C870014822A /* OperatorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A806A1B757C870014822A /* OperatorSet.swift */; };
+		557A806D1B7647CB0014822A /* Operator+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A806C1B7647CB0014822A /* Operator+Defaults.swift */; };
 		559B3EFC1B74063600000108 /* MathParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 559B3EFB1B74063600000108 /* MathParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		559B3F031B74063600000108 /* MathParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559B3EF91B74063600000108 /* MathParser.framework */; };
 		559B3F111B7406D800000108 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F101B7406D800000108 /* Tokenizer.swift */; };
@@ -167,6 +170,9 @@
 		557067B613CC0D19004CB1B2 /* _DDParserTerm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDParserTerm.h; sourceTree = "<group>"; };
 		557067B713CC0D19004CB1B2 /* _DDParserTerm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = _DDParserTerm.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		5570E3B112AA2D8D002FE945 /* DDMathOperatorTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathOperatorTypes.h; sourceTree = "<group>"; };
+		557A80681B757C2C0014822A /* Operator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operator.swift; sourceTree = "<group>"; };
+		557A806A1B757C870014822A /* OperatorSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorSet.swift; sourceTree = "<group>"; };
+		557A806C1B7647CB0014822A /* Operator+Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Operator+Defaults.swift"; sourceTree = "<group>"; };
 		558A285514A2ED36000FBE0C /* UnitTestMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTestMacros.h; sourceTree = "<group>"; };
 		559B3EF91B74063600000108 /* MathParser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MathParser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		559B3EFB1B74063600000108 /* MathParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MathParser.h; sourceTree = "<group>"; };
@@ -322,6 +328,9 @@
 		552781561B752C680093B070 /* Operators */ = {
 			isa = PBXGroup;
 			children = (
+				557A80681B757C2C0014822A /* Operator.swift */,
+				557A806C1B7647CB0014822A /* Operator+Defaults.swift */,
+				557A806A1B757C870014822A /* OperatorSet.swift */,
 				552781571B752DF90093B070 /* OperatorTokenSet.swift */,
 			);
 			name = Operators;
@@ -729,13 +738,16 @@
 				5527814F1B751DD40093B070 /* VariableExtractor.swift in Sources */,
 				5527814D1B751DCC0093B070 /* IdentifierExtractor.swift in Sources */,
 				559B3F181B7408A900000108 /* Either.swift in Sources */,
+				557A806B1B757C870014822A /* OperatorSet.swift in Sources */,
 				559B3F111B7406D800000108 /* Tokenizer.swift in Sources */,
+				557A80691B757C2C0014822A /* Operator.swift in Sources */,
 				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,
 				552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */,
 				552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */,
 				55D48BE71B740F3E0050331F /* Character.swift in Sources */,
+				557A806D1B7647CB0014822A /* Operator+Defaults.swift in Sources */,
 				55D48BEC1B74147E0050331F /* String.CharacterView.Index.swift in Sources */,
 				559B3F141B74072500000108 /* Token.swift in Sources */,
 				55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */,

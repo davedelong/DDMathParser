@@ -12,13 +12,15 @@ public struct Tokenizer: SequenceType {
     public typealias Generator = TokenGenerator
     
     private let string: String
+    private let operatorSet: OperatorSet
     
-    public init(string: String) {
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet) {
         self.string = string
+        self.operatorSet = operatorSet
     }
     
     public func generate() -> Generator {
-        return TokenGenerator(string: string)
+        return TokenGenerator(string: string, operatorSet: operatorSet)
     }
     
 }

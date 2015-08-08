@@ -15,8 +15,8 @@ public class TokenGenerator: GeneratorType {
     private let extractors: Array<TokenExtractor>
     private var hasReturnedError = false
     
-    public init(string: String) {
-        let operatorTokens = OperatorTokenSet(tokens: [])
+    public init(string: String, operatorSet: OperatorSet) {
+        let operatorTokens = operatorSet.operatorTokenSet()
         
         buffer = TokenCharacterBuffer(string: string)
         extractors = [

@@ -12,22 +12,22 @@ internal struct OperatorTokenSet {
     private let characters: Set<Character>
     private let tokens: Set<String>
     
-    init(tokens: Array<String>) {
+    init(tokens: Set<String>) {
         var characters = Set<Character>()
-        var tokens = Set<String>()
+        var normalizedTokens = Set<String>()
         
         for token in tokens {
             let lower = token.lowercaseString
             
-            tokens.insert(token)
-            tokens.insert(lower)
+            normalizedTokens.insert(token)
+            normalizedTokens.insert(lower)
             
             characters.unionInPlace(token.characters)
             characters.unionInPlace(lower.characters)
         }
         
         self.characters = characters
-        self.tokens = tokens
+        self.tokens = normalizedTokens
     }
     
     func isOperatorCharacter(c: Character) -> Bool {
