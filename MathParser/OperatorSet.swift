@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OperatorSet {
+public class OperatorSet {
     public static let defaultOperatorSet = OperatorSet()
     
     public enum Relation {
@@ -94,24 +94,30 @@ public struct OperatorSet {
         }
     }
     
-    internal func operatorTokenSet() -> OperatorTokenSet {
-        return OperatorTokenSet(tokens: knownTokens)
+    private var _operatorTokenSet: OperatorTokenSet? = nil
+    internal var operatorTokenSet: OperatorTokenSet {
+        if _operatorTokenSet == nil {
+            _operatorTokenSet = OperatorTokenSet(tokens: knownTokens)
+        }
+        guard let set = _operatorTokenSet else { fatalError("Missing operator token set") }
+        return set
     }
     
     public private(set) var operators: Array<Operator> {
         didSet {
             let tokens = operators.flatMap { $0.tokens }
             knownTokens = Set(tokens)
+            
         }
     }
     private var knownTokens: Set<String>
     
-    private mutating func removeOperator(op: Operator) {
+    private func removeOperator(op: Operator) {
         guard let index = operators.indexOf(op) else { return }
         operators.removeAtIndex(index)
     }
     
-    public mutating func addOperator(let op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
+    public func addOperator(let op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
         guard let existing = existingOperator(existingOp) else { return }
         
         var newOperator = op
@@ -141,7 +147,7 @@ public struct OperatorSet {
         return matches.first
     }
     
-    private mutating func processOperator(op: Operator, sorter: Operator -> Bool) {
+    private func processOperator(op: Operator, sorter: Operator -> Bool) {
         if var existing = existingOperator(op) {
             existing.tokens.unionInPlace(op.tokens)
         } else {
