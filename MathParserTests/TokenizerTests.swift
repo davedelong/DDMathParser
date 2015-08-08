@@ -168,4 +168,29 @@ class TokenizerTests: XCTestCase {
         XCTAssert(g.next() == nil, "Unexpected token")
     }
     
+    func testBasicOperator() {
+        let g = Tokenizer(string: "+").generate()
+        
+        TestToken(g.next(), kind: .Operator, string: "+")
+        XCTAssert(g.next() == nil, "Unexpected token")
+    }
+    
+    func testGreedyOperator() {
+        let g = Tokenizer(string: "***").generate()
+        
+        TestToken(g.next(), kind: .Operator, string: "**")
+        TestToken(g.next(), kind: .Operator, string: "*")
+        XCTAssert(g.next() == nil, "Unexpected token")
+    }
+    
+    func testConsecutiveOperators() {
+        let g = Tokenizer(string: "+-*/").generate()
+        
+        TestToken(g.next(), kind: .Operator, string: "+")
+        TestToken(g.next(), kind: .Operator, string: "-")
+        TestToken(g.next(), kind: .Operator, string: "*")
+        TestToken(g.next(), kind: .Operator, string: "/")
+        XCTAssert(g.next() == nil, "Unexpected token")
+    }
+    
 }
