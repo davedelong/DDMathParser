@@ -25,6 +25,16 @@ public struct Tokenizer: SequenceType {
     
 }
 
+public typealias RawToken = Token<RawTokenKind>
+
+public enum RawTokenKind {
+    case HexNumber
+    case Number
+    case Variable
+    case Operator
+    case Identifier
+}
+
 public struct TokenizerError: ErrorType {
     public enum Kind {
         case CannotParseNumber

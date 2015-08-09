@@ -36,7 +36,7 @@ internal struct HexNumberExtractor: TokenExtractor {
         
         if start.distanceTo(buffer.currentIndex) > 0 {
             let raw = buffer[range]
-            result = .Value(Token(kind: .HexNumber, string: raw, sourceRange: range))
+            result = .Value(RawToken(kind: .HexNumber, string: raw, sourceRange: range))
         } else {
             let error = TokenizerError(kind: .CannotParseHexNumber, sourceRange: range)
             result = .Error(error)

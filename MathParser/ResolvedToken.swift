@@ -8,11 +8,11 @@
 
 import Foundation
 
-public enum ResolvedToken {
-    
+public enum ResolvedTokenKind {
     case Number(UInt)
     case Variable(String)
     case Identifier(String)
-    case Operator
-    
+    case Operator(MathParser.Operator)
 }
+
+public typealias ResolvedToken = Token<ResolvedTokenKind>

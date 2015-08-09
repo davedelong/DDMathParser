@@ -9,7 +9,7 @@
 import Foundation
 
 public class TokenGenerator: GeneratorType {
-    public typealias Element = Either<Token, TokenizerError>
+    public typealias Element = Either<RawToken, TokenizerError>
     
     private let buffer: TokenCharacterBuffer
     private let extractors: Array<TokenExtractor>

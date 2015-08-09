@@ -42,7 +42,7 @@ internal struct VariableExtractor: TokenExtractor {
                 result = .Error(error)
             case .Value(let t):
                 let range = start ..< t.sourceRange.endIndex
-                let token = Token(kind: .Variable, string: t.string, sourceRange: range)
+                let token = RawToken(kind: .Variable, string: t.string, sourceRange: range)
                 result = .Value(token)
         }
         

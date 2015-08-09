@@ -30,32 +30,43 @@ public struct ResolvedTokenGenerator: GeneratorType {
         
         guard let token = next.value else { return nil }
         
+        let element: Element
+        
         switch token.kind {
             
             case .HexNumber:
                 if let number = UInt(token.string, radix: 16) {
-                    return .Value(.Number(number))
+                    let token = ResolvedToken(kind: .Number(number), string: token.string, sourceRange: token.sourceRange)
+                    element = .Value(token)
                 } else {
-                    hasFinished = true
-                    return .Error(TokenizerError(kind: .CannotParseHexNumber, sourceRange: token.sourceRange))
+                    element = .Error(TokenizerError(kind: .CannotParseHexNumber, sourceRange: token.sourceRange))
                 }
             
             case .Number:
                 let number = NSDecimalNumber(string: token.string)
-                return .Value(.Number(number.unsignedLongValue))
+                let token = ResolvedToken(kind: .Number(number.unsignedLongValue), string: token.string, sourceRange: token.sourceRange)
+                element = .Value(token)
                 
             case .Variable:
-                return .Value(.Variable(token.string))
+                let token = ResolvedToken(kind: .Variable(token.string), string: token.string, sourceRange: token.sourceRange)
+                element = .Value(token)
             
             case .Identifier:
-                return .Value(.Identifier(token.string))
+                let token = ResolvedToken(kind: .Identifier(token.string), string: token.string, sourceRange: token.sourceRange)
+                element = .Value(token)
             
             default:
-                // TODO: resolve operators
-                hasFinished = true
+
                 return nil
             
         }
+        
+        switch element {
+            case .Error(_): hasFinished = true
+            case .Value(let t): tokensSoFar.append(t)
+        }
+        
+        return element
     }
     
 }
