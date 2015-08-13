@@ -214,7 +214,7 @@ extension TokenResolver {
         guard let previousKind = previous?.kind else { return [] }
         let nextKind = next.kind
         
-        let previousMatches = previousKind.isNumber || previousKind.isVariable || (previousKind.resolvedOperator?.arity == .Unary && previousKind.resolvedOperator?.associativity == .Left)
+        let previousMatches = previousKind.isOperator == false || (previousKind.resolvedOperator?.arity == .Unary && previousKind.resolvedOperator?.associativity == .Left)
         
         let nextMatches = nextKind.isOperator == false || (nextKind.resolvedOperator?.arity == .Unary && nextKind.resolvedOperator?.associativity == .Right)
         
