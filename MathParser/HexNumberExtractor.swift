@@ -17,27 +17,32 @@ internal struct HexNumberExtractor: TokenExtractor {
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
-        if buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x" {
-            buffer.consume(2)
-            
-            let indexBeforeHexNumbers = buffer.currentIndex
-            while buffer.peekNext()?.isHexDigit == true {
-                buffer.consume()
-            }
-            
-            if buffer.currentIndex == indexBeforeHexNumbers {
-                // there wasn't anything after 0[xX]
-                buffer.resetTo(start)
-            }
+        guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x" else {
+            let error = TokenizerError(kind: .CannotParseHexNumber, sourceRange: start ..< start)
+            return .Error(error)
         }
         
-        let range = start ..< buffer.currentIndex
+        
+        buffer.consume(2) // 0x
+        
+        let indexBeforeHexNumbers = buffer.currentIndex
+        while buffer.peekNext()?.isHexDigit == true {
+            buffer.consume()
+        }
+        
+        if buffer.currentIndex == indexBeforeHexNumbers {
+            // there wasn't anything after 0[xX]
+            buffer.resetTo(start)
+        }
+        
         let result: TokenGenerator.Element
         
         if start.distanceTo(buffer.currentIndex) > 0 {
+            let range = indexBeforeHexNumbers ..< buffer.currentIndex
             let raw = buffer[range]
             result = .Value(RawToken(kind: .HexNumber, string: raw, sourceRange: range))
         } else {
+            let range = start ..< buffer.currentIndex
             let error = TokenizerError(kind: .CannotParseHexNumber, sourceRange: range)
             result = .Error(error)
         }

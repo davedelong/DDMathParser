@@ -33,7 +33,7 @@ class TokenizerTests: XCTestCase {
         let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x0123").tokenize())
         
         XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: RawTokenKind.HexNumber, string: "0x0123")
+        TestToken(tokens?[0], kind: RawTokenKind.HexNumber, string: "0123")
     }
     
     func testBadHexNumber() {
