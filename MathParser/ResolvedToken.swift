@@ -11,12 +11,12 @@ import Foundation
 public typealias ResolvedToken = Token<ResolvedTokenKind>
 
 public enum ResolvedTokenKind: Equatable {
-    case Number(UInt)
+    case Number(Double)
     case Variable(String)
     case Identifier(String)
     case Operator(MathParser.Operator)
     
-    public var number: UInt? {
+    public var number: Double? {
         guard case .Number(let o) = self else { return nil }
         return o
     }

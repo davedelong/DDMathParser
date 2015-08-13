@@ -88,15 +88,14 @@ extension TokenResolver {
         switch rawToken.kind {
             case .HexNumber:
                 if let number = UInt(rawToken.string, radix: 16) {
-                    resolvedToken = ResolvedToken(kind: .Number(number), string: rawToken.string, sourceRange: rawToken.sourceRange)
+                    resolvedToken = ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, sourceRange: rawToken.sourceRange)
                 } else {
                     throw TokenResolverError(kind: .CannotParseHexNumber, rawToken: rawToken)
                 }
                 
             case .Number:
                 let number = NSDecimalNumber(string: rawToken.string)
-                // TODO: this doesn't handle non-integers
-                resolvedToken = ResolvedToken(kind: .Number(number.unsignedLongValue), string: rawToken.string, sourceRange: rawToken.sourceRange)
+                resolvedToken = ResolvedToken(kind: .Number(number.doubleValue), string: rawToken.string, sourceRange: rawToken.sourceRange)
                 
             case .Variable:
                 resolvedToken = ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, sourceRange: rawToken.sourceRange)
