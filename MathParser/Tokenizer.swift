@@ -10,7 +10,7 @@ import Foundation
 
 public struct Tokenizer {
     private let string: String
-    private let operatorSet: OperatorSet
+    internal let operatorSet: OperatorSet
     
     public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet) {
         self.string = string
