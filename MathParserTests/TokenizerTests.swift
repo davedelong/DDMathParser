@@ -9,188 +9,187 @@
 import XCTest
 import MathParser
 
-func TestToken(t: Either<Token, TokenizerError>?, kind: Token.Kind, string: String, file: String = __FILE__, line: UInt = __LINE__) {
-    
-    XCTAssert(t != nil, "Expected non-nil token", file: file, line: line)
-    XCTAssert(t?.hasValue == true, "Expected value token", file: file, line: line)
-    
-    let token = t?.value
-    XCTAssertEqual(token?.kind, kind, "Unexpected token kind", file: file, line: line)
-    XCTAssertEqual(token?.string, string, "Unexpected token string", file: file, line: line)
+func TestToken<T>(t: Token<T>?, kind: T, string: String, file: String = __FILE__, line: UInt = __LINE__) {
+    XCTAssert(t != nil, "Missing token", file: file, line: line)
+    XCTAssert(t?.kind == kind, "Unexpected token kind", file: file, line: line)
+    XCTAssertEqual(t?.string, string, "Unexpected token string", file: file, line: line)
+}
+
+func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__) -> T? {
+    var t: T? = nil
+    do {
+        t = try expression()
+    } catch let e {
+        let failMessage = "Unexpected exception: \(e). \(message)"
+        XCTFail(failMessage, file: file, line: line)
+    }
+    return t
 }
 
 class TokenizerTests: XCTestCase {
     
     func testEmpty() {
-        let g = Tokenizer(string: "").generate()
-        
-        XCTAssert(g.next() == nil, "Unexpected token")
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "").tokenize())
+        XCTAssertEqual(tokens?.count, 0)
     }
     
     func testWhitespace() {
-        let g = Tokenizer(string: "").generate()
-        
-        XCTAssert(g.next() == nil, "Unexpected token")
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "     ").tokenize())
+        XCTAssertEqual(tokens?.count, 0)
     }
     
     func testWhitespaceBetweenTokens() {
-        let g = Tokenizer(string: "1 2").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 2").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "1")
-        TestToken(g.next(), kind: .Number, string: "2")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 2)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "1")
+        TestToken(tokens?[1], kind: RawTokenKind.Number, string: "2")
     }
     
     func testHexNumber() {
-        let g = Tokenizer(string: "0x0123").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x0123").tokenize())
         
-        TestToken(g.next(), kind: .HexNumber, string: "0x0123")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.HexNumber, string: "0x0123")
     }
     
     func testBadHexNumber() {
         // this looks like a bad hex number,
         // but it's really a zero followed by an x
-        let g = Tokenizer(string: "0x").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "0")
-        TestToken(g.next(), kind: .Identifier, string: "x")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 2)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "0")
+        TestToken(tokens?[1], kind: RawTokenKind.Identifier, string: "x")
     }
     
     func testNumber() {
-        let g = Tokenizer(string: "0123").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "0123").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "0123")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "0123")
     }
     
     func testFloatNumber() {
-        let g = Tokenizer(string: "1.23").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "1.23")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "1.23")
     }
     
     func testENumber() {
-        let g = Tokenizer(string: "1.23e5").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e5").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "1.23e5")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "1.23e5")
     }
     
     func testEPlusNumber() {
-        let g = Tokenizer(string: "1.23e+5").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e+5").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "1.23e+5")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "1.23e+5")
     }
     
     func testEMinusNumber() {
-        let g = Tokenizer(string: "1.23e-5").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e-5").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "1.23e-5")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "1.23e-5")
     }
     
     func testMissingExponentNumber() {
-        let g = Tokenizer(string: "1.23e").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e").tokenize())
         
-        TestToken(g.next(), kind: .Number, string: "1.23")
-        TestToken(g.next(), kind: .Identifier, string: "e")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 2)
+        TestToken(tokens?[0], kind: RawTokenKind.Number, string: "1.23")
+        TestToken(tokens?[1], kind: RawTokenKind.Identifier, string: "e")
     }
 
     func testVariable() {
-        let g = Tokenizer(string: "$foo").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "$foo").tokenize())
         
-        TestToken(g.next(), kind: .Variable, string: "foo")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Variable, string: "foo")
     }
     
     func testDoubleQuotedVariable() {
-        let g = Tokenizer(string: "\"foo\"").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\"").tokenize())
         
-        TestToken(g.next(), kind: .Variable, string: "foo")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Variable, string: "foo")
     }
     
     func testSingleQuotedVariable() {
-        let g = Tokenizer(string: "'foo'").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "'foo'").tokenize())
         
-        TestToken(g.next(), kind: .Variable, string: "foo")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Variable, string: "foo")
     }
     
     func testQuotedAndEscapedVariable() {
-        let g = Tokenizer(string: "\"foo\\\"\"").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\\\"\"").tokenize())
         
-        TestToken(g.next(), kind: .Variable, string: "foo\"")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Variable, string: "foo\"")
     }
     
     func testMissingQuoteVariable() {
-        let g = Tokenizer(string: "\"foo").generate()
-        
-        let t = g.next()
-        XCTAssert(t != nil, "Expected non-nil token")
-        XCTAssertEqual(t?.hasError, true, "Expected error, but got \(t?.value)")
-        
-        let error = t?.error
-        XCTAssertEqual(error?.kind, .CannotParseQuotedVariable, "Expected variable error")
-        
-        XCTAssert(g.next() == nil, "Unexpected token")
+        do {
+            try Tokenizer(string: "\"foo").tokenize()
+            XCTFail("Expected thrown error")
+        } catch let e as TokenizerError {
+            XCTAssert(e.kind == .CannotParseQuotedVariable, "Expected variable error")
+        } catch let other {
+            XCTFail("Unexpected error: \(other)")
+        }
     }
     
     func testEmptyQuotedVariable() {
-        let g = Tokenizer(string: "\"\"").generate()
-        
-        let t = g.next()
-        XCTAssert(t != nil, "Expected non-nil token")
-        XCTAssertEqual(t?.hasError, true, "Expected error, but got \(t?.value)")
-        
-        let error = t?.error
-        XCTAssertEqual(error?.kind, .ZeroLengthVariable, "Expected variable error")
-        
-        XCTAssert(g.next() == nil, "Unexpected token")
+        do {
+            try Tokenizer(string: "\"\"").tokenize()
+            XCTFail("Expected thrown error")
+        } catch let e as TokenizerError {
+            XCTAssert(e.kind == .ZeroLengthVariable, "Expected zero-length variable error")
+        } catch let other {
+            XCTFail("Unexpected error: \(other)")
+        }
     }
     
     func testBadVariable() {
-        let g = Tokenizer(string: "$").generate()
-        
-        let t = g.next()
-        XCTAssert(t != nil, "Expected non-nil token")
-        XCTAssertEqual(t?.hasError, true, "Expected error, but got \(t?.value)")
-        
-        let error = t?.error
-        XCTAssertEqual(error?.kind, .CannotParseVariable, "Expected variable error")
-        
-        XCTAssert(g.next() == nil, "Unexpected token")
+        do {
+            try Tokenizer(string: "$").tokenize()
+            XCTFail("Expected thrown error")
+        } catch let e as TokenizerError {
+            XCTAssert(e.kind == .CannotParseVariable, "Expected variable error")
+        } catch let other {
+            XCTFail("Unexpected error: \(other)")
+        }
     }
     
     func testBasicOperator() {
-        let g = Tokenizer(string: "+").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "+").tokenize())
         
-        TestToken(g.next(), kind: .Operator, string: "+")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 1)
+        TestToken(tokens?[0], kind: RawTokenKind.Operator, string: "+")
     }
     
     func testGreedyOperator() {
-        let g = Tokenizer(string: "***").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "***").tokenize())
         
-        TestToken(g.next(), kind: .Operator, string: "**")
-        TestToken(g.next(), kind: .Operator, string: "*")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 2)
+        TestToken(tokens?[0], kind: RawTokenKind.Operator, string: "**")
+        TestToken(tokens?[1], kind: RawTokenKind.Operator, string: "*")
     }
     
     func testConsecutiveOperators() {
-        let g = Tokenizer(string: "+-*/").generate()
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "+-*/").tokenize())
         
-        TestToken(g.next(), kind: .Operator, string: "+")
-        TestToken(g.next(), kind: .Operator, string: "-")
-        TestToken(g.next(), kind: .Operator, string: "*")
-        TestToken(g.next(), kind: .Operator, string: "/")
-        XCTAssert(g.next() == nil, "Unexpected token")
+        XCTAssertEqual(tokens?.count, 4)
+        TestToken(tokens?[0], kind: RawTokenKind.Operator, string: "+")
+        TestToken(tokens?[1], kind: RawTokenKind.Operator, string: "-")
+        TestToken(tokens?[2], kind: RawTokenKind.Operator, string: "*")
+        TestToken(tokens?[3], kind: RawTokenKind.Operator, string: "/")
     }
     
 }

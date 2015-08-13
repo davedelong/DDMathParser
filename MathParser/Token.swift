@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Token<T> {
+public struct Token<T: Equatable> {
     public let kind: T
     public let string: String
     public let sourceRange: Range<String.CharacterView.Index>

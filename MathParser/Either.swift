@@ -8,24 +8,24 @@
 
 import Foundation
 
-public enum Either<T, E: ErrorType> {
+internal enum Either<T, E: ErrorType> {
     case Value(T)
     case Error(E)
     
-    public var value: T? {
+    var value: T? {
         switch self {
             case .Value(let v): return v
             default: return nil
         }
     }
     
-    public var error: E? {
+    var error: E? {
         switch self {
             case .Error(let e): return e
             default: return nil
         }
     }
     
-    public var hasValue: Bool { return value != nil }
-    public var hasError: Bool { return error != nil }
+    var hasValue: Bool { return value != nil }
+    var hasError: Bool { return error != nil }
 }

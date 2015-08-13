@@ -8,18 +8,20 @@
 
 import Foundation
 
-public struct ResolvedTokenGenerator: GeneratorType {
-    public typealias Element = Either<ResolvedToken, TokenizerError>
+internal struct ResolvedTokenGenerator: GeneratorType {
+    typealias Element = Either<ResolvedToken, TokenizerError>
     
     private var generator: TokenGenerator
     private var tokensSoFar = Array<ResolvedToken>()
     private var hasFinished = false
+    private let operatorSet: OperatorSet
     
-    public init(generator: TokenGenerator) {
+    init(generator: TokenGenerator) {
         self.generator = generator
+        self.operatorSet = generator.operatorSet
     }
     
-    public mutating func next() -> Element? {
+    mutating func next() -> Element? {
         guard hasFinished == false else { return nil }
         guard let next = generator.next() else { return nil }
         
@@ -55,10 +57,8 @@ public struct ResolvedTokenGenerator: GeneratorType {
                 let token = ResolvedToken(kind: .Identifier(token.string), string: token.string, sourceRange: token.sourceRange)
                 element = .Value(token)
             
-            default:
-
-                return nil
-            
+            case .Operator:
+                element = resolveOperator(token)
         }
         
         switch element {
@@ -67,6 +67,19 @@ public struct ResolvedTokenGenerator: GeneratorType {
         }
         
         return element
+    }
+    
+    private func resolveOperator(token: RawToken) -> Element {
+        
+        // first, find all the operators that match this token
+        
+        let matches = operatorSet.operatorForToken(token.string)
+        
+//        guard matches.isEmpty == false else {
+            let error = TokenizerError(kind: .CannotParseOperator, sourceRange: token.sourceRange)
+            return .Error(error)
+//        }
+        
     }
     
 }

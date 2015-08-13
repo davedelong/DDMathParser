@@ -8,9 +8,7 @@
 
 import Foundation
 
-public struct Tokenizer: SequenceType {
-    public typealias Generator = TokenGenerator
-    
+public struct Tokenizer {
     private let string: String
     private let operatorSet: OperatorSet
     
@@ -19,33 +17,18 @@ public struct Tokenizer: SequenceType {
         self.operatorSet = operatorSet
     }
     
-    public func generate() -> Generator {
-        return TokenGenerator(string: string, operatorSet: operatorSet)
+    public func tokenize() throws -> Array<RawToken> {
+        let g = TokenGenerator(string: string, operatorSet: operatorSet)
+        var tokens = Array<RawToken>()
+        
+        while let next = g.next() {
+            switch next {
+                case .Error(let e): throw e
+                case .Value(let t): tokens.append(t)
+            }
+        }
+        
+        return tokens
     }
     
-}
-
-public typealias RawToken = Token<RawTokenKind>
-
-public enum RawTokenKind {
-    case HexNumber
-    case Number
-    case Variable
-    case Operator
-    case Identifier
-}
-
-public struct TokenizerError: ErrorType {
-    public enum Kind {
-        case CannotParseNumber
-        case CannotParseHexNumber
-        case CannotParseIdentifier
-        case CannotParseVariable
-        case CannotParseQuotedVariable
-        case CannotParseOperator
-        case ZeroLengthVariable
-    }
-    
-    public let kind: Kind
-    public let sourceRange: Range<String.CharacterView.Index>
 }

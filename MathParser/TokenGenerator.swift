@@ -8,14 +8,16 @@
 
 import Foundation
 
-public class TokenGenerator: GeneratorType {
-    public typealias Element = Either<RawToken, TokenizerError>
+internal class TokenGenerator: GeneratorType {
+    typealias Element = Either<RawToken, TokenizerError>
     
     private let buffer: TokenCharacterBuffer
     private let extractors: Array<TokenExtractor>
-    private var hasReturnedError = false
     
-    public init(string: String, operatorSet: OperatorSet) {
+    internal let operatorSet: OperatorSet
+    
+    init(string: String, operatorSet: OperatorSet) {
+        self.operatorSet = operatorSet
         let operatorTokens = operatorSet.operatorTokenSet
         
         buffer = TokenCharacterBuffer(string: string)
@@ -29,11 +31,7 @@ public class TokenGenerator: GeneratorType {
         ]
     }
     
-    public func next() -> Element? {
-        // once the generator has produced an error,
-        // it can't produce anything else
-        guard hasReturnedError == false else { return nil }
-        
+    func next() -> Element? {
         while buffer.peekNext()?.isWhitespaceOrNewline == true {
             buffer.consume()
         }
@@ -58,9 +56,7 @@ public class TokenGenerator: GeneratorType {
             }
         }
         
-        let error = errors.first
-        hasReturnedError = (error != nil)
-        return error
+        return errors.first
     }
     
 }

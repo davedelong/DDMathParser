@@ -171,8 +171,21 @@ public class OperatorSet {
         }
     }
     
-//    public func operatorForToken(token: String, arity: Operator.Arity? = nil, associativity: Operator.Associativity? = nil) {
-//        
-//    }
+    public func operatorForToken(token: String, arity: Operator.Arity? = nil, associativity: Operator.Associativity? = nil) -> Array<Operator> {
+        
+        return operators.filter {
+            guard $0.tokens.contains(token) else { return false }
+            
+            if let arity = arity {
+                if $0.arity != arity { return false }
+            }
+            
+            if let associativity = associativity {
+                if $0.associativity != associativity { return false }
+            }
+            
+            return true
+        }        
+    }
     
 }

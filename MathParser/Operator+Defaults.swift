@@ -61,6 +61,8 @@ public enum BuiltInOperator: String {
 
 public extension Operator {
     
+    internal var builtInOperator: BuiltInOperator? { return BuiltInOperator(rawValue: self.function) }
+    
     public init(builtInOperator: BuiltInOperator) {
         self.function = builtInOperator.rawValue
         

@@ -15,6 +15,7 @@
 		550ED42019733CE400E7D173 /* DDMathOperatorSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 550ED41E1972CCA400E7D173 /* DDMathOperatorSet.m */; };
 		550ED4241973404000E7D173 /* DDMathTokenInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 550ED4231973404000E7D173 /* DDMathTokenInterpreter.m */; };
 		550ED4251973404000E7D173 /* DDMathTokenInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 550ED4231973404000E7D173 /* DDMathTokenInterpreter.m */; };
+		5514B1741B7BDF57007431D0 /* RawToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5514B1731B7BDF57007431D0 /* RawToken.swift */; };
 		5514EF161347EBA10010B9D8 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
 		551AFD0818785F340081DFDA /* DDExpressionRewriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 551AFD0718785F340081DFDA /* DDExpressionRewriter.m */; };
 		551AFD091878637D0081DFDA /* DDExpressionRewriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 551AFD0718785F340081DFDA /* DDExpressionRewriter.m */; };
@@ -147,6 +148,7 @@
 		550ED41E1972CCA400E7D173 /* DDMathOperatorSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathOperatorSet.m; sourceTree = "<group>"; };
 		550ED4221973404000E7D173 /* DDMathTokenInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathTokenInterpreter.h; sourceTree = "<group>"; };
 		550ED4231973404000E7D173 /* DDMathTokenInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathTokenInterpreter.m; sourceTree = "<group>"; };
+		5514B1731B7BDF57007431D0 /* RawToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawToken.swift; sourceTree = "<group>"; };
 		5514EE291347CE9B0010B9D8 /* DDMathParserMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMathParserMacros.h; path = DDMathParser/DDMathParserMacros.h; sourceTree = "<group>"; };
 		551AFD0618785F340081DFDA /* DDExpressionRewriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDExpressionRewriter.h; path = DDMathParser/DDExpressionRewriter.h; sourceTree = "<group>"; };
 		551AFD0718785F340081DFDA /* DDExpressionRewriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDExpressionRewriter.m; path = DDMathParser/DDExpressionRewriter.m; sourceTree = "<group>"; };
@@ -423,6 +425,7 @@
 			children = (
 				559B3EFB1B74063600000108 /* MathParser.h */,
 				559B3F171B7408A900000108 /* Either.swift */,
+				559B3F131B74072500000108 /* Token.swift */,
 				552781561B752C680093B070 /* Operators */,
 				559B3F121B74071B00000108 /* Tokenizing */,
 				55E640AF1B76B67A00D7769C /* Resolving */,
@@ -443,9 +446,8 @@
 		559B3F121B74071B00000108 /* Tokenizing */ = {
 			isa = PBXGroup;
 			children = (
-				559B3F131B74072500000108 /* Token.swift */,
+				5514B1731B7BDF57007431D0 /* RawToken.swift */,
 				559B3F101B7406D800000108 /* Tokenizer.swift */,
-				559B3F151B7407CE00000108 /* TokenGenerator.swift */,
 				55D48BEA1B74146E0050331F /* Internal */,
 			);
 			name = Tokenizing;
@@ -493,6 +495,7 @@
 		55D48BEA1B74146E0050331F /* Internal */ = {
 			isa = PBXGroup;
 			children = (
+				559B3F151B7407CE00000108 /* TokenGenerator.swift */,
 				55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */,
 				55D48BEF1B7415DD0050331F /* Extractors */,
 				55D48BE61B740F3E0050331F /* Character.swift */,
@@ -763,6 +766,7 @@
 				552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */,
+				5514B1741B7BDF57007431D0 /* RawToken.swift in Sources */,
 				552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */,
 				55E640B11B76CBAF00D7769C /* TokenResolver.swift in Sources */,
 				55D48BE71B740F3E0050331F /* Character.swift in Sources */,

@@ -40,6 +40,7 @@ internal struct OperatorTokenSet {
     }
     
     func hasOperatorWithPrefix(s: String) -> Bool {
+        // TODO: make this more efficient
         let matching = tokens.filter { $0.hasPrefix(s) }
         return !matching.isEmpty
     }

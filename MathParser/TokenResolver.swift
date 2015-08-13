@@ -8,8 +8,7 @@
 
 import Foundation
 
-public struct TokenResolver: SequenceType {
-    public typealias Generator = ResolvedTokenGenerator
+public struct TokenResolver {
     
     private let tokenizer: Tokenizer
     
@@ -17,8 +16,8 @@ public struct TokenResolver: SequenceType {
         self.tokenizer = tokenizer
     }
     
-    public func generate() -> ResolvedTokenGenerator {
-        return ResolvedTokenGenerator(generator: tokenizer.generate())
+    public func resolve() throws -> Array<ResolvedToken> {
+        return []
     }
     
 }
