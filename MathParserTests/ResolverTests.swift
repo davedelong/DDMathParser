@@ -142,5 +142,38 @@ class TokenResolverTests: XCTestCase {
         let close = Operator(builtInOperator: .ParenthesisClose)
         TestToken(tokens?[2], kind: .Operator(close), string: ")")
     }
+    
+    func testArgumentlessFunction1() {
+        let r = TokenResolver(string: "foo+")
+        let tokens = XCTAssertNoThrows(try r.resolve())
+        
+        XCTAssertEqual(tokens?.count, 4)
+        
+        TestToken(tokens?[0], kind: .Identifier("foo"), string: "foo")
+        
+        let open = Operator(builtInOperator: .ParenthesisOpen)
+        TestToken(tokens?[1], kind: .Operator(open), string: "(")
+        
+        let close = Operator(builtInOperator: .ParenthesisClose)
+        TestToken(tokens?[2], kind: .Operator(close), string: ")")
+        
+        let add = Operator(builtInOperator: .Add)
+        TestToken(tokens?[3], kind: .Operator(add), string: "+")
+    }
+    
+    func testArgumentlessFunction2() {
+        let r = TokenResolver(string: "foo()")
+        let tokens = XCTAssertNoThrows(try r.resolve())
+        
+        XCTAssertEqual(tokens?.count, 3)
+        
+        TestToken(tokens?[0], kind: .Identifier("foo"), string: "foo")
+        
+        let open = Operator(builtInOperator: .ParenthesisOpen)
+        TestToken(tokens?[1], kind: .Operator(open), string: "(")
+        
+        let close = Operator(builtInOperator: .ParenthesisClose)
+        TestToken(tokens?[2], kind: .Operator(close), string: ")")
+    }
 
 }
