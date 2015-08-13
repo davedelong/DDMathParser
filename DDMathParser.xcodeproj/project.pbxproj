@@ -17,6 +17,7 @@
 		550ED4251973404000E7D173 /* DDMathTokenInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 550ED4231973404000E7D173 /* DDMathTokenInterpreter.m */; };
 		5514B1741B7BDF57007431D0 /* RawToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5514B1731B7BDF57007431D0 /* RawToken.swift */; };
 		5514B1761B7C22D6007431D0 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5514B1751B7C22D6007431D0 /* TestHelpers.swift */; };
+		5514B1781B7CFD1A007431D0 /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5514B1771B7CFD1A007431D0 /* ResolverTests.swift */; };
 		5514EF161347EBA10010B9D8 /* DDTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5526E9E01310EF880018B4C9 /* DDTypes.m */; };
 		551AFD0818785F340081DFDA /* DDExpressionRewriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 551AFD0718785F340081DFDA /* DDExpressionRewriter.m */; };
 		551AFD091878637D0081DFDA /* DDExpressionRewriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 551AFD0718785F340081DFDA /* DDExpressionRewriter.m */; };
@@ -150,6 +151,7 @@
 		550ED4231973404000E7D173 /* DDMathTokenInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathTokenInterpreter.m; sourceTree = "<group>"; };
 		5514B1731B7BDF57007431D0 /* RawToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawToken.swift; sourceTree = "<group>"; };
 		5514B1751B7C22D6007431D0 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		5514B1771B7CFD1A007431D0 /* ResolverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResolverTests.swift; sourceTree = "<group>"; };
 		5514EE291347CE9B0010B9D8 /* DDMathParserMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDMathParserMacros.h; path = DDMathParser/DDMathParserMacros.h; sourceTree = "<group>"; };
 		551AFD0618785F340081DFDA /* DDExpressionRewriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDExpressionRewriter.h; path = DDMathParser/DDExpressionRewriter.h; sourceTree = "<group>"; };
 		551AFD0718785F340081DFDA /* DDExpressionRewriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDExpressionRewriter.m; path = DDMathParser/DDExpressionRewriter.m; sourceTree = "<group>"; };
@@ -439,6 +441,7 @@
 			children = (
 				5514B1751B7C22D6007431D0 /* TestHelpers.swift */,
 				5527815D1B75659A0093B070 /* TokenizerTests.swift */,
+				5514B1771B7CFD1A007431D0 /* ResolverTests.swift */,
 				559B3F091B74063600000108 /* Info.plist */,
 			);
 			path = MathParserTests;
@@ -783,6 +786,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5527815E1B75659A0093B070 /* TokenizerTests.swift in Sources */,
+				5514B1781B7CFD1A007431D0 /* ResolverTests.swift in Sources */,
 				5514B1761B7C22D6007431D0 /* TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
