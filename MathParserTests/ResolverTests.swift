@@ -36,7 +36,7 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testIdentifier() {
-        let r = TokenResolver(string: "foo")
+        let r = TokenResolver(string: "foo", options: [])
         let tokens = XCTAssertNoThrows(try r.resolve())
         
         XCTAssertEqual(tokens?.count, 1)
@@ -126,6 +126,21 @@ class TokenResolverTests: XCTestCase {
         
         let fac = Operator(builtInOperator: .Add)
         TestToken(tokens?[2], kind: .Operator(fac), string: "+")
+    }
+    
+    func testArgumentlessFunction() {
+        let r = TokenResolver(string: "foo")
+        let tokens = XCTAssertNoThrows(try r.resolve())
+        
+        XCTAssertEqual(tokens?.count, 3)
+        
+        TestToken(tokens?[0], kind: .Identifier("foo"), string: "foo")
+        
+        let open = Operator(builtInOperator: .ParenthesisOpen)
+        TestToken(tokens?[1], kind: .Operator(open), string: "(")
+        
+        let close = Operator(builtInOperator: .ParenthesisClose)
+        TestToken(tokens?[2], kind: .Operator(close), string: ")")
     }
 
 }

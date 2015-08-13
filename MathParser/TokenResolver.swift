@@ -51,13 +51,26 @@ public struct TokenResolver {
             resolvedTokens.extend(resolved)
         }
         
+        let finalResolved = try resolveToken(nil, previous: resolvedTokens.last)
+        resolvedTokens.extend(finalResolved)
+        
         return resolvedTokens
     }
     
 }
 
 extension TokenResolver {
-    private func resolveToken(raw: RawToken, previous: ResolvedToken?) throws -> Array<ResolvedToken> {
+    private func resolveToken(raw: RawToken?, previous: ResolvedToken?) throws -> Array<ResolvedToken> {
+        
+        guard let raw = raw else {
+            // this is the case where the we check for argumentless stuff
+            // after the last token
+            if options.contains(.AllowArgumentlessFunctions) {
+                return extraTokensForArgumentlessFunction(nil, previous: previous)
+            } else {
+                return []
+            }
+        }
         
         let resolved = try resolveRawToken(raw, previous: previous)
         
@@ -190,18 +203,21 @@ extension TokenResolver {
         return resolvedOperator
     }
     
-    private func extraTokensForArgumentlessFunction(next: ResolvedToken, previous: ResolvedToken?) -> Array<ResolvedToken> {
+    private func extraTokensForArgumentlessFunction(next: ResolvedToken?, previous: ResolvedToken?) -> Array<ResolvedToken> {
         guard let previous = previous else { return [] }
         // we only insert tokens here if the previous token was an identifier
         guard let _ = previous.kind.identifier else { return [] }
         
-        let nextOperator = next.kind.resolvedOperator
+        
+        let nextOperator = next?.kind.resolvedOperator
         if nextOperator == nil || nextOperator?.builtInOperator != .ParenthesisOpen {
+            let range = previous.sourceRange.endIndex ..< previous.sourceRange.endIndex
+            
             let openParenOp = Operator(builtInOperator: .ParenthesisOpen)
-            let openParen = ResolvedToken(kind: .Operator(openParenOp), string: "(", sourceRange: next.sourceRange.startIndex ..< next.sourceRange.startIndex)
+            let openParen = ResolvedToken(kind: .Operator(openParenOp), string: "(", sourceRange: range)
             
             let closeParenOp = Operator(builtInOperator: .ParenthesisClose)
-            let closeParen = ResolvedToken(kind: .Operator(closeParenOp), string: ")", sourceRange: next.sourceRange.startIndex ..< next.sourceRange.startIndex)
+            let closeParen = ResolvedToken(kind: .Operator(closeParenOp), string: ")", sourceRange: range)
             
             return [openParen, closeParen]
         }
