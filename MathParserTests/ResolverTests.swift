@@ -175,5 +175,32 @@ class TokenResolverTests: XCTestCase {
         let close = Operator(builtInOperator: .ParenthesisClose)
         TestToken(tokens?[2], kind: .Operator(close), string: ")")
     }
+    
+    func testImplicitMultiplication() {
+        let r = TokenResolver(string: "1 2")
+        let tokens = XCTAssertNoThrows(try r.resolve())
+        
+        XCTAssertEqual(tokens?.count, 3)
+        TestToken(tokens?[0], kind: .Number(1), string: "1")
+        
+        let op = Operator(builtInOperator: .Multiply)
+        TestToken(tokens?[1], kind: .Operator(op), string: "*")
+        TestToken(tokens?[2], kind: .Number(2), string: "2")
+        
+    }
+    
+    func testHighPrecedenceImplicitMultiplication() {
+        let options = TokenResolverOptions.DefaultOptions.union(.UseHighPrecedenceImplicitMultiplication)
+        let r = TokenResolver(string: "1 2", options: options)
+        let tokens = XCTAssertNoThrows(try r.resolve())
+        
+        XCTAssertEqual(tokens?.count, 3)
+        TestToken(tokens?[0], kind: .Number(1), string: "1")
+        
+        let op = Operator(builtInOperator: .ImplicitMultiply)
+        TestToken(tokens?[1], kind: .Operator(op), string: "*")
+        TestToken(tokens?[2], kind: .Number(2), string: "2")
+        
+    }
 
 }
