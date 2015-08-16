@@ -9,7 +9,6 @@
 import Foundation
 
 protocol PeekingGeneratorType: GeneratorType {
-    func prev() -> Element?
     func peek() -> Element?
 }
 
@@ -18,29 +17,18 @@ internal class PeekingGenerator<G: GeneratorType>: PeekingGeneratorType {
     
     private var generator: G
     private var peekBuffer = Array<Element>()
-    private var previous: Element?
     
     init(generator: G) {
         self.generator = generator
     }
     
-    func prev() -> Element? {
-        return previous
-    }
-    
     func next() -> Element? {
         if let n = peekBuffer.first {
             peekBuffer.removeFirst()
-            previous = n
             return n
         }
         
-        if let n = generator.next() {
-            previous = n
-            return n
-        }
-        
-        return nil
+        return generator.next()
     }
     
     func peek() -> Element? {
