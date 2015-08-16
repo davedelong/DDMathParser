@@ -8,8 +8,8 @@
 
 import Foundation
 
-public struct ResolvedToken: Equatable {
-    public enum Kind: Equatable {
+public struct ResolvedToken {
+    public enum Kind {
         case Number(Double)
         case Variable(String)
         case Identifier(String)
@@ -19,20 +19,6 @@ public struct ResolvedToken: Equatable {
     public let kind: Kind
     public let string: String
     public let range: Range<String.Index>
-}
-
-public func ==(lhs: ResolvedToken.Kind, rhs: ResolvedToken.Kind) -> Bool {
-    switch (lhs, rhs) {
-        case (.Number(let l), .Number(let r)): return l == r
-        case (.Variable(let l), .Variable(let r)): return l == r
-        case (.Identifier(let l), .Identifier(let r)): return l == r
-        case (.Operator(let l), .Operator(let r)): return l == r
-        default: return false
-    }
-}
-
-public func ==(lhs: ResolvedToken, rhs: ResolvedToken) -> Bool {
-    return lhs.kind == rhs.kind && lhs.string == rhs.string && lhs.range == rhs.range
 }
 
 public extension ResolvedToken.Kind {

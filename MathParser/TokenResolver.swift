@@ -26,18 +26,16 @@ public struct TokenResolverOptions: OptionSetType {
 public struct TokenResolver {
     
     private let tokenizer: Tokenizer
-    internal let operatorSet: OperatorSet
     private let options: TokenResolverOptions
+    internal var operatorSet: OperatorSet { return tokenizer.operatorSet }
     
     public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.DefaultOptions) {
         self.tokenizer = tokenizer
-        self.operatorSet = tokenizer.operatorSet
         self.options = options
     }
     
     public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.DefaultOptions) {
         self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet)
-        self.operatorSet = operatorSet
         self.options = options
     }
     

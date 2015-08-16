@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RawToken: Equatable {
+public struct RawToken {
     
     public enum Kind {
         case HexNumber
@@ -21,10 +21,6 @@ public struct RawToken: Equatable {
     public let kind: Kind
     public let string: String
     public let range: Range<String.Index>
-}
-
-public func ==(lhs: RawToken, rhs: RawToken) -> Bool {
-    return lhs.kind == rhs.kind && lhs.string == rhs.string && lhs.range == rhs.range
 }
 
 public struct TokenizerError: ErrorType {

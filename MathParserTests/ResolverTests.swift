@@ -15,7 +15,13 @@ private func TestToken(raw: ResolvedToken?, kind: ResolvedToken.Kind, string: St
         return
     }
     
-    XCTAssert(t.kind == kind, "Unexpected token kind", file: file, line: line)
+    switch (t.kind, kind) {
+        case (.Number(let l), .Number(let r)): XCTAssertEqual(l, r, "Unexpected number value", file: file, line: line)
+        case (.Variable(let l), .Variable(let r)): XCTAssertEqual(l, r, "Unexpected variable value", file: file, line: line)
+        case (.Identifier(let l), .Identifier(let r)): XCTAssertEqual(l, r, "Unexpected identifier", file: file, line: line)
+        case (.Operator(let l), .Operator(let r)): XCTAssertEqual(l, r, "Unexpected operator", file: file, line: line)
+        default: XCTFail("Unexpected token", file: file, line: line)
+    }
     
     XCTAssertEqual(t.string, string, "Unexpected token string", file: file, line: line)
 }
