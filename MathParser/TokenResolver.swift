@@ -101,20 +101,20 @@ extension TokenResolver {
         switch rawToken.kind {
             case .HexNumber:
                 if let number = UInt(rawToken.string, radix: 16) {
-                    resolvedToken = ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, sourceRange: rawToken.range)
+                    resolvedToken = ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range)
                 } else {
                     throw TokenResolverError(kind: .CannotParseHexNumber, rawToken: rawToken)
                 }
                 
             case .Number:
                 let number = NSDecimalNumber(string: rawToken.string)
-                resolvedToken = ResolvedToken(kind: .Number(number.doubleValue), string: rawToken.string, sourceRange: rawToken.range)
+                resolvedToken = ResolvedToken(kind: .Number(number.doubleValue), string: rawToken.string, range: rawToken.range)
                 
             case .Variable:
-                resolvedToken = ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, sourceRange: rawToken.range)
+                resolvedToken = ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, range: rawToken.range)
                 
             case .Identifier:
-                resolvedToken = ResolvedToken(kind: .Identifier(rawToken.string), string: rawToken.string, sourceRange: rawToken.range)
+                resolvedToken = ResolvedToken(kind: .Identifier(rawToken.string), string: rawToken.string, range: rawToken.range)
                 
             case .Operator:
                 resolvedToken = try resolveOperator(rawToken, previous: previous)
@@ -132,7 +132,7 @@ extension TokenResolver {
         
         if matches.count == 1 {
             let op = matches[0]
-            return ResolvedToken(kind: .Operator(op), string: raw.string, sourceRange: raw.range)
+            return ResolvedToken(kind: .Operator(op), string: raw.string, range: raw.range)
         }
         
         // more than one operator has this token
@@ -169,7 +169,7 @@ extension TokenResolver {
         }
         
         if let resolved = resolvedOperator {
-            return ResolvedToken(kind: .Operator(resolved), string: raw.string, sourceRange: raw.range)
+            return ResolvedToken(kind: .Operator(resolved), string: raw.string, range: raw.range)
         } else {
             throw TokenResolverError(kind: .AmbiguousOperator, rawToken: raw)
         }
@@ -211,13 +211,13 @@ extension TokenResolver {
         
         let nextOperator = next?.kind.resolvedOperator
         if nextOperator == nil || nextOperator?.builtInOperator != .ParenthesisOpen {
-            let range = previous.sourceRange.endIndex ..< previous.sourceRange.endIndex
+            let range = previous.range.endIndex ..< previous.range.endIndex
             
             let openParenOp = Operator(builtInOperator: .ParenthesisOpen)
-            let openParen = ResolvedToken(kind: .Operator(openParenOp), string: "(", sourceRange: range)
+            let openParen = ResolvedToken(kind: .Operator(openParenOp), string: "(", range: range)
             
             let closeParenOp = Operator(builtInOperator: .ParenthesisClose)
-            let closeParen = ResolvedToken(kind: .Operator(closeParenOp), string: ")", sourceRange: range)
+            let closeParen = ResolvedToken(kind: .Operator(closeParenOp), string: ")", range: range)
             
             return [openParen, closeParen]
         }
@@ -242,6 +242,6 @@ extension TokenResolver {
             multiplyOperator = Operator(builtInOperator: .Multiply)
         }
      
-        return [ResolvedToken(kind: .Operator(multiplyOperator), string: "*", sourceRange: next.sourceRange.startIndex ..< next.sourceRange.startIndex)]
+        return [ResolvedToken(kind: .Operator(multiplyOperator), string: "*", range: next.range.startIndex ..< next.range.startIndex)]
     }
 }

@@ -9,6 +9,17 @@
 import XCTest
 import MathParser
 
+private func TestToken(raw: ResolvedToken?, kind: ResolvedToken.Kind, string: String, file: String = __FILE__, line: UInt = __LINE__) {
+    guard let t = raw else {
+        XCTFail("Missing token", file: file, line: line)
+        return
+    }
+    
+    XCTAssert(t.kind == kind, "Unexpected token kind", file: file, line: line)
+    
+    XCTAssertEqual(t.string, string, "Unexpected token string", file: file, line: line)
+}
+
 class TokenResolverTests: XCTestCase {
     
     func testNumber() {
