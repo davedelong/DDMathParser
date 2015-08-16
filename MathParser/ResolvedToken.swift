@@ -36,6 +36,10 @@ public enum ResolvedTokenKind: Equatable {
         return o
     }
     
+    public var builtInOperator: BuiltInOperator? {
+        return resolvedOperator?.builtInOperator
+    }
+    
     public var isNumber: Bool { return number != nil }
     public var isVariable: Bool { return variable != nil }
     public var isIdentifier: Bool { return identifier != nil }

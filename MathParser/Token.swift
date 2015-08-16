@@ -14,3 +14,7 @@ public struct Token<T: Equatable> {
     public let sourceRange: Range<String.CharacterView.Index>
     
 }
+
+public func ==<T>(lhs: Token<T>, rhs: Token<T>) -> Bool {
+    return lhs.kind == rhs.kind && lhs.string == rhs.string && lhs.sourceRange == rhs.sourceRange
+}

@@ -26,7 +26,7 @@ public struct TokenResolverOptions: OptionSetType {
 public struct TokenResolver {
     
     private let tokenizer: Tokenizer
-    private let operatorSet: OperatorSet
+    internal let operatorSet: OperatorSet
     private let options: TokenResolverOptions
     
     public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.DefaultOptions) {
