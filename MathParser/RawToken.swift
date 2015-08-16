@@ -8,14 +8,23 @@
 
 import Foundation
 
-public typealias RawToken = Token<RawTokenKind>
+public struct RawToken: Equatable {
+    
+    public enum Kind {
+        case HexNumber
+        case Number
+        case Variable
+        case Operator
+        case Identifier
+    }
+    
+    public let kind: Kind
+    public let string: String
+    public let range: Range<String.Index>
+}
 
-public enum RawTokenKind: Equatable {
-    case HexNumber
-    case Number
-    case Variable
-    case Operator
-    case Identifier
+public func ==(lhs: RawToken, rhs: RawToken) -> Bool {
+    return lhs.kind == rhs.kind && lhs.string == rhs.string && lhs.range == rhs.range
 }
 
 public struct TokenizerError: ErrorType {

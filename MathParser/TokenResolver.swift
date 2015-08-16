@@ -101,20 +101,20 @@ extension TokenResolver {
         switch rawToken.kind {
             case .HexNumber:
                 if let number = UInt(rawToken.string, radix: 16) {
-                    resolvedToken = ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, sourceRange: rawToken.sourceRange)
+                    resolvedToken = ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, sourceRange: rawToken.range)
                 } else {
                     throw TokenResolverError(kind: .CannotParseHexNumber, rawToken: rawToken)
                 }
                 
             case .Number:
                 let number = NSDecimalNumber(string: rawToken.string)
-                resolvedToken = ResolvedToken(kind: .Number(number.doubleValue), string: rawToken.string, sourceRange: rawToken.sourceRange)
+                resolvedToken = ResolvedToken(kind: .Number(number.doubleValue), string: rawToken.string, sourceRange: rawToken.range)
                 
             case .Variable:
-                resolvedToken = ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, sourceRange: rawToken.sourceRange)
+                resolvedToken = ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, sourceRange: rawToken.range)
                 
             case .Identifier:
-                resolvedToken = ResolvedToken(kind: .Identifier(rawToken.string), string: rawToken.string, sourceRange: rawToken.sourceRange)
+                resolvedToken = ResolvedToken(kind: .Identifier(rawToken.string), string: rawToken.string, sourceRange: rawToken.range)
                 
             case .Operator:
                 resolvedToken = try resolveOperator(rawToken, previous: previous)
@@ -132,7 +132,7 @@ extension TokenResolver {
         
         if matches.count == 1 {
             let op = matches[0]
-            return ResolvedToken(kind: .Operator(op), string: raw.string, sourceRange: raw.sourceRange)
+            return ResolvedToken(kind: .Operator(op), string: raw.string, sourceRange: raw.range)
         }
         
         // more than one operator has this token
@@ -169,7 +169,7 @@ extension TokenResolver {
         }
         
         if let resolved = resolvedOperator {
-            return ResolvedToken(kind: .Operator(resolved), string: raw.string, sourceRange: raw.sourceRange)
+            return ResolvedToken(kind: .Operator(resolved), string: raw.string, sourceRange: raw.range)
         } else {
             throw TokenResolverError(kind: .AmbiguousOperator, rawToken: raw)
         }

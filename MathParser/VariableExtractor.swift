@@ -41,8 +41,8 @@ internal struct VariableExtractor: TokenExtractor {
                 let error = TokenizerError(kind: .CannotParseVariable, sourceRange: range)
                 result = .Error(error)
             case .Value(let t):
-                let range = start ..< t.sourceRange.endIndex
-                let token = RawToken(kind: .Variable, string: t.string, sourceRange: range)
+                let range = start ..< t.range.endIndex
+                let token = RawToken(kind: .Variable, string: t.string, range: range)
                 result = .Value(token)
         }
         
