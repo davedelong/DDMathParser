@@ -16,6 +16,10 @@ public struct TokenGrouper {
         self.resolver = resolver
     }
     
+    public init(string: String) {
+        self.resolver = TokenResolver(string: string)
+    }
+    
     public func group() throws -> GroupedToken {
         let tokens = try resolver.resolve()
         let p = PeekingGenerator(generator: tokens.generate())
@@ -70,6 +74,8 @@ public struct TokenGrouper {
                 return try functionTokenFromGenerator(g)
             case .Operator(let o) where o.builtInOperator == .ParenthesisOpen:
                 return try groupTokenFromGenerator(g)
+            case .Operator(let o) where o.builtInOperator == .ParenthesisClose:
+                throw GroupedTokenError() // CloseParen, but no OpenParen
             case .Operator(let o):
                 g.next()
                 return GroupedToken(kind: .Operator(o), range: peek.range)
@@ -131,6 +137,7 @@ public struct TokenGrouper {
     
     private func groupTokenFromGenerator<P: PeekingGeneratorType where P.Element == ResolvedToken>(var g: P) throws -> GroupedToken {
         guard let open = g.next() where open.kind.builtInOperator == .ParenthesisOpen else {
+            // This should never happen
             throw GroupedTokenError() // MissingOpenParenthesis
         }
         
