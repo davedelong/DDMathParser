@@ -179,5 +179,19 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected token kind")
         }
     }
+    
+    func testEmptyRootGroup() {
+        let g = TokenGrouper(string: "")
+        
+        do {
+            let _ = try g.group()
+            XCTFail("Expected error")
+        } catch let other {
+            guard let _ = other as? GroupedTokenError else {
+                XCTFail("Unexpected error \(other)")
+                return
+            }
+        }
+    }
 
 }
