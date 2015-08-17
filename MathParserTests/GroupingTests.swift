@@ -74,10 +74,11 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let _ = other as? GroupedTokenError else {
+            guard let error = other as? GroupedTokenError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
+            XCTAssert(error.kind == .EmptyFunctionArgument)
         }
     }
     
@@ -89,10 +90,11 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let _ = other as? GroupedTokenError else {
+            guard let error = other as? GroupedTokenError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
+            XCTAssert(error.kind == .MissingOpenParenthesis)
         }
     }
     
@@ -104,10 +106,11 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let _ = other as? GroupedTokenError else {
+            guard let error = other as? GroupedTokenError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
+            XCTAssert(error.kind == .MissingCloseParenthesis)
         }
     }
     
@@ -118,10 +121,11 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let _ = other as? GroupedTokenError else {
+            guard let error = other as? GroupedTokenError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
+            XCTAssert(error.kind == .MissingCloseParenthesis)
         }
     }
     
@@ -132,10 +136,11 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let _ = other as? GroupedTokenError else {
+            guard let error = other as? GroupedTokenError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
+            XCTAssert(error.kind == .MissingOpenParenthesis)
         }
     }
     
@@ -187,10 +192,11 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let _ = other as? GroupedTokenError else {
+            guard let error = other as? GroupedTokenError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
+            XCTAssert(error.kind == .EmptyGroup)
         }
     }
     
@@ -201,10 +207,11 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let _ = other as? GroupedTokenError else {
+            guard let error = other as? GroupedTokenError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
+            XCTAssert(error.kind == .EmptyGroup)
         }
     }
 
