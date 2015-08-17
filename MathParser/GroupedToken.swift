@@ -13,7 +13,11 @@ public struct GroupedTokenError: ErrorType {
         case MissingOpenParenthesis
         case MissingCloseParenthesis
         case EmptyFunctionArgument
+        case EmptyGroup
     }
+    
+    public let kind: Kind
+    public let range: Range<String.Index>
 }
 
 public struct GroupedToken {
