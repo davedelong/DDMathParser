@@ -152,6 +152,10 @@ public struct TokenGrouper {
             throw GroupedTokenError() // MissingCloseParenthesis
         }
         
+        guard tokens.isEmpty == false else {
+            throw GroupedTokenError() // Empty Group
+        }
+        
         let range = open.range.startIndex ..< close.range.endIndex
         return GroupedToken(kind: .Group(tokens), range: range)
     }

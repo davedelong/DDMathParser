@@ -58,7 +58,7 @@ class GroupingTests: XCTestCase {
     }
     
     func testRedundantGroups() {
-        let g = TokenGrouper(string: "foo(())")
+        let g = TokenGrouper(string: "(((foo())))")
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         
         switch t.kind {
@@ -182,6 +182,20 @@ class GroupingTests: XCTestCase {
     
     func testEmptyRootGroup() {
         let g = TokenGrouper(string: "")
+        
+        do {
+            let _ = try g.group()
+            XCTFail("Expected error")
+        } catch let other {
+            guard let _ = other as? GroupedTokenError else {
+                XCTFail("Unexpected error \(other)")
+                return
+            }
+        }
+    }
+    
+    func testEmptyGroup() {
+        let g = TokenGrouper(string: "1+()")
         
         do {
             let _ = try g.group()
