@@ -235,9 +235,9 @@ extension TokenResolver {
         
         let multiplyOperator: Operator
         if options.contains(.UseHighPrecedenceImplicitMultiplication) {
-            multiplyOperator = Operator(builtInOperator: .ImplicitMultiply)
+            multiplyOperator = operatorSet.implicitMultiplyOperator
         } else {
-            multiplyOperator = Operator(builtInOperator: .Multiply)
+            multiplyOperator = operatorSet.multiplyOperator
         }
      
         return [ResolvedToken(kind: .Operator(multiplyOperator), string: "*", range: next.range.startIndex ..< next.range.startIndex)]

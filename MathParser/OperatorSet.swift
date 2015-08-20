@@ -40,10 +40,12 @@ public class OperatorSet {
         ops.append(Operator(builtInOperator: .Add, precedence: precedence))
         ops.append(Operator(builtInOperator: .Minus, precedence: precedence++))
         
-        ops.append(Operator(builtInOperator: .Multiply, precedence: precedence))
+        multiplyOperator = Operator(builtInOperator: .Multiply, precedence: precedence)
+        ops.append(multiplyOperator)
         ops.append(Operator(builtInOperator: .Divide, precedence: precedence++))
         
-        ops.append(Operator(builtInOperator: .ImplicitMultiply, precedence: precedence++))
+        implicitMultiplyOperator = Operator(builtInOperator: .ImplicitMultiply, precedence: precedence++)
+        ops.append(implicitMultiplyOperator)
             
         // NOTE: percent-as-modulo precedence goes here (between ImplicitMultiply and Bitwise Not)
         
@@ -110,6 +112,10 @@ public class OperatorSet {
             
         }
     }
+    
+    internal let multiplyOperator: Operator
+    internal let implicitMultiplyOperator: Operator
+    
     private var knownTokens: Set<String>
     
     private func removeOperator(op: Operator) {
