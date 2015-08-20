@@ -28,6 +28,7 @@ public class Expression {
     
     public let kind: Kind
     public let range: Range<String.Index>
+    internal weak var parent: Expression?
     
     internal init(kind: Kind, range: Range<String.Index>) {
         self.kind = kind
@@ -43,11 +44,18 @@ public class Expression {
             e = try expressionizer.expression()
         } catch let error {
             self.kind = .Variable("fake")
-            self.range = "".startIndex ..< "".endIndex
+            self.range = string.startIndex ..< string.endIndex
             throw error
         }
         
         self.kind = e.kind
         self.range = e.range
+        resolveToParent(nil)
+    }
+    
+    internal func resolveToParent(parent: Expression?) {
+        self.parent = parent
+        guard case let .Function(_, children) = kind else { return }
+        children.forEach { $0.resolveToParent(self) }
     }
 }
