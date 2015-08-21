@@ -28,12 +28,6 @@ public class Expression {
     
     public let kind: Kind
     public let range: Range<String.Index>
-    internal weak var parent: Expression?
-    
-    internal init(kind: Kind, range: Range<String.Index>) {
-        self.kind = kind
-        self.range = range
-    }
     
     public init(string: String) throws {
         let grouper = TokenGrouper(string: string)
@@ -51,6 +45,13 @@ public class Expression {
         self.kind = e.kind
         self.range = e.range
         resolveToParent(nil)
+    }
+    
+    internal weak var parent: Expression?
+    
+    internal init(kind: Kind, range: Range<String.Index>) {
+        self.kind = kind
+        self.range = range
     }
     
     internal func resolveToParent(parent: Expression?) {

@@ -76,7 +76,6 @@
 		559B3EFC1B74063600000108 /* MathParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 559B3EFB1B74063600000108 /* MathParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		559B3F031B74063600000108 /* MathParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559B3EF91B74063600000108 /* MathParser.framework */; };
 		559B3F111B7406D800000108 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F101B7406D800000108 /* Tokenizer.swift */; };
-		559B3F141B74072500000108 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F131B74072500000108 /* Token.swift */; };
 		559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F151B7407CE00000108 /* TokenGenerator.swift */; };
 		559B3F181B7408A900000108 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F171B7408A900000108 /* Either.swift */; };
 		559B3F1C1B740C0B00000108 /* TokenExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F1B1B740C0B00000108 /* TokenExtractor.swift */; };
@@ -197,7 +196,6 @@
 		559B3F021B74063600000108 /* MathParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		559B3F091B74063600000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		559B3F101B7406D800000108 /* Tokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
-		559B3F131B74072500000108 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		559B3F151B7407CE00000108 /* TokenGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenGenerator.swift; sourceTree = "<group>"; };
 		559B3F171B7408A900000108 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		559B3F1B1B740C0B00000108 /* TokenExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenExtractor.swift; sourceTree = "<group>"; };
@@ -451,7 +449,6 @@
 			children = (
 				559B3EFB1B74063600000108 /* MathParser.h */,
 				559B3F171B7408A900000108 /* Either.swift */,
-				559B3F131B74072500000108 /* Token.swift */,
 				552781561B752C680093B070 /* Operators */,
 				559B3F121B74071B00000108 /* Tokenizing */,
 				55E640AF1B76B67A00D7769C /* Resolving */,
@@ -817,7 +814,6 @@
 				55AE3A461B8012D30022D1CF /* TokenGrouper.swift in Sources */,
 				557A806D1B7647CB0014822A /* Operator+Defaults.swift in Sources */,
 				55D48BEC1B74147E0050331F /* String.CharacterView.Index.swift in Sources */,
-				559B3F141B74072500000108 /* Token.swift in Sources */,
 				55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */,
 				559B3F1C1B740C0B00000108 /* TokenExtractor.swift in Sources */,
 			);
