@@ -15,7 +15,7 @@ func TestString(string: String, value: Double, file: String = __FILE__, line: UI
         XCTFail(file: file, line: line)
         return
     }
-    XCTAssertEqual(d, value, file: file, line: line)
+    XCTAssertEqualWithAccuracy(d, value, accuracy: DBL_EPSILON, file: file, line: line)
 }
 
 class EvaluatorTests: XCTestCase {
