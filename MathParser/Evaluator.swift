@@ -19,15 +19,12 @@ public struct Evaluator {
     
     public static let defaultEvaluator = Evaluator()
     
-    private let operatorSet: OperatorSet
     private let functions = StandardFunctions()
     
     public var functionResolver: FunctionResolver?
     public var variableResolver: VariableResolver?
     
-    public init(operatorSet: OperatorSet = OperatorSet.defaultOperatorSet) {
-        self.operatorSet = operatorSet
-    }
+    public init() { }
     
     public func evaluate(expression: Expression, substitutions: Dictionary<String, Double> = [:]) throws -> Double {
         switch expression.kind {
@@ -40,7 +37,7 @@ public struct Evaluator {
         }
     }
     
-    public mutating func registerFunction(name: String, functionEvaluator: FunctionEvaluator) {
+    public func registerFunction(name: String, functionEvaluator: FunctionEvaluator) {
         functions.registerFunction(name, functionEvaluator: functionEvaluator)
     }
     

@@ -23,6 +23,8 @@
 		551AFD0818785F340081DFDA /* DDExpressionRewriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 551AFD0718785F340081DFDA /* DDExpressionRewriter.m */; };
 		551AFD091878637D0081DFDA /* DDExpressionRewriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 551AFD0718785F340081DFDA /* DDExpressionRewriter.m */; };
 		551C2D201B8B63EC00876E68 /* DynamicResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551C2D1F1B8B63EC00876E68 /* DynamicResolution.swift */; settings = {ASSET_TAGS = (); }; };
+		551C2D221B8B6A0E00876E68 /* EvaluatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551C2D211B8B6A0E00876E68 /* EvaluatorTests.swift */; settings = {ASSET_TAGS = (); }; };
+		551C2D241B8B6A5C00876E68 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551C2D231B8B6A5C00876E68 /* String.swift */; settings = {ASSET_TAGS = (); }; };
 		551C8C4A144E5CFC00520BDA /* DDMathOperatorTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 551C8C49144E5CFC00520BDA /* DDMathOperatorTypes.m */; };
 		552532B712C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */; };
 		552532B912C1C92D00A942A7 /* _DDFunctionEvaluator.m in Sources */ = {isa = PBXBuildFile; fileRef = 552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */; };
@@ -166,6 +168,8 @@
 		551AFD0618785F340081DFDA /* DDExpressionRewriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DDExpressionRewriter.h; path = DDMathParser/DDExpressionRewriter.h; sourceTree = "<group>"; };
 		551AFD0718785F340081DFDA /* DDExpressionRewriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DDExpressionRewriter.m; path = DDMathParser/DDExpressionRewriter.m; sourceTree = "<group>"; };
 		551C2D1F1B8B63EC00876E68 /* DynamicResolution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicResolution.swift; sourceTree = "<group>"; };
+		551C2D211B8B6A0E00876E68 /* EvaluatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvaluatorTests.swift; sourceTree = "<group>"; };
+		551C2D231B8B6A5C00876E68 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		551C8C49144E5CFC00520BDA /* DDMathOperatorTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathOperatorTypes.m; sourceTree = "<group>"; };
 		552532B512C1C92D00A942A7 /* _DDFunctionEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DDFunctionEvaluator.h; sourceTree = "<group>"; };
 		552532B612C1C92D00A942A7 /* _DDFunctionEvaluator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _DDFunctionEvaluator.m; sourceTree = "<group>"; };
@@ -363,6 +367,14 @@
 			name = Grouping;
 			sourceTree = "<group>";
 		};
+		551C2D251B8B6A6000876E68 /* Convenience */ = {
+			isa = PBXGroup;
+			children = (
+				551C2D231B8B6A5C00876E68 /* String.swift */,
+			);
+			name = Convenience;
+			sourceTree = "<group>";
+		};
 		552781561B752C680093B070 /* Operators */ = {
 			isa = PBXGroup;
 			children = (
@@ -470,6 +482,7 @@
 				5514B17B1B7D3A7F007431D0 /* Grouping */,
 				55AE3A491B823DA20022D1CF /* Expression */,
 				557F8FE61B86B8AA00155C9D /* Evaluator */,
+				551C2D251B8B6A6000876E68 /* Convenience */,
 				559B3EFD1B74063600000108 /* Info.plist */,
 			);
 			path = MathParser;
@@ -483,6 +496,7 @@
 				5514B1771B7CFD1A007431D0 /* ResolverTests.swift */,
 				55AE3A431B7FDB7D0022D1CF /* GroupingTests.swift */,
 				557F8FC21B86653700155C9D /* ExpressionTests.swift */,
+				551C2D211B8B6A0E00876E68 /* EvaluatorTests.swift */,
 				559B3F091B74063600000108 /* Info.plist */,
 			);
 			path = MathParserTests;
@@ -808,6 +822,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				551C2D241B8B6A5C00876E68 /* String.swift in Sources */,
 				552781531B75234F0093B070 /* QuotedVariableExtractor.swift in Sources */,
 				5527814F1B751DD40093B070 /* VariableExtractor.swift in Sources */,
 				5527814D1B751DCC0093B070 /* IdentifierExtractor.swift in Sources */,
@@ -846,6 +861,7 @@
 				557F8FC31B86653700155C9D /* ExpressionTests.swift in Sources */,
 				55AE3A441B7FDB7D0022D1CF /* GroupingTests.swift in Sources */,
 				5527815E1B75659A0093B070 /* TokenizerTests.swift in Sources */,
+				551C2D221B8B6A0E00876E68 /* EvaluatorTests.swift in Sources */,
 				5514B1781B7CFD1A007431D0 /* ResolverTests.swift in Sources */,
 				5514B1761B7C22D6007431D0 /* TestHelpers.swift in Sources */,
 			);

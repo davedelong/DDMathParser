@@ -447,7 +447,7 @@ public class StandardFunctions {
         var value = DBL_MIN
         for arg in args {
             let argValue = try evaluator.evaluate(arg, substitutions: substitutions)
-            value = Swift.min(value, argValue)
+            value = Swift.max(value, argValue)
         }
         return value
     }
