@@ -20,7 +20,7 @@ public struct Evaluator {
     public static let defaultEvaluator = Evaluator()
     
     private let operatorSet: OperatorSet
-    private var registeredFunctions = Dictionary<String, FunctionEvaluator>()
+    private let functions = StandardFunctions()
     
     public var functionResolver: FunctionResolver?
     public var variableResolver: VariableResolver?
@@ -41,8 +41,11 @@ public struct Evaluator {
     }
     
     public mutating func registerFunction(name: String, functionEvaluator: FunctionEvaluator) {
-        let normalized = StandardFunctions.normalizeFunctionName(name)
-        registeredFunctions[normalized] = functionEvaluator
+        functions.registerFunction(name, functionEvaluator: functionEvaluator)
+    }
+    
+    public func registerAlias(alias: String, forFunctionName name: String) {
+        functions.addAlias(alias, forFunctionName: name)
     }
     
     private func evaluateVariable(name: String, substitutions: Dictionary<String, Double>) throws -> Double {
@@ -59,23 +62,15 @@ public struct Evaluator {
     }
     
     private func evaluateFunction(name: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>) throws -> Double {
-        let normalized = StandardFunctions.normalizeFunctionName(name)
+        let normalized = functions.normalizeFunctionName(name)
         
         // TODO: check for function overrides?
         
-        if let value = try StandardFunctions.performFunction(normalized, arguments: arguments, substitutions: substitutions, evaluator: self) {
+        if let value = try functions.performFunction(normalized, arguments: arguments, substitutions: substitutions, evaluator: self) {
             return value
         }
         
-        // a standard function with this name does not exist
-        
-        // check the registered functions
-        if let registered = registeredFunctions[normalized] {
-            if let value = try registered(arguments, substitutions, self) {
-                return value
-            }
-        }
-        
+        // a function with this name does not exist
         // use the function resolver
         if let value = try functionResolver?.resolveFunction(normalized, arguments: arguments, substitutions: substitutions) {
             return value

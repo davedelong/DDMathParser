@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct StandardFunctions {
+public class StandardFunctions {
     
     private static let functionMap = [
         "add": StandardFunctions.add,
@@ -111,41 +111,69 @@ public struct StandardFunctions {
         "l_if": StandardFunctions.l_if
     ]
     
-    internal static func normalizeFunctionName(name: String) -> String {
+    private let standardAliases = [
+        "avg": "average",
+        "mean": "average",
+        "trunc": "floor",
+        "modulo": "mod",
+        "π": "pi",
+        "τ": "tau",
+        "tau_2": "pi",
+        "tau_4": "pi_2",
+        "tau_8": "pi_4",
+        "ϕ": "phi",
+        "implicitmultiply": "multiply",
+        "if": "l_if",
+        
+        "vers": "versin",
+        "ver": "versin",
+        "vercos": "vercosin",
+        "cvs": "coversin",
+        "chord": "crd"
+    ]
+    
+    private var aliases = Dictionary<String, String>()
+    private var registeredFunctions = Dictionary<String, FunctionEvaluator>()
+    
+    public var functions: Array<String> {
+        var names: Set<String> = Set(registeredFunctions.keys)
+        names.unionInPlace(aliases.keys)
+        names.unionInPlace(standardAliases.keys)
+        names.unionInPlace(StandardFunctions.functionMap.keys)
+        return names.sort { $0 < $1 }
+    }
+    
+    // MARK: - Basic functionality
+    
+    internal func normalizeFunctionName(name: String) -> String {
         let lowerName = name.lowercaseString
         
-        let normalized: String
-        switch lowerName {
-            case "avg": normalized = "average"
-            case "mean": normalized = "average"
-            case "trunc": normalized = "floor"
-            case "modulo": normalized = "mod"
-            case "π": normalized = "pi"
-            case "τ": normalized = "tau"
-            case "tau_2": normalized = "pi"
-            case "tau_4": normalized = "pi_2"
-            case "tau_8": normalized = "pi_4"
-            case "ϕ": normalized = "phi"
-            case "implicitmultiply": normalized = "multiply"
-            case "if": normalized = "l_if"
-            
-            case "vers": normalized = "versin"
-            case "ver": normalized = "versin"
-            case "vercos": normalized = "vercosin"
-            case "cvs": normalized = "coversin"
-            case "chord": normalized = "crd"
-            default: normalized = lowerName
-        }
+        var normalized = aliases[lowerName] ?? lowerName
+        normalized = standardAliases[normalized] ?? normalized
         
         return normalized
     }
     
-    static func performFunction(name: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double? {
-        
+    public func addAlias(alias: String, forFunctionName name: String) {
+        aliases[alias.lowercaseString] = name.lowercaseString
+    }
+    
+    public func registerFunction(name: String, functionEvaluator: FunctionEvaluator) {
+        registeredFunctions[name.lowercaseString] = functionEvaluator
+    }
+    
+    func performFunction(name: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double? {
         let normalized = normalizeFunctionName(name)
-        guard let function = StandardFunctions.functionMap[normalized] else { return nil }
         
-        return try function(arguments, substitutions: substitutions, evaluator: evaluator)
+        if let function = StandardFunctions.functionMap[normalized] {
+            return try function(arguments, substitutions: substitutions, evaluator: evaluator)
+        }
+        
+        if let registeredFunction = registeredFunctions[normalized] {
+            return try registeredFunction(arguments, substitutions, evaluator)
+        }
+        
+        return nil
     }
     
     // MARK: - Basic functions
