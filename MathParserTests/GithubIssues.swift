@@ -166,4 +166,14 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 1)
     }
+    
+    func testIssue79() {
+        XCTFail("Rewriting is unimplemented")
+    }
+    
+    func testIssue92() {
+        guard let d = XCTAssertNoThrows(try "$_foo".evaluate(["_foo": 4])) else { return }
+        XCTAssertEqual(d, 4)
+        
+    }
 }
