@@ -186,4 +186,32 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens?[3], kind: .Operator, string: "/")
     }
     
+    func testCustomOperatorTokens() {
+        let ops = OperatorSet()
+        
+        let tests: Dictionary<String, BuiltInOperator> = [
+            "is": .LogicalEqual,
+            "equals": .LogicalEqual,
+            "is not": .LogicalNotEqual,
+            "isn't": .LogicalNotEqual,
+            "doesn't equal": .LogicalNotEqual,
+            "is less than": .LogicalLessThan,
+            "is or is less than": .LogicalLessThanOrEqual,
+            "is less than or equal to": .LogicalLessThanOrEqual,
+            "is greater than": .LogicalGreaterThan,
+            "is or is greater than": .LogicalGreaterThanOrEqual,
+            "is greater than or equal to": .LogicalGreaterThanOrEqual,
+            "is not less than": .LogicalGreaterThanOrEqual
+        ]
+        
+        for (token, builtInOperator) in tests {
+            ops.addTokens([token], forOperator: Operator(builtInOperator: builtInOperator))
+            
+            let string = "1 \(token) 2"
+            guard let tokens = XCTAssertNoThrows(try Tokenizer(string: string, operatorSet: ops).tokenize()) else { return }
+            XCTAssertEqual(tokens.count, 3)
+            TestToken(tokens[1], kind: .Operator, string: token)
+        }
+    }
+    
 }
