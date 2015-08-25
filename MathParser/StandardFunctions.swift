@@ -279,7 +279,13 @@ public class StandardFunctions {
         
         guard arg2 != 0 else { throw EvaluationError.DivideByZero }
         
-        return Darwin.pow(arg1, 1/arg2)
+        if arg1 < 0 && arg2 % 2 == 1 {
+            // for negative numbers with an odd root, the result will be negative
+            let root = Darwin.pow(-arg1, 1/arg2)
+            return -root
+        } else {
+            return Darwin.pow(arg1, 1/arg2)
+        }
     }
     
     static func random(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
