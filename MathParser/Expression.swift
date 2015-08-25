@@ -29,8 +29,10 @@ public class Expression {
     public let kind: Kind
     public let range: Range<String.Index>
     
-    public init(string: String) throws {
-        let grouper = TokenGrouper(string: string)
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet) throws {
+        let tokenizer = Tokenizer(string: string, operatorSet: operatorSet)
+        let resolver = TokenResolver(tokenizer: tokenizer)
+        let grouper = TokenGrouper(resolver: resolver)
         let expressionizer = Expressionizer(grouper: grouper)
         
         let e: Expression
