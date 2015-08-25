@@ -53,6 +53,7 @@ public class StandardFunctions {
         "asin": StandardFunctions.asin,
         "acos": StandardFunctions.acos,
         "atan": StandardFunctions.atan,
+        "atan2": StandardFunctions.atan2,
         "csc": StandardFunctions.csc,
         "sec": StandardFunctions.sec,
         "cotan": StandardFunctions.cotan,
@@ -556,6 +557,14 @@ public class StandardFunctions {
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.atan(arg1)
+    }
+    
+    static func atan2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+        guard args.count == 2 else { throw EvaluationError.InvalidArguments }
+        
+        let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
+        let arg2 = try evaluator.evaluate(args[1], substitutions: substitutions)
+        return Darwin.atan2(arg1, arg2)
     }
     
     static func csc(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
