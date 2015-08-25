@@ -234,7 +234,14 @@ public class StandardFunctions {
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         
-        return tgamma(arg1+1)
+        if Darwin.floor(arg1) == arg1 && arg1 > 1 {
+            // it's an integer
+            var result: Double = 1
+            for (var i: Double = 2; i <= arg1; i++) { result *= i }
+            return result
+        } else {
+            return tgamma(arg1+1)
+        }
     }
     
     static func pow(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
