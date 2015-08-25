@@ -105,7 +105,8 @@ extension TokenResolver {
                 }
                 
             case .Number:
-                let number = NSDecimalNumber(string: rawToken.string)
+                let cleaned = rawToken.string.stringByReplacingOccurrencesOfString("−", withString: "-")
+                let number = NSDecimalNumber(string: cleaned)
                 resolvedToken = ResolvedToken(kind: .Number(number.doubleValue), string: rawToken.string, range: rawToken.range)
                 
             case .Variable:

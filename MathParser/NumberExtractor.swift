@@ -35,7 +35,7 @@ internal struct NumberExtractor: TokenExtractor {
             buffer.consume()
             
             // there might be a "-" or "+" character preceding the exponent
-            if buffer.peekNext() == "-" || buffer.peekNext() == "+" {
+            if buffer.peekNext() == "-" || buffer.peekNext() == "−" || buffer.peekNext() == "+" {
                 buffer.consume()
             }
             
