@@ -20,7 +20,7 @@ public struct TokenResolverOptions: OptionSetType {
     public static let AllowImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 1)
     public static let UseHighPrecedenceImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 2)
     
-    public static let DefaultOptions: TokenResolverOptions = [.AllowArgumentlessFunctions, .AllowImplicitMultiplication]
+    public static let defaultOptions: TokenResolverOptions = [.AllowArgumentlessFunctions, .AllowImplicitMultiplication, .UseHighPrecedenceImplicitMultiplication]
 }
 
 public struct TokenResolver {
@@ -29,12 +29,12 @@ public struct TokenResolver {
     private let options: TokenResolverOptions
     internal var operatorSet: OperatorSet { return tokenizer.operatorSet }
     
-    public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.DefaultOptions) {
+    public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) {
         self.tokenizer = tokenizer
         self.options = options
     }
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.DefaultOptions) {
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) {
         self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet)
         self.options = options
     }

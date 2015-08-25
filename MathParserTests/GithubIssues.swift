@@ -150,4 +150,9 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try "nthroot(-27, 3)".evaluate()) else { return }
         XCTAssertEqual(d, -3)
     }
+    
+    func testIssue64() {
+        guard let d = XCTAssertNoThrows(try "1/2$foo".evaluate(["foo": 4])) else { return }
+        XCTAssertEqual(d, 0.125)
+    }
 }
