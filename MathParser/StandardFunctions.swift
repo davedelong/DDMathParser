@@ -236,9 +236,8 @@ public class StandardFunctions {
         
         if Darwin.floor(arg1) == arg1 && arg1 > 1 {
             // it's an integer
-            var result: Double = 1
-            for (var i: Double = 2; i <= arg1; i++) { result *= i }
-            return result
+            let upperBound = Int(arg1)
+            return (1...upperBound).reduce(1, combine: *)
         } else {
             return tgamma(arg1+1)
         }
