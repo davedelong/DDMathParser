@@ -279,7 +279,14 @@ public struct Expressionizer {
         }
         
         let range = operatorWrapper.range.startIndex ..< operand.range.endIndex
-        let expression = Expression(kind: .Function(op.function, [operand]), range: range)
+        let expression: Expression
+        
+        if op.builtInOperator == .UnaryPlus {
+            // the Unary Plus operator does nothing and should be ignored
+            expression = operand
+        } else {
+            expression = Expression(kind: .Function(op.function, [operand]), range: range)
+        }
         
         let replacementExpressionRange = index ... operandIndex
         collapsedWrappers.replaceRange(replacementExpressionRange, with: [.Expression(expression)])

@@ -316,4 +316,13 @@ class ExpressionTests: XCTestCase {
         }
     }
     
+    func testUnaryPlus() {
+        guard let e = XCTAssertNoThrows(try Expression(string: "+1")) else { return }
+        
+        guard case .Number(1) = e.kind else {
+            XCTFail("Unexpected expression: \(e)")
+            return
+        }
+    }
+    
 }

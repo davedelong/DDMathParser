@@ -219,5 +219,21 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens?[2], kind: .Number(2), string: "2")
         
     }
+    
+    func testUnaryPlus() {
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "+1").resolve()) else { return }
+        
+        XCTAssertEqual(tokens.count, 2)
+        let unaryPlus = Operator(builtInOperator: .UnaryPlus)
+        guard case .Operator(unaryPlus) = tokens[0].kind else {
+            XCTFail("Unexpected token kind: \(tokens[0].kind)")
+            return
+        }
+        
+        guard case .Number(1) = tokens[1].kind else {
+            XCTFail("Unexpected token kind: \(tokens[1].kind)")
+            return
+        }
+    }
 
 }

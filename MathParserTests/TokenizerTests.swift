@@ -214,4 +214,12 @@ class TokenizerTests: XCTestCase {
         }
     }
     
+    func testUnaryPlus() {
+        let tokens = XCTAssertNoThrows(try Tokenizer(string: "+1").tokenize())
+        
+        XCTAssertEqual(tokens?.count, 2)
+        TestToken(tokens?[0], kind: .Operator, string: "+")
+        TestToken(tokens?[1], kind: .Number, string: "1")
+    }
+    
 }

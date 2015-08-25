@@ -214,5 +214,26 @@ class GroupingTests: XCTestCase {
             XCTAssert(error.kind == .EmptyGroup)
         }
     }
+    
+    func testUnaryPlus() {
+        guard let g = XCTAssertNoThrows(try TokenGrouper(string: "+1").group()) else { return }
+        
+        guard case let .Group(subterms) = g.kind else {
+            XCTFail("Unexpected group: \(g)")
+            return
+        }
+        
+        XCTAssertEqual(subterms.count, 2)
+        let unaryPlus = Operator(builtInOperator: .UnaryPlus)
+        guard case .Operator(unaryPlus) = subterms[0].kind else {
+            XCTFail("Unexpected token kind: \(subterms[0].kind)")
+            return
+        }
+        
+        guard case .Number(1) = subterms[1].kind else {
+            XCTFail("Unexpected token kind: \(subterms[1].kind)")
+            return
+        }
+    }
 
 }
