@@ -174,7 +174,6 @@ class GithubIssues: XCTestCase {
     func testIssue92() {
         guard let d = XCTAssertNoThrows(try "$_foo".evaluate(["_foo": 4])) else { return }
         XCTAssertEqual(d, 4)
-        
     }
     
     func testIssue95() {

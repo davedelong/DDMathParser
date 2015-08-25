@@ -9,123 +9,118 @@
 import XCTest
 import MathParser
 
-private func TestToken(raw: RawToken?, kind: RawToken.Kind, string: String, file: String = __FILE__, line: UInt = __LINE__) {
-    guard let t = raw else {
-        XCTFail("Missing token", file: file, line: line)
-        return
-    }
+private func TestToken(raw: RawToken, kind: RawToken.Kind, string: String, file: String = __FILE__, line: UInt = __LINE__) {
 
-    XCTAssert(t.kind == kind, "Unexpected token kind", file: file, line: line)
-    
-    XCTAssertEqual(t.string, string, "Unexpected token string", file: file, line: line)
+    XCTAssert(raw.kind == kind, "Unexpected token kind", file: file, line: line)
+    XCTAssertEqual(raw.string, string, "Unexpected token string", file: file, line: line)
 }
 
 class TokenizerTests: XCTestCase {
     
     func testEmpty() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "").tokenize())
-        XCTAssertEqual(tokens?.count, 0)
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "").tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 0)
     }
     
     func testWhitespace() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "     ").tokenize())
-        XCTAssertEqual(tokens?.count, 0)
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "     ").tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 0)
     }
     
     func testWhitespaceBetweenTokens() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 2").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 2").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 2)
-        TestToken(tokens?[0], kind: .Number, string: "1")
-        TestToken(tokens?[1], kind: .Number, string: "2")
+        XCTAssertEqual(tokens.count, 2)
+        TestToken(tokens[0], kind: .Number, string: "1")
+        TestToken(tokens[1], kind: .Number, string: "2")
     }
     
     func testHexNumber() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x0123").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x0123").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .HexNumber, string: "0123")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .HexNumber, string: "0123")
     }
     
     func testBadHexNumber() {
         // this looks like a bad hex number,
         // but it's really a zero followed by an x
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 2)
-        TestToken(tokens?[0], kind: .Number, string: "0")
-        TestToken(tokens?[1], kind: .Identifier, string: "x")
+        XCTAssertEqual(tokens.count, 2)
+        TestToken(tokens[0], kind: .Number, string: "0")
+        TestToken(tokens[1], kind: .Identifier, string: "x")
     }
     
     func testNumber() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "0123").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0123").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Number, string: "0123")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Number, string: "0123")
     }
     
     func testFloatNumber() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Number, string: "1.23")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Number, string: "1.23")
     }
     
     func testENumber() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e5").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e5").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Number, string: "1.23e5")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Number, string: "1.23e5")
     }
     
     func testEPlusNumber() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e+5").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e+5").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Number, string: "1.23e+5")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Number, string: "1.23e+5")
     }
     
     func testEMinusNumber() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e-5").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e-5").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Number, string: "1.23e-5")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Number, string: "1.23e-5")
     }
     
     func testMissingExponentNumber() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 2)
-        TestToken(tokens?[0], kind: .Number, string: "1.23")
-        TestToken(tokens?[1], kind: .Identifier, string: "e")
+        XCTAssertEqual(tokens.count, 2)
+        TestToken(tokens[0], kind: .Number, string: "1.23")
+        TestToken(tokens[1], kind: .Identifier, string: "e")
     }
 
     func testVariable() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "$foo").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "$foo").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Variable, string: "foo")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Variable, string: "foo")
     }
     
     func testDoubleQuotedVariable() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\"").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\"").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Variable, string: "foo")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Variable, string: "foo")
     }
     
     func testSingleQuotedVariable() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "'foo'").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "'foo'").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Variable, string: "foo")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Variable, string: "foo")
     }
     
     func testQuotedAndEscapedVariable() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\\\"\"").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\\\"\"").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Variable, string: "foo\"")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Variable, string: "foo\"")
     }
     
     func testMissingQuoteVariable() {
@@ -162,28 +157,28 @@ class TokenizerTests: XCTestCase {
     }
     
     func testBasicOperator() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "+").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "+").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 1)
-        TestToken(tokens?[0], kind: .Operator, string: "+")
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Operator, string: "+")
     }
     
     func testGreedyOperator() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "***").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "***").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 2)
-        TestToken(tokens?[0], kind: .Operator, string: "**")
-        TestToken(tokens?[1], kind: .Operator, string: "*")
+        XCTAssertEqual(tokens.count, 2)
+        TestToken(tokens[0], kind: .Operator, string: "**")
+        TestToken(tokens[1], kind: .Operator, string: "*")
     }
     
     func testConsecutiveOperators() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "+-*/").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "+-*/").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 4)
-        TestToken(tokens?[0], kind: .Operator, string: "+")
-        TestToken(tokens?[1], kind: .Operator, string: "-")
-        TestToken(tokens?[2], kind: .Operator, string: "*")
-        TestToken(tokens?[3], kind: .Operator, string: "/")
+        XCTAssertEqual(tokens.count, 4)
+        TestToken(tokens[0], kind: .Operator, string: "+")
+        TestToken(tokens[1], kind: .Operator, string: "-")
+        TestToken(tokens[2], kind: .Operator, string: "*")
+        TestToken(tokens[3], kind: .Operator, string: "/")
     }
     
     func testCustomOperatorTokens() {
@@ -215,11 +210,11 @@ class TokenizerTests: XCTestCase {
     }
     
     func testUnaryPlus() {
-        let tokens = XCTAssertNoThrows(try Tokenizer(string: "+1").tokenize())
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "+1").tokenize()) else { return }
         
-        XCTAssertEqual(tokens?.count, 2)
-        TestToken(tokens?[0], kind: .Operator, string: "+")
-        TestToken(tokens?[1], kind: .Number, string: "1")
+        XCTAssertEqual(tokens.count, 2)
+        TestToken(tokens[0], kind: .Operator, string: "+")
+        TestToken(tokens[1], kind: .Number, string: "1")
     }
     
 }
