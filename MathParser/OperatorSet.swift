@@ -109,9 +109,13 @@ public class OperatorSet {
     
     public private(set) var operators: Array<Operator> {
         didSet {
-            let tokens = operators.flatMap { $0.tokens }
-            knownTokens = Set(tokens)   
+            operatorsDidChange()
         }
+    }
+    
+    private func operatorsDidChange() {
+        knownTokens = Set(operators.flatMap { $0.tokens })
+        _operatorTokenSet = nil
     }
     
     internal let multiplyOperator: Operator
@@ -122,12 +126,23 @@ public class OperatorSet {
     private func removeOperator(op: Operator) {
         guard let index = operators.indexOf(op) else { return }
         operators.removeAtIndex(index)
+        operatorsDidChange()
+    }
+    
+    public func addTokens(tokens: Array<String>, forOperator op: Operator) {
+        let allowed = tokens.map { $0.lowercaseString }.filter {
+            self.operatorForToken($0).isEmpty
+        }
+        
+        guard let existing = existingOperator(op) else { return }
+        existing.tokens.unionInPlace(allowed)
+        operatorsDidChange()
     }
     
     public func addOperator(let op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
         guard let existing = existingOperator(existingOp) else { return }
         
-        var newOperator = op
+        let newOperator = op
         newOperator.precedence = existing.precedence
         
         let sorter: Operator -> Bool
@@ -155,8 +170,9 @@ public class OperatorSet {
     }
     
     private func processOperator(op: Operator, sorter: Operator -> Bool) {
-        if var existing = existingOperator(op) {
+        if let existing = existingOperator(op) {
             existing.tokens.unionInPlace(op.tokens)
+            operatorsDidChange()
         } else {
             let overlap = knownTokens.intersect(op.tokens)
             if overlap.isEmpty == false {
@@ -165,7 +181,7 @@ public class OperatorSet {
             }
             
             let newOperators = operators.map { orig -> Operator in
-                var new = Operator(function: orig.function, arity: orig.arity, associativity: orig.associativity)
+                let new = Operator(function: orig.function, arity: orig.arity, associativity: orig.associativity)
                 new.tokens = orig.tokens
                 
                 var precedence = orig.precedence!
@@ -175,6 +191,7 @@ public class OperatorSet {
             }
             operators = newOperators
             operators.append(op)
+            operatorsDidChange()
         }
     }
     

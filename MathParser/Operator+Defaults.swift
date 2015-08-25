@@ -63,158 +63,162 @@ public extension Operator {
     
     internal var builtInOperator: BuiltInOperator? { return BuiltInOperator(rawValue: self.function) }
     
-    public init(builtInOperator: BuiltInOperator) {
-        self.function = builtInOperator.rawValue
-        
+    public convenience init(builtInOperator: BuiltInOperator) {
+        let arity: Arity
+        let associativity: Associativity
+        let tokens: Set<String>
+
         switch builtInOperator {
             case .LogicalOr:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["||", "∨"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["||", "∨"]
             case .LogicalAnd:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["&&", "∧"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["&&", "∧"]
             case .LogicalNot:
-                self.arity = .Unary
-                self.associativity = .Right
-                self.tokens = ["!", "¬"]
+                arity = .Unary
+                associativity = .Right
+                tokens = ["!", "¬"]
             case .LogicalEqual:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["==", "="]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["==", "="]
             case .LogicalNotEqual:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["!=", "≠"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["!=", "≠"]
                 
             case .LogicalLessThan:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["<"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["<"]
             case .LogicalGreaterThan:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = [">"]
+                arity = .Binary
+                associativity = .Left
+                tokens = [">"]
             case .LogicalLessThanOrEqual:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["<=", "=<", "≤", "≯"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["<=", "=<", "≤", "≯"]
             case .LogicalGreaterThanOrEqual:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = [">=", "=>", "≥", "≮"]
+                arity = .Binary
+                associativity = .Left
+                tokens = [">=", "=>", "≥", "≮"]
             
             case .BitwiseOr:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["|"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["|"]
             case .BitwiseXor:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["^"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["^"]
             case .BitwiseAnd:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["&"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["&"]
             case .LeftShift:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["<<"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["<<"]
             case .RightShift:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = [">>"]
+                arity = .Binary
+                associativity = .Left
+                tokens = [">>"]
             
             case .Minus:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["-", "−"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["-", "−"]
             case .Add:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["+"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["+"]
             
             case .Divide:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["/", "÷"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["/", "÷"]
             case .Multiply:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["*", "×"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["*", "×"]
             case .ImplicitMultiply:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = []
+                arity = .Binary
+                associativity = .Left
+                tokens = []
             
             case .Modulo:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = ["%"]
+                arity = .Binary
+                associativity = .Left
+                tokens = ["%"]
             
             case .BitwiseNot:
-                self.arity = .Unary
-                self.associativity = .Right
-                self.tokens = ["~"]
+                arity = .Unary
+                associativity = .Right
+                tokens = ["~"]
             
             // Unary Left operators
             case .Factorial:
-                self.arity = .Unary
-                self.associativity = .Left
-                self.tokens = ["!"]
+                arity = .Unary
+                associativity = .Left
+                tokens = ["!"]
             case .Degree:
-                self.arity = .Unary
-                self.associativity = .Left
-                self.tokens = ["º", "°", "∘"]
+                arity = .Unary
+                associativity = .Left
+                tokens = ["º", "°", "∘"]
             case .Percent:
-                self.arity = .Unary
-                self.associativity = .Left
-                self.tokens = ["%"]
+                arity = .Unary
+                associativity = .Left
+                tokens = ["%"]
             
             case .Power:
-                self.arity = .Binary
-                self.associativity = Operator.defaultPowerAssociativity
-                self.tokens = ["**"]
+                arity = .Binary
+                associativity = Operator.defaultPowerAssociativity
+                tokens = ["**"]
             
             // Unary Right operators
             case .UnaryMinus:
-                self.arity = .Unary
-                self.associativity = .Right
-                self.tokens = ["-", "−"]
+                arity = .Unary
+                associativity = .Right
+                tokens = ["-", "−"]
             case .UnaryPlus:
-                self.arity = .Unary
-                self.associativity = .Right
-                self.tokens = ["+"]
+                arity = .Unary
+                associativity = .Right
+                tokens = ["+"]
             case .SquareRoot:
-                self.arity = .Unary
-                self.associativity = .Right
-                self.tokens = ["√"]
+                arity = .Unary
+                associativity = .Right
+                tokens = ["√"]
             case .CubeRoot:
-                self.arity = .Unary
-                self.associativity = .Right
-                self.tokens = ["∛"]
+                arity = .Unary
+                associativity = .Right
+                tokens = ["∛"]
                 
             // these are defined as .Unary .Right/.Left associative for convenience
             case .ParenthesisOpen:
-                self.arity = .Unary
-                self.associativity = .Right
-                self.tokens = ["("]
+                arity = .Unary
+                associativity = .Right
+                tokens = ["("]
             case .ParenthesisClose:
-                self.arity = .Unary
-                self.associativity = .Left
-                self.tokens = [")"]
+                arity = .Unary
+                associativity = .Left
+                tokens = [")"]
                 
             case .Comma:
-                self.arity = .Binary
-                self.associativity = .Left
-                self.tokens = [","]
+                arity = .Binary
+                associativity = .Left
+                tokens = [","]
         }
         
+        self.init(function: builtInOperator.rawValue, arity: arity, associativity: associativity)
+        self.tokens = tokens
         self.precedence = nil
     }
     
-    internal init(builtInOperator: BuiltInOperator, precedence: Int) {
+    internal convenience init(builtInOperator: BuiltInOperator, precedence: Int) {
         self.init(builtInOperator: builtInOperator)
         self.precedence = precedence
     }

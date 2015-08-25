@@ -155,4 +155,15 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try "1/2$foo".evaluate(["foo": 4])) else { return }
         XCTAssertEqual(d, 0.125)
     }
+    
+    func testIssue75() {
+        let operatorSet = OperatorSet()
+        operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .LogicalAnd))
+        
+        guard let e = XCTAssertNoThrows(try Expression(string: "1 and 2", operatorSet: operatorSet)) else { return }
+        
+        let eval = Evaluator.defaultEvaluator
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, 1)
+    }
 }

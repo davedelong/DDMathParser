@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Operator: Equatable {
+public class Operator: Equatable {
     
     public enum Arity {
         case Unary
