@@ -145,6 +145,7 @@ class EvaluatorTests: XCTestCase {
         TestString("log2(16)", value: 4)
         TestString("exp(1)", value: M_E)
         TestString("abs(-42)", value: 42)
+        TestString("10 * percent(10)", value: 1)
         TestString("10 + percent(10)", value: 11)
     }
     

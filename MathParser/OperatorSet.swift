@@ -73,26 +73,28 @@ public class OperatorSet {
         self.operators = ops
         self.interpretsPercentSignAsModulo = interpretsPercentSignAsModulo
         self.knownTokens = Set(ops.flatMap { $0.tokens })
+        
+        interpretPercentSignAsModulo(self.interpretsPercentSignAsModulo)
     }
     
     public var interpretsPercentSignAsModulo: Bool {
         didSet(oldValue) {
-            let percent = Operator(builtInOperator: .Percent)
-            let modulo = Operator(builtInOperator: .Modulo)
-            
-            // remove the old one
-            if oldValue {
-                removeOperator(modulo)
-            } else {
-                removeOperator(percent)
+            if oldValue != interpretsPercentSignAsModulo {
+                interpretPercentSignAsModulo(interpretsPercentSignAsModulo)
             }
-            
-            // add the new one
-            if interpretsPercentSignAsModulo {
-                addOperator(modulo, relatedBy: .GreaterThan, toOperator: Operator(builtInOperator: .ImplicitMultiply))
-            } else {
-                addOperator(percent, relatedBy: .EqualTo, toOperator: Operator(builtInOperator: .Factorial))
-            }
+        }
+    }
+    private func interpretPercentSignAsModulo(interpretAsModulo: Bool) {
+        let percent = Operator(builtInOperator: .Percent)
+        let modulo = Operator(builtInOperator: .Modulo)
+        
+        // remove the old one and add the new one
+        if interpretAsModulo {
+            removeOperator(percent)
+            addOperator(modulo, relatedBy: .GreaterThan, toOperator: Operator(builtInOperator: .ImplicitMultiply))
+        } else {
+            removeOperator(modulo)
+            addOperator(percent, relatedBy: .EqualTo, toOperator: Operator(builtInOperator: .Factorial))
         }
     }
     
@@ -108,8 +110,7 @@ public class OperatorSet {
     public private(set) var operators: Array<Operator> {
         didSet {
             let tokens = operators.flatMap { $0.tokens }
-            knownTokens = Set(tokens)
-            
+            knownTokens = Set(tokens)   
         }
     }
     
