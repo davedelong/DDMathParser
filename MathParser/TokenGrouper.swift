@@ -83,10 +83,10 @@ public struct TokenGrouper {
         
         switch peek.kind {
             case .Number(let d):
-                g.next()
+                let _ = g.next()
                 return GroupedToken(kind: .Number(d), range: peek.range)
             case .Variable(let s):
-                g.next()
+                let _ = g.next()
                 return GroupedToken(kind: .Variable(s), range: peek.range)
             case .Identifier(_):
                 return try functionTokenFromGenerator(g)
@@ -96,7 +96,7 @@ public struct TokenGrouper {
                 // CloseParen, but no OpenParen
                 throw GroupedTokenError(kind: .MissingOpenParenthesis, range: peek.range)
             case .Operator(let o):
-                g.next()
+                let _ = g.next()
                 return GroupedToken(kind: .Operator(o), range: peek.range)
             
         }
@@ -134,7 +134,7 @@ public struct TokenGrouper {
         
         while let p = g.peek() {
             if p.kind.builtInOperator == .Comma {
-                g.next() // consume the comma
+                let _ = g.next() // consume the comma
                 break
             }
             

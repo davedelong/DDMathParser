@@ -46,11 +46,11 @@ public struct TokenResolver {
         
         for rawToken in rawTokens {
             let resolved = try resolveToken(rawToken, previous: resolvedTokens.last)
-            resolvedTokens.extend(resolved)
+            resolvedTokens.appendContentsOf(resolved)
         }
         
         let finalResolved = try resolveToken(nil, previous: resolvedTokens.last)
-        resolvedTokens.extend(finalResolved)
+        resolvedTokens.appendContentsOf(finalResolved)
         
         return resolvedTokens
     }
@@ -77,14 +77,14 @@ extension TokenResolver {
         // check for argumentless functions
         if options.contains(.AllowArgumentlessFunctions) {
             let extras = extraTokensForArgumentlessFunction(resolved, previous: previous)
-            resolvedTokens.extend(extras)
+            resolvedTokens.appendContentsOf(extras)
         }
         
         // check for implicit multiplication
         if options.contains(.AllowImplicitMultiplication) {
             let last = resolvedTokens.last ?? previous
             let extras = extraTokensForImplicitMultiplication(resolved, previous: last)
-            resolvedTokens.extend(extras)
+            resolvedTokens.appendContentsOf(extras)
         }
         
         resolvedTokens.append(resolved)
