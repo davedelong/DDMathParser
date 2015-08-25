@@ -8,22 +8,6 @@
 
 import Foundation
 
-private let DefaultPowerAssociativity: Operator.Associativity = {
-    
-    //determine what associativity NSPredicate/NSExpression is using
-    //mathematically, it should be Right associative, but it's usually parsed as Left associative
-    //rdar://problem/8692313
-    
-    let expression = NSExpression(format: "2 ** 3 ** 2")
-    let result = expression.expressionValueWithObject(nil, context: nil)
-    
-    if result.intValue == 512 {
-        return .Right
-    } else {
-        return .Left
-    }
-}()
-
 public enum BuiltInOperator: String {
     case LogicalOr = "l_or"
     case LogicalAnd = "l_and"
@@ -60,6 +44,22 @@ public enum BuiltInOperator: String {
 }
 
 public extension Operator {
+    
+    public static let defaultPowerAssociativity: Operator.Associativity = {
+        
+        //determine what associativity NSPredicate/NSExpression is using
+        //mathematically, it should be Right associative, but it's usually parsed as Left associative
+        //rdar://problem/8692313
+        
+        let expression = NSExpression(format: "2 ** 3 ** 2")
+        let result = expression.expressionValueWithObject(nil, context: nil)
+        
+        if result.intValue == 512 {
+            return .Right
+        } else {
+            return .Left
+        }
+    }()
     
     internal var builtInOperator: BuiltInOperator? { return BuiltInOperator(rawValue: self.function) }
     
@@ -174,7 +174,7 @@ public extension Operator {
             
             case .Power:
                 self.arity = .Binary
-                self.associativity = DefaultPowerAssociativity
+                self.associativity = Operator.defaultPowerAssociativity
                 self.tokens = ["**"]
             
             // Unary Right operators
