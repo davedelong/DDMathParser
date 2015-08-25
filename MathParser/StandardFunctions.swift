@@ -10,6 +10,16 @@ import Foundation
 
 public class StandardFunctions {
     
+    private static let largestIntegerFactorial: Int = {
+        var n = Int.max
+        var i = 2
+        while i < n {
+            n /= i
+            i++
+        }
+        return i - 1
+    }()
+    
     private static let functionMap = [
         "add": StandardFunctions.add,
         "subtract": StandardFunctions.subtract,
@@ -237,11 +247,18 @@ public class StandardFunctions {
         
         if Darwin.floor(arg1) == arg1 && arg1 > 1 {
             // it's an integer
-            var result = 1.0
-            for var i = arg1; i > 1; i-- {
-                result *= i
+            let arg1Int = Int(arg1)
+            
+            if arg1Int <= StandardFunctions.largestIntegerFactorial {
+                return Double((1...arg1Int).reduce(1, combine: *))
+            } else {
+                // but it can't be represented in a word-sized Int
+                var result = 1.0
+                for var i = arg1; i > 1; i-- {
+                    result *= i
+                }
+                return result
             }
-            return result
         } else {
             return tgamma(arg1+1)
         }

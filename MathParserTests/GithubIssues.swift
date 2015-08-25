@@ -176,4 +176,12 @@ class GithubIssues: XCTestCase {
         XCTAssertEqual(d, 4)
         
     }
+    
+    func testIssue95() {
+        guard let d = XCTAssertNoThrows(try "50!".evaluate()) else { return }
+        XCTAssertNotEqual(d, 0)
+        
+        guard let e = XCTAssertNoThrows(try "20000!".evaluate()) else { return }
+        XCTAssertNotEqual(e, 0)
+    }
 }
