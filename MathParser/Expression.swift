@@ -60,3 +60,33 @@ public class Expression {
         children.forEach { $0.resolveToParent(self) }
     }
 }
+
+public extension Expression: CustomStringConvertible {
+    
+    public var description: String {
+        switch kind {
+            case .Number(let d): return d.description
+            case .Variable(let v):
+                if v.containsString(" "): return "\"\(v)\""
+                return "$\(v)"
+            case .Function(let f, let args):
+                let params = args.map { $0.description }
+                if let builtIn = BuiltInOperator(rawValue: f) {
+                    let op = Operator(builtInOperator: builtIn)
+                    let token = op.tokens.first!
+                    switch (op.arity, op.associativity) {
+                        case (.Binary, _):
+                            return "\(params[0]) \(token) \(params[1])"
+                        case (.Unary, .Left):
+                            return "\(params[0])\(token)"
+                        case (.Unary, .Right):
+                            return "\(token)\(params[0])"
+                    }
+                } else {
+                    let joined = params.joinWithSeparator(", ")
+                    return "\(f)(\(joined))"
+                }
+        }
+    }
+    
+}
