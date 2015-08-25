@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol FunctionResolver {
-    func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>) throws -> Double?
+    func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double?
 }
 
 public protocol VariableResolver {

@@ -69,7 +69,7 @@ public struct Evaluator {
         
         // a function with this name does not exist
         // use the function resolver
-        if let value = try functionResolver?.resolveFunction(normalized, arguments: arguments, substitutions: substitutions) {
+        if let value = try functionResolver?.resolveFunction(normalized, arguments: arguments, substitutions: substitutions, evaluator: self) {
             return value
         }
         

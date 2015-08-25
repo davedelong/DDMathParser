@@ -78,7 +78,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: FunctionResolver {
-            private func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>) throws -> Double? {
+            private func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double? {
                 return 42
             }
         }
