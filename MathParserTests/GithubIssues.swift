@@ -103,4 +103,46 @@ class GithubIssues: XCTestCase {
         XCTAssertEqual(d, 0.01)
         
     }
+    
+    func testIssue40() {
+        let operatorSet = OperatorSet(interpretsPercentSignAsModulo: false)
+        guard let e = XCTAssertNoThrows(try Expression(string: "7+5%", operatorSet: operatorSet)) else { return }
+        
+        let eval = Evaluator.defaultEvaluator
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, 7.35)
+    }
+    
+    func testIssue42() {
+        guard let d = XCTAssertNoThrows(try "sin('hello')".evaluate(["hello": 0])) else { return }
+        XCTAssertEqual(d, 0)
+    }
+    
+    func testIssue43() {
+        do {
+            let _ = try "hl=en&client=safari".evaluate()
+            XCTFail("Expected thrown error")
+        } catch let error as EvaluationError {
+            guard case .UnknownFunction(_) = error else {
+                XCTFail("Unexpected error \(error)")
+                return
+            }
+        } catch let e {
+            XCTFail("Unexpected error \(e)")
+        }
+    }
+    
+    func testIssue49() {
+        XCTFail("Angle Measurement Mode is unimplemented")
+    }
+    
+    func testIssue56() {
+        guard let d = XCTAssertNoThrows(try "2**3**2".evaluate()) else { return }
+        
+        if Operator.defaultPowerAssociativity == .Left {
+            XCTAssertEqual(d, 64)
+        } else {
+            XCTAssertEqual(d, 512)
+        }
+    }
 }
