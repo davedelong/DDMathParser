@@ -20,3 +20,11 @@ func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, _ message: St
     }
     return t
 }
+
+func XCTAssertThrows<T>(@autoclosure expression: () throws -> T, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__) {
+    do {
+        let _ = try expression()
+        XCTFail("Expected thrown error", file: file, line: line)
+    } catch _ {
+    }
+}

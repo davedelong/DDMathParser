@@ -90,6 +90,7 @@
 		55AE3A461B8012D30022D1CF /* TokenGrouper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A451B8012D30022D1CF /* TokenGrouper.swift */; settings = {ASSET_TAGS = (); }; };
 		55AE3A481B823D9B0022D1CF /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A471B823D9B0022D1CF /* Expression.swift */; settings = {ASSET_TAGS = (); }; };
 		55AE3A4B1B823F490022D1CF /* Expressionizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A4A1B823F490022D1CF /* Expressionizer.swift */; settings = {ASSET_TAGS = (); }; };
+		55B6AF581B8BEA0E00778033 /* GithubIssues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF571B8BEA0E00778033 /* GithubIssues.swift */; settings = {ASSET_TAGS = (); }; };
 		55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55BA67A11299FAEF002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2AD4F1295834600BA2905 /* EvaluationTests.m */; };
@@ -216,6 +217,7 @@
 		55AE3A451B8012D30022D1CF /* TokenGrouper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenGrouper.swift; sourceTree = "<group>"; };
 		55AE3A471B823D9B0022D1CF /* Expression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
 		55AE3A4A1B823F490022D1CF /* Expressionizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expressionizer.swift; sourceTree = "<group>"; };
+		55B6AF571B8BEA0E00778033 /* GithubIssues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubIssues.swift; sourceTree = "<group>"; };
 		55BA673E1298ECA2002279A5 /* DDMathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = DDMathParser.h; path = DDMathParser/DDMathParser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDMathParsing.h"; sourceTree = "<group>"; };
 		55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DDMathParsing.m"; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 				55AE3A431B7FDB7D0022D1CF /* GroupingTests.swift */,
 				557F8FC21B86653700155C9D /* ExpressionTests.swift */,
 				551C2D211B8B6A0E00876E68 /* EvaluatorTests.swift */,
+				55B6AF571B8BEA0E00778033 /* GithubIssues.swift */,
 				559B3F091B74063600000108 /* Info.plist */,
 			);
 			path = MathParserTests;
@@ -860,6 +863,7 @@
 			files = (
 				557F8FC31B86653700155C9D /* ExpressionTests.swift in Sources */,
 				55AE3A441B7FDB7D0022D1CF /* GroupingTests.swift in Sources */,
+				55B6AF581B8BEA0E00778033 /* GithubIssues.swift in Sources */,
 				5527815E1B75659A0093B070 /* TokenizerTests.swift in Sources */,
 				551C2D221B8B6A0E00876E68 /* EvaluatorTests.swift in Sources */,
 				5514B1781B7CFD1A007431D0 /* ResolverTests.swift in Sources */,
