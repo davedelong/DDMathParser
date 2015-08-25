@@ -99,8 +99,6 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue39() {
-        guard let e = XCTAssertNoThrows(try Expression(string: "1e−2")) else { return }
-        NSLog("\(e)")
         guard let d = XCTAssertNoThrows(try "1e−2".evaluate()) else { return }
         XCTAssertEqual(d, 0.01)
         
