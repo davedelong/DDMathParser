@@ -193,4 +193,15 @@ class GithubIssues: XCTestCase {
         XCTAssertEqual(tokens[0].kind, RawToken.Kind.Operator)
         XCTAssertEqual(tokens[0].string, "+")
     }
+    
+    func testIssue105() {
+        let operatorSet = OperatorSet()
+        operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .LogicalOr))
+        
+        guard let e = XCTAssertNoThrows(try Expression(string: "cos(pi)", operatorSet: operatorSet)) else { return }
+        
+        let eval = Evaluator.defaultEvaluator
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, -1)
+    }
 }

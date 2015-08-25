@@ -27,8 +27,8 @@ internal extension Character {
     
     var isAlphabetic: Bool {
         switch self {
-            case "a"..."f": return true
-            case "A"..."F": return true
+            case "a"..."z": return true
+            case "A"..."Z": return true
             default: return false
         }
     }

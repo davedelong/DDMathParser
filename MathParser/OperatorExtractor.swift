@@ -16,7 +16,8 @@ internal struct OperatorExtractor: TokenExtractor {
     }
     
     func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
-        return true
+        guard let peek = buffer.peekNext() else { return false }
+        return operatorTokens.hasOperatorWithPrefix(String(peek))
     }
     
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
