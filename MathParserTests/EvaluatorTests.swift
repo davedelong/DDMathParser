@@ -91,6 +91,23 @@ class EvaluatorTests: XCTestCase {
         XCTAssertEqual(d, 42)
     }
     
+    func testFunctionOverride() {
+        var eval = Evaluator()
+        
+        struct Overrider: FunctionOverrider {
+            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double? {
+                return 42
+            }
+        }
+        
+        eval.functionOverrider = Overrider()
+        
+        guard let e = XCTAssertNoThrows(try Expression(string: "(foo()*foo()+foo()-foo())!")) else { return }
+        
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, 42)
+    }
+    
     func testUnknownVariable() {
         do {
             let _ = try "$foo".evaluate()

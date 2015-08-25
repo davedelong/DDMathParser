@@ -8,6 +8,10 @@
 
 import Foundation
 
+public protocol FunctionOverrider {
+    func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double?
+}
+
 public protocol FunctionResolver {
     func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double?
 }

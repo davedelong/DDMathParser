@@ -21,6 +21,7 @@ public struct Evaluator {
     
     private let functions = StandardFunctions()
     
+    public var functionOverrider: FunctionOverrider?
     public var functionResolver: FunctionResolver?
     public var variableResolver: VariableResolver?
     
@@ -61,7 +62,10 @@ public struct Evaluator {
     private func evaluateFunction(name: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>) throws -> Double {
         let normalized = functions.normalizeFunctionName(name)
         
-        // TODO: check for function overrides?
+        // check for function overrides
+        if let value = try functionOverrider?.overrideFunction(name, arguments: arguments, substitutions: substitutions, evaluator: self) {
+            return value
+        }
         
         if let value = try functions.performFunction(normalized, arguments: arguments, substitutions: substitutions, evaluator: self) {
             return value
