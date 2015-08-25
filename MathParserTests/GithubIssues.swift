@@ -184,4 +184,13 @@ class GithubIssues: XCTestCase {
         guard let e = XCTAssertNoThrows(try "20000!".evaluate()) else { return }
         XCTAssertNotEqual(e, 0)
     }
+    
+    func testIssue104() {
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "+").tokenize()) else {
+            return
+        }
+        XCTAssertEqual(tokens.count, 1)
+        XCTAssertEqual(tokens[0].kind, RawToken.Kind.Operator)
+        XCTAssertEqual(tokens[0].string, "+")
+    }
 }
