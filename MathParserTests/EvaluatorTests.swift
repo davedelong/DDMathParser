@@ -195,14 +195,16 @@ class EvaluatorTests: XCTestCase {
         TestString("asin(0.42)", value: asin(0.42))
         TestString("acos(0.42)", value: acos(0.42))
         TestString("atan(0.42)", value: atan(0.42))
+        
+        XCTFail("Not completely implemented")
     }
     
     func testHyperbolicTrigonometricFunctions() {
-        
+        XCTFail("Not implemented")
     }
     
     func testGeometricFunctions() {
-        
+        XCTFail("Not implemented")
     }
     
     func testConstantFunctions() {

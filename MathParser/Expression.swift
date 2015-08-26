@@ -93,3 +93,14 @@ extension Expression: CustomStringConvertible {
     }
     
 }
+
+extension Expression: Equatable { }
+
+public func ==(lhs: Expression, rhs: Expression) -> Bool {
+    switch (lhs.kind, rhs.kind) {
+        case (.Number(let l), .Number(let r)): return l == r
+        case (.Variable(let l), .Variable(let r)): return l == r
+        case (.Function(let lf, let lArg), .Function(let rf, let rArg)): return lf == rf && lArg == rArg
+        default: return false
+    }
+}
