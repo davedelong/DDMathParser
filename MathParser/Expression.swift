@@ -46,7 +46,10 @@ public class Expression {
         
         self.kind = e.kind
         self.range = e.range
-        resolveToParent(nil)
+        
+        if case let .Function(_, args) = kind {
+            args.forEach { $0.parent = self }
+        }
     }
     
     internal weak var parent: Expression?
@@ -54,12 +57,10 @@ public class Expression {
     internal init(kind: Kind, range: Range<String.Index>) {
         self.kind = kind
         self.range = range
-    }
-    
-    internal func resolveToParent(parent: Expression?) {
-        self.parent = parent
-        guard case let .Function(_, children) = kind else { return }
-        children.forEach { $0.resolveToParent(self) }
+        
+        if case let .Function(_, args) = kind {
+            args.forEach { $0.parent = self }
+        }
     }
 }
 

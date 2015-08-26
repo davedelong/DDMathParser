@@ -49,9 +49,7 @@ public struct Expressionizer {
     public func expression() throws -> Expression {
         let rootToken = try grouper.group()
         
-        let expression = try expressionizeToken(rootToken)
-        expression.resolveToParent(nil)
-        return expression
+        return try expressionizeToken(rootToken)
     }
     
     internal func expressionizeToken(token: GroupedToken) throws -> Expression {
