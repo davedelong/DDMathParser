@@ -187,6 +187,18 @@ public class StandardFunctions {
         return nil
     }
     
+    // MARK: - Angle mode helpers
+    
+    private static func _dtor(d: Double, evaluator: Evaluator) -> Double {
+        guard evaluator.angleMeasurementMode == .Degrees else { return d }
+        return d / 180 * M_PI
+    }
+    
+    private static func _rtod(d: Double, evaluator: Evaluator) -> Double {
+        guard evaluator.angleMeasurementMode == .Degrees else { return d }
+        return d / M_PI * 180
+    }
+    
     // MARK: - Basic functions
     
     static func add(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
@@ -538,42 +550,42 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.sin(arg1)
+        return Darwin.sin(_dtor(arg1, evaluator: evaluator))
     }
     
     static func cos(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.cos(arg1)
+        return Darwin.cos(_dtor(arg1, evaluator: evaluator))
     }
     
     static func tan(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.tan(arg1)
+        return Darwin.tan(_dtor(arg1, evaluator: evaluator))
     }
     
     static func asin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.asin(arg1)
+        return _rtod(Darwin.asin(arg1), evaluator: evaluator)
     }
     
     static func acos(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.acos(arg1)
+        return _rtod(Darwin.acos(arg1), evaluator: evaluator)
     }
     
     static func atan(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.atan(arg1)
+        return _rtod(Darwin.atan(arg1), evaluator: evaluator)
     }
     
     static func atan2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
@@ -581,14 +593,14 @@ public class StandardFunctions {
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         let arg2 = try evaluator.evaluate(args[1], substitutions: substitutions)
-        return Darwin.atan2(arg1, arg2)
+        return _rtod(Darwin.atan2(arg1, arg2), evaluator: evaluator)
     }
     
     static func csc(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.sin(arg1)
+        let sinArg = Darwin.sin(_dtor(arg1, evaluator: evaluator))
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -597,7 +609,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.cos(arg1)
+        let sinArg = Darwin.cos(_dtor(arg1, evaluator: evaluator))
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -606,7 +618,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.tan(arg1)
+        let sinArg = Darwin.tan(_dtor(arg1, evaluator: evaluator))
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -615,7 +627,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.asin(arg1)
+        let sinArg = _rtod(Darwin.asin(arg1), evaluator: evaluator)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -624,7 +636,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.acos(arg1)
+        let sinArg = _rtod(Darwin.acos(arg1), evaluator: evaluator)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -633,7 +645,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.atan(arg1)
+        let sinArg = _rtod(Darwin.atan(arg1), evaluator: evaluator)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -644,49 +656,49 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.sinh(arg1)
+        return Darwin.sinh(_dtor(arg1, evaluator: evaluator))
     }
     
     static func cosh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.cosh(arg1)
+        return Darwin.cosh(_dtor(arg1, evaluator: evaluator))
     }
     
     static func tanh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.tanh(arg1)
+        return Darwin.tanh(_dtor(arg1, evaluator: evaluator))
     }
     
     static func asinh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.asinh(arg1)
+        return _rtod(Darwin.asinh(arg1), evaluator: evaluator)
     }
     
     static func acosh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.acosh(arg1)
+        return _rtod(Darwin.acosh(arg1), evaluator: evaluator)
     }
     
     static func atanh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.atanh(arg1)
+        return _rtod(Darwin.atanh(arg1), evaluator: evaluator)
     }
     
     static func csch(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.sinh(arg1)
+        let sinArg = Darwin.sinh(_dtor(arg1, evaluator: evaluator))
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -695,7 +707,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.cosh(arg1)
+        let sinArg = Darwin.cosh(_dtor(arg1, evaluator: evaluator))
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -704,7 +716,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.tanh(arg1)
+        let sinArg = Darwin.tanh(_dtor(arg1, evaluator: evaluator))
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -713,7 +725,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.asinh(arg1)
+        let sinArg = _rtod(Darwin.asinh(arg1), evaluator: evaluator)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -722,7 +734,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.acosh(arg1)
+        let sinArg = _rtod(Darwin.acosh(arg1), evaluator: evaluator)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -731,7 +743,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.atanh(arg1)
+        let sinArg = _rtod(Darwin.atanh(arg1), evaluator: evaluator)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -742,28 +754,28 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return 1.0 - Darwin.cos(arg1)
+        return 1.0 - Darwin.cos(_dtor(arg1, evaluator: evaluator))
     }
     
     static func vercosin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return 1.0 + Darwin.cos(arg1)
+        return 1.0 + Darwin.cos(_dtor(arg1, evaluator: evaluator))
     }
     
     static func coversin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return 1.0 - Darwin.sin(arg1)
+        return 1.0 - Darwin.sin(_dtor(arg1, evaluator: evaluator))
     }
     
     static func covercosin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return 1.0 + Darwin.sin(arg1)
+        return 1.0 + Darwin.sin(_dtor(arg1, evaluator: evaluator))
     }
     
     static func haversin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
@@ -786,7 +798,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let cosArg1 = Darwin.cos(arg1)
+        let cosArg1 = Darwin.cos(_dtor(arg1, evaluator: evaluator))
         guard cosArg1 != 0 else { throw EvaluationError.DivideByZero }
         return (1.0/cosArg1) - 1.0
     }
@@ -795,7 +807,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg1 = Darwin.sin(arg1)
+        let sinArg1 = Darwin.sin(_dtor(arg1, evaluator: evaluator))
         guard sinArg1 != 0 else { throw EvaluationError.DivideByZero }
         return (1.0/sinArg1) - 1.0
     }
@@ -804,7 +816,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg1 = Darwin.sin(arg1 / 2.0)
+        let sinArg1 = Darwin.sin(_dtor(arg1, evaluator: evaluator) / 2.0)
         return 2 * sinArg1
     }
     

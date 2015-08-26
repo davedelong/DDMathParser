@@ -17,10 +17,16 @@ public enum EvaluationError: ErrorType {
 
 public struct Evaluator {
     
+    public enum AngleMode {
+        case Radians
+        case Degrees
+    }
+    
     public static let defaultEvaluator = Evaluator()
     
     private let functions = StandardFunctions()
     
+    public var angleMeasurementMode = AngleMode.Radians
     public var functionOverrider: FunctionOverrider?
     public var functionResolver: FunctionResolver?
     public var variableResolver: VariableResolver?
