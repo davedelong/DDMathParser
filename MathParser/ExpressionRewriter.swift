@@ -50,7 +50,7 @@ public struct ExpressionRewriter {
     private func rewrite(expression: Expression, usingRule rule: RewriteRule, evaluator: Evaluator) -> Expression {
         
         let rewritten = rule.rewrite(expression, evaluator: evaluator)
-        if rewritten !== expression { return rewritten }
+        if rewritten != expression { return rewritten }
         
         guard case let .Function(f, args) = rewritten.kind else { return rewritten }
         
