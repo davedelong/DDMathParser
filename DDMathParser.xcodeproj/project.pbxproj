@@ -93,6 +93,7 @@
 		55B6AF581B8BEA0E00778033 /* GithubIssues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF571B8BEA0E00778033 /* GithubIssues.swift */; settings = {ASSET_TAGS = (); }; };
 		55B6AF5E1B8D081F00778033 /* RewriteRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF5D1B8D081F00778033 /* RewriteRule.swift */; settings = {ASSET_TAGS = (); }; };
 		55B6AF611B8D0AD100778033 /* ExpressionRewriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF601B8D0AD100778033 /* ExpressionRewriter.swift */; settings = {ASSET_TAGS = (); }; };
+		55B6AF631B8D870600778033 /* RewriteRule+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF621B8D870600778033 /* RewriteRule+Defaults.swift */; settings = {ASSET_TAGS = (); }; };
 		55BA67A01299FA19002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55BA67A11299FAEF002279A5 /* NSString+DDMathParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */; };
 		55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2AD4F1295834600BA2905 /* EvaluationTests.m */; };
@@ -222,6 +223,7 @@
 		55B6AF571B8BEA0E00778033 /* GithubIssues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubIssues.swift; sourceTree = "<group>"; };
 		55B6AF5D1B8D081F00778033 /* RewriteRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewriteRule.swift; sourceTree = "<group>"; };
 		55B6AF601B8D0AD100778033 /* ExpressionRewriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionRewriter.swift; sourceTree = "<group>"; };
+		55B6AF621B8D870600778033 /* RewriteRule+Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RewriteRule+Defaults.swift"; sourceTree = "<group>"; };
 		55BA673E1298ECA2002279A5 /* DDMathParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = DDMathParser.h; path = DDMathParser/DDMathParser.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		55BA679E1299FA19002279A5 /* NSString+DDMathParsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DDMathParsing.h"; sourceTree = "<group>"; };
 		55BA679F1299FA19002279A5 /* NSString+DDMathParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DDMathParsing.m"; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 			isa = PBXGroup;
 			children = (
 				55B6AF5D1B8D081F00778033 /* RewriteRule.swift */,
+				55B6AF621B8D870600778033 /* RewriteRule+Defaults.swift */,
 				55B6AF601B8D0AD100778033 /* ExpressionRewriter.swift */,
 			);
 			name = Rewriting;
@@ -857,6 +860,7 @@
 				552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				551C2D201B8B63EC00876E68 /* DynamicResolution.swift in Sources */,
+				55B6AF631B8D870600778033 /* RewriteRule+Defaults.swift in Sources */,
 				559B3F161B7407CE00000108 /* TokenGenerator.swift in Sources */,
 				55AE3A481B823D9B0022D1CF /* Expression.swift in Sources */,
 				5514B1741B7BDF57007431D0 /* RawToken.swift in Sources */,

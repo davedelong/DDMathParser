@@ -11,7 +11,7 @@ import Foundation
 public struct ExpressionRewriter {
     private var rules: Array<RewriteRule>
     
-    public init(rules: Array<RewriteRule>) {
+    public init(rules: Array<RewriteRule> = RewriteRule.defaultRules) {
         self.rules = rules
     }
     

@@ -24,6 +24,19 @@ public class Expression {
         case Number(Double)
         case Variable(String)
         case Function(String, Array<Expression>)
+        
+        public var isNumber: Bool {
+            guard case .Number(_) = self else { return false }
+            return true
+        }
+        public var isVariable: Bool {
+            guard case .Variable(_) = self else { return false }
+            return true
+        }
+        public var isFunction: Bool {
+            guard case .Function(_) = self else { return false }
+            return true
+        }
     }
     
     public let kind: Kind
@@ -60,6 +73,26 @@ public class Expression {
         
         if case let .Function(_, args) = kind {
             args.forEach { $0.parent = self }
+        }
+    }
+    
+    public func simplify(evaluator: Evaluator) -> Expression {
+        switch kind {
+            case .Number(_): return Expression(kind: kind, range: range)
+            case .Variable(_): return Expression(kind: kind, range: range)
+            case let .Function(f, args):
+                let newArgs = args.map { $0.simplify(evaluator) }
+                let areAllArgsNumbers = newArgs.reduce(true) { $0 && $1.kind.isNumber }
+            
+                guard areAllArgsNumbers else {
+                    return Expression(kind: .Function(f, newArgs), range: range)
+                }
+            
+                guard let value = try? evaluator.evaluate(self) else {
+                    return Expression(kind: .Function(f, newArgs), range: range)
+                }
+            
+                return Expression(kind: .Number(value), range: range)
         }
     }
 }

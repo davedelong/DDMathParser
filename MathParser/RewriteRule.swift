@@ -30,6 +30,17 @@ public struct RewriteRule {
         self.template = template
     }
     
+    public init(predicate: String, condition: String? = nil, template: String) throws {
+        self.predicate = try Expression(string: predicate)
+        self.template = try Expression(string: template)
+        
+        if let condition = condition {
+            self.condition = try Expression(string: condition)
+        } else {
+            self.condition = nil
+        }
+    }
+    
     public func matches(expression: Expression, evaluator: Evaluator) -> Bool {
         return matchWithCondition(expression, evaluator: evaluator) != nil
     }
@@ -133,29 +144,16 @@ public struct RewriteRule {
     private func applyReplacements(replacements: Dictionary<String, Expression>, toExpression expression: Expression) -> Expression {
         
         switch expression.kind {
-            case .Variable(_): return expression
-            case .Number(_): return expression
-            
             case .Function(let f, let args):
-                if let replacement = replacements[f] { return replacement }
+                if let replacement = replacements[f] {
+                    return Expression(kind: replacement.kind, range: replacement.range)
+                }
             
                 let newArgs = args.map { applyReplacements(replacements, toExpression: $0) }
                 return Expression(kind: .Function(f, newArgs), range: expression.range)
+            
+            default:
+                return Expression(kind: expression.kind, range: expression.range)
         }
-    }
-}
-
-private extension Expression.Kind {
-    var isNumber: Bool {
-        guard case .Number(_) = self else { return false }
-        return true
-    }
-    var isVariable: Bool {
-        guard case .Variable(_) = self else { return false }
-        return true
-    }
-    var isFunction: Bool {
-        guard case .Function(_) = self else { return false }
-        return true
     }
 }
