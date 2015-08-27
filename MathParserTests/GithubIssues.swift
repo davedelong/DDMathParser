@@ -79,7 +79,27 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue29() {
-        XCTFail("Angle Measurement Mode is unimplemented")
+        var eval = Evaluator()
+        eval.angleMeasurementMode = .Degrees
+        
+        guard let e1 = XCTAssertNoThrows(try Expression(string: "sin(45)")) else { return }
+        guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
+        XCTAssertEqualWithAccuracy(d1, M_SQRT2 / 2, accuracy: DBL_EPSILON)
+        
+        guard let e2 = XCTAssertNoThrows(try Expression(string: "sin(π/2)")) else { return }
+        guard let d2 = XCTAssertNoThrows(try eval.evaluate(e2)) else { return }
+        XCTAssertEqualWithAccuracy(d2, 0.02741213359204429, accuracy: DBL_EPSILON)
+        
+        
+        eval.angleMeasurementMode = .Radians
+        
+        guard let e3 = XCTAssertNoThrows(try Expression(string: "sin(45)")) else { return }
+        guard let d3 = XCTAssertNoThrows(try eval.evaluate(e3)) else { return }
+        XCTAssertEqual(d3, 0.8509035245341184)
+        
+        guard let e4 = XCTAssertNoThrows(try Expression(string: "sin(π/2)")) else { return }
+        guard let d4 = XCTAssertNoThrows(try eval.evaluate(e4)) else { return }
+        XCTAssertEqual(d4, 1)
     }
     
     func testIssue30() {
