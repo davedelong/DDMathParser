@@ -188,7 +188,11 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue79() {
-        XCTFail("Rewriting is unimplemented")
+        guard let original = XCTAssertNoThrows(try Expression(string: "sqrt((99**$foo)**2)")) else { return }
+        guard let expected = XCTAssertNoThrows(try Expression(string: "abs(99**$foo)")) else { return }
+        
+        let rewritten = ExpressionRewriter.defaultRewriter.rewriteExpression(original)
+        XCTAssertEqual(rewritten, expected)
     }
     
     func testIssue92() {

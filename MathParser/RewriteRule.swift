@@ -41,10 +41,6 @@ public struct RewriteRule {
         }
     }
     
-    public func matches(expression: Expression, evaluator: Evaluator) -> Bool {
-        return matchWithCondition(expression, evaluator: evaluator) != nil
-    }
-    
     public func rewrite(expression: Expression, substitutions: Dictionary<String, Double>, evaluator: Evaluator) -> Expression {
         guard let replacements = matchWithCondition(expression, substitutions: substitutions, evaluator: evaluator) else { return expression }
         

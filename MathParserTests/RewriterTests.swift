@@ -47,20 +47,20 @@ class RewriterTests: XCTestCase {
         
         //division
         TestRewrite("$foo / $foo", expected: "1", substitutions: ["foo": 1])
-        TestRewrite("$foo / $foo", expected: "0 / 0", substitutions: ["foo": 0])
+        TestRewrite("$foo / $foo", expected: "$foo / $foo")
         
         TestRewrite("($foo * $bar) / $bar", expected: "$foo", substitutions: ["bar": 1])
-        TestRewrite("($foo * $bar) / $bar", expected: "0 / 0", substitutions: ["bar": 0])
+        TestRewrite("($foo * $bar) / $bar", expected: "($foo * $bar) / $bar")
         
         
         TestRewrite("($bar * $foo) / $bar", expected: "$foo", substitutions: ["bar": 1])
-        TestRewrite("($bar * $foo) / $bar", expected: "0 / 0", substitutions: ["bar": 0])
+        TestRewrite("($bar * $foo) / $bar", expected: "($bar * $foo) / $bar")
         
         TestRewrite("$bar / ($bar * $foo)", expected: "1/$foo", substitutions: ["bar": 1])
-        TestRewrite("$bar / ($bar * $foo)", expected: "0 / 0", substitutions: ["bar": 0])
+        TestRewrite("$bar / ($bar * $foo)", expected: "$bar / ($bar * $foo)")
         
         TestRewrite("$bar / ($foo * $bar)", expected: "1/$foo", substitutions: ["bar": 1])
-        TestRewrite("$bar / ($foo * $bar)", expected: "0 / 0", substitutions: ["bar": 0])
+        TestRewrite("$bar / ($foo * $bar)", expected: "$bar / ($foo * $bar)")
         
         
         //exponents and roots
