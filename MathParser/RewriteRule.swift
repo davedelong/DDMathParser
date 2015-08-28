@@ -45,13 +45,13 @@ public struct RewriteRule {
         return matchWithCondition(expression, evaluator: evaluator) != nil
     }
     
-    public func rewrite(expression: Expression, evaluator: Evaluator) -> Expression {
-        guard let replacements = matchWithCondition(expression, evaluator: evaluator) else { return expression }
+    public func rewrite(expression: Expression, substitutions: Dictionary<String, Double>, evaluator: Evaluator) -> Expression {
+        guard let replacements = matchWithCondition(expression, substitutions: substitutions, evaluator: evaluator) else { return expression }
         
-        return applyReplacements(replacements, toExpression: expression)
+        return applyReplacements(replacements, toExpression: template)
     }
     
-    private func matchWithCondition(expression: Expression, evaluator: Evaluator, replacementsSoFar: Dictionary<String, Expression> = [:]) -> Dictionary<String, Expression>? {
+    private func matchWithCondition(expression: Expression, substitutions: Dictionary<String, Double> = [:], evaluator: Evaluator, replacementsSoFar: Dictionary<String, Expression> = [:]) -> Dictionary<String, Expression>? {
         guard let replacements = match(expression, toExpression: predicate, replacementsSoFar: replacementsSoFar) else { return nil }
         
         // we replaced, and we don't have a condition => we match
@@ -61,7 +61,7 @@ public struct RewriteRule {
         let matchingCondition = applyReplacements(replacements, toExpression: condition)
         
         // if there's an error evaluating the condition, then we don't match
-        guard let result = try? evaluator.evaluate(matchingCondition) else { return nil }
+        guard let result = try? evaluator.evaluate(matchingCondition, substitutions: substitutions) else { return nil }
         
         // non-zero => we match
         return (result != 0) ? replacements : nil

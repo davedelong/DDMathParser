@@ -148,7 +148,7 @@ public extension Operator {
             case .ImplicitMultiply:
                 arity = .Binary
                 associativity = .Left
-                tokens = []
+                tokens = ["*", "×"]
             
             case .Modulo:
                 arity = .Binary

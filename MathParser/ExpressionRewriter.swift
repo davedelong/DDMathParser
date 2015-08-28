@@ -11,7 +11,9 @@ import Foundation
 public struct ExpressionRewriter {
     private var rules: Array<RewriteRule>
     
-    public init(rules: Array<RewriteRule> = RewriteRule.defaultRules) {
+    public static let defaultRewriter = ExpressionRewriter(rules: RewriteRule.defaultRules)
+    
+    public init(rules: Array<RewriteRule>) {
         self.rules = rules
     }
     
@@ -19,7 +21,7 @@ public struct ExpressionRewriter {
         rules.append(rule)
     }
     
-    public func rewriteExpression(expression: Expression, evaluator: Evaluator) -> Expression {
+    public func rewriteExpression(expression: Expression, substitutions: Dictionary<String, Double> = [:], evaluator: Evaluator) -> Expression {
         
         var tmp = expression
         var iterationCount = 0
@@ -28,7 +30,7 @@ public struct ExpressionRewriter {
             var changed = false
             
             for rule in rules {
-                let rewritten = rewrite(tmp, usingRule: rule, evaluator: evaluator)
+                let rewritten = rewrite(tmp, usingRule: rule, substitutions: substitutions, evaluator: evaluator)
                 if rewritten != tmp {
                     changed = true
                     tmp = rewritten
@@ -47,18 +49,20 @@ public struct ExpressionRewriter {
         return tmp
     }
     
-    private func rewrite(expression: Expression, usingRule rule: RewriteRule, evaluator: Evaluator) -> Expression {
+    private func rewrite(expression: Expression, usingRule rule: RewriteRule, substitutions: Dictionary<String, Double>, evaluator: Evaluator) -> Expression {
         
-        let rewritten = rule.rewrite(expression, evaluator: evaluator)
+        let simplified = expression.simplify(substitutions, evaluator: evaluator)
+        
+        let rewritten = rule.rewrite(simplified, substitutions: substitutions, evaluator: evaluator)
         if rewritten != expression { return rewritten }
         
         guard case let .Function(f, args) = rewritten.kind else { return rewritten }
         
-        let newArgs = args.map { rewrite($0, usingRule: rule, evaluator: evaluator) }
+        let newArgs = args.map { rewrite($0, usingRule: rule, substitutions: substitutions, evaluator: evaluator) }
         
         // if nothing changed, reture
         guard args != newArgs else { return rewritten }
         
-        return Expression(kind: .Function(f, args), range: rewritten.range)
+        return Expression(kind: .Function(f, newArgs), range: rewritten.range)
     }
 }

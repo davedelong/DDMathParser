@@ -76,12 +76,16 @@ public class Expression {
         }
     }
     
-    public func simplify(evaluator: Evaluator) -> Expression {
+    public func simplify(substitutions: Dictionary<String, Double> = [:], evaluator: Evaluator) -> Expression {
         switch kind {
             case .Number(_): return Expression(kind: kind, range: range)
-            case .Variable(_): return Expression(kind: kind, range: range)
+            case .Variable(_):
+                if let resolved = try? evaluator.evaluate(self, substitutions: substitutions) {
+                    return Expression(kind: .Number(resolved), range: range)
+                }
+                return Expression(kind: kind, range: range)
             case let .Function(f, args):
-                let newArgs = args.map { $0.simplify(evaluator) }
+                let newArgs = args.map { $0.simplify(substitutions, evaluator: evaluator) }
                 let areAllArgsNumbers = newArgs.reduce(true) { $0 && $1.kind.isNumber }
             
                 guard areAllArgsNumbers else {
