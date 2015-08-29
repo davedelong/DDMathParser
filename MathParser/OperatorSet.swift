@@ -175,7 +175,7 @@ public class OperatorSet {
             operatorsDidChange()
         } else {
             let overlap = knownTokens.intersect(op.tokens)
-            if overlap.isEmpty == false {
+            guard overlap.isEmpty == true else {
                 NSLog("cannot add operator with conflicting tokens: \(overlap)")
                 return
             }
