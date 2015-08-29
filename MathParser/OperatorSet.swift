@@ -184,7 +184,7 @@ public class OperatorSet {
                 let new = Operator(function: orig.function, arity: orig.arity, associativity: orig.associativity)
                 new.tokens = orig.tokens
                 
-                var precedence = orig.precedence!
+                var precedence = orig.precedence ?? 0
                 if sorter(orig) { precedence++ }
                 new.precedence = precedence
                 return new

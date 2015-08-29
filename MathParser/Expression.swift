@@ -113,7 +113,9 @@ extension Expression: CustomStringConvertible {
                 let params = args.map { $0.description }
                 if let builtIn = BuiltInOperator(rawValue: f) {
                     let op = Operator(builtInOperator: builtIn)
-                    let token = op.tokens.first!
+                    guard let token = op.tokens.first else {
+                        fatalError("Built-in operator doesn't have any tokens")
+                    }
                     switch (op.arity, op.associativity) {
                         case (.Binary, _):
                             return "\(params[0]) \(token) \(params[1])"
