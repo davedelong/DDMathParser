@@ -183,7 +183,8 @@ class EvaluatorTests: XCTestCase {
         TestString("max(1, 2, 3)", value: 3)
         TestString("median(1, 2, 3)", value: 2)
         TestString("median(1, 2, 3, 4)", value: 2.5)
-        //stddev??
+        TestString("stddev(2, 4, 4, 4, 5, 5, 7, 9)", value: 2)
+        TestString("stddev(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)", value: 2.872281323269014329925)
         TestString("ceil(1.234)", value: 2)
         TestString("floor(1.234)", value: 1)
     }
