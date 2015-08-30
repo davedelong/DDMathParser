@@ -21,6 +21,10 @@ internal struct ExponentExtractor: TokenExtractor {
         "⁷": "7",
         "⁸": "8",
         "⁹": "9",
+        "⁺": "+",
+        "⁻": "-",
+        "⁽": "(",
+        "⁾": ")"
     ]
     
     func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {

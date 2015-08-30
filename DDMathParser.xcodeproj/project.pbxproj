@@ -102,7 +102,6 @@
 		55D2AD501295834600BA2905 /* EvaluationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2AD4F1295834600BA2905 /* EvaluationTests.m */; };
 		55D48BE71B740F3E0050331F /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE61B740F3E0050331F /* Character.swift */; };
 		55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */; };
-		55D48BEC1B74147E0050331F /* String.CharacterView.Index.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BEB1B74147E0050331F /* String.CharacterView.Index.swift */; };
 		55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BED1B7415540050331F /* NumberExtractor.swift */; };
 		55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BF01B7415E80050331F /* HexNumberExtractor.swift */; };
 		55E2FCB7129DC90400CD6023 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
@@ -241,7 +240,6 @@
 		55D2AD4F1295834600BA2905 /* EvaluationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluationTests.m; sourceTree = "<group>"; };
 		55D48BE61B740F3E0050331F /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenCharacterBuffer.swift; sourceTree = "<group>"; };
-		55D48BEB1B74147E0050331F /* String.CharacterView.Index.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.CharacterView.Index.swift; sourceTree = "<group>"; };
 		55D48BED1B7415540050331F /* NumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberExtractor.swift; sourceTree = "<group>"; };
 		55D48BF01B7415E80050331F /* HexNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexNumberExtractor.swift; sourceTree = "<group>"; };
 		55E2FCB5129DC90400CD6023 /* DDParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDParser.h; sourceTree = "<group>"; };
@@ -595,7 +593,6 @@
 				55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */,
 				55D48BEF1B7415DD0050331F /* Extractors */,
 				55D48BE61B740F3E0050331F /* Character.swift */,
-				55D48BEB1B74147E0050331F /* String.CharacterView.Index.swift */,
 			);
 			name = Internal;
 			sourceTree = "<group>";
@@ -881,7 +878,6 @@
 				55AE3A461B8012D30022D1CF /* TokenGrouper.swift in Sources */,
 				557F8FE51B86B8A500155C9D /* Evaluator.swift in Sources */,
 				557A806D1B7647CB0014822A /* Operator+Defaults.swift in Sources */,
-				55D48BEC1B74147E0050331F /* String.CharacterView.Index.swift in Sources */,
 				55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */,
 				55B6AF611B8D0AD100778033 /* ExpressionRewriter.swift in Sources */,
 				559B3F1C1B740C0B00000108 /* TokenExtractor.swift in Sources */,

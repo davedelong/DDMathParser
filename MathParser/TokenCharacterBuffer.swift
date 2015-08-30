@@ -28,17 +28,22 @@ internal class TokenCharacterBuffer {
         currentIndex = index
     }
     
-    func peekNext(delta: UInt = 0, lowercase: Bool = false) -> Character? {
+    func peekNext(delta: Int = 0, lowercase: Bool = false) -> Character? {
+        guard delta >= 0 else {
+            fatalError("Cannot peek into the past")
+        }
         let chars = lowercase ? lowercaseCharacters : characters
         
-        let index = currentIndex.extendedBy(delta)
+        let index = currentIndex.advancedBy(delta)
         guard index < chars.endIndex else { return nil }
         return chars[index]
     }
     
-    func consume(delta: UInt = 1) {
-        assert(delta > 0, "Cannot consume zero characters")
-        currentIndex = currentIndex.extendedBy(delta)
+    func consume(delta: Int = 1) {
+        guard delta > 0 else {
+            fatalError("Cannot consume less than one character")
+        }
+        currentIndex = currentIndex.advancedBy(delta)
     }
     
     subscript (i: String.CharacterView.Index) -> Character {

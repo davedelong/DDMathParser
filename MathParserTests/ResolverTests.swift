@@ -69,12 +69,42 @@ class TokenResolverTests: XCTestCase {
     func testExponent() {
         guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "2²").resolve()) else { return }
         
-        XCTAssertEqual(tokens.count, 3)
+        XCTAssertEqual(tokens.count, 5)
         TestToken(tokens[0], kind: .Number(2), string: "2")
+        TestToken(tokens[1], kind: .Operator(Operator(builtInOperator: .Power)), string: "**")
+        TestToken(tokens[2], kind: .Operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[3], kind: .Number(2), string: "2")
+        TestToken(tokens[4], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+    }
+    
+    func testNegatedExponent() {
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "2⁻²").resolve()) else { return }
         
-        let op = Operator(builtInOperator: .Power)
-        TestToken(tokens[1], kind: .Operator(op), string: "**")
-        TestToken(tokens[2], kind: .Number(2), string: "2")
+        XCTAssertEqual(tokens.count, 6)
+        TestToken(tokens[0], kind: .Number(2), string: "2")
+        TestToken(tokens[1], kind: .Operator(Operator(builtInOperator: .Power)), string: "**")
+        TestToken(tokens[2], kind: .Operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[3], kind: .Operator(Operator(builtInOperator: .UnaryMinus)), string: "-")
+        TestToken(tokens[4], kind: .Number(2), string: "2")
+        TestToken(tokens[5], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+    }
+    
+    func testComplexExponent() {
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "2⁻⁽²⁺¹⁾⁺⁵").resolve()) else { return }
+        
+        XCTAssertEqual(tokens.count, 12)
+        TestToken(tokens[0], kind: .Number(2), string: "2")
+        TestToken(tokens[1], kind: .Operator(Operator(builtInOperator: .Power)), string: "**")
+        TestToken(tokens[2], kind: .Operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[3], kind: .Operator(Operator(builtInOperator: .UnaryMinus)), string: "-")
+        TestToken(tokens[4], kind: .Operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[5], kind: .Number(2), string: "2")
+        TestToken(tokens[6], kind: .Operator(Operator(builtInOperator: .Add)), string: "+")
+        TestToken(tokens[7], kind: .Number(1), string: "1")
+        TestToken(tokens[8], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+        TestToken(tokens[9], kind: .Operator(Operator(builtInOperator: .Add)), string: "+")
+        TestToken(tokens[10], kind: .Number(5), string: "5")
+        TestToken(tokens[11], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
     }
     
     func testVariable() {

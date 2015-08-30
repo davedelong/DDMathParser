@@ -105,6 +105,14 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[1], kind: .Exponent, string: "2")
     }
     
+    func testComplexExponent() {
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "2⁻⁽²⁺¹⁾⁺⁵").tokenize()) else { return }
+        
+        XCTAssertEqual(tokens.count, 2)
+        TestToken(tokens[0], kind: .Number, string: "2")
+        TestToken(tokens[1], kind: .Exponent, string: "-(2+1)+5")
+    }
+    
     func testMissingExponentNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e").tokenize()) else { return }
         

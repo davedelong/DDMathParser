@@ -111,7 +111,7 @@ extension TokenResolver {
                 resolvedTokens.append(resolveNumber(rawToken))
             
             case .Exponent:
-                resolvedTokens.appendContentsOf(resolveExponent(rawToken))
+                resolvedTokens.appendContentsOf(try resolveExponent(rawToken))
                 
             case .Variable:
                 resolvedTokens.append(ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, range: rawToken.range))
@@ -137,13 +137,34 @@ extension TokenResolver {
         return ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
     }
     
-    private func resolveExponent(raw: RawToken) -> Array<ResolvedToken> {
+    private func resolveExponent(raw: RawToken) throws -> Array<ResolvedToken> {
+        var resolved = Array<ResolvedToken>()
         let powerOperator = operatorSet.powerOperator
         let power = ResolvedToken(kind: .Operator(powerOperator), string: "**", range: raw.range.startIndex ..< raw.range.startIndex)
+        let openParen = ResolvedToken(kind: .Operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(", range: raw.range.startIndex ..< raw.range.startIndex)
         
-        let number = NSDecimalNumber(string: raw.string)
-        let exponent = ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
-        return [power, exponent]
+        resolved += [power, openParen]
+        
+        let exponentTokenizer = Tokenizer(string: raw.string, operatorSet: operatorSet)
+        let exponentResolver = TokenResolver(tokenizer: exponentTokenizer, options: options)
+        
+        let exponentTokens = try exponentResolver.resolve()
+        
+        var distanceSoFar = 0
+        for exponentToken in exponentTokens {
+            let tokenStart = raw.range.startIndex.advancedBy(distanceSoFar)
+            
+            let tokenLength = exponentToken.range.startIndex.distanceTo(exponentToken.range.endIndex)
+            let tokenEnd = tokenStart.advancedBy(tokenLength)
+            distanceSoFar += tokenLength
+            
+            resolved.append(ResolvedToken(kind: exponentToken.kind, string: exponentToken.string, range: tokenStart ..< tokenEnd))
+        }
+        
+        let closeParen = ResolvedToken(kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")", range: raw.range.endIndex ..< raw.range.endIndex)
+        resolved.append(closeParen)
+        
+        return resolved
     }
     
     private func resolveOperator(raw: RawToken, previous: ResolvedToken?) throws -> ResolvedToken {
