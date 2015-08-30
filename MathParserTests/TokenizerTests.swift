@@ -97,6 +97,14 @@ class TokenizerTests: XCTestCase {
         }
     }
     
+    func testExponent() {
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "2²").tokenize()) else { return }
+        
+        XCTAssertEqual(tokens.count, 2)
+        TestToken(tokens[0], kind: .Number, string: "2")
+        TestToken(tokens[1], kind: .Exponent, string: "2")
+    }
+    
     func testMissingExponentNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e").tokenize()) else { return }
         

@@ -70,54 +70,60 @@ extension TokenResolver {
             }
         }
         
-        let resolved = try resolveRawToken(raw, previous: previous)
+        let resolvedTokens = try resolveRawToken(raw, previous: previous)
+        guard let firstResolved = resolvedTokens.first else {
+            fatalError("Implementation flaw! A token cannot resolve to nothing")
+        }
         
-        var resolvedTokens = Array<ResolvedToken>()
+        var final = Array<ResolvedToken>()
         
         // check for argumentless functions
         if options.contains(.AllowArgumentlessFunctions) {
-            let extras = extraTokensForArgumentlessFunction(resolved, previous: previous)
-            resolvedTokens.appendContentsOf(extras)
+            let extras = extraTokensForArgumentlessFunction(firstResolved, previous: previous)
+            final.appendContentsOf(extras)
         }
         
         // check for implicit multiplication
         if options.contains(.AllowImplicitMultiplication) {
-            let last = resolvedTokens.last ?? previous
-            let extras = extraTokensForImplicitMultiplication(resolved, previous: last)
-            resolvedTokens.appendContentsOf(extras)
+            let last = final.last ?? previous
+            let extras = extraTokensForImplicitMultiplication(firstResolved, previous: last)
+            final.appendContentsOf(extras)
         }
         
-        resolvedTokens.append(resolved)
+        final.appendContentsOf(resolvedTokens)
         
-        return resolvedTokens
+        return final
     }
     
-    private func resolveRawToken(rawToken: RawToken, previous: ResolvedToken?) throws -> ResolvedToken {
+    private func resolveRawToken(rawToken: RawToken, previous: ResolvedToken?) throws -> Array<ResolvedToken> {
         
-        let resolvedToken: ResolvedToken
+        var resolvedTokens = Array<ResolvedToken>()
         
         switch rawToken.kind {
             case .HexNumber:
                 if let number = UInt(rawToken.string, radix: 16) {
-                    resolvedToken = ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range)
+                    resolvedTokens.append(ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
                     throw TokenResolverError(kind: .CannotParseHexNumber, rawToken: rawToken)
                 }
                 
             case .Number:
-                resolvedToken = resolveNumber(rawToken)
+                resolvedTokens.append(resolveNumber(rawToken))
+            
+            case .Exponent:
+                resolvedTokens.appendContentsOf(resolveExponent(rawToken))
                 
             case .Variable:
-                resolvedToken = ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, range: rawToken.range)
+                resolvedTokens.append(ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
             case .Identifier:
-                resolvedToken = ResolvedToken(kind: .Identifier(rawToken.string), string: rawToken.string, range: rawToken.range)
+                resolvedTokens.append(ResolvedToken(kind: .Identifier(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
             case .Operator:
-                resolvedToken = try resolveOperator(rawToken, previous: previous)
+                resolvedTokens.append(try resolveOperator(rawToken, previous: previous))
         }
         
-        return resolvedToken
+        return resolvedTokens
     }
     
     private func resolveNumber(raw: RawToken) -> ResolvedToken {
@@ -129,6 +135,15 @@ extension TokenResolver {
         let cleaned = raw.string.stringByReplacingOccurrencesOfString("−", withString: "-")
         let number = NSDecimalNumber(string: cleaned)
         return ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
+    }
+    
+    private func resolveExponent(raw: RawToken) -> Array<ResolvedToken> {
+        let powerOperator = operatorSet.powerOperator
+        let power = ResolvedToken(kind: .Operator(powerOperator), string: "**", range: raw.range.startIndex ..< raw.range.startIndex)
+        
+        let number = NSDecimalNumber(string: raw.string)
+        let exponent = ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
+        return [power, exponent]
     }
     
     private func resolveOperator(raw: RawToken, previous: ResolvedToken?) throws -> ResolvedToken {

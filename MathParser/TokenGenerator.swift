@@ -25,6 +25,7 @@ internal class TokenGenerator: GeneratorType {
             HexNumberExtractor(),
             NumberExtractor(),
             SpecialNumberExtractor(),
+            ExponentExtractor(),
             VariableExtractor(operatorTokens: operatorTokens),
             QuotedVariableExtractor(),
             OperatorExtractor(operatorTokens: operatorTokens),

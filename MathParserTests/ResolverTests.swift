@@ -66,6 +66,17 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[0], kind: .Number(16), string: "10")
     }
     
+    func testExponent() {
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "2²").resolve()) else { return }
+        
+        XCTAssertEqual(tokens.count, 3)
+        TestToken(tokens[0], kind: .Number(2), string: "2")
+        
+        let op = Operator(builtInOperator: .Power)
+        TestToken(tokens[1], kind: .Operator(op), string: "**")
+        TestToken(tokens[2], kind: .Number(2), string: "2")
+    }
+    
     func testVariable() {
         let r = TokenResolver(string: "$foo")
         guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }

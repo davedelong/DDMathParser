@@ -62,7 +62,8 @@ public class OperatorSet {
         // NOTE: percent-as-percent precedence goes here (same as Factorial)
         ops.append(Operator(builtInOperator: .Degree, precedence: precedence++))
         
-        ops.append(Operator(builtInOperator: .Power, precedence: precedence++))
+        powerOperator = Operator(builtInOperator: .Power, precedence: precedence++)
+        ops.append(powerOperator)
         
         // these are defined as unary right/left associative for convenience
         ops.append(Operator(builtInOperator: .ParenthesisOpen, precedence: precedence))
@@ -120,6 +121,7 @@ public class OperatorSet {
     
     internal let multiplyOperator: Operator
     internal let implicitMultiplyOperator: Operator
+    internal let powerOperator: Operator
     
     private var knownTokens: Set<String>
     
