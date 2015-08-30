@@ -87,6 +87,16 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[0], kind: .Number, string: "1.23e-5")
     }
     
+    func testSpecialNumbers() {
+        let special = ["½", "⅓", "⅔", "¼", "¾", "⅕", "⅖", "⅗", "⅘", "⅙", "⅚", "⅛", "⅜", "⅝", "⅞"]
+        
+        for string in special {
+            guard let tokens = XCTAssertNoThrows(try Tokenizer(string: string).tokenize()) else { return }
+            XCTAssertEqual(tokens.count, 1)
+            TestToken(tokens[0], kind: .Number, string: string)
+        }
+    }
+    
     func testMissingExponentNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e").tokenize()) else { return }
         

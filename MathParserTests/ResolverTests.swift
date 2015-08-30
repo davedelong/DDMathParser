@@ -32,6 +32,32 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[0], kind: .Number(1), string: "1")
     }
     
+    func testSpecialNumbers() {
+        let specialNumbers: Dictionary<String, Double> = [
+            "½": 1.0/2,
+            "⅓": 1.0/3,
+            "⅔": 2.0/3,
+            "¼": 1.0/4,
+            "¾": 3.0/4,
+            "⅕": 1.0/5,
+            "⅖": 2.0/5,
+            "⅗": 3.0/5,
+            "⅘": 4.0/5,
+            "⅙": 1.0/6,
+            "⅚": 5.0/6,
+            "⅛": 1.0/8,
+            "⅜": 3.0/8,
+            "⅝": 5.0/8,
+            "⅞": 7.0/8
+        ]
+            
+        for (string, value) in specialNumbers {
+            guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string).resolve()) else { return }
+            XCTAssertEqual(tokens.count, 1)
+            TestToken(tokens[0], kind: .Number(value), string: string)
+        }
+    }
+    
     func testHexNumber() {
         let r = TokenResolver(string: "0x10")
         guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }

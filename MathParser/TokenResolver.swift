@@ -105,9 +105,7 @@ extension TokenResolver {
                 }
                 
             case .Number:
-                let cleaned = rawToken.string.stringByReplacingOccurrencesOfString("−", withString: "-")
-                let number = NSDecimalNumber(string: cleaned)
-                resolvedToken = ResolvedToken(kind: .Number(number.doubleValue), string: rawToken.string, range: rawToken.range)
+                resolvedToken = resolveNumber(rawToken)
                 
             case .Variable:
                 resolvedToken = ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, range: rawToken.range)
@@ -120,6 +118,17 @@ extension TokenResolver {
         }
         
         return resolvedToken
+    }
+    
+    private func resolveNumber(raw: RawToken) -> ResolvedToken {
+        // first, see if it's a special number
+        if let character = raw.string.characters.first, let value = SpecialNumberExtractor.specialNumbers[character] {
+            return ResolvedToken(kind: .Number(value), string: raw.string, range: raw.range)
+        }
+        
+        let cleaned = raw.string.stringByReplacingOccurrencesOfString("−", withString: "-")
+        let number = NSDecimalNumber(string: cleaned)
+        return ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
     }
     
     private func resolveOperator(raw: RawToken, previous: ResolvedToken?) throws -> ResolvedToken {
