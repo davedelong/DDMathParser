@@ -35,6 +35,17 @@ public class Operator: Equatable {
     }
 }
 
+extension Operator: CustomStringConvertible {
+    
+    public var description: String {
+        let tokenInfo = tokens.joinWithSeparator(", ")
+        let arityInfo = arity == .Unary ? "Unary" : "Binary"
+        let assocInfo = associativity == .Left ? "Left" : "Right"
+        let precedenceInfo = precedence?.description ?? "UNKNOWN"
+        return "{[\(tokenInfo)] -> \(function)(), \(arityInfo) \(assocInfo), precedence: \(precedenceInfo)}"
+    }
+}
+
 public func ==(lhs: Operator, rhs: Operator) -> Bool {
     return lhs.arity == rhs.arity && lhs.associativity == rhs.associativity && lhs.function == rhs.function
 }
