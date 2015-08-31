@@ -38,6 +38,7 @@
 		552CE1C11B8FC88A007B89A1 /* RewriterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C01B8FC88A007B89A1 /* RewriterTests.swift */; settings = {ASSET_TAGS = (); }; };
 		552CE1C61B9387A2007B89A1 /* SpecialNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */; settings = {ASSET_TAGS = (); }; };
 		552CE1C81B938F15007B89A1 /* ExponentExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */; settings = {ASSET_TAGS = (); }; };
+		552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */; settings = {ASSET_TAGS = (); }; };
 		55325A1912A8C82C00DE9EB0 /* DDParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E2FCB6129DC90400CD6023 /* DDParser.m */; };
 		554243571437654800BA293D /* DDMathOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 554243561437654800BA293D /* DDMathOperator.m */; };
 		554243581437654800BA293D /* DDMathOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 554243561437654800BA293D /* DDMathOperator.m */; };
@@ -189,6 +190,7 @@
 		552CE1C01B8FC88A007B89A1 /* RewriterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewriterTests.swift; sourceTree = "<group>"; };
 		552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecialNumberExtractor.swift; sourceTree = "<group>"; };
 		552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExponentExtractor.swift; sourceTree = "<group>"; };
+		552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedNumberExtractor.swift; sourceTree = "<group>"; };
 		554243551437654800BA293D /* DDMathOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathOperator.h; sourceTree = "<group>"; };
 		554243561437654800BA293D /* DDMathOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMathOperator.m; sourceTree = "<group>"; };
 		5554D58912944AFD00A62529 /* DDMathEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMathEvaluator.h; sourceTree = "<group>"; };
@@ -603,6 +605,7 @@
 				559B3F1B1B740C0B00000108 /* TokenExtractor.swift */,
 				55D48BF01B7415E80050331F /* HexNumberExtractor.swift */,
 				55D48BED1B7415540050331F /* NumberExtractor.swift */,
+				552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */,
 				552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */,
 				552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */,
 				552781521B75234F0093B070 /* QuotedVariableExtractor.swift */,
@@ -861,6 +864,7 @@
 				557A806B1B757C870014822A /* OperatorSet.swift in Sources */,
 				55AE3A4B1B823F490022D1CF /* Expressionizer.swift in Sources */,
 				559B3F111B7406D800000108 /* Tokenizer.swift in Sources */,
+				552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */,
 				557A80691B757C2C0014822A /* Operator.swift in Sources */,
 				5514B17D1B7D48F4007431D0 /* GroupedToken.swift in Sources */,
 				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,

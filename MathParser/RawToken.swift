@@ -13,6 +13,7 @@ public struct RawToken {
     public enum Kind {
         case HexNumber
         case Number
+        case LocalizedNumber
         case Exponent
         case Variable
         case Operator

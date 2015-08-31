@@ -16,19 +16,30 @@ internal class TokenGenerator: GeneratorType {
     
     internal let operatorSet: OperatorSet
     
-    init(string: String, operatorSet: OperatorSet) {
+    init(string: String, operatorSet: OperatorSet, locale: NSLocale?) {
         self.operatorSet = operatorSet
         let operatorTokens = operatorSet.operatorTokenSet
         
         buffer = TokenCharacterBuffer(string: string)
+        
+        let numberExtractor: TokenExtractor
+        if let locale = locale {
+            numberExtractor = LocalizedNumberExtractor(locale: locale)
+        } else {
+            numberExtractor = NumberExtractor()
+        }
+        
         extractors = [
             HexNumberExtractor(),
-            NumberExtractor(),
+            numberExtractor,
             SpecialNumberExtractor(),
             ExponentExtractor(),
+            
             VariableExtractor(operatorTokens: operatorTokens),
             QuotedVariableExtractor(),
+            
             OperatorExtractor(operatorTokens: operatorTokens),
+            
             IdentifierExtractor(operatorTokens: operatorTokens)
         ]
     }

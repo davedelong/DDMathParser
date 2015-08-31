@@ -243,4 +243,28 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[1], kind: .Number, string: "1")
     }
     
+    func testLocalizedNumber() {
+        let l = NSLocale(localeIdentifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1,23", locale: l).tokenize()) else { return }
+        
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .LocalizedNumber, string: "1,23")
+    }
+    
+    func testLocalizedNumbers() {
+        let l = NSLocale(localeIdentifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "sum(1,2, 3,4, 5,6,7,8)", locale: l).tokenize()) else { return }
+        
+        XCTAssertEqual(tokens.count, 10)
+        TestToken(tokens[0], kind: .Identifier, string: "sum")
+        TestToken(tokens[1], kind: .Operator, string: "(")
+        TestToken(tokens[2], kind: .LocalizedNumber, string: "1,2")
+        TestToken(tokens[3], kind: .Operator, string: ",")
+        TestToken(tokens[4], kind: .LocalizedNumber, string: "3,4")
+        TestToken(tokens[5], kind: .Operator, string: ",")
+        TestToken(tokens[6], kind: .LocalizedNumber, string: "5,6")
+        TestToken(tokens[7], kind: .Operator, string: ",")
+        TestToken(tokens[8], kind: .LocalizedNumber, string: "7,8")
+        TestToken(tokens[9], kind: .Operator, string: ")")
+    }
 }

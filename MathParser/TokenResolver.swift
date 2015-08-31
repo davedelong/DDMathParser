@@ -27,16 +27,34 @@ public struct TokenResolver {
     
     private let tokenizer: Tokenizer
     private let options: TokenResolverOptions
+    private let numberFormatters: Array<NSNumberFormatter>
     internal var operatorSet: OperatorSet { return tokenizer.operatorSet }
+    
+    private static func formattersForLocale(locale: NSLocale?) -> Array<NSNumberFormatter> {
+        guard let locale = locale else { return [] }
+        
+        let decimal = NSNumberFormatter()
+        let scientific = NSNumberFormatter()
+        
+        decimal.locale = locale
+        scientific.locale = locale
+        
+        decimal.numberStyle = .DecimalStyle
+        scientific.numberStyle = .ScientificStyle
+        
+        return [decimal, scientific]
+    }
     
     public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) {
         self.tokenizer = tokenizer
         self.options = options
+        self.numberFormatters = TokenResolver.formattersForLocale(tokenizer.locale)
     }
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) {
-        self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet)
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.defaultOptions, locale: NSLocale? = nil) {
+        self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet, locale: locale)
         self.options = options
+        self.numberFormatters = TokenResolver.formattersForLocale(locale)
     }
     
     public func resolve() throws -> Array<ResolvedToken> {
@@ -110,6 +128,9 @@ extension TokenResolver {
             case .Number:
                 resolvedTokens.append(resolveNumber(rawToken))
             
+            case .LocalizedNumber:
+                resolvedTokens.append(try resolveLocalizedNumber(rawToken))
+            
             case .Exponent:
                 resolvedTokens.appendContentsOf(try resolveExponent(rawToken))
                 
@@ -135,6 +156,16 @@ extension TokenResolver {
         let cleaned = raw.string.stringByReplacingOccurrencesOfString("−", withString: "-")
         let number = NSDecimalNumber(string: cleaned)
         return ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
+    }
+    
+    private func resolveLocalizedNumber(raw: RawToken) throws -> ResolvedToken {
+        for formatter in numberFormatters {
+            if let number = formatter.numberFromString(raw.string) {
+                return ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
+            }
+        }
+        
+        throw TokenResolverError(kind: .CannotParseLocalizedNumber, rawToken: raw)
     }
     
     private func resolveExponent(raw: RawToken) throws -> Array<ResolvedToken> {

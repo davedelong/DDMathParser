@@ -288,15 +288,35 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 2)
         let unaryPlus = Operator(builtInOperator: .UnaryPlus)
-        guard case .Operator(unaryPlus) = tokens[0].kind else {
-            XCTFail("Unexpected token kind: \(tokens[0].kind)")
-            return
-        }
+        TestToken(tokens[0], kind: .Operator(unaryPlus), string: "+")
+        TestToken(tokens[1], kind: .Number(1), string: "1")
+    }
+    
+    func testLocalizedNumber() {
+        let l = NSLocale(localeIdentifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "1,23", locale: l).resolve()) else { return }
         
-        guard case .Number(1) = tokens[1].kind else {
-            XCTFail("Unexpected token kind: \(tokens[1].kind)")
-            return
-        }
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Number(1.23), string: "1,23")
+    }
+    
+    func testLocalizedNumbers() {
+        let l = NSLocale(localeIdentifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "sum(1,2, 3,4, 5,6,7,8)", locale: l).resolve()) else { return }
+        
+        XCTAssertEqual(tokens.count, 10)
+        let comma = Operator(builtInOperator: .Comma)
+        
+        TestToken(tokens[0], kind: .Identifier("sum"), string: "sum")
+        TestToken(tokens[1], kind: .Operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[2], kind: .Number(1.2), string: "1,2")
+        TestToken(tokens[3], kind: .Operator(comma), string: ",")
+        TestToken(tokens[4], kind: .Number(3.4), string: "3,4")
+        TestToken(tokens[5], kind: .Operator(comma), string: ",")
+        TestToken(tokens[6], kind: .Number(5.6), string: "5,6")
+        TestToken(tokens[7], kind: .Operator(comma), string: ",")
+        TestToken(tokens[8], kind: .Number(7.8), string: "7,8")
+        TestToken(tokens[9], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
     }
 
 }
