@@ -13,14 +13,10 @@ import Foundation
 internal struct LocalizedNumberExtractor: TokenExtractor {
     
     private let decimalNumberFormatter = NSNumberFormatter()
-    private let scientificNumberFormatter = NSNumberFormatter()
     
     internal init(locale: NSLocale) {
         decimalNumberFormatter.locale = locale
         decimalNumberFormatter.numberStyle = .DecimalStyle
-        
-        scientificNumberFormatter.locale = locale
-        scientificNumberFormatter.numberStyle = .ScientificStyle
     }
     
     func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
@@ -54,9 +50,8 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
     }
     
     private func canParseString(string: String) -> Bool {
-        if let _ = decimalNumberFormatter.numberFromString(string) { return true }
-        if let _ = scientificNumberFormatter.numberFromString(string) { return true }
-        return false
+        guard let _ = decimalNumberFormatter.numberFromString(string) else { return false }
+        return true
     }
 
 }

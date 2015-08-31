@@ -34,15 +34,10 @@ public struct TokenResolver {
         guard let locale = locale else { return [] }
         
         let decimal = NSNumberFormatter()
-        let scientific = NSNumberFormatter()
-        
         decimal.locale = locale
-        scientific.locale = locale
-        
         decimal.numberStyle = .DecimalStyle
-        scientific.numberStyle = .ScientificStyle
         
-        return [decimal, scientific]
+        return [decimal]
     }
     
     public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) {
