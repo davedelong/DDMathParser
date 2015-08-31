@@ -20,12 +20,13 @@ public class OperatorSet {
     public init(interpretsPercentSignAsModulo: Bool = true) {
         var ops = Array<Operator>()
         var precedence = 1
-        ops.append(Operator(builtInOperator: .LogicalOr, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .LogicalAnd, precedence: precedence++))
         
         // == and != have the same precedence
-        ops.append(Operator(builtInOperator: .LogicalEqual, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .LogicalEqual, precedence: precedence))
         ops.append(Operator(builtInOperator: .LogicalNotEqual, precedence: precedence++))
+        
+        ops.append(Operator(builtInOperator: .LogicalOr, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .LogicalAnd, precedence: precedence++))
         
         ops.append(Operator(builtInOperator: .LogicalLessThan, precedence: precedence++))
         ops.append(Operator(builtInOperator: .LogicalGreaterThan, precedence: precedence++))
