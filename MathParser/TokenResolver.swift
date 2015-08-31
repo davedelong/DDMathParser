@@ -27,6 +27,7 @@ public struct TokenResolver {
     
     private let tokenizer: Tokenizer
     private let options: TokenResolverOptions
+    private let locale: NSLocale?
     private let numberFormatters: Array<NSNumberFormatter>
     internal var operatorSet: OperatorSet { return tokenizer.operatorSet }
     
@@ -43,12 +44,14 @@ public struct TokenResolver {
     public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) {
         self.tokenizer = tokenizer
         self.options = options
+        self.locale = tokenizer.locale
         self.numberFormatters = TokenResolver.formattersForLocale(tokenizer.locale)
     }
     
     public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.defaultOptions, locale: NSLocale? = nil) {
         self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet, locale: locale)
         self.options = options
+        self.locale = locale
         self.numberFormatters = TokenResolver.formattersForLocale(locale)
     }
     
@@ -171,7 +174,7 @@ extension TokenResolver {
         
         resolved += [power, openParen]
         
-        let exponentTokenizer = Tokenizer(string: raw.string, operatorSet: operatorSet)
+        let exponentTokenizer = Tokenizer(string: raw.string, operatorSet: operatorSet, locale: locale)
         let exponentResolver = TokenResolver(tokenizer: exponentTokenizer, options: options)
         
         let exponentTokens = try exponentResolver.resolve()
