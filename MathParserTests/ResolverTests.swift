@@ -318,5 +318,27 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[8], kind: .Number(7.8), string: "7,8")
         TestToken(tokens[9], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
     }
+    
+    func testLocalizedNumbersForEveryLocale() {
+        let locales = NSLocale.availableLocaleIdentifiers().map { NSLocale(localeIdentifier: $0) }
+        
+        for locale in locales {
+            let n = lrand48()
+            let f = NSNumberFormatter()
+            f.numberStyle = .DecimalStyle
+            f.usesGroupingSeparator = false
+            f.locale = locale
+            
+            let s = f.stringFromNumber(n)!
+            let string = "\(s) + \(s)"
+            
+            guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string, locale: locale).resolve()) else { return }
+            XCTAssertEqual(tokens.count, 3)
+            
+            TestToken(tokens[0], kind: .Number(Double(n)), string: s)
+            TestToken(tokens[1], kind: .Operator(Operator(builtInOperator: .Add)), string: "+")
+            TestToken(tokens[2], kind: .Number(Double(n)), string: s)
+        }
+    }
 
 }
