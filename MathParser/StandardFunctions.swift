@@ -49,6 +49,7 @@ public class StandardFunctions {
         
         "average": StandardFunctions.average,
         "sum": StandardFunctions.sum,
+        "product": StandardFunctions.product,
         "count": StandardFunctions.count,
         "min": StandardFunctions.min,
         "max": StandardFunctions.max,
@@ -135,6 +136,8 @@ public class StandardFunctions {
         "ϕ": "phi",
         "implicitmultiply": "multiply",
         "if": "l_if",
+        "∑": "sum",
+        "∏": "product",
         
         "vers": "versin",
         "ver": "versin",
@@ -467,6 +470,16 @@ public class StandardFunctions {
         var value = 0.0
         for arg in args {
             value += try evaluator.evaluate(arg, substitutions: substitutions)
+        }
+        return value
+    }
+    
+    static func product(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+        guard args.count > 0 else { throw EvaluationError.InvalidArguments }
+        
+        var value = 1.0
+        for arg in args {
+            value *= try evaluator.evaluate(arg, substitutions: substitutions)
         }
         return value
     }
