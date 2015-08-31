@@ -27,7 +27,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         let start = buffer.currentIndex
         
         var soFar = ""
-        while let peek = buffer.peekNext() {
+        while let peek = buffer.peekNext() where peek.isWhitespace == false {
             let test = soFar + String(peek)
             if canParseString(test) {
                 soFar = test
