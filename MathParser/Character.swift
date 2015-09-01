@@ -39,7 +39,8 @@ internal extension Character {
     
     var isNewline: Bool {
         switch self {
-            // From CoreFoundation/CFUniChar.c:292
+            // From CoreFoundation/CFUniChar.c:301
+            // http://www.opensource.apple.com/source/CF/CF-1151.16/CFUniChar.c
             case "\u{000a}"..."\u{000d}": return true
             case "\u{0085}": return true
             case "\u{2028}": return true
@@ -50,7 +51,8 @@ internal extension Character {
     
     var isWhitespace: Bool {
         switch self {
-            // From CoreFoundation/CFUniChar.c:288
+            // From CoreFoundation/CFUniChar.c:297
+            // http://www.opensource.apple.com/source/CF/CF-1151.16/CFUniChar.c
             case "\u{0020}": return true
             case "\u{0009}": return true
             case "\u{00a0}": return true
