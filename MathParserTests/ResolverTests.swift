@@ -143,6 +143,35 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[0], kind: .Operator(op), string: "^")
     }
     
+    func testCustomOperatorTokens() {
+        let ops = OperatorSet()
+        
+        let tests: Dictionary<String, BuiltInOperator> = [
+            "is": .LogicalEqual,
+            "equals": .LogicalEqual,
+            "is not": .LogicalNotEqual,
+            "isn't": .LogicalNotEqual,
+            "doesn't equal": .LogicalNotEqual,
+            "is less than": .LogicalLessThan,
+            "is or is less than": .LogicalLessThanOrEqual,
+            "is less than or equal to": .LogicalLessThanOrEqual,
+            "is greater than": .LogicalGreaterThan,
+            "is or is greater than": .LogicalGreaterThanOrEqual,
+            "is greater than or equal to": .LogicalGreaterThanOrEqual,
+            "is not less than": .LogicalGreaterThanOrEqual
+        ]
+        
+        for (token, builtInOperator) in tests {
+            let op = Operator(builtInOperator: builtInOperator)
+            ops.addTokens([token], forOperator: op)
+            
+            let string = "1 \(token) 2"
+            guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string, operatorSet: ops).resolve()) else { return }
+            XCTAssertEqual(tokens.count, 3)
+            TestToken(tokens[1], kind: .Operator(op), string: token)
+        }
+    }
+    
     func testOperatorDisambiguation1() {
         let r = TokenResolver(string: "++")
         guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }
