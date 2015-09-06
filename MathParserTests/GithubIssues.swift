@@ -227,4 +227,18 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, -1)
     }
+    
+    func testIssue108() {
+        guard let d = XCTAssertNoThrows(try "3++++3".evaluate()) else { return }
+        XCTAssertEqual(d, 6)
+        
+        guard let e = XCTAssertNoThrows(try Expression(string: "ln3")) else { return }
+        switch e.kind {
+            case .Function(let f, let args):
+                XCTAssertEqual(f, "ln3")
+                XCTAssertEqual(args.count, 0)
+            default:
+                XCTFail("Unexpected expression kind")
+        }
+    }
 }
