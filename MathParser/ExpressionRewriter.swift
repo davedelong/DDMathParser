@@ -21,7 +21,7 @@ public struct ExpressionRewriter {
         rules.append(rule)
     }
     
-    public func rewriteExpression(expression: Expression, substitutions: Dictionary<String, Double> = [:], evaluator: Evaluator = Evaluator.defaultEvaluator) -> Expression {
+    public func rewriteExpression(expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.defaultEvaluator) -> Expression {
         
         var tmp = expression
         var iterationCount = 0
@@ -49,7 +49,7 @@ public struct ExpressionRewriter {
         return tmp
     }
     
-    private func rewrite(expression: Expression, usingRule rule: RewriteRule, substitutions: Dictionary<String, Double>, evaluator: Evaluator) -> Expression {
+    private func rewrite(expression: Expression, usingRule rule: RewriteRule, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
         
         let simplified = expression.simplify(substitutions, evaluator: evaluator)
         

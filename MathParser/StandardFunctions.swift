@@ -177,7 +177,7 @@ public class StandardFunctions {
         registeredFunctions[name.lowercaseString] = functionEvaluator
     }
     
-    func performFunction(name: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double? {
+    func performFunction(name: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
         let normalized = normalizeFunctionName(name)
         
         if let function = StandardFunctions.functionMap[normalized] {
@@ -205,7 +205,7 @@ public class StandardFunctions {
     
     // MARK: - Basic functions
     
-    static func add(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func add(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -213,7 +213,7 @@ public class StandardFunctions {
         return arg1 + arg2
     }
     
-    static func subtract(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func subtract(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -221,7 +221,7 @@ public class StandardFunctions {
         return arg1 - arg2
     }
     
-    static func multiply(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func multiply(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -229,7 +229,7 @@ public class StandardFunctions {
         return arg1 * arg2
     }
     
-    static func divide(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func divide(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -239,7 +239,7 @@ public class StandardFunctions {
         return arg1 / arg2
     }
     
-    static func mod(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func mod(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -248,7 +248,7 @@ public class StandardFunctions {
         return fmod(arg1, arg2)
     }
     
-    static func negate(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func negate(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -256,14 +256,14 @@ public class StandardFunctions {
         return -arg1
     }
     
-    static func factorial(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func factorial(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return arg1.factorial()
     }
     
-    static func factorial2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func factorial2(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -284,7 +284,7 @@ public class StandardFunctions {
         }
     }
     
-    static func pow(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func pow(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -293,7 +293,7 @@ public class StandardFunctions {
         return Darwin.pow(arg1, arg2)
     }
     
-    static func sqrt(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func sqrt(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let value = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -301,7 +301,7 @@ public class StandardFunctions {
         return Darwin.sqrt(value)
     }
     
-    static func cuberoot(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func cuberoot(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -309,7 +309,7 @@ public class StandardFunctions {
         return Darwin.pow(arg1, 1.0/3.0)
     }
     
-    static func nthroot(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func nthroot(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -326,7 +326,7 @@ public class StandardFunctions {
         }
     }
     
-    static func random(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func random(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count <= 2 else { throw EvaluationError.InvalidArguments }
         
         var argValues = Array<Double>()
@@ -345,42 +345,42 @@ public class StandardFunctions {
         return (drand48() % range) + lowerBound
     }
     
-    static func log(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func log(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.log10(arg1)
     }
     
-    static func ln(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func ln(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.log(arg1)
     }
     
-    static func log2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func log2(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.log2(arg1)
     }
     
-    static func exp(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func exp(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.exp(arg1)
     }
     
-    static func abs(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func abs(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Swift.abs(arg1)
     }
     
-    static func percent(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func percent(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let percentArgument = args[0]
@@ -406,7 +406,7 @@ public class StandardFunctions {
     
     // MARK: - Bitwise functions
     
-    static func and(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func and(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -415,7 +415,7 @@ public class StandardFunctions {
         return Double(Int(arg1) & Int(arg2))
     }
     
-    static func or(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func or(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -424,7 +424,7 @@ public class StandardFunctions {
         return Double(Int(arg1) | Int(arg2))
     }
     
-    static func not(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func not(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -432,7 +432,7 @@ public class StandardFunctions {
         return Double(~Int(arg1))
     }
     
-    static func xor(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func xor(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -441,7 +441,7 @@ public class StandardFunctions {
         return Double(Int(arg1) ^ Int(arg2))
     }
     
-    static func rshift(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func rshift(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -450,7 +450,7 @@ public class StandardFunctions {
         return Double(Int(arg1) >> Int(arg2))
     }
     
-    static func lshift(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func lshift(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -461,7 +461,7 @@ public class StandardFunctions {
     
     // MARK: - Aggregate functions
     
-    static func average(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func average(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         let value = try sum(args, substitutions: substitutions, evaluator: evaluator)
@@ -469,7 +469,7 @@ public class StandardFunctions {
         return value / Double(args.count)
     }
     
-    static func sum(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func sum(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = 0.0
@@ -479,7 +479,7 @@ public class StandardFunctions {
         return value
     }
     
-    static func product(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func product(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = 1.0
@@ -489,11 +489,11 @@ public class StandardFunctions {
         return value
     }
     
-    static func count(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func count(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         return Double(args.count)
     }
     
-    static func min(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func min(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = DBL_MAX
@@ -504,7 +504,7 @@ public class StandardFunctions {
         return value
     }
     
-    static func max(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func max(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = DBL_MIN
@@ -515,7 +515,7 @@ public class StandardFunctions {
         return value
     }
     
-    static func median(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func median(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count >= 2 else { throw EvaluationError.InvalidArguments }
         
         var evaluated = Array<Double>()
@@ -533,7 +533,7 @@ public class StandardFunctions {
         }
     }
     
-    static func stddev(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func stddev(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count >= 2 else { throw EvaluationError.InvalidArguments }
         
         let avg = try average(args, substitutions: substitutions, evaluator: evaluator)
@@ -548,14 +548,14 @@ public class StandardFunctions {
         return Darwin.sqrt(stddev / Double(args.count))
     }
     
-    static func ceil(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func ceil(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.ceil(arg1)
     }
     
-    static func floor(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func floor(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -564,49 +564,49 @@ public class StandardFunctions {
     
     // MARK: - Trigonometric functions
     
-    static func sin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func sin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.sin(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func cos(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func cos(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.cos(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func tan(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func tan(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.tan(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func asin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func asin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return _rtod(Darwin.asin(arg1), evaluator: evaluator)
     }
     
-    static func acos(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func acos(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return _rtod(Darwin.acos(arg1), evaluator: evaluator)
     }
     
-    static func atan(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func atan(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return _rtod(Darwin.atan(arg1), evaluator: evaluator)
     }
     
-    static func atan2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func atan2(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -614,7 +614,7 @@ public class StandardFunctions {
         return _rtod(Darwin.atan2(arg1, arg2), evaluator: evaluator)
     }
     
-    static func csc(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func csc(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -623,7 +623,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func sec(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func sec(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -632,7 +632,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func cotan(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func cotan(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -641,7 +641,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func acsc(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func acsc(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -650,7 +650,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func asec(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func asec(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -659,7 +659,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func acotan(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func acotan(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -670,49 +670,49 @@ public class StandardFunctions {
     
     // MARK: - Hyperbolic trigonometric functions
     
-    static func sinh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func sinh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.sinh(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func cosh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func cosh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.cosh(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func tanh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func tanh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.tanh(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func asinh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func asinh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return _rtod(Darwin.asinh(arg1), evaluator: evaluator)
     }
     
-    static func acosh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func acosh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return _rtod(Darwin.acosh(arg1), evaluator: evaluator)
     }
     
-    static func atanh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func atanh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return _rtod(Darwin.atanh(arg1), evaluator: evaluator)
     }
     
-    static func csch(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func csch(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -721,7 +721,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func sech(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func sech(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -730,7 +730,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func cotanh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func cotanh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -739,7 +739,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func acsch(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func acsch(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -748,7 +748,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func asech(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func asech(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -757,7 +757,7 @@ public class StandardFunctions {
         return 1.0 / sinArg
     }
     
-    static func acotanh(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func acotanh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -768,51 +768,51 @@ public class StandardFunctions {
     
     // MARK: - Geometric functions
     
-    static func versin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func versin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 - Darwin.cos(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func vercosin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func vercosin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 + Darwin.cos(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func coversin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func coversin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 - Darwin.sin(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func covercosin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func covercosin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 + Darwin.sin(_dtor(arg1, evaluator: evaluator))
     }
     
-    static func haversin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func haversin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         return try versin(args, substitutions: substitutions, evaluator: evaluator) / 2.0
     }
     
-    static func havercosin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func havercosin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         return try vercosin(args, substitutions: substitutions, evaluator: evaluator) / 2.0
     }
     
-    static func hacoversin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func hacoversin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         return try coversin(args, substitutions: substitutions, evaluator: evaluator) / 2.0
     }
     
-    static func hacovercosin(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func hacovercosin(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         return try covercosin(args, substitutions: substitutions, evaluator: evaluator) / 2.0
     }
     
-    static func exsec(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func exsec(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -821,7 +821,7 @@ public class StandardFunctions {
         return (1.0/cosArg1) - 1.0
     }
     
-    static func excsc(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func excsc(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -830,7 +830,7 @@ public class StandardFunctions {
         return (1.0/sinArg1) - 1.0
     }
     
-    static func crd(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func crd(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -838,14 +838,14 @@ public class StandardFunctions {
         return 2 * sinArg1
     }
     
-    static func dtor(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func dtor(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return arg1 / 180.0 * M_PI
     }
     
-    static func rtod(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func rtod(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -854,64 +854,64 @@ public class StandardFunctions {
     
     // MARK: - Constant functions
     
-    static func phi(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func phi(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return 1.6180339887498948
     }
     
-    static func pi(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func pi(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_PI
     }
     
-    static func pi_2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func pi_2(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_PI_2
     }
     
-    static func pi_4(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func pi_4(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_PI_4
     }
     
-    static func tau(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func tau(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return 2 * M_PI
     }
     
-    static func sqrt2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func sqrt2(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_SQRT2
     }
     
-    static func e(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func e(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_E
     }
     
-    static func log2e(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func log2e(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LOG2E
     }
     
-    static func log10e(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func log10e(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LOG10E
     }
     
-    static func ln2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func ln2(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LN2
     }
     
-    static func ln10(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func ln10(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LN10
     }
     
     // MARK: - Logical Functions
     
-    static func l_and(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_and(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -919,7 +919,7 @@ public class StandardFunctions {
         return (arg1 != 0 && arg2 != 0) ? 1.0 : 0.0
     }
     
-    static func l_or(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_or(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -927,14 +927,14 @@ public class StandardFunctions {
         return (arg1 != 0 || arg2 != 0) ? 1.0 : 0.0
     }
     
-    static func l_not(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_not(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return (arg1 == 0) ? 1.0 : 0.0
     }
     
-    static func l_eq(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_eq(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -942,7 +942,7 @@ public class StandardFunctions {
         return (arg1 == arg2) ? 1.0 : 0.0
     }
     
-    static func l_neq(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_neq(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -950,7 +950,7 @@ public class StandardFunctions {
         return (arg1 != arg2) ? 1.0 : 0.0
     }
     
-    static func l_lt(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_lt(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -958,7 +958,7 @@ public class StandardFunctions {
         return (arg1 < arg2) ? 1.0 : 0.0
     }
     
-    static func l_gt(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_gt(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -966,7 +966,7 @@ public class StandardFunctions {
         return (arg1 > arg2) ? 1.0 : 0.0
     }
     
-    static func l_ltoe(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_ltoe(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -974,7 +974,7 @@ public class StandardFunctions {
         return (arg1 <= arg2) ? 1.0 : 0.0
     }
     
-    static func l_gtoe(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_gtoe(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -982,7 +982,7 @@ public class StandardFunctions {
         return (arg1 == arg2) ? 1.0 : 0.0
     }
     
-    static func l_if(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+    static func l_if(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 3 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)

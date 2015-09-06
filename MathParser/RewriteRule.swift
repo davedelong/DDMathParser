@@ -41,13 +41,13 @@ public struct RewriteRule {
         }
     }
     
-    public func rewrite(expression: Expression, substitutions: Dictionary<String, Double>, evaluator: Evaluator) -> Expression {
+    public func rewrite(expression: Expression, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
         guard let replacements = matchWithCondition(expression, substitutions: substitutions, evaluator: evaluator) else { return expression }
         
         return applyReplacements(replacements, toExpression: template)
     }
     
-    private func matchWithCondition(expression: Expression, substitutions: Dictionary<String, Double> = [:], evaluator: Evaluator, replacementsSoFar: Dictionary<String, Expression> = [:]) -> Dictionary<String, Expression>? {
+    private func matchWithCondition(expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator, replacementsSoFar: Dictionary<String, Expression> = [:]) -> Dictionary<String, Expression>? {
         guard let replacements = match(expression, toExpression: predicate, replacementsSoFar: replacementsSoFar) else { return nil }
         
         // we replaced, and we don't have a condition => we match

@@ -10,7 +10,7 @@ import Foundation
 
 public extension String {
     
-    public func evaluate(substitutions: Dictionary<String, Double> = [:]) throws -> Double {
+    public func evaluate(substitutions: Substitutions = [:]) throws -> Double {
         let e = try Expression(string: self)
         return try Evaluator.defaultEvaluator.evaluate(e, substitutions: substitutions)
     }

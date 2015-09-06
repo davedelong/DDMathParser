@@ -78,7 +78,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: FunctionResolver {
-            private func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double? {
+            private func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
                 return 42
             }
         }
@@ -95,7 +95,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double? {
+            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
                 return 42
             }
         }

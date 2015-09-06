@@ -9,7 +9,7 @@
 import XCTest
 import MathParser
 
-func TestRewrite(original: String, expected: String, substitutions: Dictionary<String, Double> = [:], evaluator: Evaluator = Evaluator.defaultEvaluator, file: String = __FILE__, line: UInt = __LINE__) {
+func TestRewrite(original: String, expected: String, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.defaultEvaluator, file: String = __FILE__, line: UInt = __LINE__) {
     
     guard let originalE = XCTAssertNoThrows(try Expression(string: original), file: file, line: line) else { return }
     

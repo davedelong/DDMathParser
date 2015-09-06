@@ -76,7 +76,7 @@ public class Expression {
         }
     }
     
-    public func simplify(substitutions: Dictionary<String, Double> = [:], evaluator: Evaluator) -> Expression {
+    public func simplify(substitutions: Substitutions = [:], evaluator: Evaluator) -> Expression {
         switch kind {
             case .Number(_): return Expression(kind: kind, range: range)
             case .Variable(_):

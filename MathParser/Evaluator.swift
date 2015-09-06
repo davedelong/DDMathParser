@@ -33,7 +33,7 @@ public struct Evaluator {
     
     public init() { }
     
-    public func evaluate(expression: Expression, substitutions: Dictionary<String, Double> = [:]) throws -> Double {
+    public func evaluate(expression: Expression, substitutions: Substitutions = [:]) throws -> Double {
         switch expression.kind {
             case .Number(let d):
                 return d
@@ -52,7 +52,7 @@ public struct Evaluator {
         functions.addAlias(alias, forFunctionName: name)
     }
     
-    private func evaluateVariable(name: String, substitutions: Dictionary<String, Double>) throws -> Double {
+    private func evaluateVariable(name: String, substitutions: Substitutions) throws -> Double {
         if let value = substitutions[name] { return value }
         
         // substitutions were insufficient
@@ -65,7 +65,7 @@ public struct Evaluator {
         throw EvaluationError.UnknownVariable(name)
     }
     
-    private func evaluateFunction(name: String, arguments: Array<Expression>, substitutions: Dictionary<String, Double>) throws -> Double {
+    private func evaluateFunction(name: String, arguments: Array<Expression>, substitutions: Substitutions) throws -> Double {
         let normalized = functions.normalizeFunctionName(name)
         
         // check for function overrides
