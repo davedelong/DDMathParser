@@ -31,6 +31,7 @@ public enum BuiltInOperator: String {
     case Modulo = "mod"
     case BitwiseNot = "not"
     case Factorial = "factorial"
+    case DoubleFactorial = "factorial2"
     case Degree = "dtor"
     case Percent = "percent"
     case Power = "pow"
@@ -165,6 +166,10 @@ public extension Operator {
                 arity = .Unary
                 associativity = .Left
                 tokens = ["!"]
+            case .DoubleFactorial:
+                arity = .Unary
+                associativity = .Left
+                tokens = ["!!"]
             case .Degree:
                 arity = .Unary
                 associativity = .Left

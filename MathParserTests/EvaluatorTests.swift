@@ -152,6 +152,7 @@ class EvaluatorTests: XCTestCase {
         TestString("mod(10,3)", value: 1)
         TestString("-4", value: -4)
         TestString("4!", value: 24)
+        TestString("4!!", value: 8)
         TestString("2**3", value: 8)
         TestString("√9", value: 3)
         TestString("∛27", value: 3)

@@ -59,6 +59,7 @@ public class OperatorSet {
         ops.append(Operator(builtInOperator: .CubeRoot, precedence: precedence++))
         
         // all left associative unary operators have the same precedence
+        ops.append(Operator(builtInOperator: .DoubleFactorial, precedence: precedence))
         ops.append(Operator(builtInOperator: .Factorial, precedence: precedence))
         // NOTE: percent-as-percent precedence goes here (same as Factorial)
         ops.append(Operator(builtInOperator: .Degree, precedence: precedence++))

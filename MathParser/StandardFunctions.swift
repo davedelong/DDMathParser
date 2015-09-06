@@ -28,6 +28,7 @@ public class StandardFunctions {
         "mod": StandardFunctions.mod,
         "negate": StandardFunctions.negate,
         "factorial": StandardFunctions.factorial,
+        "factorial2": StandardFunctions.factorial2,
         "pow": StandardFunctions.pow,
         "sqrt": StandardFunctions.sqrt,
         "cuberoot": StandardFunctions.cuberoot,
@@ -259,23 +260,27 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
+        return arg1.factorial()
+    }
+    
+    static func factorial2(args: Array<Expression>, substitutions: Dictionary<String, Double>, evaluator: Evaluator) throws -> Double {
+        guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
-        if Darwin.floor(arg1) == arg1 && arg1 > 1 {
-            // it's an integer
-            let arg1Int = Int(arg1)
-            
-            if arg1Int <= StandardFunctions.largestIntegerFactorial {
-                return Double((1...arg1Int).reduce(1, combine: *))
-            } else {
-                // but it can't be represented in a word-sized Int
-                var result = 1.0
-                for var i = arg1; i > 1; i-- {
-                    result *= i
-                }
-                return result
-            }
+        let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
+        guard arg1 >= 1 else { throw EvaluationError.InvalidArguments }
+        guard arg1 == Darwin.floor(arg1) else { throw EvaluationError.InvalidArguments }
+        
+        if arg1 % 2 == 0 {
+            let k = arg1 / 2
+            return Darwin.pow(2, k) * k.factorial()
         } else {
-            return tgamma(arg1+1)
+            let k = (arg1 + 1) / 2
+            
+            let numerator = (2*k).factorial()
+            let denominator = Darwin.pow(2, k) * k.factorial()
+            
+            guard denominator != 0 else { throw EvaluationError.DivideByZero }
+            return numerator / denominator
         }
     }
     

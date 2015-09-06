@@ -123,7 +123,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testRecursiveLeftUnaryOperator() {
-        guard let e = XCTAssertNoThrows(try Expression(string: "4!!")) else {
+        guard let e = XCTAssertNoThrows(try Expression(string: "4°!")) else {
             return
         }
         
@@ -135,7 +135,7 @@ class ExpressionTests: XCTestCase {
         XCTAssertEqual(args.count, 1)
         
         let arg = args[0]
-        guard case let .Function("factorial", args2) = arg.kind else {
+        guard case let .Function("dtor", args2) = arg.kind else {
             XCTFail("Unexpected expression kind: \(arg.kind)")
             return
         }
