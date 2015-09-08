@@ -25,16 +25,27 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
     
     func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
+        var indexBeforeDecimal: String.Index?
         
         var soFar = ""
         while let peek = buffer.peekNext() where peek.isWhitespace == false {
             let test = soFar + String(peek)
+            
+            if indexBeforeDecimal == nil && test.hasSuffix(decimalNumberFormatter.decimalSeparator) {
+                indexBeforeDecimal = buffer.currentIndex
+            }
+            
             if canParseString(test) {
                 soFar = test
                 buffer.consume()
             } else {
                 break
             }
+        }
+        
+        if let indexBeforeDecimal = indexBeforeDecimal where soFar.hasSuffix(decimalNumberFormatter.decimalSeparator) {
+            buffer.resetTo(indexBeforeDecimal)
+            soFar = buffer[start ..< indexBeforeDecimal]
         }
         
         let indexAfterNumber = buffer.currentIndex

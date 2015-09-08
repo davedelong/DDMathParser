@@ -331,21 +331,23 @@ class TokenResolverTests: XCTestCase {
     
     func testLocalizedNumbers() {
         let l = NSLocale(localeIdentifier: "fr_FR")
-        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "sum(1,2, 3,4, 5,6,7,8)", locale: l).resolve()) else { return }
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "sum(1,2, 34, 5,6,7,8,9)", locale: l).resolve()) else { return }
         
-        XCTAssertEqual(tokens.count, 10)
+        XCTAssertEqual(tokens.count, 12)
         let comma = Operator(builtInOperator: .Comma)
         
         TestToken(tokens[0], kind: .Identifier("sum"), string: "sum")
         TestToken(tokens[1], kind: .Operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
         TestToken(tokens[2], kind: .Number(1.2), string: "1,2")
         TestToken(tokens[3], kind: .Operator(comma), string: ",")
-        TestToken(tokens[4], kind: .Number(3.4), string: "3,4")
+        TestToken(tokens[4], kind: .Number(34), string: "34")
         TestToken(tokens[5], kind: .Operator(comma), string: ",")
         TestToken(tokens[6], kind: .Number(5.6), string: "5,6")
         TestToken(tokens[7], kind: .Operator(comma), string: ",")
         TestToken(tokens[8], kind: .Number(7.8), string: "7,8")
-        TestToken(tokens[9], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+        TestToken(tokens[9], kind: .Operator(comma), string: ",")
+        TestToken(tokens[10], kind: .Number(9), string: "9")
+        TestToken(tokens[11], kind: .Operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
     }
     
     func testLocalizedNumbersForEveryLocale() {
