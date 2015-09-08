@@ -166,6 +166,25 @@ class GithubIssues: XCTestCase {
         }
     }
     
+    func testIssue57() {
+        var eval = Evaluator()
+        
+        struct Overrider: FunctionOverrider {
+            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
+                guard arguments.count == 0 else { return nil }
+                let value = function.utf8.first ?? 1
+                return Double(value)
+            }
+        }
+        
+        eval.functionOverrider = Overrider()
+        
+        // T = 84, t = 116
+        guard let e = XCTAssertNoThrows(try Expression(string: "t + T")) else { return }
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, 200.0)
+    }
+    
     func testIssue63() {
         guard let d = XCTAssertNoThrows(try "nthroot(-27, 3)".evaluate()) else { return }
         XCTAssertEqual(d, -3)
@@ -206,6 +225,28 @@ class GithubIssues: XCTestCase {
         
         guard let e = XCTAssertNoThrows(try "20000!".evaluate()) else { return }
         XCTAssertNotEqual(e, 0)
+    }
+    
+    func testIssue97() {
+        var eval = Evaluator()
+        
+        struct Overrider: FunctionOverrider {
+            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
+                guard function == BuiltInOperator.LogicalNotEqual.rawValue else { return nil }
+                guard arguments.count == 2 else { return nil }
+                guard case let .Variable(left) = arguments[0].kind else { return nil }
+                guard case let .Variable(right) = arguments[1].kind else { return nil }
+                
+                return (left != right) ? 1.0 : 0.0
+            }
+        }
+        
+        eval.functionOverrider = Overrider()
+        
+        guard let e = XCTAssertNoThrows(try Expression(string: "('B' != 'A') && ('k' != 'K')")) else { return }
+        let subs = ["B": 1.0, "A": 1.0, "k": 1.0, "K": 1.0]
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e, substitutions: subs)) else { return }
+        XCTAssertEqual(d, 1.0)
     }
     
     func testIssue104() {
