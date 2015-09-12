@@ -55,17 +55,16 @@ internal class TokenGenerator: GeneratorType {
         var errors = Array<Element>()
         
         for extractor in extractors {
-            buffer.resetTo(start)
+            guard extractor.matchesPreconditions(buffer) else { continue }
             
-            if extractor.matchesPreconditions(buffer) {
-                let result = extractor.extract(buffer)
-                
-                switch result {
-                    case .Value(_):
-                        return result
-                    case .Error(_):
-                        errors.append(result)
-                }
+            buffer.resetTo(start)
+            let result = extractor.extract(buffer)
+            
+            switch result {
+                case .Value(_):
+                    return result
+                case .Error(_):
+                    errors.append(result)
             }
         }
         
