@@ -207,7 +207,21 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testHyperbolicTrigonometricFunctions() {
-        XCTFail("Not implemented")
+        TestString("sinh(42)", value: sinh(42))
+        TestString("cosh(42)", value: cosh(42))
+        TestString("tanh(42)", value: tanh(42))
+        TestString("asinh(0.42)", value: asinh(0.42))
+        TestString("acosh(1.42)", value: acosh(1.42))
+        TestString("atanh(0.42)", value: atanh(0.42))
+        
+        TestString("csch(1)", value: 0.850918128239321545133842763287175284181724660910339616990421)
+        TestString("sech(1)", value: 0.648054273663885399574977353226150323108489312071942023037865)
+        TestString("cotanh(1)", value: 1.313035285499331303636161246930847832912013941240452655543152)
+        TestString("acsch(0.850918128239321545133842763287175284181724660910339616990421)", value: 1)
+        
+        // These aren't exact because they're Doubles.
+        TestString("asech(0.648054273663885399574977353226150323108489312071942023037865)", value: 0.99999999999999967)
+        TestString("acotanh(1.313035285499331303636161246930847832912013941240452655543152)", value: 1.00000000000000067)
     }
     
     func testGeometricFunctions() {

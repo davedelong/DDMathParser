@@ -671,49 +671,49 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.sinh(_dtor(arg1, evaluator: evaluator))
+        return Darwin.sinh(arg1)
     }
     
     static func cosh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.cosh(_dtor(arg1, evaluator: evaluator))
+        return Darwin.cosh(arg1)
     }
     
     static func tanh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return Darwin.tanh(_dtor(arg1, evaluator: evaluator))
+        return Darwin.tanh(arg1)
     }
     
     static func asinh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return _rtod(Darwin.asinh(arg1), evaluator: evaluator)
+        return Darwin.asinh(arg1)
     }
     
     static func acosh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return _rtod(Darwin.acosh(arg1), evaluator: evaluator)
+        return Darwin.acosh(arg1)
     }
     
     static func atanh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        return _rtod(Darwin.atanh(arg1), evaluator: evaluator)
+        return Darwin.atanh(arg1)
     }
     
     static func csch(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.sinh(_dtor(arg1, evaluator: evaluator))
+        let sinArg = Darwin.sinh(arg1)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -722,7 +722,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.cosh(_dtor(arg1, evaluator: evaluator))
+        let sinArg = Darwin.cosh(arg1)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -731,7 +731,7 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = Darwin.tanh(_dtor(arg1, evaluator: evaluator))
+        let sinArg = Darwin.tanh(arg1)
         guard sinArg != 0 else { throw EvaluationError.DivideByZero }
         return 1.0 / sinArg
     }
@@ -740,27 +740,24 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = _rtod(Darwin.asinh(arg1), evaluator: evaluator)
-        guard sinArg != 0 else { throw EvaluationError.DivideByZero }
-        return 1.0 / sinArg
+        guard arg1 != 0 else { throw EvaluationError.DivideByZero }
+        return Darwin.asinh(1.0 / arg1)
     }
     
     static func asech(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = _rtod(Darwin.acosh(arg1), evaluator: evaluator)
-        guard sinArg != 0 else { throw EvaluationError.DivideByZero }
-        return 1.0 / sinArg
+        guard arg1 != 0 else { throw EvaluationError.DivideByZero }
+        return Darwin.acosh(1.0 / arg1)
     }
     
     static func acotanh(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = _rtod(Darwin.atanh(arg1), evaluator: evaluator)
-        guard sinArg != 0 else { throw EvaluationError.DivideByZero }
-        return 1.0 / sinArg
+        guard arg1 != 0 else { throw EvaluationError.DivideByZero }
+        return Darwin.atanh(1.0 / arg1)
     }
     
     // MARK: - Geometric functions
