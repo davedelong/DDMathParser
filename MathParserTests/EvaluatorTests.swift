@@ -198,7 +198,12 @@ class EvaluatorTests: XCTestCase {
         TestString("acos(0.42)", value: acos(0.42))
         TestString("atan(0.42)", value: atan(0.42))
         
-        XCTFail("Not completely implemented")
+        TestString("csc(π/4)", value: sqrt(2))
+        TestString("sec(π/4)", value: sqrt(2))
+        TestString("cotan(π/4)", value: 1)
+        TestString("acsc(sqrt(2))", value: M_PI_4)
+        TestString("asec(sqrt(2))", value: M_PI_4)
+        TestString("acotan(1)", value: M_PI_4)
     }
     
     func testHyperbolicTrigonometricFunctions() {

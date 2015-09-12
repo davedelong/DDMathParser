@@ -645,27 +645,24 @@ public class StandardFunctions {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = _rtod(Darwin.asin(arg1), evaluator: evaluator)
-        guard sinArg != 0 else { throw EvaluationError.DivideByZero }
-        return 1.0 / sinArg
+        guard arg1 != 0 else { throw EvaluationError.DivideByZero }
+        return _rtod(Darwin.asin(1.0 / arg1), evaluator: evaluator)
     }
     
     static func asec(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = _rtod(Darwin.acos(arg1), evaluator: evaluator)
-        guard sinArg != 0 else { throw EvaluationError.DivideByZero }
-        return 1.0 / sinArg
+        guard arg1 != 0 else { throw EvaluationError.DivideByZero }
+        return _rtod(Darwin.acos(1.0 / arg1), evaluator: evaluator)
     }
     
     static func acotan(args: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double {
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
-        let sinArg = _rtod(Darwin.atan(arg1), evaluator: evaluator)
-        guard sinArg != 0 else { throw EvaluationError.DivideByZero }
-        return 1.0 / sinArg
+        guard arg1 != 0 else { throw EvaluationError.DivideByZero }
+        return _rtod(Darwin.atan(1.0 / arg1), evaluator: evaluator)
     }
     
     // MARK: - Hyperbolic trigonometric functions
