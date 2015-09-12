@@ -28,3 +28,15 @@ func XCTAssertThrows<T>(@autoclosure expression: () throws -> T, _ message: Stri
     } catch _ {
     }
 }
+
+func TestString(string: String, value: Double, evaluator: Evaluator = Evaluator.defaultEvaluator, file: String = __FILE__, line: UInt = __LINE__) {
+    
+    guard let e = XCTAssertNoThrows(try Expression(string: string), file: file, line: line) else {
+        return
+    }
+    
+    guard let d = XCTAssertNoThrows(try evaluator.evaluate(e), file: file, line: line) else {
+        return
+    }
+    XCTAssertEqualWithAccuracy(d, value, accuracy: DBL_EPSILON, file: file, line: line)
+}

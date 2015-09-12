@@ -9,15 +9,6 @@
 import XCTest
 import MathParser
 
-func TestString(string: String, value: Double, file: String = __FILE__, line: UInt = __LINE__) {
-    
-    guard let d = XCTAssertNoThrows(try string.evaluate()) else {
-        XCTFail(file: file, line: line)
-        return
-    }
-    XCTAssertEqualWithAccuracy(d, value, accuracy: DBL_EPSILON, file: file, line: line)
-}
-
 class EvaluatorTests: XCTestCase {
 
     func testNumber() {
