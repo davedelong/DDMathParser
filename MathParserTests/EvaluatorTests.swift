@@ -225,7 +225,24 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testGeometricFunctions() {
-        XCTFail("Not implemented")
+        // versin, vercosin, coversin, covercosin
+        TestString("versin(1)", value: 0.459697694131860282599063392557023396267689579382077772329902)
+        TestString("vercosin(1)", value: 1.540302305868139717400936607442976603732310420617922227670097)
+        TestString("coversin(1)", value: 0.158529015192103493347497678369701000377436939201628934327248)
+        TestString("covercosin(1)", value: 1.841470984807896506652502321630298999622563060798371065672751)
+        
+        // haversin, havercosin, hacoversin, hacovercosin
+        TestString("haversin(1)", value: 0.229848847065930141299531696278511698133844789691038886164951)
+        TestString("havercosin(1)", value: 0.770151152934069858700468303721488301866155210308961113835048)
+        TestString("hacoversin(1)", value: 0.079264507596051746673748839184850500188718469600814467163624)
+        TestString("hacovercosin(1)", value: 0.920735492403948253326251160815149499811281530399185532836375)
+        
+        // exsec, excsc, crd, dtor, rtod
+        TestString("exsec(1)", value: 0.850815717680925617911753241398650193470396655094009298835158)
+        TestString("excsc(1)", value: 0.188395105778121216261599452374551003527829834097962625265253)
+        TestString("crd(1.287002217586570)", value: 1.20000000000000084)
+        TestString("dtor(45)", value: M_PI_4)
+        TestString("rtod(π/4)", value: 45)
     }
     
     func testConstantFunctions() {
