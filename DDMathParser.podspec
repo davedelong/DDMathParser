@@ -19,4 +19,5 @@ Pod::Spec.new do |s|
   s.source_files = 'MathParser/*.{h,m,swift}'
 
   s.requires_arc = true
+  s.module_name = 'MathParser'
 end
