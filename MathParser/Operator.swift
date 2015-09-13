@@ -27,11 +27,11 @@ public class Operator: Equatable {
     public internal(set) var tokens: Set<String>
     public internal(set) var precedence: Int?
     
-    public init(function: String, arity: Arity, associativity: Associativity) {
+    public init(function: String, arity: Arity, associativity: Associativity, tokens: Set<String> = []) {
         self.function = function
         self.arity = arity
         self.associativity = associativity
-        self.tokens = []
+        self.tokens = tokens
     }
 }
 
