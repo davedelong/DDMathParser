@@ -42,8 +42,8 @@ public class Expression {
     public let kind: Kind
     public let range: Range<String.Index>
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) throws {
-        let tokenizer = Tokenizer(string: string, operatorSet: operatorSet)
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.defaultOptions, locale: NSLocale? = nil) throws {
+        let tokenizer = Tokenizer(string: string, operatorSet: operatorSet, locale: locale)
         let resolver = TokenResolver(tokenizer: tokenizer, options: options)
         let grouper = TokenGrouper(resolver: resolver)
         let expressionizer = Expressionizer(grouper: grouper)
