@@ -38,5 +38,5 @@ public struct TokenizerError: ErrorType {
     }
     
     public let kind: Kind
-    public let sourceRange: Range<String.CharacterView.Index>
+    public let sourceRange: Range<String.Index>
 }
