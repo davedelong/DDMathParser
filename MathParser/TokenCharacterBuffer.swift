@@ -11,7 +11,7 @@ import Foundation
 internal class TokenCharacterBuffer {
     private let characters: String.CharacterView
     private let lowercaseCharacters: String.CharacterView
-    private(set) var currentIndex: String.CharacterView.Index
+    private(set) var currentIndex: String.Index
     
     init(string: String) {
         characters = string.characters
@@ -24,7 +24,7 @@ internal class TokenCharacterBuffer {
         return currentIndex >= characters.endIndex
     }
     
-    func resetTo(index: String.CharacterView.Index) {
+    func resetTo(index: String.Index) {
         currentIndex = index
     }
     
@@ -46,11 +46,11 @@ internal class TokenCharacterBuffer {
         currentIndex = currentIndex.advancedBy(delta)
     }
     
-    subscript (i: String.CharacterView.Index) -> Character {
+    subscript (i: String.Index) -> Character {
         return characters[i]
     }
     
-    subscript (r: Range<String.CharacterView.Index>) -> String {
+    subscript (r: Range<String.Index>) -> String {
         return String(characters[r])
     }
 }
