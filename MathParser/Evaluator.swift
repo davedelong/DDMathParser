@@ -23,15 +23,16 @@ public struct Evaluator {
     }
     
     public static let defaultEvaluator = Evaluator()
-    
-    private let functions = StandardFunctions()
+    private let functionSet: FunctionSet
     
     public var angleMeasurementMode = AngleMode.Radians
     public var functionOverrider: FunctionOverrider?
     public var functionResolver: FunctionResolver?
     public var variableResolver: VariableResolver?
     
-    public init() { }
+    public init(usesCaseSensitiveFunctions: Bool = false) {
+        functionSet = FunctionSet(usesCaseSensitiveFunctions: usesCaseSensitiveFunctions)
+    }
     
     public func evaluate(expression: Expression, substitutions: Substitutions = [:]) throws -> Double {
         switch expression.kind {
@@ -44,12 +45,12 @@ public struct Evaluator {
         }
     }
     
-    public func registerFunction(name: String, functionEvaluator: FunctionEvaluator) {
-        functions.registerFunction(name, functionEvaluator: functionEvaluator)
+    public func registerFunction(function: Function) throws {
+        try functionSet.registerFunction(function)
     }
     
-    public func registerAlias(alias: String, forFunctionName name: String) {
-        functions.addAlias(alias, forFunctionName: name)
+    public func registerAlias(alias: String, forFunctionName name: String) throws {
+        try functionSet.addAlias(alias, forFunctionName: name)
     }
     
     private func evaluateVariable(name: String, substitutions: Substitutions) throws -> Double {
@@ -66,19 +67,18 @@ public struct Evaluator {
     }
     
     private func evaluateFunction(name: String, arguments: Array<Expression>, substitutions: Substitutions) throws -> Double {
-        let normalized = functions.normalizeFunctionName(name)
-        
         // check for function overrides
         if let value = try functionOverrider?.overrideFunction(name, arguments: arguments, substitutions: substitutions, evaluator: self) {
             return value
         }
         
-        if let value = try functions.performFunction(normalized, arguments: arguments, substitutions: substitutions, evaluator: self) {
-            return value
+        if let function = functionSet.functionForName(name) {
+            return try function.evaluator(arguments, substitutions, self)
         }
         
         // a function with this name does not exist
         // use the function resolver
+        let normalized = functionSet.normalize(name)
         if let value = try functionResolver?.resolveFunction(normalized, arguments: arguments, substitutions: substitutions, evaluator: self) {
             return value
         }

@@ -20,5 +20,4 @@ public protocol VariableResolver {
     func resolveVariable(variable: String) -> Double?
 }
 
-public typealias FunctionEvaluator = (Array<Expression>, Substitutions, Evaluator) throws -> Double?
 public typealias Substitutions = Dictionary<String, Double>
