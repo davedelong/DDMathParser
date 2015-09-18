@@ -299,4 +299,15 @@ class GithubIssues: XCTestCase {
                 XCTFail("Unexpected expression kind")
         }
     }
+    
+    func testIssue109() {
+        let operatorSet = OperatorSet()
+        operatorSet.addTokens(["as"], forOperator: Operator(builtInOperator: .LogicalEqual))
+        
+        guard let e = XCTAssertNoThrows(try Expression(string: "asin(0.5)", operatorSet: operatorSet)) else { return }
+        
+        let eval = Evaluator.defaultEvaluator
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, M_PI / 6)
+    }
 }

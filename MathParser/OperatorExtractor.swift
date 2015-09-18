@@ -44,6 +44,14 @@ internal struct OperatorExtractor: TokenExtractor {
         let range = start ..< buffer.currentIndex
         let result: TokenGenerator.Element
         
+        if buffer[start].isAlphabetic && buffer.peekNext()?.isAlphabetic == true {
+            // This operator starts with an alphabetic character and
+            // the next character after it is also alphabetic, and not whitespace.
+            // This *probably* isn't an operator, but is instead the beginning
+            // of an identifier that happens to have the same prefix as an operator token.
+            buffer.resetTo(start)
+        }
+        
         if start.distanceTo(buffer.currentIndex) > 0 {
             let raw = buffer[range]
             result = .Value(RawToken(kind: .Operator, string: raw, range: range))
