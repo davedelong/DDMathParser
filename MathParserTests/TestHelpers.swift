@@ -10,6 +10,18 @@ import Foundation
 import XCTest
 import MathParser
 
+func XCTAssertNoThrows(@autoclosure expression: () throws -> Void, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__) -> Bool {
+    var ok = false
+    do {
+        try expression()
+        ok = true
+    } catch let e {
+        let failMessage = "Unexpected exception: \(e). \(message)"
+        XCTFail(failMessage, file: file, line: line)
+    }
+    return ok
+}
+
 func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__) -> T? {
     var t: T? = nil
     do {
