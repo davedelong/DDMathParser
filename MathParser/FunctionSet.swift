@@ -9,20 +9,18 @@
 import Foundation
 
 internal class FunctionSet {
-    private var functionsByName: Dictionary<String, FunctionRegistration>
+    private var functionsByName = Dictionary<String, FunctionRegistration>()
     private let caseSensitive: Bool
     
-    internal init(usesCaseSensitiveFunctions: Bool) {
-        caseSensitive = usesCaseSensitiveFunctions
-        let functions = Function.standardFunctions.map { FunctionRegistration(function: $0, caseSensitive: usesCaseSensitiveFunctions) }
-        
-        var functionsByName = Dictionary<String, FunctionRegistration>()
-        functions.forEach { reg in
-            reg.names.forEach {
-                functionsByName[$0] = reg
+    internal init(caseSensitive: Bool) {
+        self.caseSensitive = caseSensitive
+        Function.standardFunctions.forEach {
+            do {
+                try registerFunction($0)
+            } catch _ {
+                fatalError("Conflicting name/alias in built-in functions")
             }
         }
-        self.functionsByName = functionsByName
     }
     
     internal func normalize(name: String) -> String {

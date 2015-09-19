@@ -35,8 +35,8 @@ public struct Evaluator {
     public var functionResolver: FunctionResolver?
     public var variableResolver: VariableResolver?
     
-    public init(usesCaseSensitiveFunctions: Bool = false) {
-        functionSet = FunctionSet(usesCaseSensitiveFunctions: usesCaseSensitiveFunctions)
+    public init(caseSensitive: Bool = false) {
+        functionSet = FunctionSet(caseSensitive: caseSensitive)
     }
     
     public func evaluate(expression: Expression, substitutions: Substitutions = [:]) throws -> Double {
