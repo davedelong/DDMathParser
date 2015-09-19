@@ -71,11 +71,7 @@ private class FunctionRegistration {
     
     init(function: Function, caseSensitive: Bool) {
         self.function = function
-        
-        var names = Set<String>()
-        names.unionInPlace(function.aliases.map { caseSensitive ? $0.lowercaseString : $0 })
-        names.insert(caseSensitive ? function.name.lowercaseString : function.name)
-        self.names = names
+        self.names = Set(function.names.map { caseSensitive ? $0.lowercaseString : $0 })
     }
     
     func addAlias(name: String) {

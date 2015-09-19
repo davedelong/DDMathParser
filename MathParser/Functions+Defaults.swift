@@ -54,7 +54,7 @@ public extension Function {
     
     // MARK: - Basic functions
     
-    public static let add = Function(name: "add", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let add = Function(name: "add", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -62,7 +62,7 @@ public extension Function {
         return arg1 + arg2
     })
     
-    public static let subtract = Function(name: "subtract", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let subtract = Function(name: "subtract", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -70,7 +70,7 @@ public extension Function {
         return arg1 - arg2
     })
     
-    public static let multiply = Function(name: "multiply", aliases: ["implicitmultiply"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let multiply = Function(names: ["multiply", "implicitmultiply"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -78,7 +78,7 @@ public extension Function {
         return arg1 * arg2
     })
     
-    public static let divide = Function(name: "divide", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let divide = Function(name: "divide", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -88,7 +88,7 @@ public extension Function {
         return arg1 / arg2
     })
     
-    public static let mod = Function(name: "mod", aliases: ["modulo"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let mod = Function(names: ["mod", "modulo"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -97,7 +97,7 @@ public extension Function {
         return fmod(arg1, arg2)
     })
     
-    public static let negate = Function(name: "negate", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let negate = Function(name: "negate", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -105,14 +105,14 @@ public extension Function {
         return -arg1
     })
     
-    public static let factorial = Function(name: "factorial", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let factorial = Function(name: "factorial", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return arg1.factorial()
     })
     
-    public static let factorial2 = Function(name: "factorial2", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let factorial2 = Function(name: "factorial2", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -133,7 +133,7 @@ public extension Function {
         }
     })
     
-    public static let pow = Function(name: "pow", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let pow = Function(name: "pow", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -142,7 +142,7 @@ public extension Function {
         return Darwin.pow(arg1, arg2)
     })
     
-    public static let sqrt = Function(name: "sqrt", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let sqrt = Function(name: "sqrt", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let value = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -150,7 +150,7 @@ public extension Function {
         return Darwin.sqrt(value)
     })
     
-    public static let cuberoot = Function(name: "cuberoot", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let cuberoot = Function(name: "cuberoot", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -158,7 +158,7 @@ public extension Function {
         return Darwin.pow(arg1, 1.0/3.0)
     })
     
-    public static let nthroot = Function(name: "nthroot", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let nthroot = Function(name: "nthroot", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -175,7 +175,7 @@ public extension Function {
         }
     })
     
-    public static let random = Function(name: "random", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let random = Function(name: "random", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count <= 2 else { throw EvaluationError.InvalidArguments }
         
         var argValues = Array<Double>()
@@ -194,42 +194,42 @@ public extension Function {
         return (drand48() % range) + lowerBound
     })
     
-    public static let log = Function(name: "log", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let log = Function(name: "log", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.log10(arg1)
     })
     
-    public static let ln = Function(name: "ln", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let ln = Function(name: "ln", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.log(arg1)
     })
     
-    public static let log2 = Function(name: "log2", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let log2 = Function(name: "log2", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.log2(arg1)
     })
     
-    public static let exp = Function(name: "exp", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let exp = Function(name: "exp", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.exp(arg1)
     })
     
-    public static let abs = Function(name: "abs", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let abs = Function(name: "abs", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Swift.abs(arg1)
     })
     
-    public static let percent = Function(name: "percent", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let percent = Function(name: "percent", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let percentArgument = args[0]
@@ -255,7 +255,7 @@ public extension Function {
     
     // MARK: - Bitwise functions
     
-    public static let and = Function(name: "and", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let and = Function(name: "and", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -264,7 +264,7 @@ public extension Function {
         return Double(Int(arg1) & Int(arg2))
     })
     
-    public static let or = Function(name: "or", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let or = Function(name: "or", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -273,7 +273,7 @@ public extension Function {
         return Double(Int(arg1) | Int(arg2))
     })
     
-    public static let not = Function(name: "not", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let not = Function(name: "not", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -281,7 +281,7 @@ public extension Function {
         return Double(~Int(arg1))
     })
     
-    public static let xor = Function(name: "xor", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let xor = Function(name: "xor", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -290,7 +290,7 @@ public extension Function {
         return Double(Int(arg1) ^ Int(arg2))
     })
     
-    public static let rshift = Function(name: "rshift", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let rshift = Function(name: "rshift", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -299,7 +299,7 @@ public extension Function {
         return Double(Int(arg1) >> Int(arg2))
     })
     
-    public static let lshift = Function(name: "lshift", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let lshift = Function(name: "lshift", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -310,7 +310,7 @@ public extension Function {
     
     // MARK: - Aggregate functions
     
-    public static let average = Function(name: "average", aliases: ["avg", "mean"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let average = Function(names: ["average", "avg", "mean"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         let value = try sum.evaluator(args, substitutions, evaluator)
@@ -318,7 +318,7 @@ public extension Function {
         return value / Double(args.count)
     })
     
-    public static let sum = Function(name: "sum", aliases: ["∑"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let sum = Function(names: ["sum", "∑"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = 0.0
@@ -328,7 +328,7 @@ public extension Function {
         return value
     })
     
-    public static let product = Function(name: "product", aliases: ["∏"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let product = Function(names: ["product", "∏"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = 1.0
@@ -338,11 +338,11 @@ public extension Function {
         return value
     })
     
-    public static let count = Function(name: "count", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let count = Function(name: "count", evaluator: { (args, substitutions, evaluator) throws -> Double in
         return Double(args.count)
     })
     
-    public static let min = Function(name: "min", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let min = Function(name: "min", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = DBL_MAX
@@ -353,7 +353,7 @@ public extension Function {
         return value
     })
     
-    public static let max = Function(name: "max", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let max = Function(name: "max", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count > 0 else { throw EvaluationError.InvalidArguments }
         
         var value = DBL_MIN
@@ -364,7 +364,7 @@ public extension Function {
         return value
     })
     
-    public static let median = Function(name: "median", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let median = Function(name: "median", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count >= 2 else { throw EvaluationError.InvalidArguments }
         
         var evaluated = Array<Double>()
@@ -382,7 +382,7 @@ public extension Function {
         }
     })
     
-    public static let stddev = Function(name: "stddev", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let stddev = Function(name: "stddev", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count >= 2 else { throw EvaluationError.InvalidArguments }
         
         let avg = try average.evaluator(args, substitutions, evaluator)
@@ -397,14 +397,14 @@ public extension Function {
         return Darwin.sqrt(stddev / Double(args.count))
     })
     
-    public static let ceil = Function(name: "ceil", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let ceil = Function(name: "ceil", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.ceil(arg1)
     })
     
-    public static let floor = Function(name: "floor", aliases: ["trunc"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let floor = Function(names: ["floor", "trunc"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -413,49 +413,49 @@ public extension Function {
     
     // MARK: - Trigonometric functions
     
-    public static let sin = Function(name: "sin", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let sin = Function(name: "sin", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.sin(Function._dtor(arg1, evaluator: evaluator))
     })
     
-    public static let cos = Function(name: "cos", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let cos = Function(name: "cos", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.cos(Function._dtor(arg1, evaluator: evaluator))
     })
     
-    public static let tan = Function(name: "tan", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let tan = Function(name: "tan", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.tan(Function._dtor(arg1, evaluator: evaluator))
     })
     
-    public static let asin = Function(name: "asin", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let asin = Function(name: "asin", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Function._rtod(Darwin.asin(arg1), evaluator: evaluator)
     })
     
-    public static let acos = Function(name: "acos", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let acos = Function(name: "acos", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Function._rtod(Darwin.acos(arg1), evaluator: evaluator)
     })
     
-    public static let atan = Function(name: "atan", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let atan = Function(name: "atan", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Function._rtod(Darwin.atan(arg1), evaluator: evaluator)
     })
     
-    public static let atan2 = Function(name: "atan2", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let atan2 = Function(name: "atan2", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -463,7 +463,7 @@ public extension Function {
         return Function._rtod(Darwin.atan2(arg1, arg2), evaluator: evaluator)
     })
     
-    public static let csc = Function(name: "csc", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let csc = Function(name: "csc", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -472,7 +472,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let sec = Function(name: "sec", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let sec = Function(name: "sec", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -481,7 +481,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let cotan = Function(name: "cotan", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let cotan = Function(name: "cotan", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -490,7 +490,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let acsc = Function(name: "acsc", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let acsc = Function(name: "acsc", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -498,7 +498,7 @@ public extension Function {
         return Function._rtod(Darwin.asin(1.0 / arg1), evaluator: evaluator)
     })
     
-    public static let asec = Function(name: "asec", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let asec = Function(name: "asec", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -506,7 +506,7 @@ public extension Function {
         return Function._rtod(Darwin.acos(1.0 / arg1), evaluator: evaluator)
     })
     
-    public static let acotan = Function(name: "acotan", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let acotan = Function(name: "acotan", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -516,49 +516,49 @@ public extension Function {
     
     // MARK: - Hyperbolic trigonometric functions
     
-    public static let sinh = Function(name: "sinh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let sinh = Function(name: "sinh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.sinh(arg1)
     })
     
-    public static let cosh = Function(name: "cosh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let cosh = Function(name: "cosh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.cosh(arg1)
     })
     
-    public static let tanh = Function(name: "tanh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let tanh = Function(name: "tanh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.tanh(arg1)
     })
     
-    public static let asinh = Function(name: "asinh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let asinh = Function(name: "asinh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.asinh(arg1)
     })
     
-    public static let acosh = Function(name: "acosh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let acosh = Function(name: "acosh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.acosh(arg1)
     })
     
-    public static let atanh = Function(name: "atanh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let atanh = Function(name: "atanh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return Darwin.atanh(arg1)
     })
     
-    public static let csch = Function(name: "csch", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let csch = Function(name: "csch", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -567,7 +567,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let sech = Function(name: "sech", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let sech = Function(name: "sech", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -576,7 +576,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let cotanh = Function(name: "cotanh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let cotanh = Function(name: "cotanh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -585,7 +585,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let acsch = Function(name: "acsch", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let acsch = Function(name: "acsch", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -593,7 +593,7 @@ public extension Function {
         return Darwin.asinh(1.0 / arg1)
     })
     
-    public static let asech = Function(name: "asech", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let asech = Function(name: "asech", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -601,7 +601,7 @@ public extension Function {
         return Darwin.acosh(1.0 / arg1)
     })
     
-    public static let acotanh = Function(name: "acotanh", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let acotanh = Function(name: "acotanh", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -611,51 +611,51 @@ public extension Function {
     
     // MARK: - Geometric functions
     
-    public static let versin = Function(name: "versin", aliases: ["vers", "ver"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let versin = Function(names: ["versin", "vers", "ver"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 - Darwin.cos(Function._dtor(arg1, evaluator: evaluator))
     })
     
-    public static let vercosin = Function(name: "vercosin", aliases: ["vercos"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let vercosin = Function(names: ["vercosin", "vercos"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 + Darwin.cos(Function._dtor(arg1, evaluator: evaluator))
     })
     
-    public static let coversin = Function(name: "coversin", aliases: ["cvs"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let coversin = Function(names: ["coversin", "cvs"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 - Darwin.sin(Function._dtor(arg1, evaluator: evaluator))
     })
     
-    public static let covercosin = Function(name: "covercosin", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let covercosin = Function(name: "covercosin", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return 1.0 + Darwin.sin(Function._dtor(arg1, evaluator: evaluator))
     })
     
-    public static let haversin = Function(name: "haversin", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let haversin = Function(name: "haversin", evaluator: { (args, substitutions, evaluator) throws -> Double in
         return try versin.evaluator(args, substitutions, evaluator) / 2.0
     })
     
-    public static let havercosin = Function(name: "havercosin", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let havercosin = Function(name: "havercosin", evaluator: { (args, substitutions, evaluator) throws -> Double in
         return try vercosin.evaluator(args, substitutions, evaluator) / 2.0
     })
     
-    public static let hacoversin = Function(name: "hacoversin", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let hacoversin = Function(name: "hacoversin", evaluator: { (args, substitutions, evaluator) throws -> Double in
         return try coversin.evaluator(args, substitutions, evaluator) / 2.0
     })
     
-    public static let hacovercosin = Function(name: "hacovercosin", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let hacovercosin = Function(name: "hacovercosin", evaluator: { (args, substitutions, evaluator) throws -> Double in
         return try covercosin.evaluator(args, substitutions, evaluator) / 2.0
     })
     
-    public static let exsec = Function(name: "exsec", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let exsec = Function(name: "exsec", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -664,7 +664,7 @@ public extension Function {
         return (1.0/cosArg1) - 1.0
     })
     
-    public static let excsc = Function(name: "excsc", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let excsc = Function(name: "excsc", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -673,7 +673,7 @@ public extension Function {
         return (1.0/sinArg1) - 1.0
     })
     
-    public static let crd = Function(name: "crd", aliases: ["chord"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let crd = Function(names: ["crd", "chord"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -681,14 +681,14 @@ public extension Function {
         return 2 * sinArg1
     })
     
-    public static let dtor = Function(name: "dtor", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let dtor = Function(name: "dtor", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return arg1 / 180.0 * M_PI
     })
     
-    public static let rtod = Function(name: "rtod", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let rtod = Function(name: "rtod", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -697,64 +697,64 @@ public extension Function {
     
     // MARK: - Constant functions
     
-    public static let phi = Function(name: "phi", aliases: ["ϕ"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let phi = Function(names: ["phi", "ϕ"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return 1.6180339887498948
     })
     
-    public static let pi = Function(name: "pi", aliases: ["π", "tau_2"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let pi = Function(names: ["pi", "π", "tau_2"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_PI
     })
     
-    public static let pi_2 = Function(name: "pi_2", aliases: ["tau_4"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let pi_2 = Function(names: ["pi_2", "tau_4"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_PI_2
     })
     
-    public static let pi_4 = Function(name: "pi_4", aliases: ["tau_8"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let pi_4 = Function(names: ["pi_4", "tau_8"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_PI_4
     })
     
-    public static let tau = Function(name: "tau", aliases: ["τ"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let tau = Function(names: ["tau", "τ"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return 2 * M_PI
     })
     
-    public static let sqrt2 = Function(name: "sqrt2", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let sqrt2 = Function(name: "sqrt2", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_SQRT2
     })
     
-    public static let e = Function(name: "e", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let e = Function(name: "e", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_E
     })
     
-    public static let log2e = Function(name: "log2e", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let log2e = Function(name: "log2e", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LOG2E
     })
     
-    public static let log10e = Function(name: "log10e", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let log10e = Function(name: "log10e", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LOG10E
     })
     
-    public static let ln2 = Function(name: "ln2", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let ln2 = Function(name: "ln2", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LN2
     })
     
-    public static let ln10 = Function(name: "ln10", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let ln10 = Function(name: "ln10", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
         return M_LN10
     })
     
     // MARK: - Logical Functions
     
-    public static let l_and = Function(name: "l_and", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_and = Function(name: "l_and", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -762,7 +762,7 @@ public extension Function {
         return (arg1 != 0 && arg2 != 0) ? 1.0 : 0.0
     })
     
-    public static let l_or = Function(name: "l_or", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_or = Function(name: "l_or", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -770,14 +770,14 @@ public extension Function {
         return (arg1 != 0 || arg2 != 0) ? 1.0 : 0.0
     })
     
-    public static let l_not = Function(name: "l_not", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_not = Function(name: "l_not", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 1 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         return (arg1 == 0) ? 1.0 : 0.0
     })
     
-    public static let l_eq = Function(name: "l_eq", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_eq = Function(name: "l_eq", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -785,7 +785,7 @@ public extension Function {
         return (arg1 == arg2) ? 1.0 : 0.0
     })
     
-    public static let l_neq = Function(name: "l_neq", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_neq = Function(name: "l_neq", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -793,7 +793,7 @@ public extension Function {
         return (arg1 != arg2) ? 1.0 : 0.0
     })
     
-    public static let l_lt = Function(name: "l_lt", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_lt = Function(name: "l_lt", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -801,7 +801,7 @@ public extension Function {
         return (arg1 < arg2) ? 1.0 : 0.0
     })
     
-    public static let l_gt = Function(name: "l_gt", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_gt = Function(name: "l_gt", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -809,7 +809,7 @@ public extension Function {
         return (arg1 > arg2) ? 1.0 : 0.0
     })
     
-    public static let l_ltoe = Function(name: "l_ltoe", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_ltoe = Function(name: "l_ltoe", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -817,7 +817,7 @@ public extension Function {
         return (arg1 <= arg2) ? 1.0 : 0.0
     })
     
-    public static let l_gtoe = Function(name: "l_gtoe", aliases: [], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_gtoe = Function(name: "l_gtoe", evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 2 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
@@ -825,7 +825,7 @@ public extension Function {
         return (arg1 == arg2) ? 1.0 : 0.0
     })
     
-    public static let l_if = Function(name: "l_if", aliases: ["if"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+    public static let l_if = Function(names: ["l_if", "if"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 3 else { throw EvaluationError.InvalidArguments }
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
