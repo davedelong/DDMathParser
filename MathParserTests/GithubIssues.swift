@@ -312,13 +312,13 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue110() {
-        var eval = Evaluator(usesCaseSensitiveFunctions: false)
+        var eval = Evaluator(caseSensitive: false)
         
         guard let e1 = XCTAssertNoThrows(try Expression(string: "sin(0)")) else { return }
         guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
         XCTAssertEqual(d1, 0)
         
-        eval = Evaluator(usesCaseSensitiveFunctions: true)
+        eval = Evaluator(caseSensitive: true)
         guard let e2 = XCTAssertNoThrows(try Expression(string: "SIN(0)")) else { return }
         XCTAssertThrows(try eval.evaluate(e2))
     }
