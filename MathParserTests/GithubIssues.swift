@@ -310,4 +310,16 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, M_PI / 6)
     }
+    
+    func testIssue110() {
+        var eval = Evaluator(usesCaseSensitiveFunctions: false)
+        
+        guard let e1 = XCTAssertNoThrows(try Expression(string: "sin(0)")) else { return }
+        guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
+        XCTAssertEqual(d1, 0)
+        
+        eval = Evaluator(usesCaseSensitiveFunctions: true)
+        guard let e2 = XCTAssertNoThrows(try Expression(string: "SIN(0)")) else { return }
+        XCTAssertThrows(try eval.evaluate(e2))
+    }
 }

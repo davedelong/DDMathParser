@@ -26,28 +26,6 @@ class EvaluatorTests: XCTestCase {
         XCTAssertEqual(d, 3)
     }
     
-    func testAlias() {
-        let eval = Evaluator()
-        eval.registerAlias("foo", forFunctionName: "add")
-        
-        guard let e = XCTAssertNoThrows(try Expression(string: "foo(1, 2)")) else { return }
-        
-        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
-        XCTAssertEqual(d, 3)
-    }
-    
-    func testCustomFunction() {
-        let eval = Evaluator()
-        eval.registerFunction("foo", functionEvaluator: { _ in
-            return 42
-        })
-        
-        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
-        
-        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
-        XCTAssertEqual(d, 42)
-    }
-    
     func testVariableResolution() {
         var eval = Evaluator()
         
@@ -262,5 +240,42 @@ class EvaluatorTests: XCTestCase {
         TestString("42 >= 42", value: 1)
         TestString("if(1, 2, 3)", value: 2)
         TestString("if(0, 2, 3)", value: 3)
+    }
+    
+    func testAliases() {
+        let eval = Evaluator()
+        
+        guard XCTAssertNoThrows(try eval.registerAlias("foo", forFunctionName: "add")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo(1, 2)")) else { return }
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, 3)
+    }
+    
+    func testBadAliases() {
+        let eval = Evaluator()
+        
+        XCTAssertThrows(try eval.registerAlias("add", forFunctionName: "subtract"))
+        XCTAssertThrows(try eval.registerAlias("bar", forFunctionName: "foo"))
+    }
+    
+    func testCustomFunction() {
+        let function = Function(name: "foo", evaluator: { (args, subs, eval) throws -> Double in
+            return 42
+        })
+        
+        let eval = Evaluator()
+        guard XCTAssertNoThrows(try eval.registerFunction(function)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, 42)
+    }
+    
+    func testBadCustomFunction() {
+        let function = Function(name: "add", evaluator: { (args, subs, eval) throws -> Double in
+            return 42
+        })
+        
+        let eval = Evaluator()
+        XCTAssertThrows(try eval.registerFunction(function))
     }
 }
