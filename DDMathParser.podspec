@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name = 'DDMathParser'
   s.version = '2.0.0'
-  s.license = 'MIT'
+  s.license = { :type => 'MIT', :file => 'LICENSE' }
   s.summary = 'String → Number'
   s.description  = <<-DESC
                    An extensible and flexible library to parse a string
