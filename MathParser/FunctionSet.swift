@@ -8,11 +8,11 @@
 
 import Foundation
 
-public class FunctionSet {
+internal class FunctionSet {
     private var functionsByName: Dictionary<String, FunctionRegistration>
     private let caseSensitive: Bool
     
-    public init(usesCaseSensitiveFunctions: Bool) {
+    internal init(usesCaseSensitiveFunctions: Bool) {
         caseSensitive = usesCaseSensitiveFunctions
         let functions = Function.standardFunctions.map { FunctionRegistration(function: $0, caseSensitive: usesCaseSensitiveFunctions) }
         
@@ -34,18 +34,16 @@ public class FunctionSet {
         return functionsByName[casedName]
     }
     
-    public func functionForName(name: String) -> Function? {
+    internal func functionForName(name: String) -> Function? {
         return registeredFunctionForName(name)?.function
     }
     
-    public func addAlias(alias: String, forFunctionName name: String) throws {
+    internal func addAlias(alias: String, forFunctionName name: String) throws {
         guard registeredFunctionForName(alias) == nil else {
-            // TODO: throw error "function with name already exists"
-            return
+            throw FunctionRegistrationError.FunctionAlreadyExists(alias)
         }
         guard let registration = registeredFunctionForName(name) else {
-            // TODO: throw error "no such function"
-            return
+            throw FunctionRegistrationError.FunctionDoesNotExist(name)
         }
         
         let casedAlias = normalize(alias)
@@ -53,22 +51,25 @@ public class FunctionSet {
         functionsByName[casedAlias] = registration
     }
     
-    public func registerFunction(function: Function) throws {
-        guard registeredFunctionForName(function.name) == nil else {
-            // TODO: throw error "function with name already exists"
-            return
+    internal func registerFunction(function: Function) throws {
+        let registration = FunctionRegistration(function: function, caseSensitive: caseSensitive)
+        
+        // we need to make sure that every name is accounted for
+        for name in registration.names {
+            guard registeredFunctionForName(name) == nil else {
+                throw FunctionRegistrationError.FunctionAlreadyExists(name)
+            }
         }
         
-        let registration = FunctionRegistration(function: function, caseSensitive: caseSensitive)
         registration.names.forEach {
             self.functionsByName[$0] = registration
         }
     }
 }
 
-internal class FunctionRegistration {
-    internal private(set) var names: Set<String>
-    internal let function: Function
+private class FunctionRegistration {
+    var names: Set<String>
+    let function: Function
     
     init(function: Function, caseSensitive: Bool) {
         self.function = function

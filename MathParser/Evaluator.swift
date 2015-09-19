@@ -15,6 +15,11 @@ public enum EvaluationError: ErrorType {
     case InvalidArguments
 }
 
+public enum FunctionRegistrationError: ErrorType {
+    case FunctionAlreadyExists(String)
+    case FunctionDoesNotExist(String)
+}
+
 public struct Evaluator {
     
     public enum AngleMode {
