@@ -88,7 +88,7 @@ public struct Evaluator {
             return value
         }
         
-        throw EvaluationError.UnknownFunction(name)
+        throw EvaluationError.UnknownFunction(normalized)
     }
     
 }
