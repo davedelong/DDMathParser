@@ -77,8 +77,8 @@ public struct Evaluator {
             return value
         }
         
-        if let function = functionSet.functionForName(name) {
-            return try function.evaluator(arguments, substitutions, self)
+        if let function = functionSet.evaluatorForName(name) {
+            return try function(arguments, substitutions, self)
         }
         
         // a function with this name does not exist

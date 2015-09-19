@@ -32,7 +32,7 @@ internal class FunctionSet {
         return functionsByName[casedName]
     }
     
-    internal func functionForName(name: String) -> Function? {
+    internal func evaluatorForName(name: String) -> FunctionEvaluator? {
         return registeredFunctionForName(name)?.function
     }
     
@@ -67,10 +67,10 @@ internal class FunctionSet {
 
 private class FunctionRegistration {
     var names: Set<String>
-    let function: Function
+    let function: FunctionEvaluator
     
     init(function: Function, caseSensitive: Bool) {
-        self.function = function
+        self.function = function.evaluator
         self.names = Set(function.names.map { caseSensitive ? $0.lowercaseString : $0 })
     }
     
