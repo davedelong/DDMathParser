@@ -48,6 +48,7 @@ public extension Function {
         csch, sech, cotanh, acsch, asech, acotanh,
         versin, vercosin, coversin, covercosin, haversin, havercosin, hacoversin, hacovercosin, exsec, excsc, crd,
         dtor, rtod,
+        `true`, `false`,
         phi, pi, pi_2, pi_4, tau, sqrt2, e, log2e, log10e, ln2, ln10,
         l_and, l_or, l_not, l_eq, l_neq, l_lt, l_gt, l_ltoe, l_gtoe, l_if
     ]
@@ -696,6 +697,16 @@ public extension Function {
     })
     
     // MARK: - Constant functions
+    
+    public static let `true` = Function(names: ["true", "yes"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+        guard args.count == 0 else { throw EvaluationError.InvalidArguments }
+        return 1.0
+    })
+    
+    public static let `false` = Function(names: ["false", "no"], evaluator: { (args, substitutions, evaluator) throws -> Double in
+        guard args.count == 0 else { throw EvaluationError.InvalidArguments }
+        return 0.0
+    })
     
     public static let phi = Function(names: ["phi", "ϕ"], evaluator: { (args, substitutions, evaluator) throws -> Double in
         guard args.count == 0 else { throw EvaluationError.InvalidArguments }
