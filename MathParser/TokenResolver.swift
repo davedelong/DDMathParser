@@ -122,7 +122,14 @@ extension TokenResolver {
                 } else {
                     throw TokenResolverError(kind: .CannotParseHexNumber, rawToken: rawToken)
                 }
-                
+            
+            case .OctalNumber:
+                if let number = UInt(rawToken.string, radix: 8) {
+                    resolvedTokens.append(ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range))
+                } else {
+                    throw TokenResolverError(kind: .CannotParseOctalNumber, rawToken: rawToken)
+                }
+            
             case .Number:
                 resolvedTokens.append(resolveNumber(rawToken))
             

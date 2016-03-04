@@ -31,6 +31,7 @@ internal class TokenGenerator: GeneratorType {
         
         extractors = [
             HexNumberExtractor(),
+            OctalNumberExtractor(),
             numberExtractor,
             SpecialNumberExtractor(),
             ExponentExtractor(),

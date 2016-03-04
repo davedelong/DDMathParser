@@ -56,6 +56,7 @@ public extension ResolvedToken.Kind {
 public struct TokenResolverError: ErrorType {
     public enum Kind {
         case CannotParseHexNumber
+        case CannotParseOctalNumber
         case CannotParseLocalizedNumber
         case UnknownOperator
         case AmbiguousOperator

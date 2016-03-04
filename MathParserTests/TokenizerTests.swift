@@ -42,6 +42,13 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[0], kind: .HexNumber, string: "0123")
     }
     
+    func testOctalNumber() {
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0o0123").tokenize()) else { return }
+        
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .OctalNumber, string: "0123")
+    }
+    
     func testBadHexNumber() {
         // this looks like a bad hex number,
         // but it's really a zero followed by an x

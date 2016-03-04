@@ -66,6 +66,14 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[0], kind: .Number(16), string: "10")
     }
     
+    func testOctalNumber() {
+        let r = TokenResolver(string: "0o10")
+        guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }
+        
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .Number(8), string: "10")
+    }
+    
     func testExponent() {
         guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "2²").resolve()) else { return }
         

@@ -12,6 +12,7 @@ public struct RawToken {
     
     public enum Kind {
         case HexNumber
+        case OctalNumber
         case Number
         case LocalizedNumber
         case Exponent
@@ -29,6 +30,7 @@ public struct TokenizerError: ErrorType {
     public enum Kind {
         case CannotParseNumber
         case CannotParseHexNumber
+        case CannotParseOctalNumber
         case CannotParseExponent
         case CannotParseIdentifier
         case CannotParseVariable

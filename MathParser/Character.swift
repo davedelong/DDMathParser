@@ -17,6 +17,13 @@ internal extension Character {
         }
     }
     
+    var isOctalDigit: Bool {
+        switch self {
+            case "0"..."7": return true
+            default: return false
+        }
+    }
+    
     var isHexDigit: Bool {
         switch self {
             case "a"..."f": return true
