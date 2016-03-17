@@ -301,4 +301,38 @@ class EvaluatorTests: XCTestCase {
             XCTAssertEqual(d, value)
         }
     }
+    
+    func testConcatInsteadOfImplicitMultiply() {
+        // (2+3)2 = 52 ¯\_(ツ)_/¯
+        // https://twitter.com/ricardodssilva/status/710461355732672512
+        var eval = Evaluator()
+        
+        struct Overrider: FunctionOverrider {
+            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
+                guard function.lowercaseString == BuiltInOperator.ImplicitMultiply.rawValue.lowercaseString else { return nil }
+                guard arguments.count == 2 else { return nil }
+                
+                let firstArg = try evaluator.evaluate(arguments[0], substitutions: substitutions)
+                let secondArg = try evaluator.evaluate(arguments[1], substitutions: substitutions)
+                
+                let numberOfDigitsInSecondArgument = floor(log10(secondArg)) + 1
+                let shiftedFirstArg = firstArg * pow(10, numberOfDigitsInSecondArgument)
+                return shiftedFirstArg + secondArg
+            }
+        }
+        
+        eval.functionOverrider = Overrider()
+        
+        guard let e1 = XCTAssertNoThrows(try Expression(string: "(2+3)2")) else { return }
+        guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
+        XCTAssertEqual(d1, 52)
+        
+        guard let e2 = XCTAssertNoThrows(try Expression(string: "(789)241")) else { return }
+        guard let d2 = XCTAssertNoThrows(try eval.evaluate(e2)) else { return }
+        XCTAssertEqual(d2, 789241)
+        
+        guard let e3 = XCTAssertNoThrows(try Expression(string: "1234567(1000)")) else { return }
+        guard let d3 = XCTAssertNoThrows(try eval.evaluate(e3)) else { return }
+        XCTAssertEqual(d3, 12345671000)
+    }
 }
