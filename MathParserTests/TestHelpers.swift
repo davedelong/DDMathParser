@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import MathParser
 
-func XCTAssertNoThrows(@autoclosure expression: () throws -> Void, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__) -> Bool {
+func XCTAssertNoThrows(@autoclosure expression: () throws -> Void, _ message: String = "", file: StaticString = #file, line: UInt = #line) -> Bool {
     var ok = false
     do {
         try expression()
@@ -22,7 +22,7 @@ func XCTAssertNoThrows(@autoclosure expression: () throws -> Void, _ message: St
     return ok
 }
 
-func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__) -> T? {
+func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, _ message: String = "", file: StaticString = #file, line: UInt = #line) -> T? {
     var t: T? = nil
     do {
         t = try expression()
@@ -33,7 +33,7 @@ func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, _ message: St
     return t
 }
 
-func XCTAssertThrows<T>(@autoclosure expression: () throws -> T, _ message: String = "", file: String = __FILE__, line: UInt = __LINE__) {
+func XCTAssertThrows<T>(@autoclosure expression: () throws -> T, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
     do {
         let _ = try expression()
         XCTFail("Expected thrown error", file: file, line: line)
@@ -41,7 +41,7 @@ func XCTAssertThrows<T>(@autoclosure expression: () throws -> T, _ message: Stri
     }
 }
 
-func TestString(string: String, value: Double, evaluator: Evaluator = Evaluator.defaultEvaluator, file: String = __FILE__, line: UInt = __LINE__) {
+func TestString(string: String, value: Double, evaluator: Evaluator = Evaluator.defaultEvaluator, file: StaticString = #file, line: UInt = #line) {
     
     guard let e = XCTAssertNoThrows(try Expression(string: string), file: file, line: line) else {
         return

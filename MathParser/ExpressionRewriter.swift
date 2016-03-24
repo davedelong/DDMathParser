@@ -38,7 +38,7 @@ public struct ExpressionRewriter {
             }
         
             if changed == false { break }
-            iterationCount++
+            iterationCount += 1
             
         } while iterationCount < 256
         

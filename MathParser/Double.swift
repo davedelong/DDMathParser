@@ -15,7 +15,7 @@ internal extension Int {
         var i = 2
         while i < n {
             n /= i
-            i++
+            i += 1
         }
         return i - 1
     }()
@@ -34,8 +34,8 @@ internal extension Double {
             } else {
                 // but it can't be represented in a word-sized Int
                 var result = 1.0
-                for var i = self; i > 1; i-- {
-                    result *= i
+                for i in 2 ... arg1Int {
+                    result *= Double(i)
                 }
                 return result
             }

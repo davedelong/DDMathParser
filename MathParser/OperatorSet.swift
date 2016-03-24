@@ -23,55 +23,78 @@ public class OperatorSet {
         
         // == and != have the same precedence
         ops.append(Operator(builtInOperator: .LogicalEqual, precedence: precedence))
-        ops.append(Operator(builtInOperator: .LogicalNotEqual, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .LogicalNotEqual, precedence: precedence))
+        precedence += 1
         
-        ops.append(Operator(builtInOperator: .LogicalOr, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .LogicalAnd, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .LogicalOr, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .LogicalAnd, precedence: precedence))
+        precedence += 1
         
-        ops.append(Operator(builtInOperator: .LogicalLessThan, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .LogicalGreaterThan, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .LogicalLessThanOrEqual, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .LogicalGreaterThanOrEqual, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .LogicalNot, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .BitwiseOr, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .BitwiseXor, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .BitwiseAnd, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .LeftShift, precedence: precedence++))
-        ops.append(Operator(builtInOperator: .RightShift, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .LogicalLessThan, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .LogicalGreaterThan, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .LogicalLessThanOrEqual, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .LogicalGreaterThanOrEqual, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .LogicalNot, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .BitwiseOr, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .BitwiseXor, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .BitwiseAnd, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .LeftShift, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .RightShift, precedence: precedence))
+        precedence += 1
+        
         ops.append(Operator(builtInOperator: .Add, precedence: precedence))
-        ops.append(Operator(builtInOperator: .Minus, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .Minus, precedence: precedence))
+        precedence += 1
         
         multiplyOperator = Operator(builtInOperator: .Multiply, precedence: precedence)
         ops.append(multiplyOperator)
-        ops.append(Operator(builtInOperator: .Divide, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .Divide, precedence: precedence))
+        precedence += 1
         
-        implicitMultiplyOperator = Operator(builtInOperator: .ImplicitMultiply, precedence: precedence++)
+        implicitMultiplyOperator = Operator(builtInOperator: .ImplicitMultiply, precedence: precedence)
+        precedence += 1
         ops.append(implicitMultiplyOperator)
             
         // NOTE: percent-as-modulo precedence goes here (between ImplicitMultiply and Bitwise Not)
         
-        ops.append(Operator(builtInOperator: .BitwiseNot, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .BitwiseNot, precedence: precedence))
+        precedence += 1
         
         // all right associative unary operators have the same precedence
         ops.append(Operator(builtInOperator: .UnaryMinus, precedence: precedence))
         ops.append(Operator(builtInOperator: .UnaryPlus, precedence: precedence))
         ops.append(Operator(builtInOperator: .SquareRoot, precedence: precedence))
-        ops.append(Operator(builtInOperator: .CubeRoot, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .CubeRoot, precedence: precedence))
+        precedence += 1
         
         // all left associative unary operators have the same precedence
         ops.append(Operator(builtInOperator: .DoubleFactorial, precedence: precedence))
         ops.append(Operator(builtInOperator: .Factorial, precedence: precedence))
         // NOTE: percent-as-percent precedence goes here (same as Factorial)
-        ops.append(Operator(builtInOperator: .Degree, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .Degree, precedence: precedence))
+        precedence += 1
         
-        powerOperator = Operator(builtInOperator: .Power, precedence: precedence++)
+        powerOperator = Operator(builtInOperator: .Power, precedence: precedence)
+        precedence += 1
         ops.append(powerOperator)
         
         // these are defined as unary right/left associative for convenience
         ops.append(Operator(builtInOperator: .ParenthesisOpen, precedence: precedence))
-        ops.append(Operator(builtInOperator: .ParenthesisClose, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .ParenthesisClose, precedence: precedence))
+        precedence += 1
         
-        ops.append(Operator(builtInOperator: .Comma, precedence: precedence++))
+        ops.append(Operator(builtInOperator: .Comma, precedence: precedence))
+        precedence += 1
         
         self.operators = ops
         self.interpretsPercentSignAsModulo = interpretsPercentSignAsModulo
@@ -189,7 +212,7 @@ public class OperatorSet {
                 new.tokens = orig.tokens
                 
                 var precedence = orig.precedence ?? 0
-                if sorter(orig) { precedence++ }
+                if sorter(orig) { precedence += 1 }
                 new.precedence = precedence
                 return new
             }

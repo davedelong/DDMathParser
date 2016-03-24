@@ -9,7 +9,7 @@
 import XCTest
 import MathParser
 
-private func TestToken(raw: RawToken, kind: RawToken.Kind, string: String, file: String = __FILE__, line: UInt = __LINE__) {
+private func TestToken(raw: RawToken, kind: RawToken.Kind, string: String, file: StaticString = #file, line: UInt = #line) {
 
     XCTAssert(raw.kind == kind, "Unexpected token kind", file: file, line: line)
     XCTAssertEqual(raw.string, string, "Unexpected token string", file: file, line: line)

@@ -15,7 +15,7 @@ public extension Function {
         var i = 2
         while i < n {
             n /= i
-            i++
+            i += 1
         }
         return i - 1
     }()
