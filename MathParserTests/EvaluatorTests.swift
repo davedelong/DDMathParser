@@ -307,6 +307,8 @@ class EvaluatorTests: XCTestCase {
         // https://twitter.com/ricardodssilva/status/710461355732672512
         var eval = Evaluator()
         
+        // integral digits are concatenated
+        // fractional digits are added
         struct Overrider: FunctionOverrider {
             private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
                 guard function.lowercaseString == BuiltInOperator.ImplicitMultiply.rawValue.lowercaseString else { return nil }
@@ -315,24 +317,32 @@ class EvaluatorTests: XCTestCase {
                 let firstArg = try evaluator.evaluate(arguments[0], substitutions: substitutions)
                 let secondArg = try evaluator.evaluate(arguments[1], substitutions: substitutions)
                 
-                let numberOfDigitsInSecondArgument = floor(log10(secondArg)) + 1
-                let shiftedFirstArg = firstArg * pow(10, numberOfDigitsInSecondArgument)
-                return shiftedFirstArg + secondArg
+                let integralPartOfFirstArgument = floor(firstArg)
+                let fractionalPartOfFirstArgument = firstArg - integralPartOfFirstArgument
+                
+                let numberOfIntegralDigitsInSecondArgument = floor(log10(secondArg)) + 1
+                
+                let shiftedIntegralPartOfFirstArg = integralPartOfFirstArgument * pow(10, numberOfIntegralDigitsInSecondArgument)
+                return shiftedIntegralPartOfFirstArg + fractionalPartOfFirstArgument + secondArg
             }
         }
         
         eval.functionOverrider = Overrider()
         
-        guard let e1 = XCTAssertNoThrows(try Expression(string: "(2+3)2")) else { return }
-        guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
-        XCTAssertEqual(d1, 52)
+        let tests: Dictionary<String, Double> = [
+            "(2+3)2": 52,
+            "789(241)": 789241,
+            "1234567(1000)": 12345671000,
+            "3π": 30+M_PI,
+            "π 3": 30+M_PI,
+            "1.1(2.2)": 12.3,
+            "π π": 33 + ((M_PI - 3) * 2)
+        ]
         
-        guard let e2 = XCTAssertNoThrows(try Expression(string: "(789)241")) else { return }
-        guard let d2 = XCTAssertNoThrows(try eval.evaluate(e2)) else { return }
-        XCTAssertEqual(d2, 789241)
-        
-        guard let e3 = XCTAssertNoThrows(try Expression(string: "1234567(1000)")) else { return }
-        guard let d3 = XCTAssertNoThrows(try eval.evaluate(e3)) else { return }
-        XCTAssertEqual(d3, 12345671000)
+        for (test, expectedValue) in tests {
+            guard let e = XCTAssertNoThrows(try Expression(string: test)) else { return }
+            guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+            XCTAssertEqual(d, expectedValue)
+        }
     }
 }
