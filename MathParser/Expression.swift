@@ -8,17 +8,6 @@
 
 import Foundation
 
-public struct ExpressionError: ErrorType {
-    public enum Kind {
-        case InvalidFormat
-        case MissingLeftOperand(Operator)
-        case MissingRightOperand(Operator)
-    }
-    
-    public let kind: Kind
-    public let range: Range<String.Index>
-}
-
 public class Expression {
     public enum Kind {
         case Number(Double)

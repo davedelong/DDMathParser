@@ -152,7 +152,7 @@ class ExpressionTests: XCTestCase {
             let _ = try Expression(string: "°")
             XCTFail("Unexpected expression")
         } catch let e {
-            guard let error = e as? ExpressionError else {
+            guard let error = e as? MathParserError else {
                 XCTFail("Unexpected error: \(e)")
                 return
             }
@@ -169,7 +169,7 @@ class ExpressionTests: XCTestCase {
             let _ = try Expression(string: "-")
             XCTFail("Unexpected expression")
         } catch let e {
-            guard let error = e as? ExpressionError else {
+            guard let error = e as? MathParserError else {
                 XCTFail("Unexpected error: \(e)")
                 return
             }
@@ -246,7 +246,7 @@ class ExpressionTests: XCTestCase {
             let _ = try Expression(string: "**2")
             XCTFail("Unexpected expression")
         } catch let e {
-            guard let error = e as? ExpressionError else {
+            guard let error = e as? MathParserError else {
                 XCTFail("Unexpected error: \(e)")
                 return
             }
@@ -263,7 +263,7 @@ class ExpressionTests: XCTestCase {
             let _ = try Expression(string: "2**")
             XCTFail("Unexpected expression")
         } catch let e {
-            guard let error = e as? ExpressionError else {
+            guard let error = e as? MathParserError else {
                 XCTFail("Unexpected error: \(e)")
                 return
             }
@@ -304,7 +304,7 @@ class ExpressionTests: XCTestCase {
             let _ = try expressionizer.expression()
             XCTFail("Unexpected expression")
         } catch let e {
-            guard let error = e as? ExpressionError else {
+            guard let error = e as? MathParserError else {
                 XCTFail("Unexpected error: \(e)")
                 return
             }

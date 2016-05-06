@@ -85,7 +85,7 @@ public struct Expressionizer {
             let (indices, maybeOp) = operatorWithHighestPrecedence(wrappers)
             guard let first = indices.first else {
                 let range = wrappers.first?.range ?? "".startIndex ..< "".endIndex
-                throw ExpressionError(kind: .InvalidFormat, range: range)
+                throw MathParserError(kind: .InvalidFormat, range: range)
             }
             guard let last = indices.last else { fatalError("If there's a first, there's a last") }
             guard let op = maybeOp else { fatalError("Indices but no operator??") }
@@ -149,10 +149,10 @@ public struct Expressionizer {
         let operatorWrapper = wrappers[index]
         
         guard index > 0 else {
-            throw ExpressionError(kind: .MissingLeftOperand(op), range: operatorWrapper.range)
+            throw MathParserError(kind: .MissingLeftOperand(op), range: operatorWrapper.range)
         }
         guard index < wrappers.count - 1 else {
-            throw ExpressionError(kind: .MissingRightOperand(op), range: operatorWrapper.range)
+            throw MathParserError(kind: .MissingRightOperand(op), range: operatorWrapper.range)
         }
         
         var operatorIndex = index
@@ -202,7 +202,7 @@ public struct Expressionizer {
         let operatorWrapper = wrappers[operatorIndex]
         
         guard operatorIndex > 0 else {
-            throw ExpressionError(kind: .MissingLeftOperand(op), range: operatorWrapper.range) // Missing operand
+            throw MathParserError(kind: .MissingLeftOperand(op), range: operatorWrapper.range) // Missing operand
         }
         
         var operandIndex = operatorIndex - 1
@@ -250,7 +250,7 @@ public struct Expressionizer {
         let operandIndex = index + 1
         
         guard operandIndex < wrappers.count else {
-            throw ExpressionError(kind: .MissingRightOperand(op), range: operatorWrapper.range) // Missing operand
+            throw MathParserError(kind: .MissingRightOperand(op), range: operatorWrapper.range) // Missing operand
         }
         
         
