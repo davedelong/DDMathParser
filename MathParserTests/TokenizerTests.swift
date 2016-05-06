@@ -160,7 +160,7 @@ class TokenizerTests: XCTestCase {
         do {
             try Tokenizer(string: "\"foo").tokenize()
             XCTFail("Expected thrown error")
-        } catch let e as TokenizerError {
+        } catch let e as MathParserError {
             XCTAssert(e.kind == .CannotParseQuotedVariable, "Expected variable error")
         } catch let other {
             XCTFail("Unexpected error: \(other)")
@@ -171,7 +171,7 @@ class TokenizerTests: XCTestCase {
         do {
             try Tokenizer(string: "\"\"").tokenize()
             XCTFail("Expected thrown error")
-        } catch let e as TokenizerError {
+        } catch let e as MathParserError {
             XCTAssert(e.kind == .ZeroLengthVariable, "Expected zero-length variable error")
         } catch let other {
             XCTFail("Unexpected error: \(other)")
@@ -182,7 +182,7 @@ class TokenizerTests: XCTestCase {
         do {
             try Tokenizer(string: "$").tokenize()
             XCTFail("Expected thrown error")
-        } catch let e as TokenizerError {
+        } catch let e as MathParserError {
             XCTAssert(e.kind == .CannotParseVariable, "Expected variable error")
         } catch let other {
             XCTFail("Unexpected error: \(other)")

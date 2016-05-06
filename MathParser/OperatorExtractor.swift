@@ -56,7 +56,7 @@ internal struct OperatorExtractor: TokenExtractor {
             let raw = buffer[range]
             result = .Value(RawToken(kind: .Operator, string: raw, range: range))
         } else {
-            let error = TokenizerError(kind: .CannotParseOperator, sourceRange: range)
+            let error = MathParserError(kind: .CannotParseOperator, range: range)
             result = .Error(error)
         }
         

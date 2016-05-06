@@ -48,14 +48,14 @@ internal struct QuotedVariableExtractor: TokenExtractor {
         
         if buffer.peekNext() != quoteCharacter {
             let errorRange = start ..< buffer.currentIndex
-            let error = TokenizerError(kind: .CannotParseQuotedVariable, sourceRange: errorRange)
+            let error = MathParserError(kind: .CannotParseQuotedVariable, range: errorRange)
             result = .Error(error)
         } else {
             buffer.consume()
             let range = start ..< buffer.currentIndex
             // check to make sure we don't have an empty string
             if cleaned.characters.isEmpty {
-                let error = TokenizerError(kind: .ZeroLengthVariable, sourceRange: range)
+                let error = MathParserError(kind: .ZeroLengthVariable, range: range)
                 result = .Error(error)
             } else {
                 let token = RawToken(kind: .Variable, string: cleaned, range: range)

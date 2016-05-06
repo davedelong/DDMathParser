@@ -54,7 +54,7 @@ internal struct NumberExtractor: TokenExtractor {
         
         let length = start.distanceTo(buffer.currentIndex)
         let range = start ..< buffer.currentIndex
-        let error = TokenizerError(kind: .CannotParseNumber, sourceRange: range)
+        let error = MathParserError(kind: .CannotParseNumber, range: range)
         
         var result = TokenGenerator.Element.Error(error)
         if length > 0 {

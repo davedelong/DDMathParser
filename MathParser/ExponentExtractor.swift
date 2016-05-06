@@ -48,7 +48,7 @@ internal struct ExponentExtractor: TokenExtractor {
         if length > 0 {
             return .Value(RawToken(kind: .Exponent, string: exponent, range: range))
         } else {
-            let error = TokenizerError(kind: .CannotParseExponent, sourceRange: range)
+            let error = MathParserError(kind: .CannotParseExponent, range: range)
             return .Error(error)
         }
     }

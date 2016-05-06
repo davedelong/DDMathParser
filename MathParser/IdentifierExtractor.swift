@@ -35,7 +35,7 @@ internal struct IdentifierExtractor: TokenExtractor {
             let raw = buffer[range]
             result = .Value(RawToken(kind: .Identifier, string: raw, range: range))
         } else {
-            let error = TokenizerError(kind: .CannotParseIdentifier, sourceRange: range)
+            let error = MathParserError(kind: .CannotParseIdentifier, range: range)
             result = .Error(error)
         }
         

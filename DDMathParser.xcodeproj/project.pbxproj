@@ -28,6 +28,7 @@
 		552CE1C81B938F15007B89A1 /* ExponentExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */; };
 		552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */; };
 		5536EF5B1B9BED5200788354 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5536EF5A1B9BED5200788354 /* Double.swift */; };
+		554AF6B41CDCED3E00C2583E /* MathParserErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554AF6B31CDCED3E00C2583E /* MathParserErrors.swift */; };
 		557A80691B757C2C0014822A /* Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A80681B757C2C0014822A /* Operator.swift */; };
 		557A806B1B757C870014822A /* OperatorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A806A1B757C870014822A /* OperatorSet.swift */; };
 		557A806D1B7647CB0014822A /* Operator+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A806C1B7647CB0014822A /* Operator+Defaults.swift */; };
@@ -91,6 +92,7 @@
 		552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExponentExtractor.swift; sourceTree = "<group>"; };
 		552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedNumberExtractor.swift; sourceTree = "<group>"; };
 		5536EF5A1B9BED5200788354 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
+		554AF6B31CDCED3E00C2583E /* MathParserErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathParserErrors.swift; sourceTree = "<group>"; };
 		557A80681B757C2C0014822A /* Operator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operator.swift; sourceTree = "<group>"; };
 		557A806A1B757C870014822A /* OperatorSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorSet.swift; sourceTree = "<group>"; };
 		557A806C1B7647CB0014822A /* Operator+Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Operator+Defaults.swift"; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				559B3EFB1B74063600000108 /* MathParser.h */,
+				554AF6B31CDCED3E00C2583E /* MathParserErrors.swift */,
 				552781561B752C680093B070 /* Operators */,
 				559B3F121B74071B00000108 /* Tokenizing */,
 				55E640AF1B76B67A00D7769C /* Resolving */,
@@ -432,6 +435,7 @@
 				552CE1C81B938F15007B89A1 /* ExponentExtractor.swift in Sources */,
 				5527814F1B751DD40093B070 /* VariableExtractor.swift in Sources */,
 				5527814D1B751DCC0093B070 /* IdentifierExtractor.swift in Sources */,
+				554AF6B41CDCED3E00C2583E /* MathParserErrors.swift in Sources */,
 				557F8FE81B86BAB400155C9D /* Functions+Defaults.swift in Sources */,
 				55AE3A1C1B7E757D0022D1CF /* PeekingGenerator.swift in Sources */,
 				559B3F181B7408A900000108 /* Either.swift in Sources */,

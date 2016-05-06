@@ -25,20 +25,3 @@ public struct RawToken {
     public let string: String
     public let range: Range<String.Index>
 }
-
-public struct TokenizerError: ErrorType {
-    public enum Kind {
-        case CannotParseNumber
-        case CannotParseHexNumber
-        case CannotParseOctalNumber
-        case CannotParseExponent
-        case CannotParseIdentifier
-        case CannotParseVariable
-        case CannotParseQuotedVariable
-        case CannotParseOperator
-        case ZeroLengthVariable
-    }
-    
-    public let kind: Kind
-    public let sourceRange: Range<String.Index>
-}

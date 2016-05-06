@@ -18,7 +18,7 @@ internal struct HexNumberExtractor: TokenExtractor {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x" else {
-            let error = TokenizerError(kind: .CannotParseHexNumber, sourceRange: start ..< start)
+            let error = MathParserError(kind: .CannotParseHexNumber, range: start ..< start)
             return .Error(error)
         }
         
@@ -43,7 +43,7 @@ internal struct HexNumberExtractor: TokenExtractor {
             result = .Value(RawToken(kind: .HexNumber, string: raw, range: range))
         } else {
             let range = start ..< buffer.currentIndex
-            let error = TokenizerError(kind: .CannotParseHexNumber, sourceRange: range)
+            let error = MathParserError(kind: .CannotParseHexNumber, range: range)
             result = .Error(error)
         }
         

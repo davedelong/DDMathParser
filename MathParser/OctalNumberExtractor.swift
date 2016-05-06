@@ -18,7 +18,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o" else {
-            let error = TokenizerError(kind: .CannotParseHexNumber, sourceRange: start ..< start)
+            let error = MathParserError(kind: .CannotParseHexNumber, range: start ..< start)
             return .Error(error)
         }
         
@@ -43,7 +43,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
             result = .Value(RawToken(kind: .OctalNumber, string: raw, range: range))
         } else {
             let range = start ..< buffer.currentIndex
-            let error = TokenizerError(kind: .CannotParseOctalNumber, sourceRange: range)
+            let error = MathParserError(kind: .CannotParseOctalNumber, range: range)
             result = .Error(error)
         }
         

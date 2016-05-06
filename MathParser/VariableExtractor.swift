@@ -27,7 +27,7 @@ internal struct VariableExtractor: TokenExtractor {
         guard identifierExtractor.matchesPreconditions(buffer) else {
             // the stuff that follow "$" must be a valid identifier
             let range = start ..< start
-            let error = TokenizerError(kind: .CannotParseVariable, sourceRange: range)
+            let error = MathParserError(kind: .CannotParseVariable, range: range)
             return TokenGenerator.Element.Error(error)
         }
     
@@ -37,8 +37,8 @@ internal struct VariableExtractor: TokenExtractor {
         
         switch identifierResult {
             case .Error(let e):
-                let range = start ..< e.sourceRange.endIndex
-                let error = TokenizerError(kind: .CannotParseVariable, sourceRange: range)
+                let range = start ..< e.range.endIndex
+                let error = MathParserError(kind: .CannotParseVariable, range: range)
                 result = .Error(error)
             case .Value(let t):
                 let range = start ..< t.range.endIndex
