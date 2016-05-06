@@ -52,16 +52,3 @@ public extension ResolvedToken.Kind {
     public var isIdentifier: Bool { return identifier != nil }
     public var isOperator: Bool { return resolvedOperator != nil }
 }
-
-public struct TokenResolverError: ErrorType {
-    public enum Kind {
-        case CannotParseHexNumber
-        case CannotParseOctalNumber
-        case CannotParseLocalizedNumber
-        case UnknownOperator
-        case AmbiguousOperator
-    }
-    
-    public let kind: Kind
-    public let rawToken: RawToken
-}

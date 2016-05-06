@@ -120,14 +120,14 @@ extension TokenResolver {
                 if let number = UInt(rawToken.string, radix: 16) {
                     resolvedTokens.append(ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
-                    throw TokenResolverError(kind: .CannotParseHexNumber, rawToken: rawToken)
+                    throw MathParserError(kind: .CannotParseHexNumber, range: rawToken.range)
                 }
             
             case .OctalNumber:
                 if let number = UInt(rawToken.string, radix: 8) {
                     resolvedTokens.append(ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
-                    throw TokenResolverError(kind: .CannotParseOctalNumber, rawToken: rawToken)
+                    throw MathParserError(kind: .CannotParseOctalNumber, range: rawToken.range)
                 }
             
             case .Number:
@@ -170,7 +170,7 @@ extension TokenResolver {
             }
         }
         
-        throw TokenResolverError(kind: .CannotParseLocalizedNumber, rawToken: raw)
+        throw MathParserError(kind: .CannotParseLocalizedNumber, range: raw.range)
     }
     
     private func resolveExponent(raw: RawToken) throws -> Array<ResolvedToken> {
@@ -207,7 +207,7 @@ extension TokenResolver {
         let matches = operatorSet.operatorForToken(raw.string)
         
         if matches.isEmpty {
-            throw TokenResolverError(kind: .UnknownOperator, rawToken: raw)
+            throw MathParserError(kind: .UnknownOperator, range: raw.range)
         }
         
         if matches.count == 1 {
@@ -251,7 +251,7 @@ extension TokenResolver {
         if let resolved = resolvedOperator {
             return ResolvedToken(kind: .Operator(resolved), string: raw.string, range: raw.range)
         } else {
-            throw TokenResolverError(kind: .AmbiguousOperator, rawToken: raw)
+            throw MathParserError(kind: .AmbiguousOperator, range: raw.range)
         }
     }
     
