@@ -8,7 +8,14 @@
 
 import Foundation
 
-public typealias FunctionEvaluator = (Array<Expression>, Substitutions, Evaluator) throws -> Double
+public struct EvaluationState {
+    let expressionRange: Range<String.Index>
+    let arguments: Array<Expression>
+    let substitutions: Substitutions
+    let evaluator: Evaluator
+}
+
+public typealias FunctionEvaluator = EvaluationState throws -> Double
 
 public struct Function {
     

@@ -81,12 +81,12 @@ class EvaluatorTests: XCTestCase {
         do {
             let _ = try "$foo".evaluate()
         } catch let e {
-            guard let error = e as? EvaluationError else {
+            guard let error = e as? MathParserError else {
                 XCTFail("Unexpected error: \(e)")
                 return
             }
             
-            guard case let .UnknownVariable(v) = error else {
+            guard case let .UnknownVariable(v) = error.kind else {
                 XCTFail("Unexpected error: \(error)")
                 return
             }
@@ -99,12 +99,12 @@ class EvaluatorTests: XCTestCase {
         do {
             let _ = try "foo()".evaluate()
         } catch let e {
-            guard let error = e as? EvaluationError else {
+            guard let error = e as? MathParserError else {
                 XCTFail("Unexpected error: \(e)")
                 return
             }
             
-            guard case let .UnknownFunction(f) = error else {
+            guard case let .UnknownFunction(f) = error.kind else {
                 XCTFail("Unexpected error: \(error)")
                 return
             }
@@ -259,7 +259,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testCustomFunction() {
-        let function = Function(name: "foo", evaluator: { (args, subs, eval) throws -> Double in
+        let function = Function(name: "foo", evaluator: { state throws -> Double in
             return 42
         })
         
@@ -271,7 +271,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testBadCustomFunction() {
-        let function = Function(name: "add", evaluator: { (args, subs, eval) throws -> Double in
+        let function = Function(name: "add", evaluator: { state throws -> Double in
             return 42
         })
         

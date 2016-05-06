@@ -45,10 +45,6 @@ public struct MathParserError: ErrorType {
         case UnknownVariable(String)
         case DivideByZero
         case InvalidArguments
-        
-        // Registration Errors
-        case FunctionAlreadyExists(String)
-        case FunctionDoesNotExist(String)
     }
     
     
@@ -91,10 +87,6 @@ public func ==(lhs: MathParserError.Kind, rhs: MathParserError.Kind) -> Bool {
         case (.UnknownVariable(let leftString), .UnknownVariable(let rightString)): return leftString == rightString
         case (.DivideByZero, .DivideByZero): return true
         case (.InvalidArguments, .InvalidArguments): return true
-            
-        // Registration Errors
-        case (.FunctionAlreadyExists(let leftString), .FunctionAlreadyExists(let rightString)): return leftString == rightString
-        case (.FunctionDoesNotExist(let leftString), .FunctionDoesNotExist(let rightString)): return leftString == rightString
         
         default: return false
     }

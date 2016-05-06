@@ -142,8 +142,8 @@ class GithubIssues: XCTestCase {
         do {
             let _ = try "hl=en&client=safari".evaluate()
             XCTFail("Expected thrown error")
-        } catch let error as EvaluationError {
-            guard case .UnknownFunction(_) = error else {
+        } catch let error as MathParserError {
+            guard case .UnknownFunction(_) = error.kind else {
                 XCTFail("Unexpected error \(error)")
                 return
             }
