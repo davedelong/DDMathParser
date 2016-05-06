@@ -74,7 +74,7 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let error = other as? GroupedTokenError else {
+            guard let error = other as? MathParserError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
@@ -90,7 +90,7 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let error = other as? GroupedTokenError else {
+            guard let error = other as? MathParserError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
@@ -106,7 +106,7 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let error = other as? GroupedTokenError else {
+            guard let error = other as? MathParserError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
@@ -121,7 +121,7 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let error = other as? GroupedTokenError else {
+            guard let error = other as? MathParserError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
@@ -136,7 +136,7 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let error = other as? GroupedTokenError else {
+            guard let error = other as? MathParserError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
@@ -192,7 +192,7 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let error = other as? GroupedTokenError else {
+            guard let error = other as? MathParserError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }
@@ -207,7 +207,7 @@ class GroupingTests: XCTestCase {
             let _ = try g.group()
             XCTFail("Expected error")
         } catch let other {
-            guard let error = other as? GroupedTokenError else {
+            guard let error = other as? MathParserError else {
                 XCTFail("Unexpected error \(other)")
                 return
             }

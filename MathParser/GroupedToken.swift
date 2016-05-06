@@ -8,18 +8,6 @@
 
 import Foundation
 
-public struct GroupedTokenError: ErrorType {
-    public enum Kind {
-        case MissingOpenParenthesis
-        case MissingCloseParenthesis
-        case EmptyFunctionArgument
-        case EmptyGroup
-    }
-    
-    public let kind: Kind
-    public let range: Range<String.Index>
-}
-
 public struct GroupedToken {
     public enum Kind {
         case Number(Double)

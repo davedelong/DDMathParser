@@ -68,7 +68,7 @@ public struct TokenGrouper {
         guard let first = rootTokens.first, let last = rootTokens.last else {
             // cheap way to get an empty range
             let range = "".startIndex ..< "".startIndex
-            throw GroupedTokenError(kind: .EmptyGroup, range: range) //EmptyGroup
+            throw MathParserError(kind: .EmptyGroup, range: range) //EmptyGroup
         }
         let range = first.range.startIndex ..< last.range.endIndex
         
@@ -95,7 +95,7 @@ public struct TokenGrouper {
                 return try groupTokenFromGenerator(g)
             case .Operator(let o) where o.builtInOperator == .ParenthesisClose:
                 // CloseParen, but no OpenParen
-                throw GroupedTokenError(kind: .MissingOpenParenthesis, range: peek.range)
+                throw MathParserError(kind: .MissingOpenParenthesis, range: peek.range)
             case .Operator(let o):
                 let _ = g.next()
                 return GroupedToken(kind: .Operator(o), range: peek.range)
@@ -110,7 +110,7 @@ public struct TokenGrouper {
         }
         
         guard let open = g.next() where open.kind.builtInOperator == .ParenthesisOpen else {
-            throw GroupedTokenError(kind: .MissingOpenParenthesis, range: function.range.endIndex ..< function.range.endIndex)
+            throw MathParserError(kind: .MissingOpenParenthesis, range: function.range.endIndex ..< function.range.endIndex)
         }
         
         var parameters = Array<GroupedToken>()
@@ -123,7 +123,7 @@ public struct TokenGrouper {
         
         guard let close = g.next() where close.kind.builtInOperator == .ParenthesisClose else {
             let indexForMissingParen = parameters.last?.endIndex ?? open.range.endIndex
-            throw GroupedTokenError(kind: .MissingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
+            throw MathParserError(kind: .MissingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
         }
         
         let range = function.range.startIndex ..< close.range.endIndex
@@ -150,7 +150,7 @@ public struct TokenGrouper {
         }
         
         guard let first = parameterTokens.first, let last = parameterTokens.last else {
-            throw GroupedTokenError(kind: .EmptyFunctionArgument, range: parameterIndex ..< parameterIndex) // EmptyFunctionArgument
+            throw MathParserError(kind: .EmptyFunctionArgument, range: parameterIndex ..< parameterIndex) // EmptyFunctionArgument
         }
         
         let range = first.range.startIndex ..< last.range.endIndex
@@ -172,13 +172,13 @@ public struct TokenGrouper {
         
         guard let close = g.next() where close.kind.builtInOperator == .ParenthesisClose else {
             let indexForMissingParen = tokens.last?.endIndex ?? open.range.endIndex
-            throw GroupedTokenError(kind: .MissingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
+            throw MathParserError(kind: .MissingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
         }
         
         let range = open.range.startIndex ..< close.range.endIndex
         
         guard tokens.isEmpty == false else {
-            throw GroupedTokenError(kind: .EmptyGroup, range: range) // Empty Group
+            throw MathParserError(kind: .EmptyGroup, range: range) // Empty Group
         }
         
         return GroupedToken(kind: .Group(tokens), range: range)
