@@ -65,20 +65,21 @@ public struct Evaluator {
     }
     
     private func evaluateFunction(name: String, arguments: Array<Expression>, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
+        let state = EvaluationState(expressionRange: range, arguments: arguments, substitutions: substitutions, evaluator: self)
+        
         // check for function overrides
-        if let value = try functionOverrider?.overrideFunction(name, arguments: arguments, substitutions: substitutions, evaluator: self) {
+        if let value = try functionOverrider?.overrideFunction(name, state: state) {
             return value
         }
         
         if let function = functionSet.evaluatorForName(name) {
-            let state = EvaluationState(expressionRange: range, arguments: arguments, substitutions: substitutions, evaluator: self)
             return try function(state)
         }
         
         // a function with this name does not exist
         // use the function resolver
         let normalized = functionSet.normalize(name)
-        if let value = try functionResolver?.resolveFunction(normalized, arguments: arguments, substitutions: substitutions, evaluator: self) {
+        if let value = try functionResolver?.resolveFunction(normalized, state: state) {
             return value
         }
         

@@ -47,7 +47,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: FunctionResolver {
-            private func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
+            private func resolveFunction(function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
@@ -64,7 +64,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
+            private func overrideFunction(function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
@@ -310,12 +310,12 @@ class EvaluatorTests: XCTestCase {
         // integral digits are concatenated
         // fractional digits are added
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double? {
+            private func overrideFunction(function: String, state: EvaluationState) throws -> Double? {
                 guard function.lowercaseString == BuiltInOperator.ImplicitMultiply.rawValue.lowercaseString else { return nil }
-                guard arguments.count == 2 else { return nil }
+                guard state.arguments.count == 2 else { return nil }
                 
-                let firstArg = try evaluator.evaluate(arguments[0], substitutions: substitutions)
-                let secondArg = try evaluator.evaluate(arguments[1], substitutions: substitutions)
+                let firstArg = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
+                let secondArg = try state.evaluator.evaluate(state.arguments[1], substitutions: state.substitutions)
                 
                 let integralPartOfFirstArgument = floor(firstArg)
                 let fractionalPartOfFirstArgument = firstArg - integralPartOfFirstArgument

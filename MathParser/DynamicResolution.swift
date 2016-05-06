@@ -9,11 +9,11 @@
 import Foundation
 
 public protocol FunctionOverrider {
-    func overrideFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double?
+    func overrideFunction(function: String, state: EvaluationState) throws -> Double?
 }
 
 public protocol FunctionResolver {
-    func resolveFunction(function: String, arguments: Array<Expression>, substitutions: Substitutions, evaluator: Evaluator) throws -> Double?
+    func resolveFunction(function: String, state: EvaluationState) throws -> Double?
 }
 
 public protocol VariableResolver {
