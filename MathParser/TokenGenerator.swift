@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class TokenGenerator: GeneratorType {
+internal class TokenGenerator: IteratorProtocol {
     typealias Element = Either<RawToken, MathParserError>
     
     private let buffer: TokenCharacterBuffer
@@ -16,7 +16,7 @@ internal class TokenGenerator: GeneratorType {
     
     internal let operatorSet: OperatorSet
     
-    init(string: String, operatorSet: OperatorSet, locale: NSLocale?) {
+    init(string: String, operatorSet: OperatorSet, locale: Locale?) {
         self.operatorSet = operatorSet
         let operatorTokens = operatorSet.operatorTokenSet
         

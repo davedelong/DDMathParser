@@ -11,13 +11,13 @@ import Foundation
 public class Operator: Equatable {
     
     public enum Arity {
-        case Unary
-        case Binary
+        case unary
+        case binary
     }
     
     public enum Associativity {
-        case Left
-        case Right
+        case left
+        case right
     }
     
     public let function: String
@@ -38,9 +38,9 @@ public class Operator: Equatable {
 extension Operator: CustomStringConvertible {
     
     public var description: String {
-        let tokenInfo = tokens.joinWithSeparator(", ")
-        let arityInfo = arity == .Unary ? "Unary" : "Binary"
-        let assocInfo = associativity == .Left ? "Left" : "Right"
+        let tokenInfo = tokens.joined(separator: ", ")
+        let arityInfo = arity == .unary ? "Unary" : "Binary"
+        let assocInfo = associativity == .left ? "Left" : "Right"
         let precedenceInfo = precedence?.description ?? "UNKNOWN"
         return "{[\(tokenInfo)] -> \(function)(), \(arityInfo) \(assocInfo), precedence: \(precedenceInfo)}"
     }

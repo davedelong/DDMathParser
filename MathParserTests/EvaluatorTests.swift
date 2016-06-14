@@ -30,14 +30,14 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: VariableResolver {
-            private func resolveVariable(variable: String) -> Double? {
+            private func resolveVariable(_ variable: String) -> Double? {
                 return 42
             }
         }
         
         eval.variableResolver = Resolver()
         
-        guard let e = XCTAssertNoThrows(try Expression(string: "$foo")) else { return }
+        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "$foo")) else { return }
         
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
@@ -47,14 +47,14 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: FunctionResolver {
-            private func resolveFunction(function: String, state: EvaluationState) throws -> Double? {
+            private func resolveFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
         
         eval.functionResolver = Resolver()
         
-        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
+        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo()")) else { return }
         
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
@@ -64,14 +64,14 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(function: String, state: EvaluationState) throws -> Double? {
+            private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
         
         eval.functionOverrider = Overrider()
         
-        guard let e = XCTAssertNoThrows(try Expression(string: "(foo()*foo()+foo()-foo())!")) else { return }
+        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "(foo()*foo()+foo()-foo())!")) else { return }
         
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
@@ -86,7 +86,7 @@ class EvaluatorTests: XCTestCase {
                 return
             }
             
-            guard case let .UnknownVariable(v) = error.kind else {
+            guard case let .unknownVariable(v) = error.kind else {
                 XCTFail("Unexpected error: \(error)")
                 return
             }
@@ -104,7 +104,7 @@ class EvaluatorTests: XCTestCase {
                 return
             }
             
-            guard case let .UnknownFunction(f) = error.kind else {
+            guard case let .unknownFunction(f) = error.kind else {
                 XCTFail("Unexpected error: \(error)")
                 return
             }
@@ -246,7 +246,7 @@ class EvaluatorTests: XCTestCase {
         let eval = Evaluator()
         
         guard XCTAssertNoThrows(try eval.registerAlias("foo", forFunctionName: "add")) else { return }
-        guard let e = XCTAssertNoThrows(try Expression(string: "foo(1, 2)")) else { return }
+        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo(1, 2)")) else { return }
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 3)
     }
@@ -265,7 +265,7 @@ class EvaluatorTests: XCTestCase {
         
         let eval = Evaluator()
         guard XCTAssertNoThrows(try eval.registerFunction(function)) else { return }
-        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
+        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo()")) else { return }
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
     }
@@ -296,7 +296,7 @@ class EvaluatorTests: XCTestCase {
         ]
         
         for (test, value) in tests {
-            guard let e = XCTAssertNoThrows(try Expression(string: test, operatorSet: operatorSet)) else { return }
+            guard let e = XCTAssertNoThrows(try MathParser.Expression(string: test, operatorSet: operatorSet)) else { return }
             guard let d = XCTAssertNoThrows(try Evaluator.defaultEvaluator.evaluate(e)) else { return }
             XCTAssertEqual(d, value)
         }
@@ -310,8 +310,8 @@ class EvaluatorTests: XCTestCase {
         // integral digits are concatenated
         // fractional digits are added
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(function: String, state: EvaluationState) throws -> Double? {
-                guard function.lowercaseString == BuiltInOperator.ImplicitMultiply.rawValue.lowercaseString else { return nil }
+            private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
+                guard function.lowercased() == BuiltInOperator.ImplicitMultiply.rawValue.lowercased() else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 
                 let firstArg = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -340,7 +340,7 @@ class EvaluatorTests: XCTestCase {
         ]
         
         for (test, expectedValue) in tests {
-            guard let e = XCTAssertNoThrows(try Expression(string: test)) else { return }
+            guard let e = XCTAssertNoThrows(try MathParser.Expression(string: test)) else { return }
             guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
             XCTAssertEqual(d, expectedValue)
         }

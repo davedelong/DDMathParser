@@ -15,19 +15,19 @@ internal struct VariableExtractor: TokenExtractor {
         identifierExtractor = IdentifierExtractor(operatorTokens: operatorTokens)
     }
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         return buffer.peekNext() == "$"
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
         buffer.consume() // consume the opening $
         
         guard identifierExtractor.matchesPreconditions(buffer) else {
             // the stuff that follow "$" must be a valid identifier
-            let range = start ..< start
-            let error = MathParserError(kind: .CannotParseVariable, range: range)
+            let range: Range<Int> = start ..< start
+            let error = MathParserError(kind: .cannotParseVariable, range: range)
             return TokenGenerator.Element.Error(error)
         }
     
@@ -37,12 +37,12 @@ internal struct VariableExtractor: TokenExtractor {
         
         switch identifierResult {
             case .Error(let e):
-                let range = start ..< e.range.endIndex
-                let error = MathParserError(kind: .CannotParseVariable, range: range)
+                let range: Range<Int> = start ..< e.range.upperBound
+                let error = MathParserError(kind: .cannotParseVariable, range: range)
                 result = .Error(error)
             case .Value(let t):
-                let range = start ..< t.range.endIndex
-                let token = RawToken(kind: .Variable, string: t.string, range: range)
+                let range: Range<Int> = start ..< t.range.upperBound
+                let token = RawToken(kind: .variable, string: t.string, range: range)
                 result = .Value(token)
         }
         

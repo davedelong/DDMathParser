@@ -11,38 +11,38 @@ import Foundation
 internal struct SpecialNumberExtractor: TokenExtractor {
     
     internal static let specialNumbers: Dictionary<Character, Double> = [
-        "½": 1.0/2,
-        "⅓": 1.0/3,
-        "⅔": 2.0/3,
-        "¼": 1.0/4,
-        "¾": 3.0/4,
-        "⅕": 1.0/5,
-        "⅖": 2.0/5,
-        "⅗": 3.0/5,
-        "⅘": 4.0/5,
-        "⅙": 1.0/6,
-        "⅚": 5.0/6,
-        "⅛": 1.0/8,
-        "⅜": 3.0/8,
-        "⅝": 5.0/8,
-        "⅞": 7.0/8
+        "½": 0.5,
+        "⅓": 0.3333333,
+        "⅔": 0.6666666,
+        "¼": 0.25,
+        "¾": 0.75,
+        "⅕": 0.2,
+        "⅖": 0.4,
+        "⅗": 0.6,
+        "⅘": 0.8,
+        "⅙": 0.1666666,
+        "⅚": 0.8333333,
+        "⅛": 0.125,
+        "⅜": 0.375,
+        "⅝": 0.625,
+        "⅞": 0.875
     ]
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
         guard let _ = SpecialNumberExtractor.specialNumbers[peek] else { return false }
         return true
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
         // consume the character
         buffer.consume()
         
-        let range = start ..< buffer.currentIndex
+        let range: Range<Int> = start ..< buffer.currentIndex
         let raw = buffer[range]
-        return .Value(RawToken(kind: .Number, string: raw, range: range))
+        return .Value(RawToken(kind: .number, string: raw, range: range))
     }
     
 }

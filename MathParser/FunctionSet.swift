@@ -23,25 +23,25 @@ internal class FunctionSet {
         }
     }
     
-    internal func normalize(name: String) -> String {
-        return caseSensitive ? name : name.lowercaseString
+    internal func normalize(_ name: String) -> String {
+        return caseSensitive ? name : name.lowercased()
     }
     
-    private func registeredFunctionForName(name: String) -> FunctionRegistration? {
+    private func registeredFunctionForName(_ name: String) -> FunctionRegistration? {
         let casedName = normalize(name)
         return functionsByName[casedName]
     }
     
-    internal func evaluatorForName(name: String) -> FunctionEvaluator? {
+    internal func evaluatorForName(_ name: String) -> FunctionEvaluator? {
         return registeredFunctionForName(name)?.function
     }
     
-    internal func addAlias(alias: String, forFunctionName name: String) throws {
+    internal func addAlias(_ alias: String, forFunctionName name: String) throws {
         guard registeredFunctionForName(alias) == nil else {
-            throw FunctionRegistrationError.FunctionAlreadyExists(alias)
+            throw FunctionRegistrationError.functionAlreadyExists(alias)
         }
         guard let registration = registeredFunctionForName(name) else {
-            throw FunctionRegistrationError.FunctionDoesNotExist(name)
+            throw FunctionRegistrationError.functionDoesNotExist(name)
         }
         
         let casedAlias = normalize(alias)
@@ -49,13 +49,13 @@ internal class FunctionSet {
         functionsByName[casedAlias] = registration
     }
     
-    internal func registerFunction(function: Function) throws {
+    internal func registerFunction(_ function: Function) throws {
         let registration = FunctionRegistration(function: function, caseSensitive: caseSensitive)
         
         // we need to make sure that every name is accounted for
         for name in registration.names {
             guard registeredFunctionForName(name) == nil else {
-                throw FunctionRegistrationError.FunctionAlreadyExists(name)
+                throw FunctionRegistrationError.functionAlreadyExists(name)
             }
         }
         
@@ -71,10 +71,10 @@ private class FunctionRegistration {
     
     init(function: Function, caseSensitive: Bool) {
         self.function = function.evaluator
-        self.names = Set(function.names.map { caseSensitive ? $0.lowercaseString : $0 })
+        self.names = Set(function.names.map { caseSensitive ? $0.lowercased() : $0 })
     }
     
-    func addAlias(name: String) {
+    func addAlias(_ name: String) {
         names.insert(name)
     }
 }

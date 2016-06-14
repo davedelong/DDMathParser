@@ -9,48 +9,48 @@
 import Foundation
 
 internal class TokenCharacterBuffer {
-    private let characters: String.CharacterView
-    private let lowercaseCharacters: String.CharacterView
-    private(set) var currentIndex: String.Index
+    private let characters: Array<Character>
+    private let lowercaseCharacters: Array<Character>
+    private(set) var currentIndex: Int
     
     init(string: String) {
-        characters = string.characters
-        lowercaseCharacters = string.lowercaseString.characters
+        characters = Array(string.characters)
+        lowercaseCharacters = Array(string.lowercased().characters)
         
-        currentIndex = characters.startIndex
+        currentIndex = 0
     }
     
     var isAtEnd: Bool {
-        return currentIndex >= characters.endIndex
+        return currentIndex >= characters.count
     }
     
-    func resetTo(index: String.Index) {
+    func resetTo(_ index: Int) {
         currentIndex = index
     }
     
-    func peekNext(delta: Int = 0, lowercase: Bool = false) -> Character? {
+    func peekNext(_ delta: Int = 0, lowercase: Bool = false) -> Character? {
         guard delta >= 0 else {
             fatalError("Cannot peek into the past")
         }
         let chars = lowercase ? lowercaseCharacters : characters
         
-        let index = currentIndex.advancedBy(delta)
-        guard index < chars.endIndex else { return nil }
+        let index = currentIndex + delta
+        guard index < chars.count else { return nil }
         return chars[index]
     }
     
-    func consume(delta: Int = 1) {
+    func consume(_ delta: Int = 1) {
         guard delta > 0 else {
             fatalError("Cannot consume less than one character")
         }
-        currentIndex = currentIndex.advancedBy(delta)
+        currentIndex = currentIndex + delta
     }
     
-    subscript (i: String.Index) -> Character {
+    subscript (i: Int) -> Character {
         return characters[i]
     }
     
-    subscript (r: Range<String.Index>) -> String {
+    subscript (r: Range<Int>) -> String {
         return String(characters[r])
     }
 }

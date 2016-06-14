@@ -10,15 +10,15 @@ import Foundation
 
 internal struct OctalNumberExtractor: TokenExtractor {
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o"
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o" else {
-            let error = MathParserError(kind: .CannotParseHexNumber, range: start ..< start)
+            let error = MathParserError(kind: .cannotParseHexNumber, range: start ..< start)
             return .Error(error)
         }
         
@@ -37,13 +37,13 @@ internal struct OctalNumberExtractor: TokenExtractor {
         
         let result: TokenGenerator.Element
         
-        if start.distanceTo(buffer.currentIndex) > 0 {
-            let range = indexBeforeOctalNumbers ..< buffer.currentIndex
+        if buffer.currentIndex - start > 0 {
+            let range: Range<Int> = indexBeforeOctalNumbers ..< buffer.currentIndex
             let raw = buffer[range]
-            result = .Value(RawToken(kind: .OctalNumber, string: raw, range: range))
+            result = .Value(RawToken(kind: .octalNumber, string: raw, range: range))
         } else {
-            let range = start ..< buffer.currentIndex
-            let error = MathParserError(kind: .CannotParseOctalNumber, range: range)
+            let range: Range<Int> = start ..< buffer.currentIndex
+            let error = MathParserError(kind: .cannotParseOctalNumber, range: range)
             result = .Error(error)
         }
         

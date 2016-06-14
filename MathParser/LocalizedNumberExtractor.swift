@@ -12,20 +12,20 @@ import Foundation
 
 internal struct LocalizedNumberExtractor: TokenExtractor {
     
-    private let decimalNumberFormatter = NSNumberFormatter()
+    private let decimalNumberFormatter = NumberFormatter()
     
-    internal init(locale: NSLocale) {
+    internal init(locale: Locale) {
         decimalNumberFormatter.locale = locale
-        decimalNumberFormatter.numberStyle = .DecimalStyle
+        decimalNumberFormatter.numberStyle = .decimal
     }
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         return buffer.peekNext() != nil
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
-        var indexBeforeDecimal: String.Index?
+        var indexBeforeDecimal: Int?
         
         var soFar = ""
         while let peek = buffer.peekNext() where peek.isWhitespace == false {
@@ -49,19 +49,19 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         }
         
         let indexAfterNumber = buffer.currentIndex
-        let range = start ..< indexAfterNumber
+        let range: Range<Int> = start ..< indexAfterNumber
         
-        guard start.distanceTo(indexAfterNumber) > 0 else {
-            let error = MathParserError(kind: .CannotParseNumber, range: range)
+        guard indexAfterNumber - start > 0 else {
+            let error = MathParserError(kind: .cannotParseNumber, range: range)
             return .Error(error)
         }
         
-        let token = RawToken(kind: .LocalizedNumber, string: soFar, range: range)
+        let token = RawToken(kind: .localizedNumber, string: soFar, range: range)
         return .Value(token)
     }
     
-    private func canParseString(string: String) -> Bool {
-        guard let _ = decimalNumberFormatter.numberFromString(string) else { return false }
+    private func canParseString(_ string: String) -> Bool {
+        guard let _ = decimalNumberFormatter.number(from: string) else { return false }
         return true
     }
 

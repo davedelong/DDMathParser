@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol PeekingGeneratorType: GeneratorType {
+protocol PeekingGeneratorType: IteratorProtocol {
     func peek() -> Element?
 }
 
-internal class PeekingGenerator<G: GeneratorType>: PeekingGeneratorType {
+internal class PeekingGenerator<G: IteratorProtocol>: PeekingGeneratorType {
     typealias Element = G.Element
     
     private var generator: G

@@ -9,13 +9,13 @@
 import Foundation
 
 public struct EvaluationState {
-    public let expressionRange: Range<String.Index>
+    public let expressionRange: Range<Int>
     public let arguments: Array<Expression>
     public let substitutions: Substitutions
     public let evaluator: Evaluator
 }
 
-public typealias FunctionEvaluator = EvaluationState throws -> Double
+public typealias FunctionEvaluator = (EvaluationState) throws -> Double
 
 public struct Function {
     

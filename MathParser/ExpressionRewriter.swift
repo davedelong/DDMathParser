@@ -17,11 +17,11 @@ public struct ExpressionRewriter {
         self.rules = rules
     }
     
-    public mutating func addRule(rule: RewriteRule) {
+    public mutating func addRule(_ rule: RewriteRule) {
         rules.append(rule)
     }
     
-    public func rewriteExpression(expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.defaultEvaluator) -> Expression {
+    public func rewriteExpression(_ expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.defaultEvaluator) -> Expression {
         
         var tmp = expression
         var iterationCount = 0
@@ -49,20 +49,20 @@ public struct ExpressionRewriter {
         return tmp
     }
     
-    private func rewrite(expression: Expression, usingRule rule: RewriteRule, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
+    private func rewrite(_ expression: Expression, usingRule rule: RewriteRule, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
         
         let simplified = expression.simplify(substitutions, evaluator: evaluator)
         
         let rewritten = rule.rewrite(simplified, substitutions: substitutions, evaluator: evaluator)
         if rewritten != expression { return rewritten }
         
-        guard case let .Function(f, args) = rewritten.kind else { return rewritten }
+        guard case let .function(f, args) = rewritten.kind else { return rewritten }
         
         let newArgs = args.map { rewrite($0, usingRule: rule, substitutions: substitutions, evaluator: evaluator) }
         
         // if nothing changed, reture
         guard args != newArgs else { return rewritten }
         
-        return Expression(kind: .Function(f, newArgs), range: rewritten.range)
+        return Expression(kind: .function(f, newArgs), range: rewritten.range)
     }
 }

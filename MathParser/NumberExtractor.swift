@@ -10,11 +10,11 @@ import Foundation
 
 internal struct NumberExtractor: TokenExtractor {
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         return buffer.peekNext()?.isDigit == true
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
         while buffer.peekNext()?.isDigit == true {
@@ -52,15 +52,15 @@ internal struct NumberExtractor: TokenExtractor {
             }
         }
         
-        let length = start.distanceTo(buffer.currentIndex)
-        let range = start ..< buffer.currentIndex
-        let error = MathParserError(kind: .CannotParseNumber, range: range)
+        let length = buffer.currentIndex - start
+        let range: Range<Int> = start ..< buffer.currentIndex
+        let error = MathParserError(kind: .cannotParseNumber, range: range)
         
         var result = TokenGenerator.Element.Error(error)
         if length > 0 {
             if length != 1 || buffer[start] != "." {
                 let raw = buffer[range]
-                result = .Value(RawToken(kind: .Number, string: raw, range: range))
+                result = .Value(RawToken(kind: .number, string: raw, range: range))
             }
         }
         return result

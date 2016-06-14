@@ -41,13 +41,13 @@ public struct RewriteRule {
         }
     }
     
-    public func rewrite(expression: Expression, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
+    public func rewrite(_ expression: Expression, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
         guard let replacements = matchWithCondition(expression, substitutions: substitutions, evaluator: evaluator) else { return expression }
         
         return applyReplacements(replacements, toExpression: template)
     }
     
-    private func matchWithCondition(expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator, replacementsSoFar: Dictionary<String, Expression> = [:]) -> Dictionary<String, Expression>? {
+    private func matchWithCondition(_ expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator, replacementsSoFar: Dictionary<String, Expression> = [:]) -> Dictionary<String, Expression>? {
         guard let replacements = match(expression, toExpression: predicate, replacementsSoFar: replacementsSoFar) else { return nil }
         
         // we replaced, and we don't have a condition => we match
@@ -63,19 +63,19 @@ public struct RewriteRule {
         return (result != 0) ? replacements : nil
     }
     
-    private func match(expression: Expression, toExpression target: Expression, replacementsSoFar: Dictionary<String, Expression>) -> Dictionary<String, Expression>? {
+    private func match(_ expression: Expression, toExpression target: Expression, replacementsSoFar: Dictionary<String, Expression>) -> Dictionary<String, Expression>? {
         
         var replacements = replacementsSoFar
         
         switch target.kind {
             // we're looking for a specific number; return the replacements if we match that number
-            case .Number(_): return expression == target ? replacements : nil
+            case .number(_): return expression == target ? replacements : nil
             
             // we're looking for a specific variable; return the replacements if we match
-            case .Variable(_): return expression == target ? replacements : nil
+            case .variable(_): return expression == target ? replacements : nil
             
             // we're looking for something else
-            case .Function(let f, let args):
+            case .function(let f, let args):
             
                 // we're looking for anything
                 if f.hasPrefix(RuleTemplate.AnyExpression) {
@@ -120,7 +120,7 @@ public struct RewriteRule {
             
                 // if we make it this far, we're looking for a specific function
                 // make sure the expression we're matching against is also a function
-                guard case let .Function(expressionF, expressionArgs) = expression.kind else { return nil }
+                guard case let .function(expressionF, expressionArgs) = expression.kind else { return nil }
                 // make sure the functions have the same name
                 guard expressionF == f else { return nil }
                 // make sure the functions have the same number of arguments
@@ -137,16 +137,16 @@ public struct RewriteRule {
         }
     }
     
-    private func applyReplacements(replacements: Dictionary<String, Expression>, toExpression expression: Expression) -> Expression {
+    private func applyReplacements(_ replacements: Dictionary<String, Expression>, toExpression expression: Expression) -> Expression {
         
         switch expression.kind {
-            case .Function(let f, let args):
+            case .function(let f, let args):
                 if let replacement = replacements[f] {
                     return Expression(kind: replacement.kind, range: replacement.range)
                 }
             
                 let newArgs = args.map { applyReplacements(replacements, toExpression: $0) }
-                return Expression(kind: .Function(f, newArgs), range: expression.range)
+                return Expression(kind: .function(f, newArgs), range: expression.range)
             
             default:
                 return Expression(kind: expression.kind, range: expression.range)

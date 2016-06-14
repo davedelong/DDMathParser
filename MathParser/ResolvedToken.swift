@@ -13,12 +13,12 @@ public struct ResolvedToken {
         case Number(Double)
         case Variable(String)
         case Identifier(String)
-        case Operator(MathParser.Operator)
+        case `operator`(MathParser.Operator)
     }
     
     public let kind: Kind
     public let string: String
-    public let range: Range<String.Index>
+    public let range: Range<Int>
 }
 
 public extension ResolvedToken.Kind {
@@ -39,7 +39,7 @@ public extension ResolvedToken.Kind {
     }
     
     public var resolvedOperator: MathParser.Operator? {
-        guard case .Operator(let o) = self else { return nil }
+        guard case .operator(let o) = self else { return nil }
         return o
     }
     

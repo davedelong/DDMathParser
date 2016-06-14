@@ -10,11 +10,11 @@ import Foundation
 
 internal struct QuotedVariableExtractor: TokenExtractor {
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         return buffer.peekNext() == "\"" || buffer.peekNext() == "'"
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
         // consume the opening quote
@@ -47,18 +47,18 @@ internal struct QuotedVariableExtractor: TokenExtractor {
         let result: TokenGenerator.Element
         
         if buffer.peekNext() != quoteCharacter {
-            let errorRange = start ..< buffer.currentIndex
-            let error = MathParserError(kind: .CannotParseQuotedVariable, range: errorRange)
+            let errorRange: Range<Int> = start ..< buffer.currentIndex
+            let error = MathParserError(kind: .cannotParseQuotedVariable, range: errorRange)
             result = .Error(error)
         } else {
             buffer.consume()
-            let range = start ..< buffer.currentIndex
+            let range: Range<Int> = start ..< buffer.currentIndex
             // check to make sure we don't have an empty string
             if cleaned.characters.isEmpty {
-                let error = MathParserError(kind: .ZeroLengthVariable, range: range)
+                let error = MathParserError(kind: .zeroLengthVariable, range: range)
                 result = .Error(error)
             } else {
-                let token = RawToken(kind: .Variable, string: cleaned, range: range)
+                let token = RawToken(kind: .variable, string: cleaned, range: range)
                 result = .Value(token)
             }
         }

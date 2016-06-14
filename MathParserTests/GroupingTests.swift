@@ -15,7 +15,7 @@ class GroupingTests: XCTestCase {
         let g = TokenGrouper(string: "1")
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         switch t.kind {
-            case .Number(1.0): break
+            case .number(1.0): break
             default: XCTFail("Unexpected token kind")
         }
     }
@@ -24,7 +24,7 @@ class GroupingTests: XCTestCase {
         let g = TokenGrouper(string: "$foo")
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         switch t.kind {
-            case .Variable("foo"): break
+            case .variable("foo"): break
             default: XCTFail("Unexpected token kind")
         }
     }
@@ -33,7 +33,7 @@ class GroupingTests: XCTestCase {
         let g = TokenGrouper(string: "foo")
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         switch t.kind {
-            case .Function("foo", _): break
+            case .function("foo", _): break
             default: XCTFail("Unexpected token kind")
         }
     }
@@ -42,7 +42,7 @@ class GroupingTests: XCTestCase {
         let g = TokenGrouper(string: "1+1")
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         switch t.kind {
-            case .Group(let tokens):
+            case .group(let tokens):
                 XCTAssert(tokens.count == 3)
             default: XCTFail("Unexpected token kind")
         }
@@ -52,7 +52,7 @@ class GroupingTests: XCTestCase {
         let g = TokenGrouper(string: "(1)")
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         switch t.kind {
-            case .Number(1.0): break
+            case .number(1.0): break
             default: XCTFail("Unexpected token kind")
         }
     }
@@ -62,7 +62,7 @@ class GroupingTests: XCTestCase {
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         
         switch t.kind {
-            case .Function("foo", _): break
+            case .function("foo", _): break
             default: XCTFail("Unexpected token kind")
         }
     }
@@ -78,7 +78,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .EmptyFunctionArgument)
+            XCTAssert(error.kind == .emptyFunctionArgument)
         }
     }
     
@@ -94,7 +94,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .MissingOpenParenthesis)
+            XCTAssert(error.kind == .missingOpenParenthesis)
         }
     }
     
@@ -110,7 +110,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .MissingCloseParenthesis)
+            XCTAssert(error.kind == .missingCloseParenthesis)
         }
     }
     
@@ -125,7 +125,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .MissingCloseParenthesis)
+            XCTAssert(error.kind == .missingCloseParenthesis)
         }
     }
     
@@ -140,7 +140,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .MissingOpenParenthesis)
+            XCTAssert(error.kind == .missingOpenParenthesis)
         }
     }
     
@@ -149,35 +149,35 @@ class GroupingTests: XCTestCase {
         guard let t = XCTAssertNoThrows(try g.group()) else { return }
         
         switch t.kind {
-            case .Function("foo", let parameters):
+            case .function("foo", let parameters):
                 XCTAssertEqual(parameters.count, 3)
                 // first parameter
-                guard case .Number(1) = parameters[0].kind else { XCTFail("Unexpected parameter 1"); return }
+                guard case .number(1) = parameters[0].kind else { XCTFail("Unexpected parameter 1"); return }
             
                 // second parameter
-                guard case .Group(let second) = parameters[1].kind else {
+                guard case .group(let second) = parameters[1].kind else {
                     XCTFail("Unexpected parameter 2"); return
                 }
                 XCTAssertEqual(second.count, 3)
-                guard case .Number(2) = second[0].kind else {
+                guard case .number(2) = second[0].kind else {
                     XCTFail("Unexpected parameter 2,1"); return
                 }
-                guard case .Operator(Operator(builtInOperator: .Add)) = second[1].kind else {
+                guard case .operator(Operator(builtInOperator: .Add)) = second[1].kind else {
                     XCTFail("Unexpected parameter 2,2"); return
                 }
-                guard case .Number(3) = second[2].kind else {
+                guard case .number(3) = second[2].kind else {
                     XCTFail("Unexpected parameter 2,3"); return
                 }
             
-                guard case .Group(let third) = parameters[2].kind else {
+                guard case .group(let third) = parameters[2].kind else {
                     XCTFail("Unexpected parameter 3"); return
                 }
                 XCTAssertEqual(third.count, 2)
             
-                guard case .Operator(Operator(builtInOperator: .UnaryMinus)) = third[0].kind else {
+                guard case .operator(Operator(builtInOperator: .UnaryMinus)) = third[0].kind else {
                     XCTFail("Unexpected parameter 3,1"); return
                 }
-                guard case .Number(4) = third[1].kind else {
+                guard case .number(4) = third[1].kind else {
                     XCTFail("Unexpected parameter 3,2"); return
                 }
             default:
@@ -196,7 +196,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .EmptyGroup)
+            XCTAssert(error.kind == .emptyGroup)
         }
     }
     
@@ -211,26 +211,26 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .EmptyGroup)
+            XCTAssert(error.kind == .emptyGroup)
         }
     }
     
     func testUnaryPlus() {
         guard let g = XCTAssertNoThrows(try TokenGrouper(string: "+1").group()) else { return }
         
-        guard case let .Group(subterms) = g.kind else {
+        guard case let .group(subterms) = g.kind else {
             XCTFail("Unexpected group: \(g)")
             return
         }
         
         XCTAssertEqual(subterms.count, 2)
         let unaryPlus = Operator(builtInOperator: .UnaryPlus)
-        guard case .Operator(unaryPlus) = subterms[0].kind else {
+        guard case .operator(unaryPlus) = subterms[0].kind else {
             XCTFail("Unexpected token kind: \(subterms[0].kind)")
             return
         }
         
-        guard case .Number(1) = subterms[1].kind else {
+        guard case .number(1) = subterms[1].kind else {
             XCTFail("Unexpected token kind: \(subterms[1].kind)")
             return
         }

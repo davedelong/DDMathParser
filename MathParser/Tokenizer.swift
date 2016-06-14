@@ -10,10 +10,10 @@ import Foundation
 
 public struct Tokenizer {
     private let string: String
-    internal let locale: NSLocale?
+    internal let locale: Locale?
     internal let operatorSet: OperatorSet
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, locale: NSLocale? = nil) {
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, locale: Locale? = nil) {
         self.string = string
         self.operatorSet = operatorSet
         self.locale = locale

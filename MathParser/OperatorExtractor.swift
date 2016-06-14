@@ -15,12 +15,12 @@ internal struct OperatorExtractor: TokenExtractor {
         self.operatorTokens = operatorTokens
     }
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
         return operatorTokens.hasOperatorWithPrefix(String(peek))
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
         var lastGoodIndex = start
@@ -41,7 +41,7 @@ internal struct OperatorExtractor: TokenExtractor {
         
         buffer.resetTo(lastGoodIndex)
         
-        let range = start ..< buffer.currentIndex
+        let range: Range<Int> = start ..< buffer.currentIndex
         let result: TokenGenerator.Element
         
         if buffer[start].isAlphabetic && buffer.peekNext()?.isAlphabetic == true {
@@ -52,11 +52,11 @@ internal struct OperatorExtractor: TokenExtractor {
             buffer.resetTo(start)
         }
         
-        if start.distanceTo(buffer.currentIndex) > 0 {
+        if buffer.currentIndex - start > 0 {
             let raw = buffer[range]
-            result = .Value(RawToken(kind: .Operator, string: raw, range: range))
+            result = .Value(RawToken(kind: .operator, string: raw, range: range))
         } else {
-            let error = MathParserError(kind: .CannotParseOperator, range: range)
+            let error = MathParserError(kind: .cannotParseOperator, range: range)
             result = .Error(error)
         }
         

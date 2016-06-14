@@ -27,13 +27,13 @@ internal struct ExponentExtractor: TokenExtractor {
         "⁾": ")"
     ]
     
-    func matchesPreconditions(buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
         guard let _ = ExponentExtractor.exponentCharacters[peek] else { return false }
         return true
     }
     
-    func extract(buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
         var exponent = ""
@@ -42,13 +42,13 @@ internal struct ExponentExtractor: TokenExtractor {
             exponent.append(regular)
         }
         
-        let length = start.distanceTo(buffer.currentIndex)
-        let range = start ..< buffer.currentIndex
+        let length = buffer.currentIndex - start
+        let range: Range<Int> = start ..< buffer.currentIndex
         
         if length > 0 {
-            return .Value(RawToken(kind: .Exponent, string: exponent, range: range))
+            return .Value(RawToken(kind: .exponent, string: exponent, range: range))
         } else {
-            let error = MathParserError(kind: .CannotParseExponent, range: range)
+            let error = MathParserError(kind: .cannotParseExponent, range: range)
             return .Error(error)
         }
     }

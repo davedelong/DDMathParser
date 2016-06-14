@@ -10,13 +10,13 @@ import Foundation
 
 public struct GroupedToken {
     public enum Kind {
-        case Number(Double)
-        case Variable(String)
-        case Operator(MathParser.Operator)
-        case Function(String, Array<GroupedToken>)
-        case Group(Array<GroupedToken>)
+        case number(Double)
+        case variable(String)
+        case `operator`(MathParser.Operator)
+        case function(String, Array<GroupedToken>)
+        case group(Array<GroupedToken>)
     }
     
     public let kind: Kind
-    public let range: Range<String.Index>
+    public let range: Range<Int>
 }

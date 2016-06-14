@@ -12,9 +12,9 @@ public class OperatorSet {
     public static let defaultOperatorSet = OperatorSet()
     
     public enum Relation {
-        case LessThan
-        case EqualTo
-        case GreaterThan
+        case lessThan
+        case equalTo
+        case greaterThan
     }
     
     public init(interpretsPercentSignAsModulo: Bool = true) {
@@ -110,17 +110,17 @@ public class OperatorSet {
             }
         }
     }
-    private func interpretPercentSignAsModulo(interpretAsModulo: Bool) {
+    private func interpretPercentSignAsModulo(_ interpretAsModulo: Bool) {
         let percent = Operator(builtInOperator: .Percent)
         let modulo = Operator(builtInOperator: .Modulo)
         
         // remove the old one and add the new one
         if interpretAsModulo {
             removeOperator(percent)
-            addOperator(modulo, relatedBy: .GreaterThan, toOperator: Operator(builtInOperator: .ImplicitMultiply))
+            addOperator(modulo, relatedBy: .greaterThan, toOperator: Operator(builtInOperator: .ImplicitMultiply))
         } else {
             removeOperator(modulo)
-            addOperator(percent, relatedBy: .EqualTo, toOperator: Operator(builtInOperator: .Factorial))
+            addOperator(percent, relatedBy: .equalTo, toOperator: Operator(builtInOperator: .Factorial))
         }
     }
     
@@ -150,38 +150,38 @@ public class OperatorSet {
     
     private var knownTokens: Set<String>
     
-    private func removeOperator(op: Operator) {
-        guard let index = operators.indexOf(op) else { return }
-        operators.removeAtIndex(index)
+    private func removeOperator(_ op: Operator) {
+        guard let index = operators.index(of: op) else { return }
+        operators.remove(at: index)
         operatorsDidChange()
     }
     
-    public func addTokens(tokens: Array<String>, forOperator op: Operator) {
-        let allowed = tokens.map { $0.lowercaseString }.filter {
+    public func addTokens(_ tokens: Array<String>, forOperator op: Operator) {
+        let allowed = tokens.map { $0.lowercased() }.filter {
             self.operatorForToken($0).isEmpty
         }
         
         guard let existing = existingOperator(op) else { return }
-        existing.tokens.unionInPlace(allowed)
+        existing.tokens.formUnion(allowed)
         operatorsDidChange()
     }
     
-    public func addOperator(let op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
+    public func addOperator(_ op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
         guard let existing = existingOperator(existingOp) else { return }
         
         let newOperator = op
         newOperator.precedence = existing.precedence
         
-        let sorter: Operator -> Bool
+        let sorter: (Operator) -> Bool
         
         switch relatedBy {
-            case .EqualTo:
+            case .equalTo:
                 sorter = { _ in return false }
-            case .LessThan:
+            case .lessThan:
                 sorter = { other in
                     return other.precedence >= existing.precedence
                 }
-            case .GreaterThan:
+            case .greaterThan:
                 sorter = { other in
                     return other.precedence > existing.precedence
                 }
@@ -191,17 +191,17 @@ public class OperatorSet {
         
     }
     
-    private func existingOperator(op: Operator) -> Operator? {
+    private func existingOperator(_ op: Operator) -> Operator? {
         let matches = operators.filter { $0 == op }
         return matches.first
     }
     
-    private func processOperator(op: Operator, sorter: Operator -> Bool) {
+    private func processOperator(_ op: Operator, sorter: (Operator) -> Bool) {
         if let existing = existingOperator(op) {
-            existing.tokens.unionInPlace(op.tokens)
+            existing.tokens.formUnion(op.tokens)
             operatorsDidChange()
         } else {
-            let overlap = knownTokens.intersect(op.tokens)
+            let overlap = knownTokens.intersection(op.tokens)
             guard overlap.isEmpty == true else {
                 NSLog("cannot add operator with conflicting tokens: \(overlap)")
                 return
@@ -222,7 +222,7 @@ public class OperatorSet {
         }
     }
     
-    public func operatorForToken(token: String, arity: Operator.Arity? = nil, associativity: Operator.Associativity? = nil) -> Array<Operator> {
+    public func operatorForToken(_ token: String, arity: Operator.Arity? = nil, associativity: Operator.Associativity? = nil) -> Array<Operator> {
         
         return operators.filter {
             guard $0.tokens.contains(token) else { return false }

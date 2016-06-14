@@ -17,29 +17,29 @@ internal struct OperatorTokenSet {
         var normalizedTokens = Set<String>()
         
         for token in tokens {
-            let lower = token.lowercaseString
+            let lower = token.lowercased()
             
             normalizedTokens.insert(token)
             normalizedTokens.insert(lower)
             
-            characters.unionInPlace(token.characters)
-            characters.unionInPlace(lower.characters)
+            characters.formUnion(token.characters)
+            characters.formUnion(lower.characters)
         }
         
         self.characters = characters
         self.tokens = normalizedTokens
     }
     
-    func isOperatorCharacter(c: Character) -> Bool {
+    func isOperatorCharacter(_ c: Character) -> Bool {
         if c.isAlphabetic { return false }
         return characters.contains(c)
     }
     
-    func isOperatorToken(s: String) -> Bool {
+    func isOperatorToken(_ s: String) -> Bool {
         return tokens.contains(s)
     }
     
-    func hasOperatorWithPrefix(s: String) -> Bool {
+    func hasOperatorWithPrefix(_ s: String) -> Bool {
         // TODO: make this more efficient
         let matching = tokens.filter { $0.hasPrefix(s) }
         return !matching.isEmpty
