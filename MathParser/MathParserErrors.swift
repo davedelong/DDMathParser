@@ -13,8 +13,8 @@ public struct MathParserError: ErrorType {
     public enum Kind {
         // Tokenization Errors
         case CannotParseNumber
-        case CannotParseHexNumber
-        case CannotParseOctalNumber
+        case CannotParseHexNumber // can also occur during Resolution
+        case CannotParseOctalNumber // can also occur during Resolution
         case CannotParseExponent
         case CannotParseIdentifier
         case CannotParseVariable
@@ -23,8 +23,6 @@ public struct MathParserError: ErrorType {
         case ZeroLengthVariable
         
         // Resolution Errors
-//        case CannotParseHexNumber
-//        case CannotParseOctalNumber
         case CannotParseLocalizedNumber
         case UnknownOperator
         case AmbiguousOperator
@@ -47,8 +45,9 @@ public struct MathParserError: ErrorType {
         case InvalidArguments
     }
     
-    
     public let kind: Kind
+    
+    // the location within the original source string where the error was found
     public let range: Range<String.Index>
 }
 
