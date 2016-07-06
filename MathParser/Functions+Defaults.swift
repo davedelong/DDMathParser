@@ -833,7 +833,7 @@ public extension Function {
         
         let arg1 = try evaluator.evaluate(args[0], substitutions: substitutions)
         let arg2 = try evaluator.evaluate(args[1], substitutions: substitutions)
-        return (arg1 == arg2) ? 1.0 : 0.0
+        return (arg1 >= arg2) ? 1.0 : 0.0
     })
     
     public static let l_if = Function(names: ["l_if", "if"], evaluator: { (args, substitutions, evaluator) throws -> Double in
