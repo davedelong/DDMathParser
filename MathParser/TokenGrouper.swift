@@ -37,7 +37,7 @@ public struct TokenGrouper {
     
     public func group() throws -> GroupedToken {
         let tokens = try resolver.resolve()
-        let p = PeekingGenerator(generator: tokens.makeIterator())
+        let p = PeekingIterator(generator: tokens.makeIterator())
         let g = try rootTokenFromGenerator(p)
         return stripRedundantGroups(g)
     }
@@ -56,7 +56,7 @@ public struct TokenGrouper {
         }
     }
     
-    private func rootTokenFromGenerator<P: PeekingGeneratorType where P.Element == ResolvedToken>(_ g: P) throws -> GroupedToken {
+    private func rootTokenFromGenerator<P: PeekingIteratorType where P.Element == ResolvedToken>(_ g: P) throws -> GroupedToken {
         
         var rootTokens = Array<GroupedToken>()
         
@@ -73,7 +73,7 @@ public struct TokenGrouper {
         return GroupedToken(kind: .group(rootTokens), range: range)
     }
     
-    private func tokenFromGenerator<P: PeekingGeneratorType where P.Element == ResolvedToken>(_ generator: P) throws -> GroupedToken {
+    private func tokenFromGenerator<P: PeekingIteratorType where P.Element == ResolvedToken>(_ generator: P) throws -> GroupedToken {
         var g = generator
         
         guard let peek = g.peek() else {
@@ -101,7 +101,7 @@ public struct TokenGrouper {
         }
     }
     
-    private func functionTokenFromGenerator<P: PeekingGeneratorType where P.Element == ResolvedToken>(_ generator: P) throws -> GroupedToken {
+    private func functionTokenFromGenerator<P: PeekingIteratorType where P.Element == ResolvedToken>(_ generator: P) throws -> GroupedToken {
         var g = generator
         guard let function = g.next() else {
             fatalError("Implementation flaw")
@@ -128,7 +128,7 @@ public struct TokenGrouper {
         return GroupedToken(kind: .function(function.string, parameters), range: range)
     }
     
-    private func parameterGroupFromGenerator<P: PeekingGeneratorType where P.Element == ResolvedToken>(_ generator: P, parameterIndex: Int) throws -> GroupedToken {
+    private func parameterGroupFromGenerator<P: PeekingIteratorType where P.Element == ResolvedToken>(_ generator: P, parameterIndex: Int) throws -> GroupedToken {
         var g = generator
         
         var parameterTokens = Array<GroupedToken>()
@@ -155,7 +155,7 @@ public struct TokenGrouper {
         return GroupedToken(kind: .group(parameterTokens), range: range)
     }
     
-    private func groupTokenFromGenerator<P: PeekingGeneratorType where P.Element == ResolvedToken>(_ generator: P) throws -> GroupedToken {
+    private func groupTokenFromGenerator<P: PeekingIteratorType where P.Element == ResolvedToken>(_ generator: P) throws -> GroupedToken {
         var g = generator
         guard let open = g.next(), open.kind.builtInOperator == .parenthesisOpen else {
             fatalError("Implementation flaw")

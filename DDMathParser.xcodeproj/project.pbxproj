@@ -41,7 +41,7 @@
 		559B3F161B7407CE00000108 /* TokenIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F151B7407CE00000108 /* TokenIterator.swift */; };
 		559B3F181B7408A900000108 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F171B7408A900000108 /* Either.swift */; };
 		559B3F1C1B740C0B00000108 /* TokenExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F1B1B740C0B00000108 /* TokenExtractor.swift */; };
-		55AE3A1C1B7E757D0022D1CF /* PeekingGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A1B1B7E757D0022D1CF /* PeekingGenerator.swift */; };
+		55AE3A1C1B7E757D0022D1CF /* PeekingIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A1B1B7E757D0022D1CF /* PeekingIterator.swift */; };
 		55AE3A441B7FDB7D0022D1CF /* GroupingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A431B7FDB7D0022D1CF /* GroupingTests.swift */; };
 		55AE3A461B8012D30022D1CF /* TokenGrouper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A451B8012D30022D1CF /* TokenGrouper.swift */; };
 		55AE3A481B823D9B0022D1CF /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A471B823D9B0022D1CF /* Expression.swift */; };
@@ -108,7 +108,7 @@
 		559B3F151B7407CE00000108 /* TokenIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenIterator.swift; sourceTree = "<group>"; };
 		559B3F171B7408A900000108 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		559B3F1B1B740C0B00000108 /* TokenExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenExtractor.swift; sourceTree = "<group>"; };
-		55AE3A1B1B7E757D0022D1CF /* PeekingGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeekingGenerator.swift; sourceTree = "<group>"; };
+		55AE3A1B1B7E757D0022D1CF /* PeekingIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeekingIterator.swift; sourceTree = "<group>"; };
 		55AE3A431B7FDB7D0022D1CF /* GroupingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupingTests.swift; sourceTree = "<group>"; };
 		55AE3A451B8012D30022D1CF /* TokenGrouper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenGrouper.swift; sourceTree = "<group>"; };
 		55AE3A471B823D9B0022D1CF /* Expression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
@@ -180,7 +180,7 @@
 			children = (
 				5514B17C1B7D48F4007431D0 /* GroupedToken.swift */,
 				55AE3A451B8012D30022D1CF /* TokenGrouper.swift */,
-				55AE3A1B1B7E757D0022D1CF /* PeekingGenerator.swift */,
+				55AE3A1B1B7E757D0022D1CF /* PeekingIterator.swift */,
 			);
 			name = Grouping;
 			sourceTree = "<group>";
@@ -439,7 +439,7 @@
 				5527814D1B751DCC0093B070 /* IdentifierExtractor.swift in Sources */,
 				554AF6B41CDCED3E00C2583E /* MathParserErrors.swift in Sources */,
 				557F8FE81B86BAB400155C9D /* Functions+Defaults.swift in Sources */,
-				55AE3A1C1B7E757D0022D1CF /* PeekingGenerator.swift in Sources */,
+				55AE3A1C1B7E757D0022D1CF /* PeekingIterator.swift in Sources */,
 				559B3F181B7408A900000108 /* Either.swift in Sources */,
 				551B53F91C89439500EB318D /* OctalNumberExtractor.swift in Sources */,
 				55E640AE1B76B67400D7769C /* ResolvedToken.swift in Sources */,
