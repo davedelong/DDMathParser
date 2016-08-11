@@ -12,7 +12,7 @@ public struct GroupedToken {
     public enum Kind {
         case number(Double)
         case variable(String)
-        case `operator`(MathParser.Operator)
+        case `operator`(Operator)
         case function(String, Array<GroupedToken>)
         case group(Array<GroupedToken>)
     }

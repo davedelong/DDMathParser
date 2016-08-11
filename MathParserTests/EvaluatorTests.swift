@@ -37,7 +37,7 @@ class EvaluatorTests: XCTestCase {
         
         eval.variableResolver = Resolver()
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "$foo")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "$foo")) else { return }
         
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
@@ -54,7 +54,7 @@ class EvaluatorTests: XCTestCase {
         
         eval.functionResolver = Resolver()
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo()")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
         
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
@@ -71,7 +71,7 @@ class EvaluatorTests: XCTestCase {
         
         eval.functionOverrider = Overrider()
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "(foo()*foo()+foo()-foo())!")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "(foo()*foo()+foo()-foo())!")) else { return }
         
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
@@ -246,7 +246,7 @@ class EvaluatorTests: XCTestCase {
         let eval = Evaluator()
         
         guard XCTAssertNoThrows(try eval.registerAlias("foo", forFunctionName: "add")) else { return }
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo(1, 2)")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo(1, 2)")) else { return }
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 3)
     }
@@ -265,7 +265,7 @@ class EvaluatorTests: XCTestCase {
         
         let eval = Evaluator()
         guard XCTAssertNoThrows(try eval.registerFunction(function)) else { return }
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo()")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 42)
     }
@@ -296,7 +296,7 @@ class EvaluatorTests: XCTestCase {
         ]
         
         for (test, value) in tests {
-            guard let e = XCTAssertNoThrows(try MathParser.Expression(string: test, operatorSet: operatorSet)) else { return }
+            guard let e = XCTAssertNoThrows(try Expression(string: test, operatorSet: operatorSet)) else { return }
             guard let d = XCTAssertNoThrows(try Evaluator.defaultEvaluator.evaluate(e)) else { return }
             XCTAssertEqual(d, value)
         }
@@ -340,7 +340,7 @@ class EvaluatorTests: XCTestCase {
         ]
         
         for (test, expectedValue) in tests {
-            guard let e = XCTAssertNoThrows(try MathParser.Expression(string: test)) else { return }
+            guard let e = XCTAssertNoThrows(try Expression(string: test)) else { return }
             guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
             XCTAssertEqual(d, expectedValue)
         }

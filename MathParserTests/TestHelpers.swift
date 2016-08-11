@@ -43,7 +43,7 @@ func XCTAssertThrows<T>(_ expression: @autoclosure () throws -> T, _ message: St
 
 func TestString(_ string: String, value: Double, evaluator: Evaluator = Evaluator.defaultEvaluator, file: StaticString = #file, line: UInt = #line) {
     
-    guard let e = XCTAssertNoThrows(try MathParser.Expression(string: string), file: file, line: line) else {
+    guard let e = XCTAssertNoThrows(try Expression(string: string), file: file, line: line) else {
         return
     }
     

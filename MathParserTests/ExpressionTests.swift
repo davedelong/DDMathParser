@@ -12,7 +12,7 @@ import MathParser
 class ExpressionTests: XCTestCase {
     
     func testNumber() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "4")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "4")) else { return }
         
         guard case .number(4) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -21,7 +21,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testVariable() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "$foo")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "$foo")) else { return }
         
         guard case .variable("foo") = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -30,7 +30,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testSimpleFunction() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo()")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
         
         guard case let .function("foo", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -41,7 +41,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testFunctionWithArguments() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "foo(1)")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo(1)")) else { return }
         
         guard case let .function("foo", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -58,7 +58,7 @@ class ExpressionTests: XCTestCase {
     }
 
     func testRightUnaryOperator() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "-42")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "-42")) else { return }
         
         guard case let .function("negate", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -75,7 +75,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testRecursiveRightUnaryOperator() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "---42")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "---42")) else { return }
         
         guard case let .function("negate", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -104,7 +104,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testLeftUnaryOperator() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "4!")) else {
+        guard let e = XCTAssertNoThrows(try Expression(string: "4!")) else {
             return
         }
         
@@ -123,7 +123,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testRecursiveLeftUnaryOperator() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "4°!")) else {
+        guard let e = XCTAssertNoThrows(try Expression(string: "4°!")) else {
             return
         }
         
@@ -149,7 +149,7 @@ class ExpressionTests: XCTestCase {
     
     func testMissingLeftOperand() {
         do {
-            let _ = try MathParser.Expression(string: "°")
+            let _ = try Expression(string: "°")
             XCTFail("Unexpected expression")
         } catch let e {
             guard let error = e as? MathParserError else {
@@ -166,7 +166,7 @@ class ExpressionTests: XCTestCase {
     
     func testMissingRightOperand() {
         do {
-            let _ = try MathParser.Expression(string: "-")
+            let _ = try Expression(string: "-")
             XCTFail("Unexpected expression")
         } catch let e {
             guard let error = e as? MathParserError else {
@@ -182,7 +182,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testBinaryOperator() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "1+2")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "1+2")) else { return }
         
         guard case let .function("add", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -202,7 +202,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testBinaryOperatorCollapsingLeftOperands() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "2!**2")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "2!**2")) else { return }
         
         guard case let .function("pow", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -222,7 +222,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testBinaryOperatorCollapsingRightOperands() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "2**-2")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "2**-2")) else { return }
         
         guard case let .function("pow", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -243,7 +243,7 @@ class ExpressionTests: XCTestCase {
     
     func testBinaryOperatorMissingLeftOperand() {
         do {
-            let _ = try MathParser.Expression(string: "**2")
+            let _ = try Expression(string: "**2")
             XCTFail("Unexpected expression")
         } catch let e {
             guard let error = e as? MathParserError else {
@@ -260,7 +260,7 @@ class ExpressionTests: XCTestCase {
     
     func testBinaryOperatorMissingRightOperand() {
         do {
-            let _ = try MathParser.Expression(string: "2**")
+            let _ = try Expression(string: "2**")
             XCTFail("Unexpected expression")
         } catch let e {
             guard let error = e as? MathParserError else {
@@ -276,7 +276,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testGroup() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "1+(2+3)")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "1+(2+3)")) else { return }
         
         guard case let .function("add", args) = e.kind else {
             XCTFail("Unexpected expression kind: \(e.kind)")
@@ -317,7 +317,7 @@ class ExpressionTests: XCTestCase {
     }
     
     func testUnaryPlus() {
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "+1")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "+1")) else { return }
         
         guard case .number(1) = e.kind else {
             XCTFail("Unexpected expression: \(e)")

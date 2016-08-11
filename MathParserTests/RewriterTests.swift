@@ -11,9 +11,9 @@ import MathParser
 
 func TestRewrite(_ original: String, expected: String, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.defaultEvaluator, file: StaticString = #file, line: UInt = #line) {
     
-    guard let originalE = XCTAssertNoThrows(try MathParser.Expression(string: original), file: file, line: line) else { return }
+    guard let originalE = XCTAssertNoThrows(try Expression(string: original), file: file, line: line) else { return }
     
-    guard let expectedE = XCTAssertNoThrows(try MathParser.Expression(string: expected), file: file, line: line) else { return }
+    guard let expectedE = XCTAssertNoThrows(try Expression(string: expected), file: file, line: line) else { return }
     
     let rewritter = ExpressionRewriter.defaultRewriter
     let rewritten = rewritter.rewriteExpression(originalE, substitutions: substitutions, evaluator: evaluator)

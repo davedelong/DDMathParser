@@ -82,22 +82,22 @@ class GithubIssues: XCTestCase {
         var eval = Evaluator()
         eval.angleMeasurementMode = .degrees
         
-        guard let e1 = XCTAssertNoThrows(try MathParser.Expression(string: "sin(45)")) else { return }
+        guard let e1 = XCTAssertNoThrows(try Expression(string: "sin(45)")) else { return }
         guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
         XCTAssertEqualWithAccuracy(d1, M_SQRT2 / 2, accuracy: DBL_EPSILON)
         
-        guard let e2 = XCTAssertNoThrows(try MathParser.Expression(string: "sin(π/2)")) else { return }
+        guard let e2 = XCTAssertNoThrows(try Expression(string: "sin(π/2)")) else { return }
         guard let d2 = XCTAssertNoThrows(try eval.evaluate(e2)) else { return }
         XCTAssertEqualWithAccuracy(d2, 0.02741213359204429, accuracy: DBL_EPSILON)
         
         
         eval.angleMeasurementMode = .radians
         
-        guard let e3 = XCTAssertNoThrows(try MathParser.Expression(string: "sin(45)")) else { return }
+        guard let e3 = XCTAssertNoThrows(try Expression(string: "sin(45)")) else { return }
         guard let d3 = XCTAssertNoThrows(try eval.evaluate(e3)) else { return }
         XCTAssertEqual(d3, 0.8509035245341184)
         
-        guard let e4 = XCTAssertNoThrows(try MathParser.Expression(string: "sin(π/2)")) else { return }
+        guard let e4 = XCTAssertNoThrows(try Expression(string: "sin(π/2)")) else { return }
         guard let d4 = XCTAssertNoThrows(try eval.evaluate(e4)) else { return }
         XCTAssertEqual(d4, 1)
     }
@@ -126,7 +126,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue40() {
         let operatorSet = OperatorSet(interpretsPercentSignAsModulo: false)
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "7+5%", operatorSet: operatorSet)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "7+5%", operatorSet: operatorSet)) else { return }
         
         let eval = Evaluator.defaultEvaluator
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -197,7 +197,7 @@ class GithubIssues: XCTestCase {
         eval.functionOverrider = Overrider()
         
         // T = 84, t = 116
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "t + T")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "t + T")) else { return }
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 200.0)
     }
@@ -216,7 +216,7 @@ class GithubIssues: XCTestCase {
         let operatorSet = OperatorSet()
         operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .logicalAnd))
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "1 and 2", operatorSet: operatorSet)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "1 and 2", operatorSet: operatorSet)) else { return }
         
         let eval = Evaluator.defaultEvaluator
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -224,8 +224,8 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue79() {
-        guard let original = XCTAssertNoThrows(try MathParser.Expression(string: "sqrt((99**$foo)**2)")) else { return }
-        guard let expected = XCTAssertNoThrows(try MathParser.Expression(string: "abs(99**$foo)")) else { return }
+        guard let original = XCTAssertNoThrows(try Expression(string: "sqrt((99**$foo)**2)")) else { return }
+        guard let expected = XCTAssertNoThrows(try Expression(string: "abs(99**$foo)")) else { return }
         
         let rewritten = ExpressionRewriter.defaultRewriter.rewriteExpression(original)
         XCTAssertEqual(rewritten, expected)
@@ -260,7 +260,7 @@ class GithubIssues: XCTestCase {
         
         eval.functionOverrider = Overrider()
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "('B' != 'A') && ('k' != 'K')")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "('B' != 'A') && ('k' != 'K')")) else { return }
         let subs = ["B": 1.0, "A": 1.0, "k": 1.0, "K": 1.0]
         guard let d = XCTAssertNoThrows(try eval.evaluate(e, substitutions: subs)) else { return }
         XCTAssertEqual(d, 1.0)
@@ -279,7 +279,7 @@ class GithubIssues: XCTestCase {
         let operatorSet = OperatorSet()
         operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .logicalOr))
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "cos(pi)", operatorSet: operatorSet)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "cos(pi)", operatorSet: operatorSet)) else { return }
         
         let eval = Evaluator.defaultEvaluator
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -290,7 +290,7 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try "3++++3".evaluate()) else { return }
         XCTAssertEqual(d, 6)
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "ln3")) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "ln3")) else { return }
         switch e.kind {
             case .function(let f, let args):
                 XCTAssertEqual(f, "ln3")
@@ -304,7 +304,7 @@ class GithubIssues: XCTestCase {
         let operatorSet = OperatorSet()
         operatorSet.addTokens(["as"], forOperator: Operator(builtInOperator: .logicalEqual))
         
-        guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "asin(0.5)", operatorSet: operatorSet)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "asin(0.5)", operatorSet: operatorSet)) else { return }
         
         let eval = Evaluator.defaultEvaluator
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -314,12 +314,12 @@ class GithubIssues: XCTestCase {
     func testIssue110() {
         var eval = Evaluator(caseSensitive: false)
         
-        guard let e1 = XCTAssertNoThrows(try MathParser.Expression(string: "sin(0)")) else { return }
+        guard let e1 = XCTAssertNoThrows(try Expression(string: "sin(0)")) else { return }
         guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
         XCTAssertEqual(d1, 0)
         
         eval = Evaluator(caseSensitive: true)
-        guard let e2 = XCTAssertNoThrows(try MathParser.Expression(string: "SIN(0)")) else { return }
+        guard let e2 = XCTAssertNoThrows(try Expression(string: "SIN(0)")) else { return }
         XCTAssertThrows(try eval.evaluate(e2))
     }
 }
