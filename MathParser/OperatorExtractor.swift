@@ -20,7 +20,7 @@ internal struct OperatorExtractor: TokenExtractor {
         return operatorTokens.hasOperatorWithPrefix(String(peek))
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
         let start = buffer.currentIndex
         
         var lastGoodIndex = start
@@ -42,7 +42,7 @@ internal struct OperatorExtractor: TokenExtractor {
         buffer.resetTo(lastGoodIndex)
         
         let range: Range<Int> = start ..< buffer.currentIndex
-        let result: TokenGenerator.Element
+        let result: TokenIterator.Element
         
         if buffer[start].isAlphabetic && buffer.peekNext()?.isAlphabetic == true {
             // This operator starts with an alphabetic character and

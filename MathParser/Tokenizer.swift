@@ -20,7 +20,7 @@ public struct Tokenizer {
     }
     
     public func tokenize() throws -> Array<RawToken> {
-        let g = TokenGenerator(string: string, operatorSet: operatorSet, locale: locale)
+        let g = TokenIterator(string: string, operatorSet: operatorSet, locale: locale)
         var tokens = Array<RawToken>()
         
         while let next = g.next() {

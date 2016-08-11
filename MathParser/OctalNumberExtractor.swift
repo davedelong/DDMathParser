@@ -14,7 +14,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
         return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o" else {
@@ -35,7 +35,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
             buffer.resetTo(start)
         }
         
-        let result: TokenGenerator.Element
+        let result: TokenIterator.Element
         
         if buffer.currentIndex - start > 0 {
             let range: Range<Int> = indexBeforeOctalNumbers ..< buffer.currentIndex

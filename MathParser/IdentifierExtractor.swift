@@ -21,7 +21,7 @@ internal struct IdentifierExtractor: TokenExtractor {
         return next != "$" && next?.isDigit == false && next != "\"" && next != "'"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
         let start = buffer.currentIndex
         
         while let next = buffer.peekNext(), next.isWhitespace == false && operatorTokens.isOperatorCharacter(next) == false {
@@ -29,7 +29,7 @@ internal struct IdentifierExtractor: TokenExtractor {
         }
         
         let range: Range<Int> = start ..< buffer.currentIndex
-        let result: TokenGenerator.Element
+        let result: TokenIterator.Element
         
         if buffer.currentIndex - start > 0 {
             let raw = buffer[range]

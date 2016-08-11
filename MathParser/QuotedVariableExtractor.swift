@@ -14,7 +14,7 @@ internal struct QuotedVariableExtractor: TokenExtractor {
         return buffer.peekNext() == "\"" || buffer.peekNext() == "'"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
         let start = buffer.currentIndex
         
         // consume the opening quote
@@ -44,7 +44,7 @@ internal struct QuotedVariableExtractor: TokenExtractor {
             
         }
         
-        let result: TokenGenerator.Element
+        let result: TokenIterator.Element
         
         if buffer.peekNext() != quoteCharacter {
             let errorRange: Range<Int> = start ..< buffer.currentIndex

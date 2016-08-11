@@ -1,5 +1,5 @@
 //
-//  TokenGenerator.swift
+//  TokenIterator.swift
 //  DDMathParser
 //
 //  Created by Dave DeLong on 8/6/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class TokenGenerator: IteratorProtocol {
+internal class TokenIterator: IteratorProtocol {
     typealias Element = Either<RawToken, MathParserError>
     
     private let buffer: TokenCharacterBuffer

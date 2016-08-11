@@ -14,7 +14,7 @@ internal struct NumberExtractor: TokenExtractor {
         return buffer.peekNext()?.isDigit == true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
         let start = buffer.currentIndex
         
         while buffer.peekNext()?.isDigit == true {
@@ -56,7 +56,7 @@ internal struct NumberExtractor: TokenExtractor {
         let range: Range<Int> = start ..< buffer.currentIndex
         let error = MathParserError(kind: .cannotParseNumber, range: range)
         
-        var result = TokenGenerator.Element.Error(error)
+        var result = TokenIterator.Element.Error(error)
         if length > 0 {
             if length != 1 || buffer[start] != "." {
                 let raw = buffer[range]
