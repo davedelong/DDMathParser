@@ -128,7 +128,7 @@ class GithubIssues: XCTestCase {
         let operatorSet = OperatorSet(interpretsPercentSignAsModulo: false)
         guard let e = XCTAssertNoThrows(try Expression(string: "7+5%", operatorSet: operatorSet)) else { return }
         
-        let eval = Evaluator.defaultEvaluator
+        let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 7.35)
     }
@@ -218,7 +218,7 @@ class GithubIssues: XCTestCase {
         
         guard let e = XCTAssertNoThrows(try Expression(string: "1 and 2", operatorSet: operatorSet)) else { return }
         
-        let eval = Evaluator.defaultEvaluator
+        let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 1)
     }
@@ -227,7 +227,7 @@ class GithubIssues: XCTestCase {
         guard let original = XCTAssertNoThrows(try Expression(string: "sqrt((99**$foo)**2)")) else { return }
         guard let expected = XCTAssertNoThrows(try Expression(string: "abs(99**$foo)")) else { return }
         
-        let rewritten = ExpressionRewriter.defaultRewriter.rewriteExpression(original)
+        let rewritten = ExpressionRewriter.default.rewriteExpression(original)
         XCTAssertEqual(rewritten, expected)
     }
     
@@ -281,7 +281,7 @@ class GithubIssues: XCTestCase {
         
         guard let e = XCTAssertNoThrows(try Expression(string: "cos(pi)", operatorSet: operatorSet)) else { return }
         
-        let eval = Evaluator.defaultEvaluator
+        let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, -1)
     }
@@ -306,7 +306,7 @@ class GithubIssues: XCTestCase {
         
         guard let e = XCTAssertNoThrows(try Expression(string: "asin(0.5)", operatorSet: operatorSet)) else { return }
         
-        let eval = Evaluator.defaultEvaluator
+        let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, M_PI / 6)
     }

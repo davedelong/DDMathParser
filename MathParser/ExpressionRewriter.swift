@@ -11,7 +11,7 @@ import Foundation
 public struct ExpressionRewriter {
     private var rules: Array<RewriteRule>
     
-    public static let defaultRewriter = ExpressionRewriter(rules: RewriteRule.defaultRules)
+    public static let `default` = ExpressionRewriter(rules: RewriteRule.defaultRules)
     
     public init(rules: Array<RewriteRule>) {
         self.rules = rules
@@ -21,7 +21,7 @@ public struct ExpressionRewriter {
         rules.append(rule)
     }
     
-    public func rewriteExpression(_ expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.defaultEvaluator) -> Expression {
+    public func rewriteExpression(_ expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.default) -> Expression {
         
         var tmp = expression
         var iterationCount = 0

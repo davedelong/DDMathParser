@@ -12,7 +12,7 @@ public extension String {
     
     public func evaluate(_ substitutions: Substitutions = [:]) throws -> Double {
         let e = try Expression(string: self)
-        return try Evaluator.defaultEvaluator.evaluate(e, substitutions: substitutions)
+        return try Evaluator.default.evaluate(e, substitutions: substitutions)
     }
     
 }

@@ -307,7 +307,7 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testLowPrecedenceImplicitMultiplication() {
-        let options = TokenResolverOptions.defaultOptions.subtracting(.useHighPrecedenceImplicitMultiplication)
+        let options = TokenResolverOptions.default.subtracting(.useHighPrecedenceImplicitMultiplication)
         let r = TokenResolver(string: "1 2", options: options)
         guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }
         

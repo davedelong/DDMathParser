@@ -297,7 +297,7 @@ class EvaluatorTests: XCTestCase {
         
         for (test, value) in tests {
             guard let e = XCTAssertNoThrows(try Expression(string: test, operatorSet: operatorSet)) else { return }
-            guard let d = XCTAssertNoThrows(try Evaluator.defaultEvaluator.evaluate(e)) else { return }
+            guard let d = XCTAssertNoThrows(try Evaluator.default.evaluate(e)) else { return }
             XCTAssertEqual(d, value)
         }
     }

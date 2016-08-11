@@ -20,7 +20,7 @@ public struct Evaluator {
         case degrees
     }
     
-    public static let defaultEvaluator = Evaluator()
+    public static let `default` = Evaluator()
     private let functionSet: FunctionSet
     
     public var angleMeasurementMode = AngleMode.radians

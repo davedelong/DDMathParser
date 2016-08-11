@@ -20,7 +20,7 @@ public struct TokenResolverOptions: OptionSet {
     public static let allowImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 1)
     public static let useHighPrecedenceImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 2)
     
-    public static let defaultOptions: TokenResolverOptions = [.allowArgumentlessFunctions, .allowImplicitMultiplication, .useHighPrecedenceImplicitMultiplication]
+    public static let `default`: TokenResolverOptions = [.allowArgumentlessFunctions, .allowImplicitMultiplication, .useHighPrecedenceImplicitMultiplication]
 }
 
 public struct TokenResolver {
@@ -41,14 +41,14 @@ public struct TokenResolver {
         return [decimal]
     }
     
-    public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.defaultOptions) {
+    public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.default) {
         self.tokenizer = tokenizer
         self.options = options
         self.locale = tokenizer.locale
         self.numberFormatters = TokenResolver.formattersForLocale(tokenizer.locale)
     }
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, options: TokenResolverOptions = TokenResolverOptions.defaultOptions, locale: Locale? = nil) {
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, options: TokenResolverOptions = TokenResolverOptions.default, locale: Locale? = nil) {
         self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet, locale: locale)
         self.options = options
         self.locale = locale
