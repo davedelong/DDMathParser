@@ -17,7 +17,7 @@ private extension GroupedToken {
 
 private enum TokenOrExpression {
     case token(GroupedToken)
-    case expression(MathParser.Expression)
+    case expression(Expression)
     
     var token: GroupedToken? {
         guard case .token(let t) = self else { return nil }
