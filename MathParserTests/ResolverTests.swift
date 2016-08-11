@@ -330,7 +330,7 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testLocalizedNumber() {
-        let l = Locale(localeIdentifier: "fr_FR")
+        let l = Locale(identifier: "fr_FR")
         guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "1,23", locale: l).resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
@@ -338,7 +338,7 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testLocalizedNumbers() {
-        let l = Locale(localeIdentifier: "fr_FR")
+        let l = Locale(identifier: "fr_FR")
         guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "sum(1,2, 34, 5,6,7,8,9)", locale: l).resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 12)
@@ -359,7 +359,7 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testLocalizedNumbersForEveryLocale() {
-        let locales = Locale.availableLocaleIdentifiers().map { Locale(localeIdentifier: $0) }
+        let locales = Locale.availableIdentifiers.map { Locale(identifier: $0) }
         
         for locale in locales {
             let n = arc4random()

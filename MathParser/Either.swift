@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal enum Either<T, E: ErrorProtocol> {
+internal enum Either<T, E: Error> {
     case Value(T)
     case Error(E)
     

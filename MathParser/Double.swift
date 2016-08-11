@@ -30,7 +30,7 @@ internal extension Double {
             let arg1Int = Int(self)
             
             if arg1Int <= Int.largestIntegerFactorial {
-                return Double((1...arg1Int).reduce(1, combine: *))
+                return Double((1...arg1Int).reduce(1, *))
             } else {
                 // but it can't be represented in a word-sized Int
                 var result = 1.0

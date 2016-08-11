@@ -251,7 +251,7 @@ class TokenizerTests: XCTestCase {
     }
     
     func testLocalizedNumber() {
-        let l = Locale(localeIdentifier: "fr_FR")
+        let l = Locale(identifier: "fr_FR")
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1,23", locale: l).tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
@@ -259,7 +259,7 @@ class TokenizerTests: XCTestCase {
     }
     
     func testLocalizedNumbers() {
-        let l = Locale(localeIdentifier: "fr_FR")
+        let l = Locale(identifier: "fr_FR")
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "sum(1,2, 3,4, 5,6,7,8)", locale: l).tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 10)

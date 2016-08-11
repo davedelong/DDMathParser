@@ -28,7 +28,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         var indexBeforeDecimal: Int?
         
         var soFar = ""
-        while let peek = buffer.peekNext() where peek.isWhitespace == false {
+        while let peek = buffer.peekNext(), peek.isWhitespace == false {
             let test = soFar + String(peek)
             
             if indexBeforeDecimal == nil && test.hasSuffix(decimalNumberFormatter.decimalSeparator) {
@@ -43,7 +43,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
             }
         }
         
-        if let indexBeforeDecimal = indexBeforeDecimal where soFar.hasSuffix(decimalNumberFormatter.decimalSeparator) {
+        if let indexBeforeDecimal = indexBeforeDecimal, soFar.hasSuffix(decimalNumberFormatter.decimalSeparator) {
             buffer.resetTo(indexBeforeDecimal)
             soFar = buffer[start ..< indexBeforeDecimal]
         }

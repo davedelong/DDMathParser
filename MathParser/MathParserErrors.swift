@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct MathParserError: ErrorProtocol {
+public struct MathParserError: Error {
     
     public enum Kind {
         // Tokenization Errors

@@ -107,19 +107,19 @@ public struct TokenGrouper {
             fatalError("Implementation flaw")
         }
         
-        guard let open = g.next() where open.kind.builtInOperator == .ParenthesisOpen else {
+        guard let open = g.next(), open.kind.builtInOperator == .ParenthesisOpen else {
             throw MathParserError(kind: .missingOpenParenthesis, range: function.range.upperBound ..< function.range.upperBound)
         }
         
         var parameters = Array<GroupedToken>()
         
-        while let p = g.peek() where p.kind.builtInOperator != .ParenthesisClose {
+        while let p = g.peek(), p.kind.builtInOperator != .ParenthesisClose {
             // read out all the arguments
             let parameter = try parameterGroupFromGenerator(g, parameterIndex: p.range.lowerBound)
             parameters.append(parameter)
         }
         
-        guard let close = g.next() where close.kind.builtInOperator == .ParenthesisClose else {
+        guard let close = g.next(), close.kind.builtInOperator == .ParenthesisClose else {
             let indexForMissingParen = parameters.last?.range.upperBound ?? open.range.upperBound
             throw MathParserError(kind: .missingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
         }
@@ -157,18 +157,18 @@ public struct TokenGrouper {
     
     private func groupTokenFromGenerator<P: PeekingGeneratorType where P.Element == ResolvedToken>(_ generator: P) throws -> GroupedToken {
         var g = generator
-        guard let open = g.next() where open.kind.builtInOperator == .ParenthesisOpen else {
+        guard let open = g.next(), open.kind.builtInOperator == .ParenthesisOpen else {
             fatalError("Implementation flaw")
         }
         
         var tokens = Array<GroupedToken>()
         
-        while let peek = g.peek() where peek.kind.builtInOperator != .ParenthesisClose {
+        while let peek = g.peek(), peek.kind.builtInOperator != .ParenthesisClose {
             
             tokens.append(try tokenFromGenerator(g))
         }
         
-        guard let close = g.next() where close.kind.builtInOperator == .ParenthesisClose else {
+        guard let close = g.next(), close.kind.builtInOperator == .ParenthesisClose else {
             let indexForMissingParen = tokens.last?.range.upperBound ?? open.range.upperBound
             throw MathParserError(kind: .missingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
         }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum FunctionRegistrationError: ErrorProtocol {
+public enum FunctionRegistrationError: Error {
     case functionAlreadyExists(String)
     case functionDoesNotExist(String)
 }

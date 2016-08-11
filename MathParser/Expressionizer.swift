@@ -161,7 +161,7 @@ public struct Expressionizer {
         
         var collapsedWrappers = wrappers
         if let t = rightWrapper.token {
-            if let o = t.groupedOperator where o.associativity == .right && o.arity == .unary {
+            if let o = t.groupedOperator, o.associativity == .right && o.arity == .unary {
                 collapsedWrappers = try collapseWrappers(collapsedWrappers, aroundRightUnaryOperator: o, atIndex: rightIndex)
                 
                 rightWrapper = collapsedWrappers[rightIndex]
@@ -174,7 +174,7 @@ public struct Expressionizer {
         var leftIndex = index - 1
         var leftWrapper = collapsedWrappers[leftIndex]
         if let t = leftWrapper.token {
-            if let o = t.groupedOperator where o.associativity == .left && o.arity == .unary {
+            if let o = t.groupedOperator, o.associativity == .left && o.arity == .unary {
                 collapsedWrappers = try collapseWrappers(collapsedWrappers, aroundLeftUnaryOperator: o, atIndex: &leftIndex)
                 
                 leftWrapper = collapsedWrappers[leftIndex]
@@ -210,7 +210,7 @@ public struct Expressionizer {
         
         var collapsedWrappers = wrappers
         if let t = operandWrapper.token {
-            if let o = t.groupedOperator where o.associativity == .left && o.arity == .unary {
+            if let o = t.groupedOperator, o.associativity == .left && o.arity == .unary {
                 // recursively collapse left unary operators
                 // technically, this should never happen, because left unary operators
                 // are left-associative, which means they evaluate from left-to-right
@@ -257,7 +257,7 @@ public struct Expressionizer {
         var operandWrapper = collapsedWrappers[operandIndex];
         
         if let t = operandWrapper.token {
-            if let o = t.groupedOperator where o.associativity == .right && o.arity == .unary {
+            if let o = t.groupedOperator, o.associativity == .right && o.arity == .unary {
                 // recursively collapse right unary operators
                 // technically, this should never happen, because right unary operators
                 // are right-associative, which means they evaluate from right-to-left

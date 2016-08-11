@@ -24,7 +24,7 @@ internal struct IdentifierExtractor: TokenExtractor {
     func extract(_ buffer: TokenCharacterBuffer) -> TokenGenerator.Element {
         let start = buffer.currentIndex
         
-        while let next = buffer.peekNext() where next.isWhitespace == false && operatorTokens.isOperatorCharacter(next) == false {
+        while let next = buffer.peekNext(), next.isWhitespace == false && operatorTokens.isOperatorCharacter(next) == false {
             buffer.consume()
         }
         
