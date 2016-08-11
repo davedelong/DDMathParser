@@ -49,17 +49,17 @@ internal struct QuotedVariableExtractor: TokenExtractor {
         if buffer.peekNext() != quoteCharacter {
             let errorRange: Range<Int> = start ..< buffer.currentIndex
             let error = MathParserError(kind: .cannotParseQuotedVariable, range: errorRange)
-            result = .Error(error)
+            result = .error(error)
         } else {
             buffer.consume()
             let range: Range<Int> = start ..< buffer.currentIndex
             // check to make sure we don't have an empty string
             if cleaned.characters.isEmpty {
                 let error = MathParserError(kind: .zeroLengthVariable, range: range)
-                result = .Error(error)
+                result = .error(error)
             } else {
                 let token = RawToken(kind: .variable, string: cleaned, range: range)
-                result = .Value(token)
+                result = .value(token)
             }
         }
         

@@ -42,7 +42,7 @@ internal struct SpecialNumberExtractor: TokenExtractor {
         
         let range: Range<Int> = start ..< buffer.currentIndex
         let raw = buffer[range]
-        return .Value(RawToken(kind: .number, string: raw, range: range))
+        return .value(RawToken(kind: .number, string: raw, range: range))
     }
     
 }

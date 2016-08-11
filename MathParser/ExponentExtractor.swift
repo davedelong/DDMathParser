@@ -46,10 +46,10 @@ internal struct ExponentExtractor: TokenExtractor {
         let range: Range<Int> = start ..< buffer.currentIndex
         
         if length > 0 {
-            return .Value(RawToken(kind: .exponent, string: exponent, range: range))
+            return .value(RawToken(kind: .exponent, string: exponent, range: range))
         } else {
             let error = MathParserError(kind: .cannotParseExponent, range: range)
-            return .Error(error)
+            return .error(error)
         }
     }
     

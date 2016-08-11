@@ -25,8 +25,8 @@ public struct Tokenizer {
         
         while let next = g.next() {
             switch next {
-                case .Error(let e): throw e
-                case .Value(let t): tokens.append(t)
+                case .error(let e): throw e
+                case .value(let t): tokens.append(t)
             }
         }
         

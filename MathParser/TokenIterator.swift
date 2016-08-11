@@ -62,9 +62,9 @@ internal class TokenIterator: IteratorProtocol {
             let result = extractor.extract(buffer)
             
             switch result {
-                case .Value(_):
+                case .value(_):
                     return result
-                case .Error(_):
+                case .error(_):
                     errors.append(result)
             }
         }

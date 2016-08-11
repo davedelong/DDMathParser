@@ -33,10 +33,10 @@ internal struct IdentifierExtractor: TokenExtractor {
         
         if buffer.currentIndex - start > 0 {
             let raw = buffer[range]
-            result = .Value(RawToken(kind: .identifier, string: raw, range: range))
+            result = .value(RawToken(kind: .identifier, string: raw, range: range))
         } else {
             let error = MathParserError(kind: .cannotParseIdentifier, range: range)
-            result = .Error(error)
+            result = .error(error)
         }
         
         return result

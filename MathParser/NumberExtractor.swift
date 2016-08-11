@@ -56,11 +56,11 @@ internal struct NumberExtractor: TokenExtractor {
         let range: Range<Int> = start ..< buffer.currentIndex
         let error = MathParserError(kind: .cannotParseNumber, range: range)
         
-        var result = TokenIterator.Element.Error(error)
+        var result = TokenIterator.Element.error(error)
         if length > 0 {
             if length != 1 || buffer[start] != "." {
                 let raw = buffer[range]
-                result = .Value(RawToken(kind: .number, string: raw, range: range))
+                result = .value(RawToken(kind: .number, string: raw, range: range))
             }
         }
         return result

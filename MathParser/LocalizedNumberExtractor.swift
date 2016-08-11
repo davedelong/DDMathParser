@@ -53,11 +53,11 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         
         guard indexAfterNumber - start > 0 else {
             let error = MathParserError(kind: .cannotParseNumber, range: range)
-            return .Error(error)
+            return .error(error)
         }
         
         let token = RawToken(kind: .localizedNumber, string: soFar, range: range)
-        return .Value(token)
+        return .value(token)
     }
     
     private func canParseString(_ string: String) -> Bool {

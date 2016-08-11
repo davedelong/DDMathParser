@@ -28,7 +28,7 @@ internal struct VariableExtractor: TokenExtractor {
             // the stuff that follow "$" must be a valid identifier
             let range: Range<Int> = start ..< start
             let error = MathParserError(kind: .cannotParseVariable, range: range)
-            return TokenIterator.Element.Error(error)
+            return TokenIterator.Element.error(error)
         }
     
         let identifierResult = identifierExtractor.extract(buffer)
@@ -36,14 +36,14 @@ internal struct VariableExtractor: TokenExtractor {
         let result: TokenIterator.Element
         
         switch identifierResult {
-            case .Error(let e):
+            case .error(let e):
                 let range: Range<Int> = start ..< e.range.upperBound
                 let error = MathParserError(kind: .cannotParseVariable, range: range)
-                result = .Error(error)
-            case .Value(let t):
+                result = .error(error)
+            case .value(let t):
                 let range: Range<Int> = start ..< t.range.upperBound
                 let token = RawToken(kind: .variable, string: t.string, range: range)
-                result = .Value(token)
+                result = .value(token)
         }
         
         return result
