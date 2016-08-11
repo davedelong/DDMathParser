@@ -118,14 +118,14 @@ extension TokenResolver {
         switch rawToken.kind {
             case .hexNumber:
                 if let number = UInt(rawToken.string, radix: 16) {
-                    resolvedTokens.append(ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range))
+                    resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
                     throw MathParserError(kind: .cannotParseHexNumber, range: rawToken.range)
                 }
             
             case .octalNumber:
                 if let number = UInt(rawToken.string, radix: 8) {
-                    resolvedTokens.append(ResolvedToken(kind: .Number(Double(number)), string: rawToken.string, range: rawToken.range))
+                    resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
                     throw MathParserError(kind: .cannotParseOctalNumber, range: rawToken.range)
                 }
@@ -140,10 +140,10 @@ extension TokenResolver {
                 resolvedTokens.append(contentsOf: try resolveExponent(rawToken))
                 
             case .variable:
-                resolvedTokens.append(ResolvedToken(kind: .Variable(rawToken.string), string: rawToken.string, range: rawToken.range))
+                resolvedTokens.append(ResolvedToken(kind: .variable(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
             case .identifier:
-                resolvedTokens.append(ResolvedToken(kind: .Identifier(rawToken.string), string: rawToken.string, range: rawToken.range))
+                resolvedTokens.append(ResolvedToken(kind: .identifier(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
             case .operator:
                 resolvedTokens.append(try resolveOperator(rawToken, previous: previous))
@@ -155,18 +155,18 @@ extension TokenResolver {
     private func resolveNumber(_ raw: RawToken) -> ResolvedToken {
         // first, see if it's a special number
         if let character = raw.string.characters.first, let value = SpecialNumberExtractor.specialNumbers[character] {
-            return ResolvedToken(kind: .Number(value), string: raw.string, range: raw.range)
+            return ResolvedToken(kind: .number(value), string: raw.string, range: raw.range)
         }
         
         let cleaned = raw.string.replacingOccurrences(of: "−", with: "-")
         let number = NSDecimalNumber(string: cleaned)
-        return ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
+        return ResolvedToken(kind: .number(number.doubleValue), string: raw.string, range: raw.range)
     }
     
     private func resolveLocalizedNumber(_ raw: RawToken) throws -> ResolvedToken {
         for formatter in numberFormatters {
             if let number = formatter.number(from: raw.string) {
-                return ResolvedToken(kind: .Number(number.doubleValue), string: raw.string, range: raw.range)
+                return ResolvedToken(kind: .number(number.doubleValue), string: raw.string, range: raw.range)
             }
         }
         

@@ -81,13 +81,13 @@ public struct TokenGrouper {
         }
         
         switch peek.kind {
-            case .Number(let d):
+            case .number(let d):
                 let _ = g.next()
                 return GroupedToken(kind: .number(d), range: peek.range)
-            case .Variable(let s):
+            case .variable(let s):
                 let _ = g.next()
                 return GroupedToken(kind: .variable(s), range: peek.range)
-            case .Identifier(_):
+            case .identifier(_):
                 return try functionTokenFromGenerator(g)
             case .operator(let o) where o.builtInOperator == .parenthesisOpen:
                 return try groupTokenFromGenerator(g)
