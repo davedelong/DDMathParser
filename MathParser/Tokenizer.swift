@@ -13,7 +13,7 @@ public struct Tokenizer {
     internal let locale: Locale?
     internal let operatorSet: OperatorSet
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, locale: Locale? = nil) {
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, locale: Locale? = nil) {
         self.string = string
         self.operatorSet = operatorSet
         self.locale = locale

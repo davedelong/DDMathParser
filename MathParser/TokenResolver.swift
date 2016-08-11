@@ -48,7 +48,7 @@ public struct TokenResolver {
         self.numberFormatters = TokenResolver.formattersForLocale(tokenizer.locale)
     }
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.defaultOperatorSet, options: TokenResolverOptions = TokenResolverOptions.defaultOptions, locale: Locale? = nil) {
+    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, options: TokenResolverOptions = TokenResolverOptions.defaultOptions, locale: Locale? = nil) {
         self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet, locale: locale)
         self.options = options
         self.locale = locale

@@ -9,7 +9,7 @@
 import Foundation
 
 public class OperatorSet {
-    public static let defaultOperatorSet = OperatorSet()
+    public static let `default` = OperatorSet()
     
     public enum Relation {
         case lessThan
