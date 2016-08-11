@@ -22,78 +22,78 @@ public class OperatorSet {
         var precedence = 1
         
         // == and != have the same precedence
-        ops.append(Operator(builtInOperator: .LogicalEqual, precedence: precedence))
-        ops.append(Operator(builtInOperator: .LogicalNotEqual, precedence: precedence))
+        ops.append(Operator(builtInOperator: .logicalEqual, precedence: precedence))
+        ops.append(Operator(builtInOperator: .logicalNotEqual, precedence: precedence))
         precedence += 1
         
-        ops.append(Operator(builtInOperator: .LogicalOr, precedence: precedence))
+        ops.append(Operator(builtInOperator: .logicalOr, precedence: precedence))
         precedence += 1
-        ops.append(Operator(builtInOperator: .LogicalAnd, precedence: precedence))
-        precedence += 1
-        
-        ops.append(Operator(builtInOperator: .LogicalLessThan, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .LogicalGreaterThan, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .LogicalLessThanOrEqual, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .LogicalGreaterThanOrEqual, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .LogicalNot, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .BitwiseOr, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .BitwiseXor, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .BitwiseAnd, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .LeftShift, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .RightShift, precedence: precedence))
+        ops.append(Operator(builtInOperator: .logicalAnd, precedence: precedence))
         precedence += 1
         
-        ops.append(Operator(builtInOperator: .Add, precedence: precedence))
-        ops.append(Operator(builtInOperator: .Minus, precedence: precedence))
+        ops.append(Operator(builtInOperator: .logicalLessThan, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .logicalGreaterThan, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .logicalLessThanOrEqual, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .logicalGreaterThanOrEqual, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .logicalNot, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .bitwiseOr, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .bitwiseXor, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .bitwiseAnd, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .leftShift, precedence: precedence))
+        precedence += 1
+        ops.append(Operator(builtInOperator: .rightShift, precedence: precedence))
         precedence += 1
         
-        multiplyOperator = Operator(builtInOperator: .Multiply, precedence: precedence)
+        ops.append(Operator(builtInOperator: .add, precedence: precedence))
+        ops.append(Operator(builtInOperator: .minus, precedence: precedence))
+        precedence += 1
+        
+        multiplyOperator = Operator(builtInOperator: .multiply, precedence: precedence)
         ops.append(multiplyOperator)
-        ops.append(Operator(builtInOperator: .Divide, precedence: precedence))
+        ops.append(Operator(builtInOperator: .divide, precedence: precedence))
         precedence += 1
         
-        implicitMultiplyOperator = Operator(builtInOperator: .ImplicitMultiply, precedence: precedence)
+        implicitMultiplyOperator = Operator(builtInOperator: .implicitMultiply, precedence: precedence)
         precedence += 1
         ops.append(implicitMultiplyOperator)
             
         // NOTE: percent-as-modulo precedence goes here (between ImplicitMultiply and Bitwise Not)
         
-        ops.append(Operator(builtInOperator: .BitwiseNot, precedence: precedence))
+        ops.append(Operator(builtInOperator: .bitwiseNot, precedence: precedence))
         precedence += 1
         
         // all right associative unary operators have the same precedence
-        ops.append(Operator(builtInOperator: .UnaryMinus, precedence: precedence))
-        ops.append(Operator(builtInOperator: .UnaryPlus, precedence: precedence))
-        ops.append(Operator(builtInOperator: .SquareRoot, precedence: precedence))
-        ops.append(Operator(builtInOperator: .CubeRoot, precedence: precedence))
+        ops.append(Operator(builtInOperator: .unaryMinus, precedence: precedence))
+        ops.append(Operator(builtInOperator: .unaryPlus, precedence: precedence))
+        ops.append(Operator(builtInOperator: .squareRoot, precedence: precedence))
+        ops.append(Operator(builtInOperator: .cubeRoot, precedence: precedence))
         precedence += 1
         
         // all left associative unary operators have the same precedence
-        ops.append(Operator(builtInOperator: .DoubleFactorial, precedence: precedence))
-        ops.append(Operator(builtInOperator: .Factorial, precedence: precedence))
+        ops.append(Operator(builtInOperator: .doubleFactorial, precedence: precedence))
+        ops.append(Operator(builtInOperator: .factorial, precedence: precedence))
         // NOTE: percent-as-percent precedence goes here (same as Factorial)
-        ops.append(Operator(builtInOperator: .Degree, precedence: precedence))
+        ops.append(Operator(builtInOperator: .degree, precedence: precedence))
         precedence += 1
         
-        powerOperator = Operator(builtInOperator: .Power, precedence: precedence)
+        powerOperator = Operator(builtInOperator: .power, precedence: precedence)
         precedence += 1
         ops.append(powerOperator)
         
         // these are defined as unary right/left associative for convenience
-        ops.append(Operator(builtInOperator: .ParenthesisOpen, precedence: precedence))
-        ops.append(Operator(builtInOperator: .ParenthesisClose, precedence: precedence))
+        ops.append(Operator(builtInOperator: .parenthesisOpen, precedence: precedence))
+        ops.append(Operator(builtInOperator: .parenthesisClose, precedence: precedence))
         precedence += 1
         
-        ops.append(Operator(builtInOperator: .Comma, precedence: precedence))
+        ops.append(Operator(builtInOperator: .comma, precedence: precedence))
         precedence += 1
         
         self.operators = ops
@@ -111,16 +111,16 @@ public class OperatorSet {
         }
     }
     private func interpretPercentSignAsModulo(_ interpretAsModulo: Bool) {
-        let percent = Operator(builtInOperator: .Percent)
-        let modulo = Operator(builtInOperator: .Modulo)
+        let percent = Operator(builtInOperator: .percent)
+        let modulo = Operator(builtInOperator: .modulo)
         
         // remove the old one and add the new one
         if interpretAsModulo {
             removeOperator(percent)
-            addOperator(modulo, relatedBy: .greaterThan, toOperator: Operator(builtInOperator: .ImplicitMultiply))
+            addOperator(modulo, relatedBy: .greaterThan, toOperator: Operator(builtInOperator: .implicitMultiply))
         } else {
             removeOperator(modulo)
-            addOperator(percent, relatedBy: .equalTo, toOperator: Operator(builtInOperator: .Factorial))
+            addOperator(percent, relatedBy: .equalTo, toOperator: Operator(builtInOperator: .factorial))
         }
     }
     

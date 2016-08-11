@@ -218,18 +218,18 @@ class TokenizerTests: XCTestCase {
         let ops = OperatorSet()
         
         let tests: Dictionary<String, BuiltInOperator> = [
-            "is": .LogicalEqual,
-            "equals": .LogicalEqual,
-            "is not": .LogicalNotEqual,
-            "isn't": .LogicalNotEqual,
-            "doesn't equal": .LogicalNotEqual,
-            "is less than": .LogicalLessThan,
-            "is or is less than": .LogicalLessThanOrEqual,
-            "is less than or equal to": .LogicalLessThanOrEqual,
-            "is greater than": .LogicalGreaterThan,
-            "is or is greater than": .LogicalGreaterThanOrEqual,
-            "is greater than or equal to": .LogicalGreaterThanOrEqual,
-            "is not less than": .LogicalGreaterThanOrEqual
+            "is": .logicalEqual,
+            "equals": .logicalEqual,
+            "is not": .logicalNotEqual,
+            "isn't": .logicalNotEqual,
+            "doesn't equal": .logicalNotEqual,
+            "is less than": .logicalLessThan,
+            "is or is less than": .logicalLessThanOrEqual,
+            "is less than or equal to": .logicalLessThanOrEqual,
+            "is greater than": .logicalGreaterThan,
+            "is or is greater than": .logicalGreaterThanOrEqual,
+            "is greater than or equal to": .logicalGreaterThanOrEqual,
+            "is not less than": .logicalGreaterThanOrEqual
         ]
         
         for (token, builtInOperator) in tests {

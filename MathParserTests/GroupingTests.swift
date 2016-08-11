@@ -162,7 +162,7 @@ class GroupingTests: XCTestCase {
                 guard case .number(2) = second[0].kind else {
                     XCTFail("Unexpected parameter 2,1"); return
                 }
-                guard case .operator(Operator(builtInOperator: .Add)) = second[1].kind else {
+                guard case .operator(Operator(builtInOperator: .add)) = second[1].kind else {
                     XCTFail("Unexpected parameter 2,2"); return
                 }
                 guard case .number(3) = second[2].kind else {
@@ -174,7 +174,7 @@ class GroupingTests: XCTestCase {
                 }
                 XCTAssertEqual(third.count, 2)
             
-                guard case .operator(Operator(builtInOperator: .UnaryMinus)) = third[0].kind else {
+                guard case .operator(Operator(builtInOperator: .unaryMinus)) = third[0].kind else {
                     XCTFail("Unexpected parameter 3,1"); return
                 }
                 guard case .number(4) = third[1].kind else {
@@ -224,7 +224,7 @@ class GroupingTests: XCTestCase {
         }
         
         XCTAssertEqual(subterms.count, 2)
-        let unaryPlus = Operator(builtInOperator: .UnaryPlus)
+        let unaryPlus = Operator(builtInOperator: .unaryPlus)
         guard case .operator(unaryPlus) = subterms[0].kind else {
             XCTFail("Unexpected token kind: \(subterms[0].kind)")
             return

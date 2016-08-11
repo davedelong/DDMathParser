@@ -214,7 +214,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue75() {
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .LogicalAnd))
+        operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .logicalAnd))
         
         guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "1 and 2", operatorSet: operatorSet)) else { return }
         
@@ -249,7 +249,7 @@ class GithubIssues: XCTestCase {
         
         struct Overrider: FunctionOverrider {
             private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
-                guard function == BuiltInOperator.LogicalNotEqual.rawValue else { return nil }
+                guard function == BuiltInOperator.logicalNotEqual.rawValue else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 guard case let .variable(left) = state.arguments[0].kind else { return nil }
                 guard case let .variable(right) = state.arguments[1].kind else { return nil }
@@ -277,7 +277,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue105() {
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .LogicalOr))
+        operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .logicalOr))
         
         guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "cos(pi)", operatorSet: operatorSet)) else { return }
         
@@ -302,7 +302,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue109() {
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["as"], forOperator: Operator(builtInOperator: .LogicalEqual))
+        operatorSet.addTokens(["as"], forOperator: Operator(builtInOperator: .logicalEqual))
         
         guard let e = XCTAssertNoThrows(try MathParser.Expression(string: "asin(0.5)", operatorSet: operatorSet)) else { return }
         

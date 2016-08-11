@@ -281,10 +281,10 @@ class EvaluatorTests: XCTestCase {
     
     func testLogic() {
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .LogicalAnd))
-        operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .LogicalOr))
-        operatorSet.addTokens(["is"], forOperator: Operator(builtInOperator: .LogicalEqual))
-        operatorSet.addTokens(["is not"], forOperator: Operator(builtInOperator: .LogicalNotEqual))
+        operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .logicalAnd))
+        operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .logicalOr))
+        operatorSet.addTokens(["is"], forOperator: Operator(builtInOperator: .logicalEqual))
+        operatorSet.addTokens(["is not"], forOperator: Operator(builtInOperator: .logicalNotEqual))
         
         
         let tests: Dictionary<String, Double> = [
@@ -311,7 +311,7 @@ class EvaluatorTests: XCTestCase {
         // fractional digits are added
         struct Overrider: FunctionOverrider {
             private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
-                guard function.lowercased() == BuiltInOperator.ImplicitMultiply.rawValue.lowercased() else { return nil }
+                guard function.lowercased() == BuiltInOperator.implicitMultiply.rawValue.lowercased() else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 
                 let firstArg = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)

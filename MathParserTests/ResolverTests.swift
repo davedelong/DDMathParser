@@ -79,10 +79,10 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 5)
         TestToken(tokens[0], kind: .Number(2), string: "2")
-        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .Power)), string: "**")
-        TestToken(tokens[2], kind: .operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .power)), string: "**")
+        TestToken(tokens[2], kind: .operator(Operator(builtInOperator: .parenthesisOpen)), string: "(")
         TestToken(tokens[3], kind: .Number(2), string: "2")
-        TestToken(tokens[4], kind: .operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+        TestToken(tokens[4], kind: .operator(Operator(builtInOperator: .parenthesisClose)), string: ")")
     }
     
     func testNegatedExponent() {
@@ -90,11 +90,11 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 6)
         TestToken(tokens[0], kind: .Number(2), string: "2")
-        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .Power)), string: "**")
-        TestToken(tokens[2], kind: .operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
-        TestToken(tokens[3], kind: .operator(Operator(builtInOperator: .UnaryMinus)), string: "-")
+        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .power)), string: "**")
+        TestToken(tokens[2], kind: .operator(Operator(builtInOperator: .parenthesisOpen)), string: "(")
+        TestToken(tokens[3], kind: .operator(Operator(builtInOperator: .unaryMinus)), string: "-")
         TestToken(tokens[4], kind: .Number(2), string: "2")
-        TestToken(tokens[5], kind: .operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+        TestToken(tokens[5], kind: .operator(Operator(builtInOperator: .parenthesisClose)), string: ")")
     }
     
     func testComplexExponent() {
@@ -102,17 +102,17 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 12)
         TestToken(tokens[0], kind: .Number(2), string: "2")
-        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .Power)), string: "**")
-        TestToken(tokens[2], kind: .operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
-        TestToken(tokens[3], kind: .operator(Operator(builtInOperator: .UnaryMinus)), string: "-")
-        TestToken(tokens[4], kind: .operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .power)), string: "**")
+        TestToken(tokens[2], kind: .operator(Operator(builtInOperator: .parenthesisOpen)), string: "(")
+        TestToken(tokens[3], kind: .operator(Operator(builtInOperator: .unaryMinus)), string: "-")
+        TestToken(tokens[4], kind: .operator(Operator(builtInOperator: .parenthesisOpen)), string: "(")
         TestToken(tokens[5], kind: .Number(2), string: "2")
-        TestToken(tokens[6], kind: .operator(Operator(builtInOperator: .Add)), string: "+")
+        TestToken(tokens[6], kind: .operator(Operator(builtInOperator: .add)), string: "+")
         TestToken(tokens[7], kind: .Number(1), string: "1")
-        TestToken(tokens[8], kind: .operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
-        TestToken(tokens[9], kind: .operator(Operator(builtInOperator: .Add)), string: "+")
+        TestToken(tokens[8], kind: .operator(Operator(builtInOperator: .parenthesisClose)), string: ")")
+        TestToken(tokens[9], kind: .operator(Operator(builtInOperator: .add)), string: "+")
         TestToken(tokens[10], kind: .Number(5), string: "5")
-        TestToken(tokens[11], kind: .operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+        TestToken(tokens[11], kind: .operator(Operator(builtInOperator: .parenthesisClose)), string: ")")
     }
     
     func testVariable() {
@@ -137,7 +137,7 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 1)
         
-        let op = Operator(builtInOperator: .UnaryPlus)
+        let op = Operator(builtInOperator: .unaryPlus)
         TestToken(tokens[0], kind: .operator(op), string: "+")
     }
     
@@ -147,7 +147,7 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 1)
         
-        let op = Operator(builtInOperator: .BitwiseXor)
+        let op = Operator(builtInOperator: .bitwiseXor)
         TestToken(tokens[0], kind: .operator(op), string: "^")
     }
     
@@ -155,18 +155,18 @@ class TokenResolverTests: XCTestCase {
         let ops = OperatorSet()
         
         let tests: Dictionary<String, BuiltInOperator> = [
-            "is": .LogicalEqual,
-            "equals": .LogicalEqual,
-            "is not": .LogicalNotEqual,
-            "isn't": .LogicalNotEqual,
-            "doesn't equal": .LogicalNotEqual,
-            "is less than": .LogicalLessThan,
-            "is or is less than": .LogicalLessThanOrEqual,
-            "is less than or equal to": .LogicalLessThanOrEqual,
-            "is greater than": .LogicalGreaterThan,
-            "is or is greater than": .LogicalGreaterThanOrEqual,
-            "is greater than or equal to": .LogicalGreaterThanOrEqual,
-            "is not less than": .LogicalGreaterThanOrEqual
+            "is": .logicalEqual,
+            "equals": .logicalEqual,
+            "is not": .logicalNotEqual,
+            "isn't": .logicalNotEqual,
+            "doesn't equal": .logicalNotEqual,
+            "is less than": .logicalLessThan,
+            "is or is less than": .logicalLessThanOrEqual,
+            "is less than or equal to": .logicalLessThanOrEqual,
+            "is greater than": .logicalGreaterThan,
+            "is or is greater than": .logicalGreaterThanOrEqual,
+            "is greater than or equal to": .logicalGreaterThanOrEqual,
+            "is not less than": .logicalGreaterThanOrEqual
         ]
         
         for (token, builtInOperator) in tests {
@@ -186,7 +186,7 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 2)
         
-        let op = Operator(builtInOperator: .UnaryPlus)
+        let op = Operator(builtInOperator: .unaryPlus)
         TestToken(tokens[0], kind: .operator(op), string: "+")
         TestToken(tokens[1], kind: .operator(op), string: "+")
     }
@@ -197,7 +197,7 @@ class TokenResolverTests: XCTestCase {
         
         XCTAssertEqual(tokens.count, 2)
         
-        let op = Operator(builtInOperator: .Add)
+        let op = Operator(builtInOperator: .add)
         TestToken(tokens[0], kind: .Number(1), string: "1")
         TestToken(tokens[1], kind: .operator(op), string: "+")
     }
@@ -211,7 +211,7 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[0], kind: .Number(1), string: "1")
         TestToken(tokens[1], kind: .Number(2), string: "2")
         
-        let fac = Operator(builtInOperator: .Factorial)
+        let fac = Operator(builtInOperator: .factorial)
         TestToken(tokens[2], kind: .operator(fac), string: "!")
     }
     
@@ -223,10 +223,10 @@ class TokenResolverTests: XCTestCase {
         
         TestToken(tokens[0], kind: .Number(1), string: "1")
         
-        let deg = Operator(builtInOperator: .Degree)
+        let deg = Operator(builtInOperator: .degree)
         TestToken(tokens[1], kind: .operator(deg), string: "°")
         
-        let fac = Operator(builtInOperator: .Factorial)
+        let fac = Operator(builtInOperator: .factorial)
         TestToken(tokens[2], kind: .operator(fac), string: "!")
     }
     
@@ -238,10 +238,10 @@ class TokenResolverTests: XCTestCase {
         
         TestToken(tokens[0], kind: .Number(1), string: "1")
         
-        let deg = Operator(builtInOperator: .Degree)
+        let deg = Operator(builtInOperator: .degree)
         TestToken(tokens[1], kind: .operator(deg), string: "°")
         
-        let fac = Operator(builtInOperator: .Add)
+        let fac = Operator(builtInOperator: .add)
         TestToken(tokens[2], kind: .operator(fac), string: "+")
     }
     
@@ -253,10 +253,10 @@ class TokenResolverTests: XCTestCase {
         
         TestToken(tokens[0], kind: .Identifier("foo"), string: "foo")
         
-        let open = Operator(builtInOperator: .ParenthesisOpen)
+        let open = Operator(builtInOperator: .parenthesisOpen)
         TestToken(tokens[1], kind: .operator(open), string: "(")
         
-        let close = Operator(builtInOperator: .ParenthesisClose)
+        let close = Operator(builtInOperator: .parenthesisClose)
         TestToken(tokens[2], kind: .operator(close), string: ")")
     }
     
@@ -268,13 +268,13 @@ class TokenResolverTests: XCTestCase {
         
         TestToken(tokens[0], kind: .Identifier("foo"), string: "foo")
         
-        let open = Operator(builtInOperator: .ParenthesisOpen)
+        let open = Operator(builtInOperator: .parenthesisOpen)
         TestToken(tokens[1], kind: .operator(open), string: "(")
         
-        let close = Operator(builtInOperator: .ParenthesisClose)
+        let close = Operator(builtInOperator: .parenthesisClose)
         TestToken(tokens[2], kind: .operator(close), string: ")")
         
-        let add = Operator(builtInOperator: .Add)
+        let add = Operator(builtInOperator: .add)
         TestToken(tokens[3], kind: .operator(add), string: "+")
     }
     
@@ -286,10 +286,10 @@ class TokenResolverTests: XCTestCase {
         
         TestToken(tokens[0], kind: .Identifier("foo"), string: "foo")
         
-        let open = Operator(builtInOperator: .ParenthesisOpen)
+        let open = Operator(builtInOperator: .parenthesisOpen)
         TestToken(tokens[1], kind: .operator(open), string: "(")
         
-        let close = Operator(builtInOperator: .ParenthesisClose)
+        let close = Operator(builtInOperator: .parenthesisClose)
         TestToken(tokens[2], kind: .operator(close), string: ")")
     }
     
@@ -300,7 +300,7 @@ class TokenResolverTests: XCTestCase {
         XCTAssertEqual(tokens.count, 3)
         TestToken(tokens[0], kind: .Number(1), string: "1")
         
-        let op = Operator(builtInOperator: .ImplicitMultiply)
+        let op = Operator(builtInOperator: .implicitMultiply)
         TestToken(tokens[1], kind: .operator(op), string: "*")
         TestToken(tokens[2], kind: .Number(2), string: "2")
         
@@ -314,7 +314,7 @@ class TokenResolverTests: XCTestCase {
         XCTAssertEqual(tokens.count, 3)
         TestToken(tokens[0], kind: .Number(1), string: "1")
         
-        let op = Operator(builtInOperator: .Multiply)
+        let op = Operator(builtInOperator: .multiply)
         TestToken(tokens[1], kind: .operator(op), string: "*")
         TestToken(tokens[2], kind: .Number(2), string: "2")
         
@@ -324,7 +324,7 @@ class TokenResolverTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "+1").resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        let unaryPlus = Operator(builtInOperator: .UnaryPlus)
+        let unaryPlus = Operator(builtInOperator: .unaryPlus)
         TestToken(tokens[0], kind: .operator(unaryPlus), string: "+")
         TestToken(tokens[1], kind: .Number(1), string: "1")
     }
@@ -342,10 +342,10 @@ class TokenResolverTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "sum(1,2, 34, 5,6,7,8,9)", locale: l).resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 12)
-        let comma = Operator(builtInOperator: .Comma)
+        let comma = Operator(builtInOperator: .comma)
         
         TestToken(tokens[0], kind: .Identifier("sum"), string: "sum")
-        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .ParenthesisOpen)), string: "(")
+        TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .parenthesisOpen)), string: "(")
         TestToken(tokens[2], kind: .Number(1.2), string: "1,2")
         TestToken(tokens[3], kind: .operator(comma), string: ",")
         TestToken(tokens[4], kind: .Number(34), string: "34")
@@ -355,7 +355,7 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[8], kind: .Number(7.8), string: "7,8")
         TestToken(tokens[9], kind: .operator(comma), string: ",")
         TestToken(tokens[10], kind: .Number(9), string: "9")
-        TestToken(tokens[11], kind: .operator(Operator(builtInOperator: .ParenthesisClose)), string: ")")
+        TestToken(tokens[11], kind: .operator(Operator(builtInOperator: .parenthesisClose)), string: ")")
     }
     
     func testLocalizedNumbersForEveryLocale() {
@@ -375,7 +375,7 @@ class TokenResolverTests: XCTestCase {
             XCTAssertEqual(tokens.count, 3)
             
             TestToken(tokens[0], kind: .Number(Double(n)), string: s)
-            TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .Add)), string: "+")
+            TestToken(tokens[1], kind: .operator(Operator(builtInOperator: .add)), string: "+")
             TestToken(tokens[2], kind: .Number(Double(n)), string: s)
         }
     }

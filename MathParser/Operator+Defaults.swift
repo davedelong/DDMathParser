@@ -9,39 +9,39 @@
 import Foundation
 
 public enum BuiltInOperator: String {
-    case LogicalOr = "l_or"
-    case LogicalAnd = "l_and"
-    case LogicalNot = "l_not"
-    case LogicalEqual = "l_eq"
-    case LogicalNotEqual = "l_neq"
-    case LogicalLessThan = "l_lt"
-    case LogicalGreaterThan = "l_gt"
-    case LogicalLessThanOrEqual = "l_ltoe"
-    case LogicalGreaterThanOrEqual = "l_gtoe"
-    case BitwiseOr = "or"
-    case BitwiseXor = "xor"
-    case BitwiseAnd = "and"
-    case LeftShift = "lshift"
-    case RightShift = "rshift"
-    case Minus = "subtract"
-    case Add = "add"
-    case Divide = "divide"
-    case Multiply = "multiply"
-    case ImplicitMultiply = "implicitMultiply"
-    case Modulo = "mod"
-    case BitwiseNot = "not"
-    case Factorial = "factorial"
-    case DoubleFactorial = "factorial2"
-    case Degree = "dtor"
-    case Percent = "percent"
-    case Power = "pow"
-    case ParenthesisOpen = "open_paren"
-    case ParenthesisClose = "close_paren"
-    case Comma = "comma"
-    case UnaryMinus = "negate"
-    case UnaryPlus = "positive"
-    case SquareRoot = "sqrt"
-    case CubeRoot = "cuberoot"
+    case logicalOr = "l_or"
+    case logicalAnd = "l_and"
+    case logicalNot = "l_not"
+    case logicalEqual = "l_eq"
+    case logicalNotEqual = "l_neq"
+    case logicalLessThan = "l_lt"
+    case logicalGreaterThan = "l_gt"
+    case logicalLessThanOrEqual = "l_ltoe"
+    case logicalGreaterThanOrEqual = "l_gtoe"
+    case bitwiseOr = "or"
+    case bitwiseXor = "xor"
+    case bitwiseAnd = "and"
+    case leftShift = "lshift"
+    case rightShift = "rshift"
+    case minus = "subtract"
+    case add = "add"
+    case divide = "divide"
+    case multiply = "multiply"
+    case implicitMultiply = "implicitMultiply"
+    case modulo = "mod"
+    case bitwiseNot = "not"
+    case factorial = "factorial"
+    case doubleFactorial = "factorial2"
+    case degree = "dtor"
+    case percent = "percent"
+    case power = "pow"
+    case parenthesisOpen = "open_paren"
+    case parenthesisClose = "close_paren"
+    case comma = "comma"
+    case unaryMinus = "negate"
+    case unaryPlus = "positive"
+    case squareRoot = "sqrt"
+    case cubeRoot = "cuberoot"
 }
 
 public extension Operator {
@@ -70,149 +70,149 @@ public extension Operator {
         let tokens: Set<String>
 
         switch builtInOperator {
-            case .LogicalOr:
+            case .logicalOr:
                 arity = .binary
                 associativity = .left
                 tokens = ["||", "∨"]
-            case .LogicalAnd:
+            case .logicalAnd:
                 arity = .binary
                 associativity = .left
                 tokens = ["&&", "∧"]
-            case .LogicalNot:
+            case .logicalNot:
                 arity = .unary
                 associativity = .right
                 tokens = ["!", "¬"]
-            case .LogicalEqual:
+            case .logicalEqual:
                 arity = .binary
                 associativity = .left
                 tokens = ["==", "="]
-            case .LogicalNotEqual:
+            case .logicalNotEqual:
                 arity = .binary
                 associativity = .left
                 tokens = ["!=", "≠"]
                 
-            case .LogicalLessThan:
+            case .logicalLessThan:
                 arity = .binary
                 associativity = .left
                 tokens = ["<"]
-            case .LogicalGreaterThan:
+            case .logicalGreaterThan:
                 arity = .binary
                 associativity = .left
                 tokens = [">"]
-            case .LogicalLessThanOrEqual:
+            case .logicalLessThanOrEqual:
                 arity = .binary
                 associativity = .left
                 tokens = ["<=", "=<", "≤", "≯"]
-            case .LogicalGreaterThanOrEqual:
+            case .logicalGreaterThanOrEqual:
                 arity = .binary
                 associativity = .left
                 tokens = [">=", "=>", "≥", "≮"]
             
-            case .BitwiseOr:
+            case .bitwiseOr:
                 arity = .binary
                 associativity = .left
                 tokens = ["|"]
-            case .BitwiseXor:
+            case .bitwiseXor:
                 arity = .binary
                 associativity = .left
                 tokens = ["^"]
-            case .BitwiseAnd:
+            case .bitwiseAnd:
                 arity = .binary
                 associativity = .left
                 tokens = ["&"]
-            case .LeftShift:
+            case .leftShift:
                 arity = .binary
                 associativity = .left
                 tokens = ["<<"]
-            case .RightShift:
+            case .rightShift:
                 arity = .binary
                 associativity = .left
                 tokens = [">>"]
             
-            case .Minus:
+            case .minus:
                 arity = .binary
                 associativity = .left
                 tokens = ["-", "−"]
-            case .Add:
+            case .add:
                 arity = .binary
                 associativity = .left
                 tokens = ["+"]
             
-            case .Divide:
+            case .divide:
                 arity = .binary
                 associativity = .left
                 tokens = ["/", "÷"]
-            case .Multiply:
+            case .multiply:
                 arity = .binary
                 associativity = .left
                 tokens = ["*", "×"]
-            case .ImplicitMultiply:
+            case .implicitMultiply:
                 arity = .binary
                 associativity = .left
                 tokens = ["*", "×"]
             
-            case .Modulo:
+            case .modulo:
                 arity = .binary
                 associativity = .left
                 tokens = ["%"]
             
-            case .BitwiseNot:
+            case .bitwiseNot:
                 arity = .unary
                 associativity = .right
                 tokens = ["~"]
             
             // Unary Left operators
-            case .Factorial:
+            case .factorial:
                 arity = .unary
                 associativity = .left
                 tokens = ["!"]
-            case .DoubleFactorial:
+            case .doubleFactorial:
                 arity = .unary
                 associativity = .left
                 tokens = ["!!"]
-            case .Degree:
+            case .degree:
                 arity = .unary
                 associativity = .left
                 tokens = ["º", "°", "∘"]
-            case .Percent:
+            case .percent:
                 arity = .unary
                 associativity = .left
                 tokens = ["%"]
             
-            case .Power:
+            case .power:
                 arity = .binary
                 associativity = Operator.defaultPowerAssociativity
                 tokens = ["**"]
             
             // Unary Right operators
-            case .UnaryMinus:
+            case .unaryMinus:
                 arity = .unary
                 associativity = .right
                 tokens = ["-", "−"]
-            case .UnaryPlus:
+            case .unaryPlus:
                 arity = .unary
                 associativity = .right
                 tokens = ["+"]
-            case .SquareRoot:
+            case .squareRoot:
                 arity = .unary
                 associativity = .right
                 tokens = ["√"]
-            case .CubeRoot:
+            case .cubeRoot:
                 arity = .unary
                 associativity = .right
                 tokens = ["∛"]
                 
             // these are defined as .Unary .Right/.Left associative for convenience
-            case .ParenthesisOpen:
+            case .parenthesisOpen:
                 arity = .unary
                 associativity = .right
                 tokens = ["("]
-            case .ParenthesisClose:
+            case .parenthesisClose:
                 arity = .unary
                 associativity = .left
                 tokens = [")"]
                 
-            case .Comma:
+            case .comma:
                 arity = .binary
                 associativity = .left
                 tokens = [","]
