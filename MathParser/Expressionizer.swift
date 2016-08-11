@@ -16,25 +16,30 @@ private extension GroupedToken {
 }
 
 private enum TokenOrExpression {
-    case Token(GroupedToken)
-    case Expression(MathParser.Expression)
+    case token(GroupedToken)
+    case expression(MathParser.Expression)
     
     var token: GroupedToken? {
-        guard case .Token(let t) = self else { return nil }
+        guard case .token(let t) = self else { return nil }
         return t
     }
     
-    var expression: MathParser.Expression? {
-        guard case .Expression(let e) = self else { return nil }
+    var expression: Expression? {
+        guard case .expression(let e) = self else { return nil }
         return e
     }
     
-    var isToken: Bool { return token != nil }
+// <rdar://problem/27805272> Segfault when compiling "Result" enum
+//    var isToken: Bool { return token != nil }
+    var isToken: Bool {
+        if case .token(_) = self { return true }
+        return false
+    }
     
     var range: Range<Int> {
         switch self {
-            case .Token(let t): return t.range
-            case .Expression(let e): return e.range
+            case .token(let t): return t.range
+            case .expression(let e): return e.range
         }
     }
 }
@@ -79,7 +84,7 @@ public struct Expressionizer {
     }
     
     private func expressionizeGroup(_ tokens: Array<GroupedToken>) throws -> Expression {
-        var wrappers = tokens.map { TokenOrExpression.Token($0) }
+        var wrappers = tokens.map { TokenOrExpression.token($0) }
         
         while wrappers.count > 1 || wrappers.first?.isToken == true {
             let (indices, maybeOp) = operatorWithHighestPrecedence(wrappers)
@@ -99,9 +104,9 @@ public struct Expressionizer {
         }
         
         switch wrapper {
-            case .Token(let t):
+            case .token(let t):
                 return try expressionizeToken(t)
-            case .Expression(let e):
+            case .expression(let e):
                 return e
         }
     }
@@ -166,7 +171,7 @@ public struct Expressionizer {
                 
                 rightWrapper = collapsedWrappers[rightIndex]
             } else {
-                rightWrapper = .Expression(try expressionizeToken(t))
+                rightWrapper = .expression(try expressionizeToken(t))
             }
         }
         collapsedWrappers[rightIndex] = rightWrapper
@@ -181,7 +186,7 @@ public struct Expressionizer {
                 operatorIndex = leftIndex + 1
                 rightIndex = operatorIndex + 1
             } else {
-                leftWrapper = .Expression(try expressionizeToken(t))
+                leftWrapper = .expression(try expressionizeToken(t))
             }
         }
         
@@ -192,7 +197,7 @@ public struct Expressionizer {
         let expression = Expression(kind: .function(op.function, [leftOperand, rightOperand]), range: range)
         
         let replacementRange = leftIndex ... rightIndex
-        collapsedWrappers.replaceSubrange(replacementRange, with: [.Expression(expression)])
+        collapsedWrappers.replaceSubrange(replacementRange, with: [.expression(expression)])
         
         return collapsedWrappers
     }
@@ -225,7 +230,7 @@ public struct Expressionizer {
                 operatorIndex = operatorIndex - indexDelta
                 operandIndex = operandIndex - 1
             } else {
-                operandWrapper = .Expression(try expressionizeToken(t))
+                operandWrapper = .expression(try expressionizeToken(t))
             }
         }
         
@@ -237,7 +242,7 @@ public struct Expressionizer {
         let expression = Expression(kind: .function(op.function, [operand]), range: range)
         
         let replacementRange = operandIndex ... operatorIndex
-        collapsedWrappers.replaceSubrange(replacementRange, with: [.Expression(expression)])
+        collapsedWrappers.replaceSubrange(replacementRange, with: [.expression(expression)])
         
         index = operandIndex
         return collapsedWrappers
@@ -268,7 +273,7 @@ public struct Expressionizer {
                 collapsedWrappers = try collapseWrappers(collapsedWrappers, aroundRightUnaryOperator: o, atIndex: operandIndex)
                 operandWrapper = collapsedWrappers[operandIndex]
             } else {
-                operandWrapper = .Expression(try expressionizeToken(t))
+                operandWrapper = .expression(try expressionizeToken(t))
             }
         }
         
@@ -287,7 +292,7 @@ public struct Expressionizer {
         }
         
         let replacementExpressionRange = index ... operandIndex
-        collapsedWrappers.replaceSubrange(replacementExpressionRange, with: [.Expression(expression)])
+        collapsedWrappers.replaceSubrange(replacementExpressionRange, with: [.expression(expression)])
         
         return collapsedWrappers
     }
