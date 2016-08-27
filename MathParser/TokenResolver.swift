@@ -26,9 +26,9 @@ public struct TokenResolverOptions: OptionSet {
 public struct TokenResolver {
     
     private let tokenizer: Tokenizer
-    private let options: TokenResolverOptions
-    private let locale: Locale?
-    private let numberFormatters: Array<NumberFormatter>
+    fileprivate let options: TokenResolverOptions
+    fileprivate let locale: Locale?
+    fileprivate let numberFormatters: Array<NumberFormatter>
     internal var operatorSet: OperatorSet { return tokenizer.operatorSet }
     
     private static func formattersForLocale(_ locale: Locale?) -> Array<NumberFormatter> {
@@ -74,7 +74,7 @@ public struct TokenResolver {
 }
 
 extension TokenResolver {
-    private func resolveToken(_ raw: RawToken?, previous: ResolvedToken?) throws -> Array<ResolvedToken> {
+    fileprivate func resolveToken(_ raw: RawToken?, previous: ResolvedToken?) throws -> Array<ResolvedToken> {
         
         guard let raw = raw else {
             // this is the case where the we check for argumentless stuff

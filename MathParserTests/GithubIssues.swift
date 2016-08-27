@@ -187,7 +187,7 @@ class GithubIssues: XCTestCase {
         var eval = Evaluator()
         
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 guard state.arguments.count == 0 else { return nil }
                 let value = function.utf8.first ?? 1
                 return Double(value)
@@ -248,7 +248,7 @@ class GithubIssues: XCTestCase {
         var eval = Evaluator()
         
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 guard function == BuiltInOperator.logicalNotEqual.rawValue else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 guard case let .variable(left) = state.arguments[0].kind else { return nil }

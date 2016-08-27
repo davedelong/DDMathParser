@@ -8,8 +8,8 @@
 
 import Foundation
 
-private extension GroupedToken {
-    private var groupedOperator: Operator? {
+fileprivate extension GroupedToken {
+    fileprivate var groupedOperator: Operator? {
         guard case .operator(let o) = self.kind else { return nil }
         return o
     }

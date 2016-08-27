@@ -168,6 +168,7 @@ public class OperatorSet {
     
     public func addOperator(_ op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
         guard let existing = existingOperator(existingOp) else { return }
+        guard let existingP = existing.precedence else { fatalError("Existing operator missing precedence \(existing)") }
         
         let newOperator = op
         newOperator.precedence = existing.precedence
@@ -179,11 +180,13 @@ public class OperatorSet {
                 sorter = { _ in return false }
             case .lessThan:
                 sorter = { other in
-                    return other.precedence >= existing.precedence
+                    guard let otherP = other.precedence else { fatalError("Operator missing precedence: \(other)") }
+                    return otherP >= existingP
                 }
             case .greaterThan:
                 sorter = { other in
-                    return other.precedence > existing.precedence
+                    guard let otherP = other.precedence else { fatalError("Operator missing precedence: \(other)") }
+                    return otherP > existingP
                 }
         }
         

@@ -30,7 +30,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: VariableResolver {
-            private func resolveVariable(_ variable: String) -> Double? {
+            func resolveVariable(_ variable: String) -> Double? {
                 return 42
             }
         }
@@ -47,7 +47,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: FunctionResolver {
-            private func resolveFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func resolveFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
@@ -64,7 +64,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
@@ -310,7 +310,7 @@ class EvaluatorTests: XCTestCase {
         // integral digits are concatenated
         // fractional digits are added
         struct Overrider: FunctionOverrider {
-            private func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 guard function.lowercased() == BuiltInOperator.implicitMultiply.rawValue.lowercased() else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 
