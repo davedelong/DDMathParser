@@ -378,9 +378,11 @@
 					559B3EF81B74063600000108 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 9JA89QQLNQ;
+						LastSwiftMigration = 0800;
 					};
 					559B3F011B74063600000108 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -515,6 +517,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_VERSION = 2.3;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -538,6 +541,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
+				SWIFT_VERSION = 2.3;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;

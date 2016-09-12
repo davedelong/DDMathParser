@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
-  s.name = 'DDMathParser'
-  s.version = '2.0.1'
+  s.name = 'IBMathParser'
+  s.version = '2.0.2'
   s.license = { :type => 'MIT', :file => 'LICENSE' }
   s.summary = 'String → Number'
   s.description  = <<-DESC
