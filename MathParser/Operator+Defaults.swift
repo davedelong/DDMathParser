@@ -55,11 +55,7 @@ public extension Operator {
         let expression = NSExpression(format: "2 ** 3 ** 2")
         let result = expression.expressionValueWithObject(nil, context: nil)
         
-        if result.intValue == 512 {
-            return .Right
-        } else {
-            return .Left
-        }
+        return result?.intValue == 512 ? .Right : .Left
     }()
     
     internal var builtInOperator: BuiltInOperator? { return BuiltInOperator(rawValue: self.function) }
