@@ -22,12 +22,12 @@ public struct Function {
     public let names: Set<String>
     public let evaluator: FunctionEvaluator
     
-    public init(name: String, evaluator: FunctionEvaluator) {
+    public init(name: String, evaluator: @escaping FunctionEvaluator) {
         self.names = [name]
         self.evaluator = evaluator
     }
     
-    public init(names: Set<String>, evaluator: FunctionEvaluator) {
+    public init(names: Set<String>, evaluator: @escaping FunctionEvaluator) {
         self.names = names
         self.evaluator = evaluator
     }
