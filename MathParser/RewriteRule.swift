@@ -8,13 +8,11 @@
 
 import Foundation
 
-public struct RuleTemplate {
-    public static let AnyExpression = "__exp"
-    public static let AnyNumber = "__num"
-    public static let AnyVariable = "__var"
-    public static let AnyFunction = "__func"
-    
-    private init() { }
+public enum RuleTemplate {
+    public static let anyExpression = "__exp"
+    public static let anyNumber = "__num"
+    public static let anyVariable = "__var"
+    public static let anyFunction = "__func"
 }
 
 public struct RewriteRule {
@@ -78,7 +76,7 @@ public struct RewriteRule {
             case .function(let f, let args):
             
                 // we're looking for anything
-                if f.hasPrefix(RuleTemplate.AnyExpression) {
+                if f.hasPrefix(RuleTemplate.anyExpression) {
                     // is this a matcher ("__exp42") we've seen before?
                     // if it is, only return replacements if it's the same expression
                     // as what has already been matched
@@ -92,7 +90,7 @@ public struct RewriteRule {
                 }
             
                 // we're looking for any number
-                if f.hasPrefix(RuleTemplate.AnyNumber) && expression.kind.isNumber {
+                if f.hasPrefix(RuleTemplate.anyNumber) && expression.kind.isNumber {
                     if let seenBefore = replacements[f] {
                         return seenBefore == expression ? replacements : nil
                     }
@@ -101,7 +99,7 @@ public struct RewriteRule {
                 }
                 
                 // we're looking for any variable
-                if f.hasPrefix(RuleTemplate.AnyVariable) && expression.kind.isVariable {
+                if f.hasPrefix(RuleTemplate.anyVariable) && expression.kind.isVariable {
                     if let seenBefore = replacements[f] {
                         return seenBefore == expression ? replacements : nil
                     }
@@ -110,7 +108,7 @@ public struct RewriteRule {
                 }
                 
                 // we're looking for any function
-                if f.hasPrefix(RuleTemplate.AnyFunction) && expression.kind.isFunction {
+                if f.hasPrefix(RuleTemplate.anyFunction) && expression.kind.isFunction {
                     if let seenBefore = replacements[f] {
                         return seenBefore == expression ? replacements : nil
                     }

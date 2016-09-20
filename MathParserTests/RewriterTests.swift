@@ -9,14 +9,13 @@
 import XCTest
 import MathParser
 
-func TestRewrite(_ original: String, expected: String, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.default, file: StaticString = #file, line: UInt = #line) {
+func TestRewrite(_ original: String, expected: String, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.default, rewriter: ExpressionRewriter = ExpressionRewriter.default, file: StaticString = #file, line: UInt = #line) {
     
     guard let originalE = XCTAssertNoThrows(try Expression(string: original), file: file, line: line) else { return }
     
     guard let expectedE = XCTAssertNoThrows(try Expression(string: expected), file: file, line: line) else { return }
     
-    let rewritter = ExpressionRewriter.default
-    let rewritten = rewritter.rewriteExpression(originalE, substitutions: substitutions, evaluator: evaluator)
+    let rewritten = rewriter.rewriteExpression(originalE, substitutions: substitutions, evaluator: evaluator)
     
     XCTAssertEqual(rewritten, expectedE, file: file, line: line)
 }

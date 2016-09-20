@@ -9,11 +9,13 @@
 import Foundation
 
 public struct ExpressionRewriter {
+    private let maxIterationCount: UInt
     private var rules: Array<RewriteRule>
     
     public static let `default` = ExpressionRewriter(rules: RewriteRule.defaultRules)
     
-    public init(rules: Array<RewriteRule>) {
+    public init(rules: Array<RewriteRule>, maxIterationCount: UInt = 256) {
+        self.maxIterationCount = maxIterationCount
         self.rules = rules
     }
     
@@ -24,7 +26,7 @@ public struct ExpressionRewriter {
     public func rewriteExpression(_ expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.default) -> Expression {
         
         var tmp = expression
-        var iterationCount = 0
+        var iterationCount: UInt = 0
         
         repeat {
             var changed = false
@@ -40,9 +42,9 @@ public struct ExpressionRewriter {
             if changed == false { break }
             iterationCount += 1
             
-        } while iterationCount < 256
+        } while iterationCount < maxIterationCount
         
-        if iterationCount >= 256 {
+        if iterationCount >= maxIterationCount {
             NSLog("replacement limit reached")
         }
         
