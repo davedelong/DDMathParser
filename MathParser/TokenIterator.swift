@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class TokenIterator: IteratorProtocol {
+internal final class TokenIterator: IteratorProtocol {
     typealias Element = Either<RawToken, MathParserError>
     
     private let buffer: TokenCharacterBuffer

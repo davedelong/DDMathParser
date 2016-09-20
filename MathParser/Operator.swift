@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Operator: Equatable {
+public final class Operator: Equatable {
     
     public enum Arity {
         case unary

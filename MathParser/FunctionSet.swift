@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class FunctionSet {
+internal final class FunctionSet {
     private var functionsByName = Dictionary<String, FunctionRegistration>()
     private let caseSensitive: Bool
     
@@ -65,7 +65,7 @@ internal class FunctionSet {
     }
 }
 
-private class FunctionRegistration {
+private final class FunctionRegistration {
     var names: Set<String>
     let function: FunctionEvaluator
     

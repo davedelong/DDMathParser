@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class TokenCharacterBuffer {
+internal final class TokenCharacterBuffer {
     private let characters: Array<Character>
     private let lowercaseCharacters: Array<Character>
     private(set) var currentIndex: Int

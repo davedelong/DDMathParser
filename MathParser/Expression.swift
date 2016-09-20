@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Expression {
+public final class Expression {
     public enum Kind {
         case number(Double)
         case variable(String)

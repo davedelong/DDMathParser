@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class OperatorSet {
+public final class OperatorSet {
     public static let `default` = OperatorSet()
     
     public enum Relation {

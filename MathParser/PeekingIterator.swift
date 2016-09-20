@@ -12,7 +12,7 @@ protocol PeekingIteratorType: IteratorProtocol {
     func peek() -> Element?
 }
 
-internal class PeekingIterator<G: IteratorProtocol>: PeekingIteratorType {
+internal final class PeekingIterator<G: IteratorProtocol>: PeekingIteratorType {
     typealias Element = G.Element
     
     private var generator: G
