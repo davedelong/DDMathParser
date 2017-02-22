@@ -24,12 +24,12 @@ public extension Function {
     
     internal static func _dtor(_ d: Double, evaluator: Evaluator) -> Double {
         guard evaluator.angleMeasurementMode == .degrees else { return d }
-        return d / 180 * M_PI
+        return d / 180 * Double.pi
     }
     
     internal static func _rtod(_ d: Double, evaluator: Evaluator) -> Double {
         guard evaluator.angleMeasurementMode == .degrees else { return d }
-        return d / M_PI * 180
+        return d / Double.pi * 180
     }
     
     public static let standardFunctions: Array<Function> = [
@@ -185,8 +185,8 @@ public extension Function {
             argValues.append(argValue)
         }
         
-        let lowerBound = argValues.count > 0 ? argValues[0] : DBL_MIN
-        let upperBound = argValues.count > 1 ? argValues[1] : DBL_MAX
+        let lowerBound = argValues.count > 0 ? argValues[0] : Double.leastNormalMagnitude
+        let upperBound = argValues.count > 1 ? argValues[1] : Double.greatestFiniteMagnitude
         
         guard lowerBound < upperBound else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
@@ -346,7 +346,7 @@ public extension Function {
     public static let min = Function(name: "min", evaluator: { state throws -> Double in
         guard state.arguments.count > 0 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
-        var value = DBL_MAX
+        var value = Double.greatestFiniteMagnitude
         for arg in state.arguments {
             let argValue = try state.evaluator.evaluate(arg, substitutions: state.substitutions)
             value = Swift.min(value, argValue)
@@ -357,7 +357,7 @@ public extension Function {
     public static let max = Function(name: "max", evaluator: { state throws -> Double in
         guard state.arguments.count > 0 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
-        var value = DBL_MIN
+        var value = Double.leastNormalMagnitude
         for arg in state.arguments {
             let argValue = try state.evaluator.evaluate(arg, substitutions: state.substitutions)
             value = Swift.max(value, argValue)
@@ -686,14 +686,14 @@ public extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
-        return arg1 / 180.0 * M_PI
+        return arg1 / 180.0 * Double.pi
     })
     
     public static let rtod = Function(name: "rtod", evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
-        return arg1 / M_PI * 180
+        return arg1 / Double.pi * 180
     })
     
     // MARK: - Constant functions
@@ -715,27 +715,27 @@ public extension Function {
     
     public static let pi = Function(names: ["pi", "π", "tau_2"], evaluator: { state throws -> Double in
         guard state.arguments.count == 0 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
-        return M_PI
+        return Double.pi
     })
     
     public static let pi_2 = Function(names: ["pi_2", "tau_4"], evaluator: { state throws -> Double in
         guard state.arguments.count == 0 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
-        return M_PI_2
+        return Double.pi / 2
     })
     
     public static let pi_4 = Function(names: ["pi_4", "tau_8"], evaluator: { state throws -> Double in
         guard state.arguments.count == 0 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
-        return M_PI_4
+        return Double.pi / 4
     })
     
     public static let tau = Function(names: ["tau", "τ"], evaluator: { state throws -> Double in
         guard state.arguments.count == 0 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
-        return 2 * M_PI
+        return 2 * Double.pi
     })
     
     public static let sqrt2 = Function(name: "sqrt2", evaluator: { state throws -> Double in
         guard state.arguments.count == 0 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
-        return M_SQRT2
+        return 2.squareRoot()
     })
     
     public static let e = Function(name: "e", evaluator: { state throws -> Double in

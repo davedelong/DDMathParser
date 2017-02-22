@@ -170,9 +170,9 @@ class EvaluatorTests: XCTestCase {
         TestString("csc(π/4)", value: sqrt(2))
         TestString("sec(π/4)", value: sqrt(2))
         TestString("cotan(π/4)", value: 1)
-        TestString("acsc(sqrt(2))", value: M_PI_4)
-        TestString("asec(sqrt(2))", value: M_PI_4)
-        TestString("acotan(1)", value: M_PI_4)
+        TestString("acsc(sqrt(2))", value: Double.pi / 4)
+        TestString("asec(sqrt(2))", value: Double.pi / 4)
+        TestString("acotan(1)", value: Double.pi / 4)
     }
     
     func testHyperbolicTrigonometricFunctions() {
@@ -210,17 +210,17 @@ class EvaluatorTests: XCTestCase {
         TestString("exsec(1)", value: 0.850815717680925617911753241398650193470396655094009298835158)
         TestString("excsc(1)", value: 0.188395105778121216261599452374551003527829834097962625265253)
         TestString("crd(1.287002217586570)", value: 1.20000000000000084)
-        TestString("dtor(45)", value: M_PI_4)
+        TestString("dtor(45)", value: Double.pi / 4)
         TestString("rtod(π/4)", value: 45)
     }
     
     func testConstantFunctions() {
         TestString("phi", value: 1.6180339887498948)
-        TestString("pi", value: M_PI)
-        TestString("pi_2", value: M_PI_2)
-        TestString("pi_4", value: M_PI_4)
-        TestString("tau", value: 2 * M_PI)
-        TestString("sqrt2", value: M_SQRT2)
+        TestString("pi", value: Double.pi)
+        TestString("pi_2", value: Double.pi / 2)
+        TestString("pi_4", value: Double.pi / 4)
+        TestString("tau", value: 2 * Double.pi)
+        TestString("sqrt2", value: 2.squareRoot())
         TestString("e", value: M_E)
         TestString("log2e", value: M_LOG2E)
         TestString("log10e", value: M_LOG10E)
@@ -333,10 +333,10 @@ class EvaluatorTests: XCTestCase {
             "(2+3)2": 52,
             "789(241)": 789241,
             "1234567(1000)": 12345671000,
-            "3π": 30+M_PI,
-            "π 3": 30+M_PI,
+            "3π": 30+Double.pi,
+            "π 3": 30+Double.pi,
             "1.1(2.2)": 12.3,
-            "π π": 33 + ((M_PI - 3) * 2)
+            "π π": 33 + ((Double.pi - 3) * 2)
         ]
         
         for (test, expectedValue) in tests {
