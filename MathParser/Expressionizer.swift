@@ -88,11 +88,10 @@ public struct Expressionizer {
         
         while wrappers.count > 1 || wrappers.first?.isToken == true {
             let (indices, maybeOp) = operatorWithHighestPrecedence(wrappers)
-            guard let first = indices.first else {
+            guard let first = indices.first, let last = indices.last else {
                 let range: Range<Int> = wrappers.first?.range ?? 0 ..< 0
                 throw MathParserError(kind: .invalidFormat, range: range)
             }
-            guard let last = indices.last else { fatalError("If there's a first, there's a last") }
             guard let op = maybeOp else { fatalError("Indices but no operator??") }
             
             let index = op.associativity == .left ? first : last
