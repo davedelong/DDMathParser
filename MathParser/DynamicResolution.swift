@@ -25,11 +25,16 @@ public protocol Substitution {
     func substitutionValue(using evaluator: Evaluator) throws -> Double
     
     func simplified(using evaluator: Evaluator, substitutions: Substitutions) -> Substitution
+    func simplified(using evaluator: Evaluator) -> Substitution
 }
 
 public extension Substitution {
     func substitutionValue(using evaluator: Evaluator) throws -> Double {
         return try substitutionValue(using: evaluator, substitutions: [:])
+    }
+    
+    func simplified(using evaluator: Evaluator) -> Substitution {
+        return simplified(using: evaluator, substitutions: [:])
     }
 }
 
