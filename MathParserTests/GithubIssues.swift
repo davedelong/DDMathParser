@@ -45,7 +45,7 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try "exp(ln(42))".evaluate()) else { return }
         // d is 42.00000000000000711
         // that's pretty close, but we need to fudge in some ε
-        XCTAssertEqualWithAccuracy(d, 42, accuracy: 32 * DBL_EPSILON)
+        XCTAssertEqualWithAccuracy(d, 42, accuracy: 32 * .ulpOfOne)
     }
     
     func testIssue14() {
@@ -55,12 +55,12 @@ class GithubIssues: XCTestCase {
     
     func testIssue15() {
         guard let d = XCTAssertNoThrows(try "sin(π/6)".evaluate()) else { return }
-        XCTAssertEqualWithAccuracy(d, 0.5, accuracy: DBL_EPSILON)
+        XCTAssertEqualWithAccuracy(d, 0.5, accuracy: .ulpOfOne)
     }
     
     func testIssue16() {
         guard let d = XCTAssertNoThrows(try "π * e".evaluate()) else { return }
-        XCTAssertEqual(d, M_PI * M_E)
+        XCTAssertEqual(d, .pi * M_E)
     }
     
     func testIssue19() {
@@ -84,11 +84,11 @@ class GithubIssues: XCTestCase {
         
         guard let e1 = XCTAssertNoThrows(try Expression(string: "sin(45)")) else { return }
         guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
-        XCTAssertEqualWithAccuracy(d1, M_SQRT2 / 2, accuracy: DBL_EPSILON)
+        XCTAssertEqualWithAccuracy(d1, 2.squareRoot() / 2, accuracy: .ulpOfOne)
         
         guard let e2 = XCTAssertNoThrows(try Expression(string: "sin(π/2)")) else { return }
         guard let d2 = XCTAssertNoThrows(try eval.evaluate(e2)) else { return }
-        XCTAssertEqualWithAccuracy(d2, 0.02741213359204429, accuracy: DBL_EPSILON)
+        XCTAssertEqualWithAccuracy(d2, 0.02741213359204429, accuracy: .ulpOfOne)
         
         
         eval.angleMeasurementMode = .radians
@@ -308,7 +308,7 @@ class GithubIssues: XCTestCase {
         
         let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
-        XCTAssertEqual(d, M_PI / 6)
+        XCTAssertEqual(d, .pi / 6)
     }
     
     func testIssue110() {
