@@ -86,6 +86,16 @@ public final class Expression {
     }
 }
 
+extension Expression: Substitution {
+    public func substitutionValue(using evaluator: Evaluator, substitutions: Substitutions) throws -> Double {
+        return try evaluator.evaluate(self, substitutions: substitutions)
+    }
+    
+    public func simplified(using evaluator: Evaluator, substitutions: Substitutions) -> Substitution {
+        return simplify(substitutions, evaluator: evaluator)
+    }
+}
+
 extension Expression: CustomStringConvertible {
     
     public var description: String {

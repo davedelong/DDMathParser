@@ -52,7 +52,9 @@ public struct Evaluator {
     }
     
     private func evaluateVariable(_ name: String, substitutions: Substitutions, range: Range<Int>) throws -> Double {
-        if let value = substitutions[name] { return value }
+        if let value = try substitutions[name]?.substitutionValue(using: self, substitutions: substitutions) {
+            return value
+        }
         
         // substitutions were insufficient
         // use the variable resolver
