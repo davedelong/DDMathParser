@@ -61,12 +61,11 @@ public final class Expression {
         switch kind {
             case .number(_): return Expression(kind: kind, range: range)
             case .variable(let varName):
-                if let exp = substitutions[varName] as? Expression {
-                    let newKind = exp.simplify(substitutions, evaluator: evaluator).kind
-                    return Expression(kind: newKind, range: range)
-                }
                 if let resolved = try? evaluator.evaluate(self, substitutions: substitutions) {
                     return Expression(kind: .number(resolved), range: range)
+                }
+                if let exp = substitutions[varName]?.simplified(using: evaluator, substitutions: substitutions) as? Expression {
+                    return Expression(kind: exp.kind, range: range)
                 }
                 return Expression(kind: kind, range: range)
             case let .function(f, args):
