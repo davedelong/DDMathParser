@@ -60,7 +60,11 @@ public final class Expression {
     public func simplify(_ substitutions: Substitutions = [:], evaluator: Evaluator) -> Expression {
         switch kind {
             case .number(_): return Expression(kind: kind, range: range)
-            case .variable(_):
+            case .variable(let varName):
+                if let exp = substitutions[varName] as? Expression {
+                    let newKind = exp.simplify(substitutions, evaluator: evaluator).kind
+                    return Expression(kind: newKind, range: range)
+                }
                 if let resolved = try? evaluator.evaluate(self, substitutions: substitutions) {
                     return Expression(kind: .number(resolved), range: range)
                 }
