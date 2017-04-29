@@ -325,4 +325,13 @@ class ExpressionTests: XCTestCase {
         }
     }
     
+    func testSimplifyWithNestedExpressions() {
+        guard let e = XCTAssertNoThrows(try Expression(string: "$foo * 2 + $bar")) else { return }
+        guard let foo = XCTAssertNoThrows(try Expression(string: "$bar + 2")) else { return }
+        
+        let simplified = e.simplify(["foo": foo], evaluator: .default)
+        guard let expectedResult = XCTAssertNoThrows(try Expression(string: "($bar + 2) * 2 + $bar")) else { return }
+        XCTAssertEqual(simplified, expectedResult)
+    }
+    
 }
