@@ -22,21 +22,22 @@ public struct RewriteRule {
     
     public let template: Expression
     
-    public init(predicate: Expression, condition: Expression? = nil, template: Expression) {
+    public init(predicate: Expression, condition: Expression, template: Expression) {
         self.predicate = predicate
         self.condition = condition
         self.template = template
     }
-    
-    public init(predicate: String, condition: String? = nil, template: String) throws {
+
+    public init(predicate: String, template: String) throws {
         self.predicate = try Expression(string: predicate)
         self.template = try Expression(string: template)
-        
-        if let condition = condition {
-            self.condition = try Expression(string: condition)
-        } else {
-            self.condition = nil
-        }
+        self.condition = nil
+    }
+    
+    public init(predicate: String, condition: String, template: String) throws {
+        self.predicate = try Expression(string: predicate)
+        self.template = try Expression(string: template)
+        self.condition = try Expression(string: condition)
     }
     
     public func rewrite(_ expression: Expression, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
