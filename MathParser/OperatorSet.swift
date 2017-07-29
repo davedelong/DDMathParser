@@ -21,60 +21,60 @@ public final class OperatorSet {
         var ops = Array<Operator>()
         var precedence = 1
         
-        // == and != have the same precedence
-        ops.append(Operator(builtInOperator: .logicalEqual, precedence: precedence))
-        ops.append(Operator(builtInOperator: .logicalNotEqual, precedence: precedence))
-        precedence += 1
-        
+        // LogicalDisjunction
         ops.append(Operator(builtInOperator: .logicalOr, precedence: precedence))
         precedence += 1
+        
+        // LogicalConjunction
         ops.append(Operator(builtInOperator: .logicalAnd, precedence: precedence))
         precedence += 1
         
+        // == and != have the same precedence
+        
+        // ComparisonPrecedence
+        ops.append(Operator(builtInOperator: .logicalEqual, precedence: precedence))
+        ops.append(Operator(builtInOperator: .logicalNotEqual, precedence: precedence))
         ops.append(Operator(builtInOperator: .logicalLessThan, precedence: precedence))
-        precedence += 1
         ops.append(Operator(builtInOperator: .logicalGreaterThan, precedence: precedence))
-        precedence += 1
         ops.append(Operator(builtInOperator: .logicalLessThanOrEqual, precedence: precedence))
-        precedence += 1
         ops.append(Operator(builtInOperator: .logicalGreaterThanOrEqual, precedence: precedence))
         precedence += 1
-        ops.append(Operator(builtInOperator: .logicalNot, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .bitwiseOr, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .bitwiseXor, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .bitwiseAnd, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .leftShift, precedence: precedence))
-        precedence += 1
-        ops.append(Operator(builtInOperator: .rightShift, precedence: precedence))
+        
         precedence += 1
         
+        // AdditionPrecedence
+        precedence += 1
         ops.append(Operator(builtInOperator: .add, precedence: precedence))
         ops.append(Operator(builtInOperator: .minus, precedence: precedence))
+        ops.append(Operator(builtInOperator: .bitwiseOr, precedence: precedence))
+        ops.append(Operator(builtInOperator: .bitwiseXor, precedence: precedence))
         precedence += 1
         
+        // MultiplicationPrecedence
         multiplyOperator = Operator(builtInOperator: .multiply, precedence: precedence)
         ops.append(multiplyOperator)
         ops.append(Operator(builtInOperator: .divide, precedence: precedence))
+        ops.append(Operator(builtInOperator: .bitwiseAnd, precedence: precedence))
         precedence += 1
         
         implicitMultiplyOperator = Operator(builtInOperator: .implicitMultiply, precedence: precedence)
-        precedence += 1
         ops.append(implicitMultiplyOperator)
-            
-        // NOTE: percent-as-modulo precedence goes here (between ImplicitMultiply and Bitwise Not)
+        precedence += 1
         
-        ops.append(Operator(builtInOperator: .bitwiseNot, precedence: precedence))
+        // NOTE: percent-as-modulo precedence goes here (after ImplicitMultiply)
+        
+        // BitwiseShiftPrecedence
+        ops.append(Operator(builtInOperator: .leftShift, precedence: precedence))
+        ops.append(Operator(builtInOperator: .rightShift, precedence: precedence))
         precedence += 1
         
         // all right associative unary operators have the same precedence
+        ops.append(Operator(builtInOperator: .bitwiseNot, precedence: precedence))
         ops.append(Operator(builtInOperator: .unaryMinus, precedence: precedence))
         ops.append(Operator(builtInOperator: .unaryPlus, precedence: precedence))
         ops.append(Operator(builtInOperator: .squareRoot, precedence: precedence))
         ops.append(Operator(builtInOperator: .cubeRoot, precedence: precedence))
+        ops.append(Operator(builtInOperator: .logicalNot, precedence: precedence))
         precedence += 1
         
         // all left associative unary operators have the same precedence

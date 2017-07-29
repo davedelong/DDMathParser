@@ -322,4 +322,27 @@ class GithubIssues: XCTestCase {
         guard let e2 = XCTAssertNoThrows(try Expression(string: "SIN(0)")) else { return }
         XCTAssertThrows(try eval.evaluate(e2))
     }
+    
+    func testIssue113() {
+        let number = Double(Int.max) + 1
+        
+        guard let d = XCTAssertNoThrows(try "\(number)!".evaluate()) else { return }
+        XCTAssertTrue(d > 0)
+    }
+    
+    func testIssue134() {
+        guard let d = XCTAssertNoThrows(try "( 1 == 3 || 2 == 2)".evaluate()) else { return }
+        XCTAssertEqual(d, 1)
+    }
+    
+    func testIssue138() {
+        let tokenizer = Tokenizer(string: "pow")
+        let resolver = TokenResolver(tokenizer: tokenizer, options: .default)
+        let grouper = TokenGrouper(resolver: resolver)
+        let expressionizer = Expressionizer(grouper: grouper)
+        let expression = try! expressionizer.expression()
+        let description = expression.description
+        
+        XCTAssertEqual(description, "pow()")
+    }
 }

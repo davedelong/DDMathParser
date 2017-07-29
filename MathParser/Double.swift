@@ -10,7 +10,7 @@ import Foundation
 
 internal extension Int {
     
-    static let largestIntegerFactorial: Int = {
+    static let largestSupportedIntegerFactorial: Int = {
         var n = Int.max
         var i = 2
         while i < n {
@@ -26,22 +26,22 @@ internal extension Double {
     
     func factorial() -> Double {
         if Darwin.floor(self) == self && self > 1 {
-            // it's an integer
-            let arg1Int = Int(self)
+            // it's a factorial of an integer
             
-            if arg1Int <= Int.largestIntegerFactorial {
+            if self <= Double(Int.largestSupportedIntegerFactorial) {
+                // it's a factorial of an integer representable as an Int
+                let arg1Int = Int(self)
                 return Double((1...arg1Int).reduce(1, *))
-            } else {
-                // but it can't be represented in a word-sized Int
+            } else if self <= Double(Int.max) {
+                // it's a factorial of an integer NOT representable as an Int
                 var result = 1.0
-                for i in 2 ... arg1Int {
+                for i in 2 ... Int(self) {
                     result *= Double(i)
                 }
                 return result
             }
-        } else {
-            return tgamma(self+1)
         }
+        return tgamma(self+1)
     }
     
 }
