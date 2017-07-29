@@ -18,6 +18,10 @@ func TestRewrite(_ original: String, expected: String, substitutions: Substituti
     let rewritten = rewriter.rewriteExpression(originalE, substitutions: substitutions, evaluator: evaluator)
     
     XCTAssertEqual(rewritten, expectedE, file: file, line: line)
+    
+    // Also test that the convenience functions produces the same result.
+    let convenienceRewritten = originalE.rewrite(substitutions, rewriter: rewriter, evaluator: evaluator)
+    XCTAssertEqual(convenienceRewritten, rewritten)
 }
 
 class RewriterTests: XCTestCase {
