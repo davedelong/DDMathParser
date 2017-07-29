@@ -323,6 +323,11 @@ class GithubIssues: XCTestCase {
         XCTAssertThrows(try eval.evaluate(e2))
     }
     
+    func testIssue134() {
+        guard let d = XCTAssertNoThrows(try "( 1 == 3 || 2 == 2)".evaluate()) else { return }
+        XCTAssertEqual(d, 1)
+    }
+    
     func testIssue138() {
         let tokenizer = Tokenizer(string: "pow")
         let resolver = TokenResolver(tokenizer: tokenizer, options: .default)
