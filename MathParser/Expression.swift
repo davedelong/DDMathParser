@@ -60,9 +60,12 @@ public final class Expression {
     public func simplify(_ substitutions: Substitutions = [:], evaluator: Evaluator) -> Expression {
         switch kind {
             case .number(_): return Expression(kind: kind, range: range)
-            case .variable(_):
+            case .variable(let varName):
                 if let resolved = try? evaluator.evaluate(self, substitutions: substitutions) {
                     return Expression(kind: .number(resolved), range: range)
+                }
+                if let exp = substitutions[varName]?.simplified(using: evaluator, substitutions: substitutions) as? Expression {
+                    return Expression(kind: exp.kind, range: range)
                 }
                 return Expression(kind: kind, range: range)
             case let .function(f, args):
@@ -83,6 +86,16 @@ public final class Expression {
     
     public func rewrite(_ substitutions: Substitutions = [:], rewriter: ExpressionRewriter = .default, evaluator: Evaluator = .default) -> Expression {
         return rewriter.rewriteExpression(self, substitutions: substitutions, evaluator: evaluator)
+    }
+}
+
+extension Expression: Substitution {
+    public func substitutionValue(using evaluator: Evaluator, substitutions: Substitutions) throws -> Double {
+        return try evaluator.evaluate(self, substitutions: substitutions)
+    }
+    
+    public func simplified(using evaluator: Evaluator, substitutions: Substitutions) -> Substitution {
+        return simplify(substitutions, evaluator: evaluator)
     }
 }
 
