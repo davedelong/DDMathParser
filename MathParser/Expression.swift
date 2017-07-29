@@ -80,6 +80,10 @@ public final class Expression {
                 return Expression(kind: .number(value), range: range)
         }
     }
+    
+    public func rewrite(_ substitutions: Substitutions = [:], rewriter: ExpressionRewriter = .default, evaluator: Evaluator = .default) -> Expression {
+        return rewriter.rewriteExpression(self, substitutions: substitutions, evaluator: evaluator)
+    }
 }
 
 extension Expression: CustomStringConvertible {
