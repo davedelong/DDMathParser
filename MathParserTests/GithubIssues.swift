@@ -323,6 +323,13 @@ class GithubIssues: XCTestCase {
         XCTAssertThrows(try eval.evaluate(e2))
     }
     
+    func testIssue113() {
+        let number = Double(Int.max) + 1
+        
+        guard let d = XCTAssertNoThrows(try "\(number)!".evaluate()) else { return }
+        XCTAssertTrue(d > 0)
+    }
+    
     func testIssue134() {
         guard let d = XCTAssertNoThrows(try "( 1 == 3 || 2 == 2)".evaluate()) else { return }
         XCTAssertEqual(d, 1)

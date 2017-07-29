@@ -10,16 +10,6 @@ import Foundation
 
 public extension Function {
     
-    private static let largestIntegerFactorial: Int = {
-        var n = Int.max
-        var i = 2
-        while i < n {
-            n /= i
-            i += 1
-        }
-        return i - 1
-    }()
-    
     // MARK: - Angle mode helpers
     
     internal static func _dtor(_ d: Double, evaluator: Evaluator) -> Double {
