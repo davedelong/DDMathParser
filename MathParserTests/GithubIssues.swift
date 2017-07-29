@@ -322,4 +322,15 @@ class GithubIssues: XCTestCase {
         guard let e2 = XCTAssertNoThrows(try Expression(string: "SIN(0)")) else { return }
         XCTAssertThrows(try eval.evaluate(e2))
     }
+    
+    func testIssue138() {
+        let tokenizer = Tokenizer(string: "pow")
+        let resolver = TokenResolver(tokenizer: tokenizer, options: .default)
+        let grouper = TokenGrouper(resolver: resolver)
+        let expressionizer = Expressionizer(grouper: grouper)
+        let expression = try! expressionizer.expression()
+        let description = expression.description
+        
+        XCTAssertEqual(description, "pow()")
+    }
 }

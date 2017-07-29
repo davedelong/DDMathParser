@@ -114,18 +114,20 @@ extension Expression: CustomStringConvertible {
                     guard let token = op.tokens.first else {
                         fatalError("Built-in operator doesn't have any tokens")
                     }
-                    switch (op.arity, op.associativity) {
-                        case (.binary, _):
-                            return "\(params[0]) \(token) \(params[1])"
-                        case (.unary, .left):
-                            return "\(params[0])\(token)"
-                        case (.unary, .right):
-                            return "\(token)\(params[0])"
+                    
+                    if op.arity.argumentCount == params.count {
+                        switch (op.arity, op.associativity) {
+                            case (.binary, _):
+                                return "\(params[0]) \(token) \(params[1])"
+                            case (.unary, .left):
+                                return "\(params[0])\(token)"
+                            case (.unary, .right):
+                                return "\(token)\(params[0])"
+                        }
                     }
-                } else {
-                    let joined = params.joined(separator: ", ")
-                    return "\(f)(\(joined))"
                 }
+                let joined = params.joined(separator: ", ")
+                return "\(f)(\(joined))"
         }
     }
     

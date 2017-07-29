@@ -13,6 +13,13 @@ public final class Operator: Equatable {
     public enum Arity {
         case unary
         case binary
+        
+        internal var argumentCount: Int {
+            switch self {
+                case .unary: return 1
+                case .binary: return 2
+            }
+        }
     }
     
     public enum Associativity {
