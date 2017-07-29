@@ -21,6 +21,12 @@ class EvaluatorTests: XCTestCase {
         XCTAssertEqual(d, 42)
     }
     
+    func testVariableWithNestedExpression() {
+        guard let sub = XCTAssertNoThrows(try Expression(string: "21 * 2")) else { return }
+        guard let d = XCTAssertNoThrows(try "$foo".evaluate(["foo": sub])) else { return }
+        XCTAssertEqual(d, 42)
+    }
+    
     func testFunction() {
         guard let d = XCTAssertNoThrows(try "1 + 2".evaluate()) else { return }
         XCTAssertEqual(d, 3)
