@@ -130,6 +130,14 @@ extension TokenResolver {
                     throw MathParserError(kind: .cannotParseOctalNumber, range: rawToken.range)
                 }
             
+            case .fraction:
+                if case .some(.number(_)) = previous?.kind {
+                    let add = operatorSet.addOperator
+                    let addToken = ResolvedToken(kind: .operator(add), string: "+", range: rawToken.range.lowerBound ..< rawToken.range.lowerBound)
+                    resolvedTokens.append(addToken)
+                }
+                resolvedTokens.append(resolveNumber(rawToken))
+            
             case .number:
                 resolvedTokens.append(resolveNumber(rawToken))
             

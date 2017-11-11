@@ -100,7 +100,7 @@ class TokenizerTests: XCTestCase {
         for string in special {
             guard let tokens = XCTAssertNoThrows(try Tokenizer(string: string).tokenize()) else { return }
             XCTAssertEqual(tokens.count, 1)
-            TestToken(tokens[0], kind: .number, string: string)
+            TestToken(tokens[0], kind: .fraction, string: string)
         }
     }
     

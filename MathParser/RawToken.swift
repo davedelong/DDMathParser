@@ -14,6 +14,7 @@ public struct RawToken {
         case hexNumber
         case octalNumber
         case number
+        case fraction
         case localizedNumber
         case exponent
         case variable

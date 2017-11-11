@@ -44,7 +44,8 @@ public final class OperatorSet {
         
         // AdditionPrecedence
         precedence += 1
-        ops.append(Operator(builtInOperator: .add, precedence: precedence))
+        addOperator = Operator(builtInOperator: .add, precedence: precedence)
+        ops.append(addOperator)
         ops.append(Operator(builtInOperator: .minus, precedence: precedence))
         ops.append(Operator(builtInOperator: .bitwiseOr, precedence: precedence))
         ops.append(Operator(builtInOperator: .bitwiseXor, precedence: precedence))
@@ -144,6 +145,7 @@ public final class OperatorSet {
         _operatorTokenSet = nil
     }
     
+    internal let addOperator: Operator
     internal let multiplyOperator: Operator
     internal let implicitMultiplyOperator: Operator
     internal let powerOperator: Operator
