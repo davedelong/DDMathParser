@@ -29,12 +29,7 @@ private enum TokenOrExpression {
         return e
     }
     
-// <rdar://problem/27805272> Segfault when compiling "Result" enum
-//    var isToken: Bool { return token != nil }
-    var isToken: Bool {
-        if case .token(_) = self { return true }
-        return false
-    }
+    var isToken: Bool { return token != nil }
     
     var range: Range<Int> {
         switch self {
