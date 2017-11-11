@@ -34,7 +34,7 @@ internal struct SpecialNumberExtractor: TokenExtractor {
         return true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         // consume the character

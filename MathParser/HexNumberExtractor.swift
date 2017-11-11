@@ -14,7 +14,7 @@ internal struct HexNumberExtractor: TokenExtractor {
         return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x" else {
@@ -35,7 +35,7 @@ internal struct HexNumberExtractor: TokenExtractor {
             buffer.resetTo(start)
         }
         
-        let result: TokenIterator.Element
+        let result: Tokenizer.Result
         
         if buffer.currentIndex - start > 0 {
             let range: Range<Int> = indexBeforeHexNumbers ..< buffer.currentIndex

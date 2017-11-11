@@ -23,7 +23,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         return buffer.peekNext() != nil
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         var indexBeforeDecimal: Int?
         

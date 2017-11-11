@@ -19,7 +19,7 @@ internal struct VariableExtractor: TokenExtractor {
         return buffer.peekNext() == "$"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         buffer.consume() // consume the opening $
@@ -28,12 +28,12 @@ internal struct VariableExtractor: TokenExtractor {
             // the stuff that follow "$" must be a valid identifier
             let range: Range<Int> = start ..< start
             let error = MathParserError(kind: .cannotParseVariable, range: range)
-            return TokenIterator.Element.error(error)
+            return Tokenizer.Result.error(error)
         }
     
         let identifierResult = identifierExtractor.extract(buffer)
     
-        let result: TokenIterator.Element
+        let result: Tokenizer.Result
         
         switch identifierResult {
             case .error(let e):
