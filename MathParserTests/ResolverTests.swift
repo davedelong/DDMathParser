@@ -379,5 +379,19 @@ class TokenResolverTests: XCTestCase {
             TestToken(tokens[2], kind: .number(Double(n)), string: s)
         }
     }
+    
+    func testInjectedAddition() {
+        let r = TokenResolver(string: "2½")
+        guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }
+        
+        XCTAssertEqual(tokens.count, 3)
+        
+        TestToken(tokens[0], kind: .number(2), string: "2")
+        
+        let add = Operator(builtInOperator: .add)
+        TestToken(tokens[1], kind: .operator(add), string: "+")
+        
+        TestToken(tokens[2], kind: .number(0.5), string: "½")
+    }
 
 }

@@ -345,4 +345,12 @@ class GithubIssues: XCTestCase {
         
         XCTAssertEqual(description, "pow()")
     }
+    
+    func testIssue142() {
+        guard let d = XCTAssertNoThrows(try "2½".evaluate()) else { return }
+        XCTAssertEqual(d, 2.5)
+        
+        guard let d1 = XCTAssertNoThrows(try "2½ * 2".evaluate()) else { return }
+        XCTAssertEqual(d1, 5)
+    }
 }
