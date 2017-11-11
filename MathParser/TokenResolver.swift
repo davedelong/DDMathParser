@@ -132,7 +132,7 @@ extension TokenResolver {
             
             case .fraction:
                 if case .some(.number(_)) = previous?.kind {
-                    let add = operatorSet.addOperator
+                    let add = operatorSet.addFractionOperator
                     let addToken = ResolvedToken(kind: .operator(add), string: "+", range: rawToken.range.lowerBound ..< rawToken.range.lowerBound)
                     resolvedTokens.append(addToken)
                 }
