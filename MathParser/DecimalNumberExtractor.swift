@@ -1,5 +1,5 @@
 //
-//  NumberExtractor.swift
+//  DecimalNumberExtractor.swift
 //  DDMathParser
 //
 //  Created by Dave DeLong on 8/6/15.
@@ -18,7 +18,7 @@ public class DecimalNumberToken: RawToken {
     
 }
 
-internal struct NumberExtractor: TokenExtractor {
+internal struct DecimalNumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         return buffer.peekNext()?.isDigit == true

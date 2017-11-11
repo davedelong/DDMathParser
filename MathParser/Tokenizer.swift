@@ -30,7 +30,7 @@ public struct Tokenizer {
         if let locale = locale {
             numberExtractor = LocalizedNumberExtractor(locale: locale)
         } else {
-            numberExtractor = NumberExtractor()
+            numberExtractor = DecimalNumberExtractor()
         }
         
         extractors = [

@@ -52,7 +52,7 @@
 		55B6AF631B8D870600778033 /* RewriteRule+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF621B8D870600778033 /* RewriteRule+Defaults.swift */; };
 		55D48BE71B740F3E0050331F /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE61B740F3E0050331F /* Character.swift */; };
 		55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */; };
-		55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BED1B7415540050331F /* NumberExtractor.swift */; };
+		55D48BEE1B7415540050331F /* DecimalNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BED1B7415540050331F /* DecimalNumberExtractor.swift */; };
 		55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BF01B7415E80050331F /* HexNumberExtractor.swift */; };
 		55E640AE1B76B67400D7769C /* ResolvedToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E640AD1B76B67400D7769C /* ResolvedToken.swift */; };
 		55E640B11B76CBAF00D7769C /* TokenResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E640B01B76CBAF00D7769C /* TokenResolver.swift */; };
@@ -119,7 +119,7 @@
 		55B6AF621B8D870600778033 /* RewriteRule+Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RewriteRule+Defaults.swift"; sourceTree = "<group>"; };
 		55D48BE61B740F3E0050331F /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenCharacterBuffer.swift; sourceTree = "<group>"; };
-		55D48BED1B7415540050331F /* NumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberExtractor.swift; sourceTree = "<group>"; };
+		55D48BED1B7415540050331F /* DecimalNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalNumberExtractor.swift; sourceTree = "<group>"; };
 		55D48BF01B7415E80050331F /* HexNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexNumberExtractor.swift; sourceTree = "<group>"; };
 		55E640AD1B76B67400D7769C /* ResolvedToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResolvedToken.swift; sourceTree = "<group>"; };
 		55E640B01B76CBAF00D7769C /* TokenResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenResolver.swift; sourceTree = "<group>"; };
@@ -298,7 +298,7 @@
 				559B3F1B1B740C0B00000108 /* TokenExtractor.swift */,
 				55D48BF01B7415E80050331F /* HexNumberExtractor.swift */,
 				551B53F81C89439500EB318D /* OctalNumberExtractor.swift */,
-				55D48BED1B7415540050331F /* NumberExtractor.swift */,
+				55D48BED1B7415540050331F /* DecimalNumberExtractor.swift */,
 				552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */,
 				552CE1C51B9387A2007B89A1 /* FractionNumberExtractor.swift */,
 				552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */,
@@ -451,7 +451,7 @@
 				552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */,
 				557A80691B757C2C0014822A /* Operator.swift in Sources */,
 				5514B17D1B7D48F4007431D0 /* GroupedToken.swift in Sources */,
-				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,
+				55D48BEE1B7415540050331F /* DecimalNumberExtractor.swift in Sources */,
 				552CE1C61B9387A2007B89A1 /* FractionNumberExtractor.swift in Sources */,
 				552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
