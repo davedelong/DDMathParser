@@ -162,7 +162,7 @@ extension TokenResolver {
     
     private func resolveNumber(_ raw: RawToken) -> ResolvedToken {
         // first, see if it's a special number
-        if let character = raw.string.characters.first, let value = SpecialNumberExtractor.specialNumbers[character] {
+        if let character = raw.string.first, let value = SpecialNumberExtractor.specialNumbers[character] {
             return ResolvedToken(kind: .number(value), string: raw.string, range: raw.range)
         }
         

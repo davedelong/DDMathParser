@@ -14,8 +14,8 @@ internal final class TokenCharacterBuffer {
     private(set) var currentIndex: Int
     
     init(string: String) {
-        characters = Array(string.characters)
-        lowercaseCharacters = Array(string.lowercased().characters)
+        characters = Array(string)
+        lowercaseCharacters = Array(string.lowercased())
         
         currentIndex = 0
     }

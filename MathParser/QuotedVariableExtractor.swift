@@ -54,7 +54,7 @@ internal struct QuotedVariableExtractor: TokenExtractor {
             buffer.consume()
             let range: Range<Int> = start ..< buffer.currentIndex
             // check to make sure we don't have an empty string
-            if cleaned.characters.isEmpty {
+            if cleaned.isEmpty {
                 let error = MathParserError(kind: .zeroLengthVariable, range: range)
                 result = .error(error)
             } else {

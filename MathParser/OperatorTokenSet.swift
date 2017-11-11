@@ -22,8 +22,8 @@ internal struct OperatorTokenSet {
             normalizedTokens.insert(token)
             normalizedTokens.insert(lower)
             
-            characters.formUnion(token.characters)
-            characters.formUnion(lower.characters)
+            characters.formUnion(token)
+            characters.formUnion(lower)
         }
         
         self.characters = characters
