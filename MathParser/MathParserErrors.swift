@@ -15,6 +15,7 @@ public struct MathParserError: Error {
         case cannotParseNumber
         case cannotParseHexNumber // can also occur during Resolution
         case cannotParseOctalNumber // can also occur during Resolution
+        case cannotParseFractionalNumber
         case cannotParseExponent
         case cannotParseIdentifier
         case cannotParseVariable

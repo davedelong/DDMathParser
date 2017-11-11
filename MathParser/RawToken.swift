@@ -16,14 +16,8 @@ public class RawToken {
         self.string = string
         self.range = range
     }
+    
+    public func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
+        fatalError("\(#function) must be overridden for this token type")
+    }
 }
-
-public class HexNumberToken: RawToken { }
-public class OctalNumberToken: RawToken { }
-public class DecimalNumberToken: RawToken { }
-public class FractionNumberToken: RawToken { }
-public class LocalizedNumberToken: RawToken { }
-public class ExponentToken: RawToken { }
-public class VariableToken: RawToken { }
-public class OperatorToken: RawToken { }
-public class IdentifierToken: RawToken { }

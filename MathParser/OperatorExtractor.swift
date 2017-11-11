@@ -8,6 +8,82 @@
 
 import Foundation
 
+public class OperatorToken: RawToken {
+    
+    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
+        let matches = operators.operatorForToken(string)
+        
+        if matches.isEmpty {
+            throw MathParserError(kind: .unknownOperator, range: range)
+        }
+        
+        if matches.count == 1 {
+            let op = matches[0]
+            return [ResolvedToken(kind: .operator(op), string: string, range: range)]
+        }
+        
+        // more than one operator has this token
+        
+        var resolvedOperator: Operator? = nil
+        
+        if let previous = previousToken {
+            switch previous.kind {
+                case .operator(let o):
+                    
+                    switch (o.arity, o.associativity) {
+                        case (.unary, .left):
+                            // a left-assoc unary operator can be followed by either:
+                            // another left-assoc unary operator
+                            // or a binary operator
+                            resolvedOperator = operators.operatorForToken(string, arity: .unary, associativity: .left).first
+                            
+                            if resolvedOperator == nil {
+                                resolvedOperator = operators.operatorForToken(string, arity: .binary).first
+                            }
+                        
+                        
+                        default:
+                            // either a binary operator or a right-assoc unary operator
+                            
+                            // a binary operator can only be followed by a right-assoc unary operator
+                            //a right-assoc operator can only be followed by a right-assoc unary operator
+                            resolvedOperator = operators.operatorForToken(string, arity: .unary, associativity: .right).first
+                        
+                    }
+                
+                default:
+                    // a number/variable can be followed by:
+                    // a left-assoc unary operator,
+                    // a binary operator,
+                    // or a right-assoc unary operator (assuming implicit multiplication)
+                    // we'll prefer them from left-to-right:
+                    // left-assoc unary, binary, right-assoc unary
+                    // TODO: is this correct?? should we be looking at precedence instead?
+                    resolvedOperator = operators.operatorForToken(string, arity: .unary, associativity: .left).first
+                    
+                    if resolvedOperator == nil {
+                        resolvedOperator = operators.operatorForToken(string, arity: .binary).first
+                    }
+                    
+                    if resolvedOperator == nil {
+                        resolvedOperator = operators.operatorForToken(string, arity: .unary, associativity: .right).first
+                    }
+            }
+            
+        } else {
+            // no previous token, so this must be a right-assoc unary operator
+            resolvedOperator = operators.operatorForToken(string, arity: .unary, associativity: .right).first
+        }
+        
+        if let resolved = resolvedOperator {
+            return [ResolvedToken(kind: .operator(resolved), string: string, range: range)]
+        } else {
+            throw MathParserError(kind: .ambiguousOperator, range: range)
+        }
+    }
+    
+}
+
 internal struct OperatorExtractor: TokenExtractor {
     let operatorTokens: OperatorTokenSet
     

@@ -8,6 +8,26 @@
 
 import Foundation
 
+public class FractionNumberToken: RawToken {
+    
+    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
+        guard let fraction = string.first else { throw MathParserError(kind: .cannotParseFractionalNumber, range: range) }
+        guard let value = SpecialNumberExtractor.specialNumbers[fraction] else {
+            throw MathParserError(kind: .cannotParseFractionalNumber, range: range)
+        }
+        
+        let resolved = ResolvedToken(kind: .number(value), string: string, range: range)
+        
+        if previousToken?.kind.isNumber == true {
+            let add = ResolvedToken(kind: .operator(operators.addOperator), string: "+", range: range.lowerBound ..< range.lowerBound)
+            return [add, resolved]
+        } else {
+            return [resolved]
+        }
+    }
+    
+}
+
 internal struct SpecialNumberExtractor: TokenExtractor {
     
     internal static let specialNumbers: Dictionary<Character, Double> = [

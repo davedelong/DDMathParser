@@ -8,6 +8,15 @@
 
 import Foundation
 
+public class OctalNumberToken: RawToken {
+    
+    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
+        guard let value = UInt(string, radix: 8) else { throw MathParserError(kind: .cannotParseHexNumber, range: range) }
+        return [ResolvedToken(kind: .number(Double(value)), string: string, range: range)]
+    }
+    
+}
+
 internal struct OctalNumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {

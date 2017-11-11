@@ -302,8 +302,8 @@
 				552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */,
 				552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */,
 				552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */,
-				552781521B75234F0093B070 /* QuotedVariableExtractor.swift */,
 				5527814E1B751DD40093B070 /* VariableExtractor.swift */,
+				552781521B75234F0093B070 /* QuotedVariableExtractor.swift */,
 				552781501B751DDB0093B070 /* OperatorExtractor.swift */,
 				5527814C1B751DCC0093B070 /* IdentifierExtractor.swift */,
 			);

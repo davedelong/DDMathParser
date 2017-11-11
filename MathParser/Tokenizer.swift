@@ -80,10 +80,8 @@ public struct Tokenizer {
             let result = extractor.extract(buffer)
             
             switch result {
-            case .value(_):
-                return result
-            case .error(_):
-                errors.append(result)
+                case .value(_): return result
+                case .error(_): errors.append(result)
             }
         }
         

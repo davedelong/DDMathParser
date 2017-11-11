@@ -8,6 +8,16 @@
 
 import Foundation
 
+public class DecimalNumberToken: RawToken {
+    
+    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
+        let cleaned = string.replacingOccurrences(of: "−", with: "-")
+        let number = NSDecimalNumber(string: cleaned)
+        return [ResolvedToken(kind: .number(number.doubleValue), string: string, range: range)]
+    }
+    
+}
+
 internal struct NumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {

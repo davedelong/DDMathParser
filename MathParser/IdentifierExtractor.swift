@@ -8,6 +8,14 @@
 
 import Foundation
 
+public class IdentifierToken: RawToken {
+    
+    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken?) throws -> Array<ResolvedToken> {
+        return [ResolvedToken(kind: .identifier(string), string: string, range: range)]
+    }
+    
+}
+
 internal struct IdentifierExtractor: TokenExtractor {
     let operatorTokens: OperatorTokenSet
     
