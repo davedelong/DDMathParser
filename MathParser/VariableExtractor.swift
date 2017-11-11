@@ -8,14 +8,6 @@
 
 import Foundation
 
-public class VariableToken: RawToken {
-    
-    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
-        return [ResolvedToken(kind: .variable(string), string: string, range: range)]
-    }
-    
-}
-
 internal struct VariableExtractor: TokenExtractor {
     private let identifierExtractor: IdentifierExtractor
     

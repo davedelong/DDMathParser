@@ -8,24 +8,6 @@
 
 import Foundation
 
-import Foundation
-
-public class LocalizedNumberToken: RawToken {
-    
-    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.numberStyle = .decimal
-        
-        if let number = formatter.number(from: string) {
-            return [ResolvedToken(kind: .number(number.doubleValue), string: string, range: range)]
-        }
-        
-        throw MathParserError(kind: .cannotParseLocalizedNumber, range: range)
-    }
-    
-}
-
 internal struct LocalizedNumberExtractor: TokenExtractor {
     
     private let decimalNumberFormatter = NumberFormatter()

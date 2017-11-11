@@ -8,15 +8,6 @@
 
 import Foundation
 
-public class HexNumberToken: RawToken {
-    
-    public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
-        guard let value = UInt(string, radix: 16) else { throw MathParserError(kind: .cannotParseHexNumber, range: range) }
-        return [ResolvedToken(kind: .number(Double(value)), string: string, range: range)]
-    }
-    
-}
-
 internal struct HexNumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
