@@ -11,9 +11,6 @@ import Foundation
 public class ExponentToken: RawToken {
     
     public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
-        // TODO: this isn't quite right
-        // for the same reason it wouldn't be right for fractions; the injection of ** shouldn't happen here
-        
         var resolved = Array<ResolvedToken>()
         let powerOperator = operators.powerOperator
         let power = ResolvedToken(kind: .operator(powerOperator), string: "**", range: range.lowerBound ..< range.lowerBound)

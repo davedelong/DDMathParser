@@ -44,8 +44,7 @@ public final class OperatorSet {
         
         // AdditionPrecedence
         precedence += 1
-        addOperator = Operator(builtInOperator: .add, precedence: precedence)
-        ops.append(addOperator)
+        ops.append(Operator(builtInOperator: .add, precedence: precedence))
         ops.append(Operator(builtInOperator: .minus, precedence: precedence))
         ops.append(Operator(builtInOperator: .bitwiseOr, precedence: precedence))
         ops.append(Operator(builtInOperator: .bitwiseXor, precedence: precedence))
@@ -88,6 +87,10 @@ public final class OperatorSet {
         powerOperator = Operator(builtInOperator: .power, precedence: precedence)
         precedence += 1
         ops.append(powerOperator)
+        
+        addFractionOperator = Operator(builtInOperator: .add, precedence: precedence)
+        precedence += 1
+        ops.append(addFractionOperator)
         
         // these are defined as unary right/left associative for convenience
         ops.append(Operator(builtInOperator: .parenthesisOpen, precedence: precedence))
@@ -145,7 +148,7 @@ public final class OperatorSet {
         _operatorTokenSet = nil
     }
     
-    internal let addOperator: Operator
+    internal let addFractionOperator: Operator
     internal let multiplyOperator: Operator
     internal let implicitMultiplyOperator: Operator
     internal let powerOperator: Operator

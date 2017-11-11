@@ -37,7 +37,7 @@ public struct Tokenizer {
             HexNumberExtractor(),
             OctalNumberExtractor(),
             numberExtractor,
-            SpecialNumberExtractor(),
+            FractionNumberExtractor(),
             ExponentExtractor(),
             
             VariableExtractor(operatorTokens: operatorTokens),

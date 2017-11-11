@@ -1,5 +1,5 @@
 //
-//  SpecialNumberExtractor.swift
+//  FractionNumberExtractor.swift
 //  DDMathParser
 //
 //  Created by Dave DeLong on 8/30/15.
@@ -12,14 +12,14 @@ public class FractionNumberToken: RawToken {
     
     public override func resolve(options: TokenResolverOptions, locale: Locale, operators: OperatorSet, previousToken: ResolvedToken? = nil) throws -> Array<ResolvedToken> {
         guard let fraction = string.first else { throw MathParserError(kind: .cannotParseFractionalNumber, range: range) }
-        guard let value = SpecialNumberExtractor.specialNumbers[fraction] else {
+        guard let value = FractionNumberExtractor.fractions[fraction] else {
             throw MathParserError(kind: .cannotParseFractionalNumber, range: range)
         }
         
         let resolved = ResolvedToken(kind: .number(value), string: string, range: range)
         
         if previousToken?.kind.isNumber == true {
-            let add = ResolvedToken(kind: .operator(operators.addOperator), string: "+", range: range.lowerBound ..< range.lowerBound)
+            let add = ResolvedToken(kind: .operator(operators.addFractionOperator), string: "+", range: range.lowerBound ..< range.lowerBound)
             return [add, resolved]
         } else {
             return [resolved]
@@ -28,9 +28,9 @@ public class FractionNumberToken: RawToken {
     
 }
 
-internal struct SpecialNumberExtractor: TokenExtractor {
+internal struct FractionNumberExtractor: TokenExtractor {
     
-    internal static let specialNumbers: Dictionary<Character, Double> = [
+    internal static let fractions: Dictionary<Character, Double> = [
         "½": 0.5,
         "⅓": 0.3333333,
         "⅔": 0.6666666,
@@ -50,7 +50,7 @@ internal struct SpecialNumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
-        guard let _ = SpecialNumberExtractor.specialNumbers[peek] else { return false }
+        guard let _ = FractionNumberExtractor.fractions[peek] else { return false }
         return true
     }
     

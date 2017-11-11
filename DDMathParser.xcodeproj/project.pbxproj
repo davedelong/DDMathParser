@@ -25,7 +25,7 @@
 		552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552781571B752DF90093B070 /* OperatorTokenSet.swift */; };
 		5527815E1B75659A0093B070 /* TokenizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527815D1B75659A0093B070 /* TokenizerTests.swift */; };
 		552CE1C11B8FC88A007B89A1 /* RewriterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C01B8FC88A007B89A1 /* RewriterTests.swift */; };
-		552CE1C61B9387A2007B89A1 /* SpecialNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */; };
+		552CE1C61B9387A2007B89A1 /* FractionNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C51B9387A2007B89A1 /* FractionNumberExtractor.swift */; };
 		552CE1C81B938F15007B89A1 /* ExponentExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */; };
 		552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */; };
 		5536EF5B1B9BED5200788354 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5536EF5A1B9BED5200788354 /* Double.swift */; };
@@ -89,7 +89,7 @@
 		552781571B752DF90093B070 /* OperatorTokenSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorTokenSet.swift; sourceTree = "<group>"; };
 		5527815D1B75659A0093B070 /* TokenizerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenizerTests.swift; sourceTree = "<group>"; };
 		552CE1C01B8FC88A007B89A1 /* RewriterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewriterTests.swift; sourceTree = "<group>"; };
-		552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecialNumberExtractor.swift; sourceTree = "<group>"; };
+		552CE1C51B9387A2007B89A1 /* FractionNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionNumberExtractor.swift; sourceTree = "<group>"; };
 		552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExponentExtractor.swift; sourceTree = "<group>"; };
 		552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedNumberExtractor.swift; sourceTree = "<group>"; };
 		5536EF5A1B9BED5200788354 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
@@ -300,7 +300,7 @@
 				551B53F81C89439500EB318D /* OctalNumberExtractor.swift */,
 				55D48BED1B7415540050331F /* NumberExtractor.swift */,
 				552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */,
-				552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */,
+				552CE1C51B9387A2007B89A1 /* FractionNumberExtractor.swift */,
 				552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */,
 				5527814E1B751DD40093B070 /* VariableExtractor.swift */,
 				552781521B75234F0093B070 /* QuotedVariableExtractor.swift */,
@@ -452,7 +452,7 @@
 				557A80691B757C2C0014822A /* Operator.swift in Sources */,
 				5514B17D1B7D48F4007431D0 /* GroupedToken.swift in Sources */,
 				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,
-				552CE1C61B9387A2007B89A1 /* SpecialNumberExtractor.swift in Sources */,
+				552CE1C61B9387A2007B89A1 /* FractionNumberExtractor.swift in Sources */,
 				552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				551C2D201B8B63EC00876E68 /* DynamicResolution.swift in Sources */,
