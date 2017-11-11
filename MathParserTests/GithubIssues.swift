@@ -271,7 +271,7 @@ class GithubIssues: XCTestCase {
             return
         }
         XCTAssertEqual(tokens.count, 1)
-        XCTAssertEqual(tokens[0].kind, RawToken.Kind.operator)
+        XCTAssertTrue(tokens[0] is OperatorToken)
         XCTAssertEqual(tokens[0].string, "+")
     }
     

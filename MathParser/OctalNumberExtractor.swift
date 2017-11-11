@@ -40,7 +40,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
         if buffer.currentIndex - start > 0 {
             let range: Range<Int> = indexBeforeOctalNumbers ..< buffer.currentIndex
             let raw = buffer[range]
-            result = .value(RawToken(kind: .octalNumber, string: raw, range: range))
+            result = .value(OctalNumberToken(string: raw, range: range))
         } else {
             let range: Range<Int> = start ..< buffer.currentIndex
             let error = MathParserError(kind: .cannotParseOctalNumber, range: range)

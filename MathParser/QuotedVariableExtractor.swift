@@ -58,7 +58,7 @@ internal struct QuotedVariableExtractor: TokenExtractor {
                 let error = MathParserError(kind: .zeroLengthVariable, range: range)
                 result = .error(error)
             } else {
-                let token = RawToken(kind: .variable, string: cleaned, range: range)
+                let token = VariableToken(string: cleaned, range: range)
                 result = .value(token)
             }
         }

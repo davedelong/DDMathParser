@@ -115,22 +115,22 @@ extension TokenResolver {
         
         var resolvedTokens = Array<ResolvedToken>()
         
-        switch rawToken.kind {
-            case .hexNumber:
+        switch rawToken {
+            case is HexNumberToken:
                 if let number = UInt(rawToken.string, radix: 16) {
                     resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
                     throw MathParserError(kind: .cannotParseHexNumber, range: rawToken.range)
                 }
             
-            case .octalNumber:
+            case is OctalNumberToken:
                 if let number = UInt(rawToken.string, radix: 8) {
                     resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
                     throw MathParserError(kind: .cannotParseOctalNumber, range: rawToken.range)
                 }
             
-            case .fraction:
+            case is FractionNumberToken:
                 if case .some(.number(_)) = previous?.kind {
                     let add = operatorSet.addOperator
                     let addToken = ResolvedToken(kind: .operator(add), string: "+", range: rawToken.range.lowerBound ..< rawToken.range.lowerBound)
@@ -138,23 +138,25 @@ extension TokenResolver {
                 }
                 resolvedTokens.append(resolveNumber(rawToken))
             
-            case .number:
+            case is DecimalNumberToken:
                 resolvedTokens.append(resolveNumber(rawToken))
             
-            case .localizedNumber:
+            case is LocalizedNumberToken:
                 resolvedTokens.append(try resolveLocalizedNumber(rawToken))
             
-            case .exponent:
+            case is ExponentToken:
                 resolvedTokens.append(contentsOf: try resolveExponent(rawToken))
                 
-            case .variable:
+            case is VariableToken:
                 resolvedTokens.append(ResolvedToken(kind: .variable(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
-            case .identifier:
+            case is IdentifierToken:
                 resolvedTokens.append(ResolvedToken(kind: .identifier(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
-            case .operator:
+            case is OperatorToken:
                 resolvedTokens.append(try resolveOperator(rawToken, previous: previous))
+            
+            default: fatalError("Unknown raw token: \(rawToken)")
         }
         
         return resolvedTokens

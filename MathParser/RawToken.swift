@@ -8,21 +8,22 @@
 
 import Foundation
 
-public struct RawToken {
-    
-    public enum Kind {
-        case hexNumber
-        case octalNumber
-        case number
-        case fraction
-        case localizedNumber
-        case exponent
-        case variable
-        case `operator`
-        case identifier
-    }
-    
-    public let kind: Kind
+public class RawToken {
     public let string: String
     public let range: Range<Int>
+    
+    public init(string: String, range: Range<Int>) {
+        self.string = string
+        self.range = range
+    }
 }
+
+public class HexNumberToken: RawToken { }
+public class OctalNumberToken: RawToken { }
+public class DecimalNumberToken: RawToken { }
+public class FractionNumberToken: RawToken { }
+public class LocalizedNumberToken: RawToken { }
+public class ExponentToken: RawToken { }
+public class VariableToken: RawToken { }
+public class OperatorToken: RawToken { }
+public class IdentifierToken: RawToken { }

@@ -9,9 +9,8 @@
 import XCTest
 import MathParser
 
-private func TestToken(_ raw: RawToken, kind: RawToken.Kind, string: String, file: StaticString = #file, line: UInt = #line) {
-
-    XCTAssert(raw.kind == kind, "Unexpected token kind", file: file, line: line)
+private func TestToken<T: RawToken>(_ raw: RawToken, kind: T.Type, string: String, file: StaticString = #file, line: UInt = #line) {
+    XCTAssertTrue(raw is T, "Unexpected token kind", file: file, line: line)
     XCTAssertEqual(raw.string, string, "Unexpected token string", file: file, line: line)
 }
 
@@ -31,22 +30,22 @@ class TokenizerTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 2").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        TestToken(tokens[0], kind: .number, string: "1")
-        TestToken(tokens[1], kind: .number, string: "2")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
+        TestToken(tokens[1], kind: DecimalNumberToken.self, string: "2")
     }
     
     func testHexNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x0123").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .hexNumber, string: "0123")
+        TestToken(tokens[0], kind: HexNumberToken.self, string: "0123")
     }
     
     func testOctalNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0o0123").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .octalNumber, string: "0123")
+        TestToken(tokens[0], kind: OctalNumberToken.self, string: "0123")
     }
     
     func testBadHexNumber() {
@@ -55,43 +54,43 @@ class TokenizerTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0x").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        TestToken(tokens[0], kind: .number, string: "0")
-        TestToken(tokens[1], kind: .identifier, string: "x")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "0")
+        TestToken(tokens[1], kind: IdentifierToken.self, string: "x")
     }
     
     func testNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "0123").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .number, string: "0123")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "0123")
     }
     
     func testFloatNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .number, string: "1.23")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1.23")
     }
     
     func testENumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e5").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .number, string: "1.23e5")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1.23e5")
     }
     
     func testEPlusNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e+5").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .number, string: "1.23e+5")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1.23e+5")
     }
     
     func testEMinusNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e-5").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .number, string: "1.23e-5")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1.23e-5")
     }
     
     func testSpecialNumbers() {
@@ -100,7 +99,7 @@ class TokenizerTests: XCTestCase {
         for string in special {
             guard let tokens = XCTAssertNoThrows(try Tokenizer(string: string).tokenize()) else { return }
             XCTAssertEqual(tokens.count, 1)
-            TestToken(tokens[0], kind: .fraction, string: string)
+            TestToken(tokens[0], kind: FractionNumberToken.self, string: string)
         }
     }
     
@@ -108,52 +107,52 @@ class TokenizerTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "2²").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        TestToken(tokens[0], kind: .number, string: "2")
-        TestToken(tokens[1], kind: .exponent, string: "2")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "2")
+        TestToken(tokens[1], kind: ExponentToken.self, string: "2")
     }
     
     func testComplexExponent() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "2⁻⁽²⁺¹⁾⁺⁵").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        TestToken(tokens[0], kind: .number, string: "2")
-        TestToken(tokens[1], kind: .exponent, string: "-(2+1)+5")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "2")
+        TestToken(tokens[1], kind: ExponentToken.self, string: "-(2+1)+5")
     }
     
     func testMissingExponentNumber() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1.23e").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        TestToken(tokens[0], kind: .number, string: "1.23")
-        TestToken(tokens[1], kind: .identifier, string: "e")
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1.23")
+        TestToken(tokens[1], kind: IdentifierToken.self, string: "e")
     }
 
     func testVariable() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "$foo").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .variable, string: "foo")
+        TestToken(tokens[0], kind: VariableToken.self, string: "foo")
     }
     
     func testDoubleQuotedVariable() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\"").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .variable, string: "foo")
+        TestToken(tokens[0], kind: VariableToken.self, string: "foo")
     }
     
     func testSingleQuotedVariable() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "'foo'").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .variable, string: "foo")
+        TestToken(tokens[0], kind: VariableToken.self, string: "foo")
     }
     
     func testQuotedAndEscapedVariable() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "\"foo\\\"\"").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .variable, string: "foo\"")
+        TestToken(tokens[0], kind: VariableToken.self, string: "foo\"")
     }
     
     func testMissingQuoteVariable() {
@@ -193,25 +192,25 @@ class TokenizerTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "+").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .operator, string: "+")
+        TestToken(tokens[0], kind: OperatorToken.self, string: "+")
     }
     
     func testGreedyOperator() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "***").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        TestToken(tokens[0], kind: .operator, string: "**")
-        TestToken(tokens[1], kind: .operator, string: "*")
+        TestToken(tokens[0], kind: OperatorToken.self, string: "**")
+        TestToken(tokens[1], kind: OperatorToken.self, string: "*")
     }
     
     func testConsecutiveOperators() {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "+-*/").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 4)
-        TestToken(tokens[0], kind: .operator, string: "+")
-        TestToken(tokens[1], kind: .operator, string: "-")
-        TestToken(tokens[2], kind: .operator, string: "*")
-        TestToken(tokens[3], kind: .operator, string: "/")
+        TestToken(tokens[0], kind: OperatorToken.self, string: "+")
+        TestToken(tokens[1], kind: OperatorToken.self, string: "-")
+        TestToken(tokens[2], kind: OperatorToken.self, string: "*")
+        TestToken(tokens[3], kind: OperatorToken.self, string: "/")
     }
     
     func testCustomOperatorTokens() {
@@ -238,7 +237,7 @@ class TokenizerTests: XCTestCase {
             let string = "1 \(token) 2"
             guard let tokens = XCTAssertNoThrows(try Tokenizer(string: string, operatorSet: ops).tokenize()) else { return }
             XCTAssertEqual(tokens.count, 3)
-            TestToken(tokens[1], kind: .operator, string: token)
+            TestToken(tokens[1], kind: OperatorToken.self, string: token)
         }
     }
     
@@ -246,8 +245,8 @@ class TokenizerTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "+1").tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 2)
-        TestToken(tokens[0], kind: .operator, string: "+")
-        TestToken(tokens[1], kind: .number, string: "1")
+        TestToken(tokens[0], kind: OperatorToken.self, string: "+")
+        TestToken(tokens[1], kind: DecimalNumberToken.self, string: "1")
     }
     
     func testLocalizedNumber() {
@@ -255,7 +254,7 @@ class TokenizerTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1,23", locale: l).tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
-        TestToken(tokens[0], kind: .localizedNumber, string: "1,23")
+        TestToken(tokens[0], kind: LocalizedNumberToken.self, string: "1,23")
     }
     
     func testLocalizedNumbers() {
@@ -263,15 +262,15 @@ class TokenizerTests: XCTestCase {
         guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "sum(1,2, 3,4, 5,6,7,8)", locale: l).tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 10)
-        TestToken(tokens[0], kind: .identifier, string: "sum")
-        TestToken(tokens[1], kind: .operator, string: "(")
-        TestToken(tokens[2], kind: .localizedNumber, string: "1,2")
-        TestToken(tokens[3], kind: .operator, string: ",")
-        TestToken(tokens[4], kind: .localizedNumber, string: "3,4")
-        TestToken(tokens[5], kind: .operator, string: ",")
-        TestToken(tokens[6], kind: .localizedNumber, string: "5,6")
-        TestToken(tokens[7], kind: .operator, string: ",")
-        TestToken(tokens[8], kind: .localizedNumber, string: "7,8")
-        TestToken(tokens[9], kind: .operator, string: ")")
+        TestToken(tokens[0], kind: IdentifierToken.self, string: "sum")
+        TestToken(tokens[1], kind: OperatorToken.self, string: "(")
+        TestToken(tokens[2], kind: LocalizedNumberToken.self, string: "1,2")
+        TestToken(tokens[3], kind: OperatorToken.self, string: ",")
+        TestToken(tokens[4], kind: LocalizedNumberToken.self, string: "3,4")
+        TestToken(tokens[5], kind: OperatorToken.self, string: ",")
+        TestToken(tokens[6], kind: LocalizedNumberToken.self, string: "5,6")
+        TestToken(tokens[7], kind: OperatorToken.self, string: ",")
+        TestToken(tokens[8], kind: LocalizedNumberToken.self, string: "7,8")
+        TestToken(tokens[9], kind: OperatorToken.self, string: ")")
     }
 }

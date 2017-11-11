@@ -40,7 +40,7 @@ internal struct HexNumberExtractor: TokenExtractor {
         if buffer.currentIndex - start > 0 {
             let range: Range<Int> = indexBeforeHexNumbers ..< buffer.currentIndex
             let raw = buffer[range]
-            result = .value(RawToken(kind: .hexNumber, string: raw, range: range))
+            result = .value(HexNumberToken(string: raw, range: range))
         } else {
             let range: Range<Int> = start ..< buffer.currentIndex
             let error = MathParserError(kind: .cannotParseHexNumber, range: range)

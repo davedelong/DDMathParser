@@ -56,7 +56,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
             return .error(error)
         }
         
-        let token = RawToken(kind: .localizedNumber, string: soFar, range: range)
+        let token = LocalizedNumberToken(string: soFar, range: range)
         return .value(token)
     }
     

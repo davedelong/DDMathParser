@@ -60,7 +60,7 @@ internal struct NumberExtractor: TokenExtractor {
         if length > 0 {
             if length != 1 || buffer[start] != "." {
                 let raw = buffer[range]
-                result = .value(RawToken(kind: .number, string: raw, range: range))
+                result = .value(DecimalNumberToken(string: raw, range: range))
             }
         }
         return result
