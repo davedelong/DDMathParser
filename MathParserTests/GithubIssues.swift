@@ -362,4 +362,12 @@ class GithubIssues: XCTestCase {
         guard let d2 = XCTAssertNoThrows(try "0.2".evaluate()) else { return }
         XCTAssertEqual(d2, 0.2)
     }
+    
+    func testIssue145() {
+        guard let d1 = XCTAssertNoThrows(try "-2+3".evaluate()) else { return }
+        XCTAssertEqual(d1, 1)        
+        
+        guard let d2 = XCTAssertNoThrows(try "-2++3".evaluate()) else { return }
+        XCTAssertEqual(d2, 1)
+    }
 }
