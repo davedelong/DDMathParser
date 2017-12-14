@@ -11,7 +11,7 @@ import Foundation
 internal struct DecimalNumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
-        return buffer.peekNext()?.isDigit == true
+        return buffer.peekNext()?.isDigit == true || buffer.peekNext() == "."
     }
     
     func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
