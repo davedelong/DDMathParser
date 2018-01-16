@@ -50,6 +50,11 @@ public struct MathParserError: Error {
     
     // the location within the original source string where the error was found
     public let range: Range<Int>
+
+    public init(kind: Kind, range: Range<Int>) {
+        self.kind = kind
+        self.range = range
+    }
 }
 
 extension MathParserError.Kind: Equatable { }
