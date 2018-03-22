@@ -425,21 +425,21 @@ public extension Function {
         return Darwin.tan(Function._dtor(arg1, evaluator: state.evaluator))
     })
     
-    public static let asin = Function(name: "asin", evaluator: { state throws -> Double in
+    public static let asin = Function(names: ["asin", "sin⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
         return Function._rtod(Darwin.asin(arg1), evaluator: state.evaluator)
     })
     
-    public static let acos = Function(name: "acos", evaluator: { state throws -> Double in
+    public static let acos = Function(names: ["acos", "cos⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
         return Function._rtod(Darwin.acos(arg1), evaluator: state.evaluator)
     })
     
-    public static let atan = Function(name: "atan", evaluator: { state throws -> Double in
+    public static let atan = Function(names: ["atan", "tan⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -481,7 +481,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let acsc = Function(name: "acsc", evaluator: { state throws -> Double in
+    public static let acsc = Function(names: ["acsc", "csc⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -489,7 +489,7 @@ public extension Function {
         return Function._rtod(Darwin.asin(1.0 / arg1), evaluator: state.evaluator)
     })
     
-    public static let asec = Function(name: "asec", evaluator: { state throws -> Double in
+    public static let asec = Function(names: ["asec", "sec⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -497,7 +497,7 @@ public extension Function {
         return Function._rtod(Darwin.acos(1.0 / arg1), evaluator: state.evaluator)
     })
     
-    public static let acotan = Function(name: "acotan", evaluator: { state throws -> Double in
+    public static let acotan = Function(names: ["acotan", "cotan⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -528,21 +528,21 @@ public extension Function {
         return Darwin.tanh(arg1)
     })
     
-    public static let asinh = Function(name: "asinh", evaluator: { state throws -> Double in
+    public static let asinh = Function(names: ["asinh", "sinh⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
         return Darwin.asinh(arg1)
     })
     
-    public static let acosh = Function(name: "acosh", evaluator: { state throws -> Double in
+    public static let acosh = Function(names: ["acosh", "cosh⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
         return Darwin.acosh(arg1)
     })
     
-    public static let atanh = Function(name: "atanh", evaluator: { state throws -> Double in
+    public static let atanh = Function(names: ["atanh", "tanh⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -576,7 +576,7 @@ public extension Function {
         return 1.0 / sinArg
     })
     
-    public static let acsch = Function(name: "acsch", evaluator: { state throws -> Double in
+    public static let acsch = Function(names: ["acsch", "csch⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -584,7 +584,7 @@ public extension Function {
         return Darwin.asinh(1.0 / arg1)
     })
     
-    public static let asech = Function(name: "asech", evaluator: { state throws -> Double in
+    public static let asech = Function(names: ["asech", "sech⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
@@ -592,7 +592,7 @@ public extension Function {
         return Darwin.acosh(1.0 / arg1)
     })
     
-    public static let acotanh = Function(name: "acotanh", evaluator: { state throws -> Double in
+    public static let acotanh = Function(names: ["acotanh", "cotanh⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
