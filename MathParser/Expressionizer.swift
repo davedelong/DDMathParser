@@ -29,12 +29,7 @@ private enum TokenOrExpression {
         return e
     }
     
-// <rdar://problem/27805272> Segfault when compiling "Result" enum
-//    var isToken: Bool { return token != nil }
-    var isToken: Bool {
-        if case .token(_) = self { return true }
-        return false
-    }
+    var isToken: Bool { return token != nil }
     
     var range: Range<Int> {
         switch self {
@@ -95,7 +90,7 @@ public struct Expressionizer {
             guard let op = maybeOp else { fatalError("Indices but no operator??") }
             
             let index = op.associativity == .left ? first : last
-            wrappers = try collapseWrappers(wrappers, aroundOperator: op, atIndex: index)
+            wrappers = try collapseWrappers(wrappers, aroundOperatorAtIndex: index)
         }
         
         guard let wrapper = wrappers.first else {
@@ -136,7 +131,8 @@ public struct Expressionizer {
         return (indices, op)
     }
     
-    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundOperator op: Operator, atIndex index: Int) throws -> Array<TokenOrExpression> {
+    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundOperatorAtIndex index: Int) throws -> Array<TokenOrExpression> {
+        guard let op = wrappers[index].token?.groupedOperator else { fatalError("Implementation flaw") }
         switch (op.arity, op.associativity) {
             case (.binary, _):
                 return try collapseWrappers(wrappers, aroundBinaryOperator: op, atIndex: index)

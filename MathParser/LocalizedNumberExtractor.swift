@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 internal struct LocalizedNumberExtractor: TokenExtractor {
     
     private let decimalNumberFormatter = NumberFormatter()
@@ -23,7 +21,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         return buffer.peekNext() != nil
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         var indexBeforeDecimal: Int?
         
@@ -56,7 +54,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
             return .error(error)
         }
         
-        let token = RawToken(kind: .localizedNumber, string: soFar, range: range)
+        let token = LocalizedNumberToken(string: soFar, range: range)
         return .value(token)
     }
     

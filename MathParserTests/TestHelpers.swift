@@ -50,5 +50,5 @@ func TestString(_ string: String, value: Double, evaluator: Evaluator = Evaluato
     guard let d = XCTAssertNoThrows(try evaluator.evaluate(e), file: file, line: line) else {
         return
     }
-    XCTAssertEqualWithAccuracy(d, value, accuracy: .ulpOfOne, file: file, line: line)
+    XCTAssertEqual(d, value, accuracy: .ulpOfOne, file: file, line: line)
 }

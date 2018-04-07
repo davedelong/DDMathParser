@@ -47,26 +47,8 @@ public extension ResolvedToken.Kind {
         return resolvedOperator?.builtInOperator
     }
 
-// <rdar://problem/27805272> Segfault when compiling "Result" enum
-//    public var isNumber: Bool { return number != nil }
-//    public var isVariable: Bool { return variable != nil }
-//    public var isIdentifier: Bool { return identifier != nil }
-//    public var isOperator: Bool { return resolvedOperator != nil }
-    
-    public var isNumber: Bool {
-        if case .number(_) = self { return true }
-        return false
-    }
-    public var isVariable: Bool {
-        if case .variable(_) = self { return true }
-        return false
-    }
-    public var isIdentifier: Bool {
-        if case .identifier(_) = self { return true }
-        return false
-    }
-    public var isOperator: Bool {
-        if case .operator(_) = self { return true }
-        return false
-    }
+    public var isNumber: Bool { return number != nil }
+    public var isVariable: Bool { return variable != nil }
+    public var isIdentifier: Bool { return identifier != nil }
+    public var isOperator: Bool { return resolvedOperator != nil }
 }

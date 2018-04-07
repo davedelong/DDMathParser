@@ -21,7 +21,7 @@ internal struct IdentifierExtractor: TokenExtractor {
         return next != "$" && next?.isDigit == false && next != "\"" && next != "'"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         while let next = buffer.peekNext(), next.isWhitespace == false && operatorTokens.isOperatorCharacter(next) == false {
@@ -29,11 +29,11 @@ internal struct IdentifierExtractor: TokenExtractor {
         }
         
         let range: Range<Int> = start ..< buffer.currentIndex
-        let result: TokenIterator.Element
+        let result: Tokenizer.Result
         
         if buffer.currentIndex - start > 0 {
             let raw = buffer[range]
-            result = .value(RawToken(kind: .identifier, string: raw, range: range))
+            result = .value(IdentifierToken(string: raw, range: range))
         } else {
             let error = MathParserError(kind: .cannotParseIdentifier, range: range)
             result = .error(error)

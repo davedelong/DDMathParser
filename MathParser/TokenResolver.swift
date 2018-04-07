@@ -115,60 +115,59 @@ extension TokenResolver {
         
         var resolvedTokens = Array<ResolvedToken>()
         
-        switch rawToken.kind {
-            case .hexNumber:
+        switch rawToken {
+            case is HexNumberToken:
                 if let number = UInt(rawToken.string, radix: 16) {
                     resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
                     throw MathParserError(kind: .cannotParseHexNumber, range: rawToken.range)
                 }
             
-            case .octalNumber:
+            case is OctalNumberToken:
                 if let number = UInt(rawToken.string, radix: 8) {
                     resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
                     throw MathParserError(kind: .cannotParseOctalNumber, range: rawToken.range)
                 }
             
-            case .fraction:
-                if case .some(.number(_)) = previous?.kind {
+            case is FractionNumberToken:
+                if previous?.kind.isNumber == true {
                     let add = operatorSet.addFractionOperator
                     let addToken = ResolvedToken(kind: .operator(add), string: "+", range: rawToken.range.lowerBound ..< rawToken.range.lowerBound)
                     resolvedTokens.append(addToken)
                 }
-                resolvedTokens.append(resolveNumber(rawToken))
             
-            case .number:
-                resolvedTokens.append(resolveNumber(rawToken))
+                // first, see if it's a special number
+                if let character = rawToken.string.first, let value = FractionNumberExtractor.fractions[character] {
+                    resolvedTokens.append(ResolvedToken(kind: .number(value), string: rawToken.string, range: rawToken.range))
+                } else {
+                    throw MathParserError(kind: .cannotParseFractionalNumber, range: rawToken.range)
+                }
             
-            case .localizedNumber:
+            case is DecimalNumberToken:
+                let cleaned = rawToken.string.replacingOccurrences(of: "−", with: "-")
+                let number = NSDecimalNumber(string: cleaned)
+                resolvedTokens.append(ResolvedToken(kind: .number(number.doubleValue), string: rawToken.string, range: rawToken.range))
+            
+            case is LocalizedNumberToken:
                 resolvedTokens.append(try resolveLocalizedNumber(rawToken))
             
-            case .exponent:
+            case is ExponentToken:
                 resolvedTokens.append(contentsOf: try resolveExponent(rawToken))
                 
-            case .variable:
+            case is VariableToken:
                 resolvedTokens.append(ResolvedToken(kind: .variable(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
-            case .identifier:
+            case is IdentifierToken:
                 resolvedTokens.append(ResolvedToken(kind: .identifier(rawToken.string), string: rawToken.string, range: rawToken.range))
                 
-            case .operator:
+            case is OperatorToken:
                 resolvedTokens.append(try resolveOperator(rawToken, previous: previous))
+            
+            default: fatalError("Unknown raw token: \(rawToken)")
         }
         
         return resolvedTokens
-    }
-    
-    private func resolveNumber(_ raw: RawToken) -> ResolvedToken {
-        // first, see if it's a special number
-        if let character = raw.string.characters.first, let value = SpecialNumberExtractor.specialNumbers[character] {
-            return ResolvedToken(kind: .number(value), string: raw.string, range: raw.range)
-        }
-        
-        let cleaned = raw.string.replacingOccurrences(of: "−", with: "-")
-        let number = NSDecimalNumber(string: cleaned)
-        return ResolvedToken(kind: .number(number.doubleValue), string: raw.string, range: raw.range)
     }
     
     private func resolveLocalizedNumber(_ raw: RawToken) throws -> ResolvedToken {

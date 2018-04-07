@@ -170,7 +170,7 @@ public struct TokenGrouper {
         
         guard let close = g.next(), close.kind.builtInOperator == .parenthesisClose else {
             let indexForMissingParen = tokens.last?.range.upperBound ?? open.range.upperBound
-            throw MathParserError(kind: .missingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
+            throw MathParserError(kind: .missingCloseParenthesis, range: open.range.lowerBound ..< indexForMissingParen)
         }
         
         let range: Range<Int> = open.range.lowerBound ..< close.range.upperBound

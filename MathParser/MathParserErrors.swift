@@ -15,6 +15,7 @@ public struct MathParserError: Error {
         case cannotParseNumber
         case cannotParseHexNumber // can also occur during Resolution
         case cannotParseOctalNumber // can also occur during Resolution
+        case cannotParseFractionalNumber
         case cannotParseExponent
         case cannotParseIdentifier
         case cannotParseVariable
@@ -49,6 +50,11 @@ public struct MathParserError: Error {
     
     // the location within the original source string where the error was found
     public let range: Range<Int>
+
+    public init(kind: Kind, range: Range<Int>) {
+        self.kind = kind
+        self.range = range
+    }
 }
 
 extension MathParserError.Kind: Equatable { }

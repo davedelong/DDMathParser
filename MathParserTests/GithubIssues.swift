@@ -45,7 +45,7 @@ class GithubIssues: XCTestCase {
         guard let d = XCTAssertNoThrows(try "exp(ln(42))".evaluate()) else { return }
         // d is 42.00000000000000711
         // that's pretty close, but we need to fudge in some ε
-        XCTAssertEqualWithAccuracy(d, 42, accuracy: 32 * .ulpOfOne)
+        XCTAssertEqual(d, 42, accuracy: 32 * .ulpOfOne)
     }
     
     func testIssue14() {
@@ -55,7 +55,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue15() {
         guard let d = XCTAssertNoThrows(try "sin(π/6)".evaluate()) else { return }
-        XCTAssertEqualWithAccuracy(d, 0.5, accuracy: .ulpOfOne)
+        XCTAssertEqual(d, 0.5, accuracy: .ulpOfOne)
     }
     
     func testIssue16() {
@@ -84,11 +84,11 @@ class GithubIssues: XCTestCase {
         
         guard let e1 = XCTAssertNoThrows(try Expression(string: "sin(45)")) else { return }
         guard let d1 = XCTAssertNoThrows(try eval.evaluate(e1)) else { return }
-        XCTAssertEqualWithAccuracy(d1, 2.squareRoot() / 2, accuracy: .ulpOfOne)
+        XCTAssertEqual(d1, 2.squareRoot() / 2, accuracy: .ulpOfOne)
         
         guard let e2 = XCTAssertNoThrows(try Expression(string: "sin(π/2)")) else { return }
         guard let d2 = XCTAssertNoThrows(try eval.evaluate(e2)) else { return }
-        XCTAssertEqualWithAccuracy(d2, 0.02741213359204429, accuracy: .ulpOfOne)
+        XCTAssertEqual(d2, 0.02741213359204429, accuracy: .ulpOfOne)
         
         
         eval.angleMeasurementMode = .radians
@@ -271,7 +271,7 @@ class GithubIssues: XCTestCase {
             return
         }
         XCTAssertEqual(tokens.count, 1)
-        XCTAssertEqual(tokens[0].kind, RawToken.Kind.operator)
+        XCTAssertTrue(tokens[0] is OperatorToken)
         XCTAssertEqual(tokens[0].string, "+")
     }
     
@@ -352,5 +352,22 @@ class GithubIssues: XCTestCase {
         
         guard let d1 = XCTAssertNoThrows(try "2½ * 2".evaluate()) else { return }
         XCTAssertEqual(d1, 5)
+    }
+    
+    func testIssue144() {
+        guard let d1 = XCTAssertNoThrows(try ".2".evaluate()) else { return }
+        XCTAssertEqual(d1, 0.2)
+        
+        
+        guard let d2 = XCTAssertNoThrows(try "0.2".evaluate()) else { return }
+        XCTAssertEqual(d2, 0.2)
+    }
+    
+    func testIssue145() {
+        guard let d1 = XCTAssertNoThrows(try "-2+3".evaluate()) else { return }
+        XCTAssertEqual(d1, 1)        
+        
+        guard let d2 = XCTAssertNoThrows(try "-2++3".evaluate()) else { return }
+        XCTAssertEqual(d2, 1)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  SpecialNumberExtractor.swift
+//  FractionNumberExtractor.swift
 //  DDMathParser
 //
 //  Created by Dave DeLong on 8/30/15.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-internal struct SpecialNumberExtractor: TokenExtractor {
+internal struct FractionNumberExtractor: TokenExtractor {
     
-    internal static let specialNumbers: Dictionary<Character, Double> = [
+    internal static let fractions: Dictionary<Character, Double> = [
         "½": 0.5,
         "⅓": 0.3333333,
         "⅔": 0.6666666,
@@ -30,11 +30,11 @@ internal struct SpecialNumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
-        guard let _ = SpecialNumberExtractor.specialNumbers[peek] else { return false }
+        guard let _ = FractionNumberExtractor.fractions[peek] else { return false }
         return true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         // consume the character
@@ -42,7 +42,7 @@ internal struct SpecialNumberExtractor: TokenExtractor {
         
         let range: Range<Int> = start ..< buffer.currentIndex
         let raw = buffer[range]
-        return .value(RawToken(kind: .fraction, string: raw, range: range))
+        return .value(FractionNumberToken(string: raw, range: range))
     }
     
 }

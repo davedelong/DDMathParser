@@ -8,6 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		079712FC1EB49A0B003D7C3C /* SubstitutionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079712FB1EB49A0B003D7C3C /* SubstitutionExtensions.swift */; };
+		55113C071FC35AC7001E508D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C061FC35AC7001E508D /* AppDelegate.swift */; };
+		55113C091FC35AC7001E508D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55113C081FC35AC7001E508D /* Assets.xcassets */; };
+		55113C0C1FC35AC7001E508D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55113C0A1FC35AC7001E508D /* MainMenu.xib */; };
+		55113C141FC49139001E508D /* AnalyzerFlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C121FC49138001E508D /* AnalyzerFlowViewController.swift */; };
+		55113C151FC49139001E508D /* AnalyzerFlowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55113C131FC49138001E508D /* AnalyzerFlowViewController.xib */; };
+		55113C1C1FC49173001E508D /* RawTokenAnalyzerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C1A1FC49173001E508D /* RawTokenAnalyzerViewController.swift */; };
+		55113C1D1FC49173001E508D /* RawTokenAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55113C1B1FC49173001E508D /* RawTokenAnalyzerViewController.xib */; };
+		55113C201FC49181001E508D /* ResolvedTokenAnalyzerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C1E1FC49181001E508D /* ResolvedTokenAnalyzerViewController.swift */; };
+		55113C211FC49181001E508D /* ResolvedTokenAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55113C1F1FC49181001E508D /* ResolvedTokenAnalyzerViewController.xib */; };
+		55113C241FC4918C001E508D /* GroupedTokenAnalyzerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C221FC4918C001E508D /* GroupedTokenAnalyzerViewController.swift */; };
+		55113C251FC4918C001E508D /* GroupedTokenAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55113C231FC4918C001E508D /* GroupedTokenAnalyzerViewController.xib */; };
+		55113C281FC49197001E508D /* ExpressionAnalyzerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C261FC49197001E508D /* ExpressionAnalyzerViewController.swift */; };
+		55113C291FC49197001E508D /* ExpressionAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55113C271FC49197001E508D /* ExpressionAnalyzerViewController.xib */; };
+		55113C2D1FC491BA001E508D /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C2B1FC491BA001E508D /* DemoViewController.swift */; };
+		55113C2E1FC491BA001E508D /* DemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55113C2C1FC491BA001E508D /* DemoViewController.xib */; };
+		55113C321FC495D2001E508D /* AnalyzerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55113C311FC495D2001E508D /* AnalyzerViewController.swift */; };
+		55113C331FC499E3001E508D /* MathParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559B3EF91B74063600000108 /* MathParser.framework */; };
+		55113C341FC499E3001E508D /* MathParser.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 559B3EF91B74063600000108 /* MathParser.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5514B1741B7BDF57007431D0 /* RawToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5514B1731B7BDF57007431D0 /* RawToken.swift */; };
 		5514B1761B7C22D6007431D0 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5514B1751B7C22D6007431D0 /* TestHelpers.swift */; };
 		5514B1781B7CFD1A007431D0 /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5514B1771B7CFD1A007431D0 /* ResolverTests.swift */; };
@@ -25,7 +43,7 @@
 		552781581B752DF90093B070 /* OperatorTokenSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552781571B752DF90093B070 /* OperatorTokenSet.swift */; };
 		5527815E1B75659A0093B070 /* TokenizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5527815D1B75659A0093B070 /* TokenizerTests.swift */; };
 		552CE1C11B8FC88A007B89A1 /* RewriterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C01B8FC88A007B89A1 /* RewriterTests.swift */; };
-		552CE1C61B9387A2007B89A1 /* SpecialNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */; };
+		552CE1C61B9387A2007B89A1 /* FractionNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C51B9387A2007B89A1 /* FractionNumberExtractor.swift */; };
 		552CE1C81B938F15007B89A1 /* ExponentExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */; };
 		552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */; };
 		5536EF5B1B9BED5200788354 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5536EF5A1B9BED5200788354 /* Double.swift */; };
@@ -39,7 +57,6 @@
 		559B3EFC1B74063600000108 /* MathParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 559B3EFB1B74063600000108 /* MathParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		559B3F031B74063600000108 /* MathParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559B3EF91B74063600000108 /* MathParser.framework */; };
 		559B3F111B7406D800000108 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F101B7406D800000108 /* Tokenizer.swift */; };
-		559B3F161B7407CE00000108 /* TokenIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F151B7407CE00000108 /* TokenIterator.swift */; };
 		559B3F181B7408A900000108 /* Either.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F171B7408A900000108 /* Either.swift */; };
 		559B3F1C1B740C0B00000108 /* TokenExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559B3F1B1B740C0B00000108 /* TokenExtractor.swift */; };
 		55AE3A1C1B7E757D0022D1CF /* PeekingIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AE3A1B1B7E757D0022D1CF /* PeekingIterator.swift */; };
@@ -51,15 +68,24 @@
 		55B6AF5E1B8D081F00778033 /* RewriteRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF5D1B8D081F00778033 /* RewriteRule.swift */; };
 		55B6AF611B8D0AD100778033 /* ExpressionRewriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF601B8D0AD100778033 /* ExpressionRewriter.swift */; };
 		55B6AF631B8D870600778033 /* RewriteRule+Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B6AF621B8D870600778033 /* RewriteRule+Defaults.swift */; };
+		55BC91BA1FE2FEBF008816C2 /* VariableAnalyzerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BC91B81FE2FEBF008816C2 /* VariableAnalyzerViewController.swift */; };
+		55BC91BB1FE2FEBF008816C2 /* VariableAnalyzerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55BC91B91FE2FEBF008816C2 /* VariableAnalyzerViewController.xib */; };
 		55D48BE71B740F3E0050331F /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE61B740F3E0050331F /* Character.swift */; };
 		55D48BE91B7414420050331F /* TokenCharacterBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */; };
-		55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BED1B7415540050331F /* NumberExtractor.swift */; };
+		55D48BEE1B7415540050331F /* DecimalNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BED1B7415540050331F /* DecimalNumberExtractor.swift */; };
 		55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D48BF01B7415E80050331F /* HexNumberExtractor.swift */; };
 		55E640AE1B76B67400D7769C /* ResolvedToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E640AD1B76B67400D7769C /* ResolvedToken.swift */; };
 		55E640B11B76CBAF00D7769C /* TokenResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E640B01B76CBAF00D7769C /* TokenResolver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		55113C351FC499E3001E508D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 559B3EF81B74063600000108;
+			remoteInfo = MathParser;
+		};
 		559B3F041B74063600000108 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
@@ -69,10 +95,43 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		55113C371FC499E3001E508D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				55113C341FC499E3001E508D /* MathParser.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		079712FB1EB49A0B003D7C3C /* SubstitutionExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubstitutionExtensions.swift; sourceTree = "<group>"; };
 		08FB779EFE84155DC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		3D80DDD019BA9163008C2E6C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		55113C041FC35AC7001E508D /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		55113C061FC35AC7001E508D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		55113C081FC35AC7001E508D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		55113C0B1FC35AC7001E508D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		55113C0D1FC35AC7001E508D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55113C0E1FC35AC7001E508D /* Demo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Demo.entitlements; sourceTree = "<group>"; };
+		55113C121FC49138001E508D /* AnalyzerFlowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzerFlowViewController.swift; sourceTree = "<group>"; };
+		55113C131FC49138001E508D /* AnalyzerFlowViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AnalyzerFlowViewController.xib; sourceTree = "<group>"; };
+		55113C1A1FC49173001E508D /* RawTokenAnalyzerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawTokenAnalyzerViewController.swift; sourceTree = "<group>"; };
+		55113C1B1FC49173001E508D /* RawTokenAnalyzerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RawTokenAnalyzerViewController.xib; sourceTree = "<group>"; };
+		55113C1E1FC49181001E508D /* ResolvedTokenAnalyzerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResolvedTokenAnalyzerViewController.swift; sourceTree = "<group>"; };
+		55113C1F1FC49181001E508D /* ResolvedTokenAnalyzerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ResolvedTokenAnalyzerViewController.xib; sourceTree = "<group>"; };
+		55113C221FC4918C001E508D /* GroupedTokenAnalyzerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedTokenAnalyzerViewController.swift; sourceTree = "<group>"; };
+		55113C231FC4918C001E508D /* GroupedTokenAnalyzerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GroupedTokenAnalyzerViewController.xib; sourceTree = "<group>"; };
+		55113C261FC49197001E508D /* ExpressionAnalyzerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionAnalyzerViewController.swift; sourceTree = "<group>"; };
+		55113C271FC49197001E508D /* ExpressionAnalyzerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExpressionAnalyzerViewController.xib; sourceTree = "<group>"; };
+		55113C2B1FC491BA001E508D /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
+		55113C2C1FC491BA001E508D /* DemoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DemoViewController.xib; sourceTree = "<group>"; };
+		55113C311FC495D2001E508D /* AnalyzerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzerViewController.swift; sourceTree = "<group>"; };
 		5514B1731B7BDF57007431D0 /* RawToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawToken.swift; sourceTree = "<group>"; };
 		5514B1751B7C22D6007431D0 /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		5514B1771B7CFD1A007431D0 /* ResolverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResolverTests.swift; sourceTree = "<group>"; };
@@ -90,7 +149,7 @@
 		552781571B752DF90093B070 /* OperatorTokenSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorTokenSet.swift; sourceTree = "<group>"; };
 		5527815D1B75659A0093B070 /* TokenizerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenizerTests.swift; sourceTree = "<group>"; };
 		552CE1C01B8FC88A007B89A1 /* RewriterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewriterTests.swift; sourceTree = "<group>"; };
-		552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecialNumberExtractor.swift; sourceTree = "<group>"; };
+		552CE1C51B9387A2007B89A1 /* FractionNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FractionNumberExtractor.swift; sourceTree = "<group>"; };
 		552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExponentExtractor.swift; sourceTree = "<group>"; };
 		552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedNumberExtractor.swift; sourceTree = "<group>"; };
 		5536EF5A1B9BED5200788354 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
@@ -107,7 +166,6 @@
 		559B3F021B74063600000108 /* MathParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MathParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		559B3F091B74063600000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		559B3F101B7406D800000108 /* Tokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
-		559B3F151B7407CE00000108 /* TokenIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenIterator.swift; sourceTree = "<group>"; };
 		559B3F171B7408A900000108 /* Either.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Either.swift; sourceTree = "<group>"; };
 		559B3F1B1B740C0B00000108 /* TokenExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenExtractor.swift; sourceTree = "<group>"; };
 		55AE3A1B1B7E757D0022D1CF /* PeekingIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeekingIterator.swift; sourceTree = "<group>"; };
@@ -119,15 +177,25 @@
 		55B6AF5D1B8D081F00778033 /* RewriteRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewriteRule.swift; sourceTree = "<group>"; };
 		55B6AF601B8D0AD100778033 /* ExpressionRewriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionRewriter.swift; sourceTree = "<group>"; };
 		55B6AF621B8D870600778033 /* RewriteRule+Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RewriteRule+Defaults.swift"; sourceTree = "<group>"; };
+		55BC91B81FE2FEBF008816C2 /* VariableAnalyzerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableAnalyzerViewController.swift; sourceTree = "<group>"; };
+		55BC91B91FE2FEBF008816C2 /* VariableAnalyzerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VariableAnalyzerViewController.xib; sourceTree = "<group>"; };
 		55D48BE61B740F3E0050331F /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenCharacterBuffer.swift; sourceTree = "<group>"; };
-		55D48BED1B7415540050331F /* NumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberExtractor.swift; sourceTree = "<group>"; };
+		55D48BED1B7415540050331F /* DecimalNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalNumberExtractor.swift; sourceTree = "<group>"; };
 		55D48BF01B7415E80050331F /* HexNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexNumberExtractor.swift; sourceTree = "<group>"; };
 		55E640AD1B76B67400D7769C /* ResolvedToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResolvedToken.swift; sourceTree = "<group>"; };
 		55E640B01B76CBAF00D7769C /* TokenResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenResolver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		55113C011FC35AC7001E508D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55113C331FC499E3001E508D /* MathParser.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		559B3EF51B74063600000108 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -152,6 +220,7 @@
 				559B3EFA1B74063600000108 /* MathParser */,
 				559B3F061B74063600000108 /* MathParserTests */,
 				08FB779DFE84155DC02AAC07 /* External Frameworks and Libraries */,
+				55113C051FC35AC7001E508D /* Demo */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 			);
 			name = DDMathParser;
@@ -173,8 +242,44 @@
 			children = (
 				559B3EF91B74063600000108 /* MathParser.framework */,
 				559B3F021B74063600000108 /* MathParserTests.xctest */,
+				55113C041FC35AC7001E508D /* Demo.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		55113C051FC35AC7001E508D /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				55113C061FC35AC7001E508D /* AppDelegate.swift */,
+				55113C2B1FC491BA001E508D /* DemoViewController.swift */,
+				55113C2C1FC491BA001E508D /* DemoViewController.xib */,
+				55113C121FC49138001E508D /* AnalyzerFlowViewController.swift */,
+				55113C131FC49138001E508D /* AnalyzerFlowViewController.xib */,
+				55113C2A1FC4919D001E508D /* Analyzers */,
+				55113C081FC35AC7001E508D /* Assets.xcassets */,
+				55113C0A1FC35AC7001E508D /* MainMenu.xib */,
+				55113C0D1FC35AC7001E508D /* Info.plist */,
+				55113C0E1FC35AC7001E508D /* Demo.entitlements */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
+		55113C2A1FC4919D001E508D /* Analyzers */ = {
+			isa = PBXGroup;
+			children = (
+				55113C311FC495D2001E508D /* AnalyzerViewController.swift */,
+				55113C1A1FC49173001E508D /* RawTokenAnalyzerViewController.swift */,
+				55113C1B1FC49173001E508D /* RawTokenAnalyzerViewController.xib */,
+				55113C1E1FC49181001E508D /* ResolvedTokenAnalyzerViewController.swift */,
+				55113C1F1FC49181001E508D /* ResolvedTokenAnalyzerViewController.xib */,
+				55113C221FC4918C001E508D /* GroupedTokenAnalyzerViewController.swift */,
+				55113C231FC4918C001E508D /* GroupedTokenAnalyzerViewController.xib */,
+				55113C261FC49197001E508D /* ExpressionAnalyzerViewController.swift */,
+				55113C271FC49197001E508D /* ExpressionAnalyzerViewController.xib */,
+				55BC91B81FE2FEBF008816C2 /* VariableAnalyzerViewController.swift */,
+				55BC91B91FE2FEBF008816C2 /* VariableAnalyzerViewController.xib */,
+			);
+			name = Analyzers;
 			sourceTree = "<group>";
 		};
 		5514B17B1B7D3A7F007431D0 /* Grouping */ = {
@@ -287,7 +392,6 @@
 			isa = PBXGroup;
 			children = (
 				559B3F171B7408A900000108 /* Either.swift */,
-				559B3F151B7407CE00000108 /* TokenIterator.swift */,
 				55D48BE81B7414420050331F /* TokenCharacterBuffer.swift */,
 				55D48BEF1B7415DD0050331F /* Extractors */,
 				55D48BE61B740F3E0050331F /* Character.swift */,
@@ -301,12 +405,12 @@
 				559B3F1B1B740C0B00000108 /* TokenExtractor.swift */,
 				55D48BF01B7415E80050331F /* HexNumberExtractor.swift */,
 				551B53F81C89439500EB318D /* OctalNumberExtractor.swift */,
-				55D48BED1B7415540050331F /* NumberExtractor.swift */,
+				55D48BED1B7415540050331F /* DecimalNumberExtractor.swift */,
 				552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */,
-				552CE1C51B9387A2007B89A1 /* SpecialNumberExtractor.swift */,
+				552CE1C51B9387A2007B89A1 /* FractionNumberExtractor.swift */,
 				552CE1C71B938F15007B89A1 /* ExponentExtractor.swift */,
-				552781521B75234F0093B070 /* QuotedVariableExtractor.swift */,
 				5527814E1B751DD40093B070 /* VariableExtractor.swift */,
+				552781521B75234F0093B070 /* QuotedVariableExtractor.swift */,
 				552781501B751DDB0093B070 /* OperatorExtractor.swift */,
 				5527814C1B751DCC0093B070 /* IdentifierExtractor.swift */,
 			);
@@ -336,6 +440,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		55113C031FC35AC7001E508D /* Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55113C0F1FC35AC7001E508D /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildPhases = (
+				55113C001FC35AC7001E508D /* Sources */,
+				55113C011FC35AC7001E508D /* Frameworks */,
+				55113C021FC35AC7001E508D /* Resources */,
+				55113C371FC499E3001E508D /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				55113C361FC499E3001E508D /* PBXTargetDependency */,
+			);
+			name = Demo;
+			productName = Demo;
+			productReference = 55113C041FC35AC7001E508D /* Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		559B3EF81B74063600000108 /* MathParser */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 559B3F0A1B74063600000108 /* Build configuration list for PBXNativeTarget "MathParser" */;
@@ -378,13 +501,18 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0800;
+				LastSwiftUpdateCheck = 0910;
+				LastUpgradeCheck = 0930;
 				TargetAttributes = {
+					55113C031FC35AC7001E508D = {
+						CreatedOnToolsVersion = 9.1;
+						DevelopmentTeam = 654LUM7646;
+						ProvisioningStyle = Automatic;
+					};
 					559B3EF81B74063600000108 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 9JA89QQLNQ;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 					559B3F011B74063600000108 = {
 						CreatedOnToolsVersion = 7.0;
@@ -401,6 +529,7 @@
 				Japanese,
 				French,
 				German,
+				Base,
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* DDMathParser */;
 			projectDirPath = "";
@@ -408,11 +537,28 @@
 			targets = (
 				559B3EF81B74063600000108 /* MathParser */,
 				559B3F011B74063600000108 /* MathParserTests */,
+				55113C031FC35AC7001E508D /* Demo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		55113C021FC35AC7001E508D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55113C291FC49197001E508D /* ExpressionAnalyzerViewController.xib in Resources */,
+				55BC91BB1FE2FEBF008816C2 /* VariableAnalyzerViewController.xib in Resources */,
+				55113C151FC49139001E508D /* AnalyzerFlowViewController.xib in Resources */,
+				55113C091FC35AC7001E508D /* Assets.xcassets in Resources */,
+				55113C1D1FC49173001E508D /* RawTokenAnalyzerViewController.xib in Resources */,
+				55113C2E1FC491BA001E508D /* DemoViewController.xib in Resources */,
+				55113C251FC4918C001E508D /* GroupedTokenAnalyzerViewController.xib in Resources */,
+				55113C211FC49181001E508D /* ResolvedTokenAnalyzerViewController.xib in Resources */,
+				55113C0C1FC35AC7001E508D /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		559B3EF71B74063600000108 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -430,6 +576,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		55113C001FC35AC7001E508D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55113C201FC49181001E508D /* ResolvedTokenAnalyzerViewController.swift in Sources */,
+				55113C241FC4918C001E508D /* GroupedTokenAnalyzerViewController.swift in Sources */,
+				55113C141FC49139001E508D /* AnalyzerFlowViewController.swift in Sources */,
+				55113C1C1FC49173001E508D /* RawTokenAnalyzerViewController.swift in Sources */,
+				55113C321FC495D2001E508D /* AnalyzerViewController.swift in Sources */,
+				55113C071FC35AC7001E508D /* AppDelegate.swift in Sources */,
+				55113C2D1FC491BA001E508D /* DemoViewController.swift in Sources */,
+				55BC91BA1FE2FEBF008816C2 /* VariableAnalyzerViewController.swift in Sources */,
+				55113C281FC49197001E508D /* ExpressionAnalyzerViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		559B3EF41B74063600000108 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -454,13 +616,12 @@
 				552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */,
 				557A80691B757C2C0014822A /* Operator.swift in Sources */,
 				5514B17D1B7D48F4007431D0 /* GroupedToken.swift in Sources */,
-				55D48BEE1B7415540050331F /* NumberExtractor.swift in Sources */,
-				552CE1C61B9387A2007B89A1 /* SpecialNumberExtractor.swift in Sources */,
+				55D48BEE1B7415540050331F /* DecimalNumberExtractor.swift in Sources */,
+				552CE1C61B9387A2007B89A1 /* FractionNumberExtractor.swift in Sources */,
 				552781511B751DDB0093B070 /* OperatorExtractor.swift in Sources */,
 				55D48BF11B7415E80050331F /* HexNumberExtractor.swift in Sources */,
 				551C2D201B8B63EC00876E68 /* DynamicResolution.swift in Sources */,
 				55B6AF631B8D870600778033 /* RewriteRule+Defaults.swift in Sources */,
-				559B3F161B7407CE00000108 /* TokenIterator.swift in Sources */,
 				551DC7741BAC55FA00C27DB9 /* FunctionSet.swift in Sources */,
 				55AE3A481B823D9B0022D1CF /* Expression.swift in Sources */,
 				5514B1741B7BDF57007431D0 /* RawToken.swift in Sources */,
@@ -495,12 +656,28 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		55113C361FC499E3001E508D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 559B3EF81B74063600000108 /* MathParser */;
+			targetProxy = 55113C351FC499E3001E508D /* PBXContainerItemProxy */;
+		};
 		559B3F051B74063600000108 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 559B3EF81B74063600000108 /* MathParser */;
 			targetProxy = 559B3F041B74063600000108 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		55113C0A1FC35AC7001E508D /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				55113C0B1FC35AC7001E508D /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB927908733DD40010E9CD /* Debug */ = {
@@ -509,14 +686,22 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -545,7 +730,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchsimulator watchos macosx appletvsimulator appletvos";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = "i386 x86_64 armv6 armv7 armv7s arm64";
 				VERSIONING_SYSTEM = "apple-generic";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
@@ -558,14 +743,22 @@
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -592,10 +785,78 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchsimulator watchos macosx appletvsimulator appletvos";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = "i386 x86_64 armv6 armv7 armv7s arm64";
 				VERSIONING_SYSTEM = "apple-generic";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		55113C101FC35AC7001E508D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 654LUM7646;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Demo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davedelong.MathParser.Demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		55113C111FC35AC7001E508D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 654LUM7646;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Demo/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davedelong.MathParser.Demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -605,10 +866,13 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -621,6 +885,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davedelong.MathParser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
@@ -633,10 +898,13 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = MathParser/Info.plist;
@@ -645,6 +913,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davedelong.MathParser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
@@ -707,6 +976,15 @@
 			buildConfigurations = (
 				1DEB927908733DD40010E9CD /* Debug */,
 				1DEB927A08733DD40010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55113C0F1FC35AC7001E508D /* Build configuration list for PBXNativeTarget "Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55113C101FC35AC7001E508D /* Debug */,
+				55113C111FC35AC7001E508D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

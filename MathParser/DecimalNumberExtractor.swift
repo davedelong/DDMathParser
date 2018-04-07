@@ -1,5 +1,5 @@
 //
-//  NumberExtractor.swift
+//  DecimalNumberExtractor.swift
 //  DDMathParser
 //
 //  Created by Dave DeLong on 8/6/15.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-internal struct NumberExtractor: TokenExtractor {
+internal struct DecimalNumberExtractor: TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
-        return buffer.peekNext()?.isDigit == true
+        return buffer.peekNext()?.isDigit == true || buffer.peekNext() == "."
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> TokenIterator.Element {
+    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         while buffer.peekNext()?.isDigit == true {
@@ -56,11 +56,11 @@ internal struct NumberExtractor: TokenExtractor {
         let range: Range<Int> = start ..< buffer.currentIndex
         let error = MathParserError(kind: .cannotParseNumber, range: range)
         
-        var result = TokenIterator.Element.error(error)
+        var result = Tokenizer.Result.error(error)
         if length > 0 {
             if length != 1 || buffer[start] != "." {
                 let raw = buffer[range]
-                result = .value(RawToken(kind: .number, string: raw, range: range))
+                result = .value(DecimalNumberToken(string: raw, range: range))
             }
         }
         return result
