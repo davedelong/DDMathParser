@@ -32,7 +32,7 @@ internal extension Double {
                 // it's a factorial of an integer representable as an Int
                 let arg1Int = Int(self)
                 return Double((1...arg1Int).reduce(1, *))
-            } else if self <= Double(Int.max) {
+            } else if self < Double(Int.max) {
                 // it's a factorial of an integer NOT representable as an Int
                 var result = 1.0
                 for i in 2 ... Int(self) {
