@@ -733,7 +733,6 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
-				VALID_ARCHS = "i386 x86_64 armv6 armv7 armv7s arm64";
 				VERSIONING_SYSTEM = "apple-generic";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -789,7 +788,6 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator watchsimulator watchos macosx appletvsimulator appletvos";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 4.2;
-				VALID_ARCHS = "i386 x86_64 armv6 armv7 armv7s arm64";
 				VERSIONING_SYSTEM = "apple-generic";
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
