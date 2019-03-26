@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension Function {
+extension Function {
     
     // MARK: - Angle mode helpers
     
@@ -837,6 +837,5 @@ public extension Function {
             return try state.evaluator.evaluate(state.arguments[2], substitutions: state.substitutions)
         }
     })
-    
 
 }
