@@ -76,4 +76,14 @@ internal extension Character {
         return isWhitespace || isNewline
     }
     
+    var isSuperscript: Bool {
+        switch self {
+            case "\u{00B2}": return true
+            case "\u{00B3}": return true
+            case "\u{00B9}": return true
+            case "\u{2070}"..."\u{207F}": return true
+            default: return false
+        }
+    }
+    
 }

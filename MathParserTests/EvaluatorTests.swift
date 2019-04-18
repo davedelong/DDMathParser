@@ -359,4 +359,8 @@ class EvaluatorTests: XCTestCase {
             XCTAssertEqual(d, expectedValue)
         }
     }
+    
+    func testESquared() {
+        TestString("e²", value: M_E * M_E)
+    }
 }
