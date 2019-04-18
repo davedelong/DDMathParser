@@ -14,17 +14,28 @@ public final class Expression {
         case variable(String)
         case function(String, Array<Expression>)
         
-        public var isNumber: Bool {
-            guard case .number(_) = self else { return false }
-            return true
+        public var isNumber: Bool { return number != nil }
+        public var isVariable: Bool { return variable != nil }
+        public var isFunction: Bool { return functionName != nil }
+        
+        public var number: Double? {
+            guard case .number(let d) = self else { return nil }
+            return d
         }
-        public var isVariable: Bool {
-            guard case .variable(_) = self else { return false }
-            return true
+        
+        public var variable: String? {
+            guard case .variable(let v) = self else { return nil }
+            return v
         }
-        public var isFunction: Bool {
-            guard case .function(_) = self else { return false }
-            return true
+        
+        public var functionName: String? {
+            guard case .function(let name, _) = self else { return nil }
+            return name
+        }
+        
+        public var functionArguments: Array<Expression>? {
+            guard case .function(_, let args) = self else { return nil }
+            return args
         }
     }
     
