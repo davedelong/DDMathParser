@@ -334,4 +334,11 @@ class ExpressionTests: XCTestCase {
         XCTAssertEqual(simplified, expectedResult)
     }
     
+    func testInvalidFormat() {
+        var options = TokenResolverOptions.default
+        options.remove(.allowImplicitMultiplication)
+        guard let e = XCTAssertNoThrows(try Expression(string: "3$x", options: options)) else { return }
+        print("\(e)")
+    }
+    
 }
