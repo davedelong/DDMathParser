@@ -12,22 +12,20 @@ public struct Tokenizer {
     internal typealias Result = Either<RawToken, MathParserError>
     
     private let string: String
-    internal let locale: Locale?
-    internal let operatorSet: OperatorSet
+    internal let configuration: Configuration
     
     private let buffer: TokenCharacterBuffer
     private let extractors: Array<TokenExtractor>
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, locale: Locale? = nil) {
+    public init(string: String, configuration: Configuration = .default) {
         self.string = string
-        self.operatorSet = operatorSet
-        self.locale = locale
+        self.configuration = configuration
         
         buffer = TokenCharacterBuffer(string: string)
-        let operatorTokens = operatorSet.operatorTokenSet
+        let operatorTokens = configuration.operatorSet.operatorTokenSet
         
         let numberExtractor: TokenExtractor
-        if let locale = locale {
+        if let locale = configuration.locale {
             numberExtractor = LocalizedNumberExtractor(locale: locale)
         } else {
             numberExtractor = DecimalNumberExtractor()

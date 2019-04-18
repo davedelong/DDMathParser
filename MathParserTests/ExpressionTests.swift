@@ -297,8 +297,8 @@ class ExpressionTests: XCTestCase {
     
     func testMissingOperator() {
         do {
-            let tokenizer = Tokenizer(string: "1 2")
-            let resolver = TokenResolver(tokenizer: tokenizer, options: [])
+            let tokenizer = Tokenizer(string: "1 2", configuration: .defaultWithEmptyOptions)
+            let resolver = TokenResolver(tokenizer: tokenizer)
             let grouper = TokenGrouper(resolver: resolver)
             let expressionizer = Expressionizer(grouper: grouper)
             let _ = try expressionizer.expression()
@@ -335,9 +335,9 @@ class ExpressionTests: XCTestCase {
     }
     
     func testInvalidFormat() {
-        var options = TokenResolverOptions.default
-        options.remove(.allowImplicitMultiplication)
-        guard let e = XCTAssertNoThrows(try Expression(string: "3$x", options: options)) else { return }
+        var c = Configuration.default
+        c.allowImplicitMultiplication = false
+        guard let e = XCTAssertNoThrows(try Expression(string: "3$x", configuration: c)) else { return }
         print("\(e)")
     }
     

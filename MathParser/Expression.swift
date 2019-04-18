@@ -31,9 +31,9 @@ public final class Expression {
     public let kind: Kind
     public let range: Range<Int>
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, options: TokenResolverOptions = TokenResolverOptions.default, locale: Locale? = nil) throws {
-        let tokenizer = Tokenizer(string: string, operatorSet: operatorSet, locale: locale)
-        let resolver = TokenResolver(tokenizer: tokenizer, options: options)
+    public init(string: String, configuration: Configuration = .default) throws {
+        let tokenizer = Tokenizer(string: string, configuration: configuration)
+        let resolver = TokenResolver(tokenizer: tokenizer)
         let grouper = TokenGrouper(resolver: resolver)
         let expressionizer = Expressionizer(grouper: grouper)
         

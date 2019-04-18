@@ -309,8 +309,11 @@ class EvaluatorTests: XCTestCase {
             "true or false is true": 1
         ]
         
+        var c = Configuration.default
+        c.operatorSet = operatorSet
+        
         for (test, value) in tests {
-            guard let e = XCTAssertNoThrows(try Expression(string: test, operatorSet: operatorSet)) else { return }
+            guard let e = XCTAssertNoThrows(try Expression(string: test, configuration: c)) else { return }
             guard let d = XCTAssertNoThrows(try Evaluator.default.evaluate(e)) else { return }
             XCTAssertEqual(d, value, "Test failed: \(test)")
         }

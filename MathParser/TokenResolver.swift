@@ -8,28 +8,12 @@
 
 import Foundation
 
-public struct TokenResolverOptions: OptionSet {
-    public let rawValue: UInt
-    
-    public init(rawValue: UInt) {
-        self.rawValue = rawValue
-    }
-    
-    public static let none = TokenResolverOptions(rawValue: 0)
-    public static let allowArgumentlessFunctions = TokenResolverOptions(rawValue: 1 << 0)
-    public static let allowImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 1)
-    public static let useHighPrecedenceImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 2)
-    
-    public static let `default`: TokenResolverOptions = [.allowArgumentlessFunctions, .allowImplicitMultiplication, .useHighPrecedenceImplicitMultiplication]
-}
-
 public struct TokenResolver {
     
     private let tokenizer: Tokenizer
-    fileprivate let options: TokenResolverOptions
-    fileprivate let locale: Locale?
+    private var configuration: Configuration { return tokenizer.configuration }
     fileprivate let numberFormatters: Array<NumberFormatter>
-    internal var operatorSet: OperatorSet { return tokenizer.operatorSet }
+    internal var operatorSet: OperatorSet { return configuration.operatorSet }
     
     private static func formattersForLocale(_ locale: Locale?) -> Array<NumberFormatter> {
         guard let locale = locale else { return [] }
@@ -41,18 +25,15 @@ public struct TokenResolver {
         return [decimal]
     }
     
-    public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.default) {
+    public init(tokenizer: Tokenizer) {
         self.tokenizer = tokenizer
-        self.options = options
-        self.locale = tokenizer.locale
-        self.numberFormatters = TokenResolver.formattersForLocale(tokenizer.locale)
+        let locale = tokenizer.configuration.locale
+        self.numberFormatters = TokenResolver.formattersForLocale(locale)
     }
     
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, options: TokenResolverOptions = TokenResolverOptions.default, locale: Locale? = nil) {
-        self.tokenizer = Tokenizer(string: string, operatorSet: operatorSet, locale: locale)
-        self.options = options
-        self.locale = locale
-        self.numberFormatters = TokenResolver.formattersForLocale(locale)
+    public init(string: String, configuration: Configuration = .default) {
+        let t = Tokenizer(string: string, configuration: configuration)
+        self.init(tokenizer: t)
     }
     
     public func resolve() throws -> Array<ResolvedToken> {
@@ -79,7 +60,7 @@ extension TokenResolver {
         guard let raw = raw else {
             // this is the case where the we check for argumentless stuff
             // after the last token
-            if options.contains(.allowArgumentlessFunctions) {
+            if configuration.allowArgumentlessFunctions {
                 return extraTokensForArgumentlessFunction(nil, previous: previous)
             } else {
                 return []
@@ -94,13 +75,13 @@ extension TokenResolver {
         var final = Array<ResolvedToken>()
         
         // check for argumentless functions
-        if options.contains(.allowArgumentlessFunctions) {
+        if configuration.allowArgumentlessFunctions {
             let extras = extraTokensForArgumentlessFunction(firstResolved, previous: previous)
             final.append(contentsOf: extras)
         }
         
         // check for implicit multiplication
-        if options.contains(.allowImplicitMultiplication) {
+        if configuration.allowImplicitMultiplication {
             let last = final.last ?? previous
             let extras = extraTokensForImplicitMultiplication(firstResolved, previous: last)
             final.append(contentsOf: extras)
@@ -188,8 +169,8 @@ extension TokenResolver {
         
         resolved += [power, openParen]
         
-        let exponentTokenizer = Tokenizer(string: raw.string, operatorSet: operatorSet, locale: locale)
-        let exponentResolver = TokenResolver(tokenizer: exponentTokenizer, options: options)
+        let exponentTokenizer = Tokenizer(string: raw.string, configuration: configuration)
+        let exponentResolver = TokenResolver(tokenizer: exponentTokenizer)
         
         let exponentTokens = try exponentResolver.resolve()
         
@@ -323,7 +304,7 @@ extension TokenResolver {
         guard previousMatches && nextMatches else { return [] }
         
         let multiplyOperator: Operator
-        if options.contains(.useHighPrecedenceImplicitMultiplication) {
+        if configuration.useHighPrecedenceImplicitMultiplication {
             multiplyOperator = operatorSet.implicitMultiplyOperator
         } else {
             multiplyOperator = operatorSet.multiplyOperator

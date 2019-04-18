@@ -231,11 +231,14 @@ class TokenizerTests: XCTestCase {
             "is not less than": .logicalGreaterThanOrEqual
         ]
         
+        var c = Configuration.default
+        
         for (token, builtInOperator) in tests {
             ops.addTokens([token], forOperator: Operator(builtInOperator: builtInOperator))
             
+            c.operatorSet = ops
             let string = "1 \(token) 2"
-            guard let tokens = XCTAssertNoThrows(try Tokenizer(string: string, operatorSet: ops).tokenize()) else { return }
+            guard let tokens = XCTAssertNoThrows(try Tokenizer(string: string, configuration: c).tokenize()) else { return }
             XCTAssertEqual(tokens.count, 3)
             TestToken(tokens[1], kind: OperatorToken.self, string: token)
         }
@@ -250,16 +253,18 @@ class TokenizerTests: XCTestCase {
     }
     
     func testLocalizedNumber() {
-        let l = Locale(identifier: "fr_FR")
-        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1,23", locale: l).tokenize()) else { return }
+        var c = Configuration.default
+        c.locale = Locale(identifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1,23", configuration: c).tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
         TestToken(tokens[0], kind: LocalizedNumberToken.self, string: "1,23")
     }
     
     func testLocalizedNumbers() {
-        let l = Locale(identifier: "fr_FR")
-        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "sum(1,2, 3,4, 5,6,7,8)", locale: l).tokenize()) else { return }
+        var c = Configuration.default
+        c.locale = Locale(identifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "sum(1,2, 3,4, 5,6,7,8)", configuration: c).tokenize()) else { return }
         
         XCTAssertEqual(tokens.count, 10)
         TestToken(tokens[0], kind: IdentifierToken.self, string: "sum")

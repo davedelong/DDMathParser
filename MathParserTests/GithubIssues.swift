@@ -125,8 +125,9 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue40() {
-        let operatorSet = OperatorSet(interpretsPercentSignAsModulo: false)
-        guard let e = XCTAssertNoThrows(try Expression(string: "7+5%", operatorSet: operatorSet)) else { return }
+        var c = Configuration.default
+        c.operatorSet = OperatorSet(interpretsPercentSignAsModulo: false)
+        guard let e = XCTAssertNoThrows(try Expression(string: "7+5%", configuration: c)) else { return }
         
         let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -213,10 +214,12 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue75() {
+        var c = Configuration.default
         let operatorSet = OperatorSet()
         operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .logicalAnd))
+        c.operatorSet = operatorSet
         
-        guard let e = XCTAssertNoThrows(try Expression(string: "1 and 2", operatorSet: operatorSet)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "1 and 2", configuration: c)) else { return }
         
         let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -276,10 +279,12 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue105() {
+        var c = Configuration.default
         let operatorSet = OperatorSet()
         operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .logicalOr))
+        c.operatorSet = operatorSet
         
-        guard let e = XCTAssertNoThrows(try Expression(string: "cos(pi)", operatorSet: operatorSet)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "cos(pi)", configuration: c)) else { return }
         
         let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -301,10 +306,12 @@ class GithubIssues: XCTestCase {
     }
     
     func testIssue109() {
+        var c = Configuration.default
         let operatorSet = OperatorSet()
         operatorSet.addTokens(["as"], forOperator: Operator(builtInOperator: .logicalEqual))
+        c.operatorSet = operatorSet
         
-        guard let e = XCTAssertNoThrows(try Expression(string: "asin(0.5)", operatorSet: operatorSet)) else { return }
+        guard let e = XCTAssertNoThrows(try Expression(string: "asin(0.5)", configuration: c)) else { return }
         
         let eval = Evaluator.default
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -337,7 +344,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue138() {
         let tokenizer = Tokenizer(string: "pow")
-        let resolver = TokenResolver(tokenizer: tokenizer, options: .default)
+        let resolver = TokenResolver(tokenizer: tokenizer)
         let grouper = TokenGrouper(resolver: resolver)
         let expressionizer = Expressionizer(grouper: grouper)
         let expression = try! expressionizer.expression()

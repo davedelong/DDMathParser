@@ -52,3 +52,13 @@ func TestString(_ string: String, value: Double, evaluator: Evaluator = Evaluato
     }
     XCTAssertEqual(d, value, accuracy: .ulpOfOne, file: file, line: line)
 }
+
+extension MathParser.Configuration {
+    static let defaultWithEmptyOptions: Configuration = {
+        var c = Configuration.default
+        c.useHighPrecedenceImplicitMultiplication = false
+        c.allowImplicitMultiplication = false
+        c.allowArgumentlessFunctions = false
+        return c
+    }()
+}

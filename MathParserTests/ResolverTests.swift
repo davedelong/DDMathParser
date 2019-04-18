@@ -124,7 +124,7 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testIdentifier() {
-        let r = TokenResolver(string: "foo", options: [])
+        let r = TokenResolver(string: "foo", configuration: .defaultWithEmptyOptions)
         guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
@@ -169,12 +169,15 @@ class TokenResolverTests: XCTestCase {
             "is not less than": .logicalGreaterThanOrEqual
         ]
         
+        var c = Configuration.default
+        c.operatorSet = ops
+        
         for (token, builtInOperator) in tests {
             let op = Operator(builtInOperator: builtInOperator)
             ops.addTokens([token], forOperator: op)
             
             let string = "1 \(token) 2"
-            guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string, operatorSet: ops).resolve()) else { return }
+            guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string, configuration: c).resolve()) else { return }
             XCTAssertEqual(tokens.count, 3)
             TestToken(tokens[1], kind: .operator(op), string: token)
         }
@@ -203,7 +206,7 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testOperatorDisambiguation3() {
-        let r = TokenResolver(string: "1 2 !", options: [])
+        let r = TokenResolver(string: "1 2 !", configuration: .defaultWithEmptyOptions)
         guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 3)
@@ -307,8 +310,9 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testLowPrecedenceImplicitMultiplication() {
-        let options = TokenResolverOptions.default.subtracting(.useHighPrecedenceImplicitMultiplication)
-        let r = TokenResolver(string: "1 2", options: options)
+        var c = Configuration.default
+        c.useHighPrecedenceImplicitMultiplication = false
+        let r = TokenResolver(string: "1 2", configuration: c)
         guard let tokens = XCTAssertNoThrows(try r.resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 3)
@@ -330,16 +334,18 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testLocalizedNumber() {
-        let l = Locale(identifier: "fr_FR")
-        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "1,23", locale: l).resolve()) else { return }
+        var c = Configuration.default
+        c.locale = Locale(identifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "1,23", configuration: c).resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 1)
         TestToken(tokens[0], kind: .number(1.23), string: "1,23")
     }
     
     func testLocalizedNumbers() {
-        let l = Locale(identifier: "fr_FR")
-        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "sum(1,2, 34, 5,6,7,8,9)", locale: l).resolve()) else { return }
+        var c = Configuration.default
+        c.locale = Locale(identifier: "fr_FR")
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: "sum(1,2, 34, 5,6,7,8,9)", configuration: c).resolve()) else { return }
         
         XCTAssertEqual(tokens.count, 12)
         let comma = Operator(builtInOperator: .comma)
@@ -371,7 +377,10 @@ class TokenResolverTests: XCTestCase {
             let s = f.string(from: NSNumber(value: n))!
             let string = "\(s) + \(s)"
             
-            guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string, locale: locale).resolve()) else { return }
+            var c = Configuration.default
+            c.locale = locale
+            
+            guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string, configuration: c).resolve()) else { return }
             XCTAssertEqual(tokens.count, 3)
             
             TestToken(tokens[0], kind: .number(Double(n)), string: s)

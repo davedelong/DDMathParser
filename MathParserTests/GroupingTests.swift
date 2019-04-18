@@ -83,7 +83,7 @@ class GroupingTests: XCTestCase {
     }
     
     func testFunctionMissingOpenParenthesis() {
-        let r = TokenResolver(string: "foo", options: [])
+        let r = TokenResolver(string: "foo", configuration: .defaultWithEmptyOptions)
         let g = TokenGrouper(resolver: r)
         
         do {
@@ -99,7 +99,7 @@ class GroupingTests: XCTestCase {
     }
     
     func testFunctionMissingCloseParenthesis() {
-        let r = TokenResolver(string: "foo(", options: [])
+        let r = TokenResolver(string: "foo(", configuration: .defaultWithEmptyOptions)
         let g = TokenGrouper(resolver: r)
         
         do {
