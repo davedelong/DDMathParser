@@ -156,7 +156,7 @@ public final class OperatorSet {
     private var knownTokens: Set<String>
     
     private func removeOperator(_ op: Operator) {
-        guard let index = operators.index(of: op) else { return }
+        guard let index = operators.firstIndex(of: op) else { return }
         operators.remove(at: index)
         operatorsDidChange()
     }

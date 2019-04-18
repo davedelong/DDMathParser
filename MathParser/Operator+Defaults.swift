@@ -44,7 +44,7 @@ public enum BuiltInOperator: String {
     case cubeRoot = "cuberoot"
 }
 
-public extension Operator {
+extension Operator {
     
     public static let defaultPowerAssociativity: Associativity = {
         
@@ -227,5 +227,5 @@ public extension Operator {
         self.init(builtInOperator: builtInOperator)
         self.precedence = precedence
     }
-    
+
 }

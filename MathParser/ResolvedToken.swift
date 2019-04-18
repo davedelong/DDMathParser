@@ -21,7 +21,7 @@ public struct ResolvedToken {
     public let range: Range<Int>
 }
 
-public extension ResolvedToken.Kind {
+extension ResolvedToken.Kind {
     
     public var number: Double? {
         guard case .number(let o) = self else { return nil }
