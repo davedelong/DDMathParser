@@ -10,11 +10,11 @@ import Foundation
 
 internal struct QuotedVariableExtractor: TokenExtractor {
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         return buffer.peekNext() == "\"" || buffer.peekNext() == "'"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         // consume the opening quote
@@ -54,7 +54,7 @@ internal struct QuotedVariableExtractor: TokenExtractor {
             buffer.consume()
             let range: Range<Int> = start ..< buffer.currentIndex
             // check to make sure we don't have an empty string
-            if cleaned.isEmpty {
+            if cleaned.isEmpty && configuration.allowZeroLengthVariables == false {
                 let error = MathParserError(kind: .zeroLengthVariable, range: range)
                 result = .error(error)
             } else {

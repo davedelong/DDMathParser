@@ -15,13 +15,13 @@ internal struct IdentifierExtractor: TokenExtractor {
         self.operatorTokens = operatorTokens
     }
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         // An identifier can't start with these, because other things already do
         let next = buffer.peekNext()
         return next != "$" && next?.isDigit == false && next != "\"" && next != "'"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         while let next = buffer.peekNext(), next.isWhitespace == false && operatorTokens.isOperatorCharacter(next) == false {

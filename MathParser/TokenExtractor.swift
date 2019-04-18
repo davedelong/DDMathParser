@@ -10,7 +10,7 @@ import Foundation
 
 internal protocol TokenExtractor {
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result
     
 }

@@ -14,6 +14,8 @@ public struct Configuration {
     public var operatorSet: OperatorSet
     public var locale: Locale?
     
+    public var allowZeroLengthVariables: Bool
+    
     public var allowArgumentlessFunctions: Bool
     public var allowImplicitMultiplication: Bool
     public var useHighPrecedenceImplicitMultiplication: Bool
@@ -21,6 +23,8 @@ public struct Configuration {
     public init() {
         operatorSet = OperatorSet.default
         locale = nil
+        
+        allowZeroLengthVariables = false
         
         allowArgumentlessFunctions = true
         allowImplicitMultiplication = true

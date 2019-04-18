@@ -72,10 +72,10 @@ public struct Tokenizer {
         var errors = Array<Result>()
         
         for extractor in extractors {
-            guard extractor.matchesPreconditions(buffer) else { continue }
+            guard extractor.matchesPreconditions(buffer, configuration: configuration) else { continue }
             
             buffer.resetTo(start)
-            let result = extractor.extract(buffer)
+            let result = extractor.extract(buffer, configuration: configuration)
             
             switch result {
                 case .value(_): return result

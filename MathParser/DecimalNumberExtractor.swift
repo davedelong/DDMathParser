@@ -10,11 +10,11 @@ import Foundation
 
 internal struct DecimalNumberExtractor: TokenExtractor {
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         return buffer.peekNext()?.isDigit == true || buffer.peekNext() == "."
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         while buffer.peekNext()?.isDigit == true {

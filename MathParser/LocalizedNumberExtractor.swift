@@ -17,11 +17,11 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         decimalNumberFormatter.numberStyle = .decimal
     }
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         return buffer.peekNext() != nil
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
         let start = buffer.currentIndex
         var indexBeforeDecimal: Int?
         

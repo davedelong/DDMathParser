@@ -27,13 +27,13 @@ internal struct ExponentExtractor: TokenExtractor {
         "⁾": ")"
     ]
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
         guard let _ = ExponentExtractor.exponentCharacters[peek] else { return false }
         return true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         var exponent = ""

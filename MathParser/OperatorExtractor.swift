@@ -15,12 +15,12 @@ internal struct OperatorExtractor: TokenExtractor {
         self.operatorTokens = operatorTokens
     }
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
         return operatorTokens.hasOperatorWithPrefix(String(peek))
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         var lastGoodIndex = start

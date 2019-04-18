@@ -278,4 +278,28 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[8], kind: LocalizedNumberToken.self, string: "7,8")
         TestToken(tokens[9], kind: OperatorToken.self, string: ")")
     }
+    
+    func testZeroLengthVariables() {
+        var c = Configuration.default
+        c.allowZeroLengthVariables = true
+        
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 $ 2", configuration: c).tokenize()) else { return }
+        
+        XCTAssertEqual(tokens.count, 3)
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
+        TestToken(tokens[1], kind: VariableToken.self, string: "")
+        TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
+    }
+    
+    func testQuotedZeroLengthVariables() {
+        var c = Configuration.default
+        c.allowZeroLengthVariables = true
+        
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 \"\" 2", configuration: c).tokenize()) else { return }
+        
+        XCTAssertEqual(tokens.count, 3)
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
+        TestToken(tokens[1], kind: VariableToken.self, string: "")
+        TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
+    }
 }

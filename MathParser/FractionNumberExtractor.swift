@@ -28,13 +28,13 @@ internal struct FractionNumberExtractor: TokenExtractor {
         "⅞": 0.875
     ]
     
-    func matchesPreconditions(_ buffer: TokenCharacterBuffer) -> Bool {
+    func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
         guard let _ = FractionNumberExtractor.fractions[peek] else { return false }
         return true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
         let start = buffer.currentIndex
         
         // consume the character
