@@ -8,24 +8,6 @@
 
 import Foundation
 
-@available(*, deprecated, message: "TokenResolverOptions has been deprecated. Use Configuration instead")
-public struct TokenResolverOptions: OptionSet {
-    public let rawValue: UInt
-    
-    public init(rawValue: UInt) {
-        self.rawValue = rawValue
-    }
-    
-    public static let none = TokenResolverOptions(rawValue: 0)
-    public static let allowArgumentlessFunctions = TokenResolverOptions(rawValue: 1 << 0)
-    public static let allowImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 1)
-    public static let useHighPrecedenceImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 2)
-    
-    public static let `default`: TokenResolverOptions = [.allowArgumentlessFunctions, .allowImplicitMultiplication, .useHighPrecedenceImplicitMultiplication]
-}
-
-
-
 public struct TokenResolver {
     
     private let tokenizer: Tokenizer
@@ -41,11 +23,6 @@ public struct TokenResolver {
         decimal.numberStyle = .decimal
         
         return [decimal]
-    }
-    
-    @available(*, deprecated, renamed: "init(tokenizer:)")
-    public init(tokenizer: Tokenizer, options: TokenResolverOptions = TokenResolverOptions.default) {
-        self.init(tokenizer: tokenizer)
     }
     
     public init(tokenizer: Tokenizer) {

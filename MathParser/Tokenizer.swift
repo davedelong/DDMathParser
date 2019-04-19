@@ -17,14 +17,6 @@ public struct Tokenizer {
     private let buffer: TokenCharacterBuffer
     private let extractors: Array<TokenExtractor>
     
-    @available(*, deprecated, renamed: "init(string:configuration:)")
-    public init(string: String, operatorSet: OperatorSet = OperatorSet.default, locale: Locale? = nil) {
-        var c = Configuration.default
-        c.operatorSet = operatorSet
-        c.locale = locale
-        self.init(string: string, configuration: c)
-    }
-    
     public init(string: String, configuration: Configuration = .default) {
         self.string = string
         self.configuration = configuration

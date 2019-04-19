@@ -42,17 +42,6 @@ public final class Expression {
     public let kind: Kind
     public let range: Range<Int>
     
-    @available(*, deprecated, renamed: "init(string:configuration:)")
-    public convenience init(string: String, operatorSet: OperatorSet = OperatorSet.default, options: TokenResolverOptions = TokenResolverOptions.default, locale: Locale? = nil) throws {
-        var c = Configuration()
-        c.operatorSet = operatorSet
-        c.allowArgumentlessFunctions = options.contains(.allowArgumentlessFunctions)
-        c.allowImplicitMultiplication = options.contains(.allowImplicitMultiplication)
-        c.useHighPrecedenceImplicitMultiplication = options.contains(.useHighPrecedenceImplicitMultiplication)
-        c.locale = locale
-        try self.init(string: string, configuration: c)
-    }
-    
     public init(string: String, configuration: Configuration = .default) throws {
         let tokenizer = Tokenizer(string: string, configuration: configuration)
         let resolver = TokenResolver(tokenizer: tokenizer)
