@@ -42,30 +42,25 @@ public final class Expression {
     public let kind: Kind
     public let range: Range<Int>
     
-    public init(string: String, configuration: Configuration = .default) throws {
-        let tokenizer = Tokenizer(string: string, configuration: configuration)
-        let resolver = TokenResolver(tokenizer: tokenizer)
-        let grouper = TokenGrouper(resolver: resolver)
-        let expressionizer = Expressionizer(grouper: grouper)
-        
-        let e = try expressionizer.expression()
-        self.kind = e.kind
-        self.range = e.range
-        
-        if case let .function(_, args) = kind {
-            args.forEach { $0.parent = self }
-        }
-    }
-    
     internal weak var parent: Expression?
     
-    internal init(kind: Kind, range: Range<Int>) {
+    public init(kind: Kind, range: Range<Int>) {
         self.kind = kind
         self.range = range
         
         if case let .function(_, args) = kind {
             args.forEach { $0.parent = self }
         }
+    }
+    
+    public convenience init(string: String, configuration: Configuration = .default) throws {
+        let tokenizer = Tokenizer(string: string, configuration: configuration)
+        let resolver = TokenResolver(tokenizer: tokenizer)
+        let grouper = TokenGrouper(resolver: resolver)
+        let expressionizer = Expressionizer(grouper: grouper)
+        
+        let e = try expressionizer.expression()
+        self.init(kind: e.kind, range: e.range)
     }
     
     public func simplify(_ substitutions: Substitutions = [:], evaluator: Evaluator) -> Expression {
