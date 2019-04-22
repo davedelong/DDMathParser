@@ -40,99 +40,30 @@ public struct RewriteRule {
     }
     
     public func rewrite(_ expression: Expression, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
-        guard let replacements = matchWithCondition(expression, substitutions: substitutions, evaluator: evaluator) else { return expression }
         
-        return applyReplacements(replacements, toExpression: template)
-    }
-    
-    private func matchWithCondition(_ expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator, replacementsSoFar: Dictionary<String, Expression> = [:]) -> Dictionary<String, Expression>? {
-        guard let replacements = match(expression, toExpression: predicate, replacementsSoFar: replacementsSoFar) else { return nil }
-        
-        // we replaced, and we don't have a condition => we match
-        guard let condition = condition else { return replacements }
-        
-        // see if the expression matches the condition
-        let matchingCondition = applyReplacements(replacements, toExpression: condition)
-        
-        // if there's an error evaluating the condition, then we don't match
-        guard let result = try? evaluator.evaluate(matchingCondition, substitutions: substitutions) else { return nil }
-        
-        // non-zero => we match
-        return (result != 0) ? replacements : nil
-    }
-    
-    private func match(_ expression: Expression, toExpression target: Expression, replacementsSoFar: Dictionary<String, Expression>) -> Dictionary<String, Expression>? {
-        
-        var replacements = replacementsSoFar
-        
-        switch target.kind {
-            // we're looking for a specific number; return the replacements if we match that number
-            case .number(_): return expression == target ? replacements : nil
-            
-            // we're looking for a specific variable; return the replacements if we match
-            case .variable(_): return expression == target ? replacements : nil
-            
-            // we're looking for something else
-            case .function(let f, let args):
-            
-                // we're looking for anything
-                if f.hasPrefix(RuleTemplate.anyExpression) {
-                    // is this a matcher ("__exp42") we've seen before?
-                    // if it is, only return replacements if it's the same expression
-                    // as what has already been matched
-                    if let seenBefore = replacements[f] {
-                        return seenBefore == expression ? replacements : nil
-                    }
-                    
-                    // otherwise remember this one and return the new replacements
-                    replacements[f] = expression
-                    return replacements
-                }
-            
-                // we're looking for any number
-                if f.hasPrefix(RuleTemplate.anyNumber) && expression.kind.isNumber {
-                    if let seenBefore = replacements[f] {
-                        return seenBefore == expression ? replacements : nil
-                    }
-                    replacements[f] = expression
-                    return replacements
-                }
-                
-                // we're looking for any variable
-                if f.hasPrefix(RuleTemplate.anyVariable) && expression.kind.isVariable {
-                    if let seenBefore = replacements[f] {
-                        return seenBefore == expression ? replacements : nil
-                    }
-                    replacements[f] = expression
-                    return replacements
-                }
-                
-                // we're looking for any function
-                if f.hasPrefix(RuleTemplate.anyFunction) && expression.kind.isFunction {
-                    if let seenBefore = replacements[f] {
-                        return seenBefore == expression ? replacements : nil
-                    }
-                    replacements[f] = expression
-                    return replacements
-                }
-            
-                // if we make it this far, we're looking for a specific function
-                // make sure the expression we're matching against is also a function
-                guard case let .function(expressionF, expressionArgs) = expression.kind else { return nil }
-                // make sure the functions have the same name
-                guard expressionF == f else { return nil }
-                // make sure the functions have the same number of arguments
-                guard expressionArgs.count == args.count else { return nil }
-            
-                // make sure each argument matches
-                for (expressionArg, targetArg) in zip(expressionArgs, args) {
-                    // if this argument doesn't match, return nil
-                    guard let argReplacements = match(expressionArg, toExpression: targetArg, replacementsSoFar: replacements) else { return nil }
-                    replacements = argReplacements
-                }
-            
-                return replacements
+        guard let replacements = expression.match(for: predicate) else {
+            // the expression doesn't match the predicate
+            return expression
         }
+        
+        if let condition = condition {
+            
+            // see if the expression matches the condition
+            let matchingCondition = applyReplacements(replacements, toExpression: condition)
+            
+            // if there's an error evaluating the condition, then we don't match
+            guard let result = try? evaluator.evaluate(matchingCondition, substitutions: substitutions) else {
+                return expression
+            }
+            
+            // a "zero" result value is interpreted as "false", which means we don't match
+            if result == 0 { return expression }
+        }
+        
+        // if we get here, then the expression matches the predicate and either:
+        // 1. we don't have a condition or
+        // 2. we have a condition, and the condition is satisfied
+        return applyReplacements(replacements, toExpression: template)
     }
     
     private func applyReplacements(_ replacements: Dictionary<String, Expression>, toExpression expression: Expression) -> Expression {

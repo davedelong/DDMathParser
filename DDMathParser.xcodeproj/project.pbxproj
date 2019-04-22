@@ -48,6 +48,8 @@
 		552CE1CA1B94A1E1007B89A1 /* LocalizedNumberExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */; };
 		5536EF5B1B9BED5200788354 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5536EF5A1B9BED5200788354 /* Double.swift */; };
 		55375E69226920A100AE4D29 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55375E68226920A100AE4D29 /* Configuration.swift */; };
+		55375E7E226E72BC00AE4D29 /* Expression+Matching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55375E7D226E72BC00AE4D29 /* Expression+Matching.swift */; };
+		55375E80226E72C200AE4D29 /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55375E7F226E72C200AE4D29 /* Deprecations.swift */; };
 		554AF6B41CDCED3E00C2583E /* MathParserErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554AF6B31CDCED3E00C2583E /* MathParserErrors.swift */; };
 		557A80691B757C2C0014822A /* Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A80681B757C2C0014822A /* Operator.swift */; };
 		557A806B1B757C870014822A /* OperatorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557A806A1B757C870014822A /* OperatorSet.swift */; };
@@ -155,6 +157,8 @@
 		552CE1C91B94A1E0007B89A1 /* LocalizedNumberExtractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedNumberExtractor.swift; sourceTree = "<group>"; };
 		5536EF5A1B9BED5200788354 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		55375E68226920A100AE4D29 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		55375E7D226E72BC00AE4D29 /* Expression+Matching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Expression+Matching.swift"; sourceTree = "<group>"; };
+		55375E7F226E72C200AE4D29 /* Deprecations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deprecations.swift; sourceTree = "<group>"; };
 		554AF6B31CDCED3E00C2583E /* MathParserErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathParserErrors.swift; sourceTree = "<group>"; };
 		557A80681B757C2C0014822A /* Operator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operator.swift; sourceTree = "<group>"; };
 		557A806A1B757C870014822A /* OperatorSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorSet.swift; sourceTree = "<group>"; };
@@ -299,6 +303,7 @@
 			children = (
 				551C2D231B8B6A5C00876E68 /* String.swift */,
 				079712FB1EB49A0B003D7C3C /* SubstitutionExtensions.swift */,
+				55375E7F226E72C200AE4D29 /* Deprecations.swift */,
 			);
 			name = Convenience;
 			sourceTree = "<group>";
@@ -376,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				55AE3A471B823D9B0022D1CF /* Expression.swift */,
+				55375E7D226E72BC00AE4D29 /* Expression+Matching.swift */,
 				55AE3A4A1B823F490022D1CF /* Expressionizer.swift */,
 			);
 			name = Expression;
@@ -598,6 +604,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55375E80226E72C200AE4D29 /* Deprecations.swift in Sources */,
 				55B6AF5E1B8D081F00778033 /* RewriteRule.swift in Sources */,
 				551C2D241B8B6A5C00876E68 /* String.swift in Sources */,
 				552781531B75234F0093B070 /* QuotedVariableExtractor.swift in Sources */,
@@ -606,6 +613,7 @@
 				5527814F1B751DD40093B070 /* VariableExtractor.swift in Sources */,
 				55375E69226920A100AE4D29 /* Configuration.swift in Sources */,
 				5527814D1B751DCC0093B070 /* IdentifierExtractor.swift in Sources */,
+				55375E7E226E72BC00AE4D29 /* Expression+Matching.swift in Sources */,
 				554AF6B41CDCED3E00C2583E /* MathParserErrors.swift in Sources */,
 				557F8FE81B86BAB400155C9D /* Functions+Defaults.swift in Sources */,
 				55AE3A1C1B7E757D0022D1CF /* PeekingIterator.swift in Sources */,
