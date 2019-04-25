@@ -302,4 +302,28 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[1], kind: VariableToken.self, string: "")
         TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
     }
+    
+    func testQuotedVariableWithNewline() {
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 \"\\n\" 2").tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 3)
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
+        TestToken(tokens[1], kind: VariableToken.self, string: "\n")
+        TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
+    }
+    
+    func testQuotedVariableWithReturn() {
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 \"\\r\" 2").tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 3)
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
+        TestToken(tokens[1], kind: VariableToken.self, string: "\r")
+        TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
+    }
+    
+    func testQuotedVariableWithTab() {
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 \"\\t\" 2").tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 3)
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
+        TestToken(tokens[1], kind: VariableToken.self, string: "\t")
+        TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
+    }
 }

@@ -37,7 +37,12 @@ internal struct QuotedVariableExtractor: TokenExtractor {
                     break
                 }
             } else {
-                cleaned.append(next)
+                switch next {
+                    case "n": cleaned.append("\n")
+                    case "r": cleaned.append("\r")
+                    case "t": cleaned.append("\t")
+                    default: cleaned.append(next)
+                }
                 isEscaped = false
                 buffer.consume()
             }
