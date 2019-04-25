@@ -37,11 +37,16 @@ internal struct QuotedVariableExtractor: TokenExtractor {
                     break
                 }
             } else {
-                switch next {
-                    case "n": cleaned.append("\n")
-                    case "r": cleaned.append("\r")
-                    case "t": cleaned.append("\t")
-                    default: cleaned.append(next)
+                if configuration.unescapesQuotedVariables == true {
+                    switch next {
+                        case "n": cleaned.append("\n")
+                        case "r": cleaned.append("\r")
+                        case "t": cleaned.append("\t")
+                        default: cleaned.append(next)
+                    }
+                } else {
+                    cleaned.append("\\")
+                    cleaned.append(next)
                 }
                 isEscaped = false
                 buffer.consume()

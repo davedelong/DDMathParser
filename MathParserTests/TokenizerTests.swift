@@ -326,4 +326,14 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[1], kind: VariableToken.self, string: "\t")
         TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
     }
+    
+    func testUnescaptedQuotedVariable() {
+        var c = Configuration.default
+        c.unescapesQuotedVariables = false
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: "1 \"\\t\" 2", configuration: c).tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 3)
+        TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
+        TestToken(tokens[1], kind: VariableToken.self, string: "\\t")
+        TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
+    }
 }

@@ -15,6 +15,7 @@ public struct Configuration {
     public var locale: Locale?
     
     public var allowZeroLengthVariables: Bool
+    public var unescapesQuotedVariables: Bool
     
     public var allowArgumentlessFunctions: Bool
     public var allowImplicitMultiplication: Bool
@@ -25,6 +26,7 @@ public struct Configuration {
         locale = nil
         
         allowZeroLengthVariables = false
+        unescapesQuotedVariables = true
         
         allowArgumentlessFunctions = true
         allowImplicitMultiplication = true
