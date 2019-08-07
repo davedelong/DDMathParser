@@ -6,3 +6,5 @@ build
 
 **/xcuserdata
 **/**/xcuserdata
+.build
+.swiftpm
