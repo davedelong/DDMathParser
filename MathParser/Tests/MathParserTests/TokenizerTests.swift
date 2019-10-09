@@ -280,15 +280,11 @@ class TokenizerTests: XCTestCase {
     }
         
     func testLocalizedNumberWithoutLeadingZero() throws {
-        let evaluator = Evaluator()
-        let locale = Locale(identifier: "de_AT")
-        do {
-            let exp = try Expression(string: ",2", locale: locale)
-            let result = try evaluator.evaluate(exp)
-            XCTAssertEqual(result, 0.2)
-        } catch let error {
-            XCTFail(error.localizedDescription)
-        }
+        var c = Configuration.default
+        c.locale = Locale(identifier: "de_AT")
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: ",2", configuration: c).tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: LocalizedNumberToken.self, string: ",2")
     }
     
     func testZeroLengthVariables() {
@@ -347,18 +343,5 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[0], kind: DecimalNumberToken.self, string: "1")
         TestToken(tokens[1], kind: VariableToken.self, string: "\\t")
         TestToken(tokens[2], kind: DecimalNumberToken.self, string: "2")
-    }
-    
-    func testLocalizedNumberWithoutLeadingZero() throws {
-        let evaluator = Evaluator()
-        var c = Configuration.default
-        c.locale = Locale(identifier: "de_AT")
-        do {
-            let exp = try Expression(string: ",2", configuration: c)
-            let result = try evaluator.evaluate(exp)
-            XCTAssertEqual(result, 0.2)
-        } catch let error {
-            XCTFail(error.localizedDescription)
-        }
     }
 }

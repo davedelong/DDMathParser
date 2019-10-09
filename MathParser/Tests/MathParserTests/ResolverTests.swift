@@ -363,6 +363,15 @@ class TokenResolverTests: XCTestCase {
         TestToken(tokens[10], kind: .number(9), string: "9")
         TestToken(tokens[11], kind: .operator(Operator(builtInOperator: .parenthesisClose)), string: ")")
     }
+        
+    func testLocalizedNumberWithoutLeadingZero() throws {
+        var c = Configuration.default
+        c.locale = Locale(identifier: "de_AT")
+        guard let tokens = XCTAssertNoThrows(try TokenResolver(string: ",2", configuration: c).resolve()) else { return }
+        
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: .number(0.2), string: ",2")
+    }
     
     func testLocalizedNumbersForEveryLocale() {
         let locales = Locale.availableIdentifiers.map { Locale(identifier: $0) }
