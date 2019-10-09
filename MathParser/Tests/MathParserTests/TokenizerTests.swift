@@ -339,9 +339,10 @@ class TokenizerTests: XCTestCase {
     
     func testLocalizedNumberWithoutLeadingZero() throws {
         let evaluator = Evaluator()
-        let locale = Locale(identifier: "de_AT")
+        var c = Configuration.default
+        c.locale = Locale(identifier: "de_AT")
         do {
-            let exp = try Expression(string: ",2", locale: locale)
+            let exp = try Expression(string: ",2", configuration: c)
             let result = try evaluator.evaluate(exp)
             XCTAssertEqual(result, 0.2)
         } catch let error {
