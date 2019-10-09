@@ -60,11 +60,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
     
     /// - Returns: True if the string is a valid prefix of a localized number.
     private func isValidPrefix(_ string: String) -> Bool {
-        if string == decimalNumberFormatter.decimalSeparator {
-            return true
-        }
-        
-        return false
+        return string == decimalNumberFormatter.decimalSeparator
     }
     
     private func canParseString(_ string: String) -> Bool {
