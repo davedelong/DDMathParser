@@ -278,6 +278,14 @@ class TokenizerTests: XCTestCase {
         TestToken(tokens[8], kind: LocalizedNumberToken.self, string: "7,8")
         TestToken(tokens[9], kind: OperatorToken.self, string: ")")
     }
+        
+    func testLocalizedNumberWithoutLeadingZero() throws {
+        var c = Configuration.default
+        c.locale = Locale(identifier: "de_AT")
+        guard let tokens = XCTAssertNoThrows(try Tokenizer(string: ",2", configuration: c).tokenize()) else { return }
+        XCTAssertEqual(tokens.count, 1)
+        TestToken(tokens[0], kind: LocalizedNumberToken.self, string: ",2")
+    }
     
     func testZeroLengthVariables() {
         var c = Configuration.default

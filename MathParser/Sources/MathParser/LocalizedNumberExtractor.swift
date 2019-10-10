@@ -33,7 +33,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
                 indexBeforeDecimal = buffer.currentIndex
             }
             
-            if canParseString(test) {
+            if canParseString(test) || (start == 0 && isValidPrefix(test)) {
                 soFar = test
                 buffer.consume()
             } else {
@@ -49,7 +49,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         let indexAfterNumber = buffer.currentIndex
         let range: Range<Int> = start ..< indexAfterNumber
         
-        guard indexAfterNumber - start > 0 else {
+        if range.isEmpty {
             let error = MathParserError(kind: .cannotParseNumber, range: range)
             return .error(error)
         }
@@ -58,9 +58,13 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         return .value(token)
     }
     
+    /// - Returns: True if the string is a valid prefix of a localized number.
+    private func isValidPrefix(_ string: String) -> Bool {
+        return string == decimalNumberFormatter.decimalSeparator
+    }
+    
     private func canParseString(_ string: String) -> Bool {
         guard let _ = decimalNumberFormatter.number(from: string) else { return false }
         return true
     }
-
 }
