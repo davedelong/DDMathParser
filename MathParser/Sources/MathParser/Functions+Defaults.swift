@@ -146,7 +146,12 @@ extension Function {
         
         let arg1 = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
         
-        return Darwin.pow(arg1, 1.0/3.0)
+        if arg1 < 0 {
+            let root = Darwin.pow(-arg1, 1.0/3.0)
+            return -root
+        } else {
+            return Darwin.pow(arg1, 1.0/3.0)
+        }
     })
     
     public static let nthroot = Function(name: "nthroot", evaluator: { state throws -> Double in
