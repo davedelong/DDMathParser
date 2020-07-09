@@ -24,8 +24,8 @@ public struct TokenResolverOptions: OptionSet {
     public init(rawValue: UInt) {
         self.rawValue = rawValue
     }
-    
-    public static let none = TokenResolverOptions(rawValue: 0)
+
+    public static let none: TokenResolverOptions = []
     public static let allowArgumentlessFunctions = TokenResolverOptions(rawValue: 1 << 0)
     public static let allowImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 1)
     public static let useHighPrecedenceImplicitMultiplication = TokenResolverOptions(rawValue: 1 << 2)
