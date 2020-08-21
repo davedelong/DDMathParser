@@ -377,4 +377,31 @@ class GithubIssues: XCTestCase {
         guard let d2 = XCTAssertNoThrows(try "-2++3".evaluate()) else { return }
         XCTAssertEqual(d2, 1)
     }
+    
+    func testIssue158() {
+        srand48(282828)
+        guard let d1 = XCTAssertNoThrows(try "random()".evaluate()) else { return }
+        XCTAssertLessThanOrEqual(d1, 0.4662)
+        XCTAssertGreaterThanOrEqual(0.4661, d1)
+        
+        srand48(298298)
+        guard let d2 = XCTAssertNoThrows(try "random(100)".evaluate()) else { return }
+        XCTAssertLessThanOrEqual(d2, 75.79)
+        XCTAssertLessThanOrEqual(75.78, d2)
+        
+        srand48(828282)
+        var total: Double = 0.0
+        for _ in 1..<10 {
+            guard let d3 = XCTAssertNoThrows(try "random(100,600)".evaluate()) else { return }
+            total += d3
+        }
+        XCTAssertGreaterThanOrEqual(total / 10, 270)
+        XCTAssertLessThanOrEqual(total / 10, 271)
+        
+        srand48(400400)
+        guard let d4 = XCTAssertNoThrows(try "random(-10.0, 10.0)".evaluate()) else { return }
+        XCTAssertLessThanOrEqual(d4, -1.69)
+        XCTAssertLessThanOrEqual( -1.70, d4)
+        
+    }
 }
