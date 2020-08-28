@@ -71,7 +71,7 @@ private final class FunctionRegistration {
     
     init(function: Function, caseSensitive: Bool) {
         self.function = function.evaluator
-        self.names = Set(function.names.map { caseSensitive ? $0.lowercased() : $0 })
+        self.names = Set(function.names.map { caseSensitive ? $0 : $0.lowercased() })
     }
     
     func addAlias(_ name: String) {
