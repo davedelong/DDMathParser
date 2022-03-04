@@ -39,15 +39,15 @@ private enum TokenOrExpression {
     }
 }
 
-public struct Expressionizer {
+internal struct Expressionizer {
     private let grouper: TokenGrouper
     private var source: String { grouper.source }
     
-    public init(grouper: TokenGrouper) {
+    internal init(grouper: TokenGrouper) {
         self.grouper = grouper
     }
     
-    public func expression() throws -> Expression {
+    internal func expression() throws -> Expression {
         let rootToken = try grouper.group()
         
         return try expressionizeToken(rootToken)

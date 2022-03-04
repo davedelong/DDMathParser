@@ -8,8 +8,8 @@
 
 import Foundation
 
-public struct GroupedToken: Hashable {
-    public enum Kind: Hashable {
+internal struct GroupedToken: Hashable {
+    internal enum Kind: Hashable {
         case number(Double)
         case variable(String)
         case `operator`(Operator)
@@ -17,6 +17,6 @@ public struct GroupedToken: Hashable {
         case group(Array<GroupedToken>)
     }
     
-    public let kind: Kind
-    public let range: Range<String.Index>
+    internal let kind: Kind
+    internal let range: Range<String.Index>
 }

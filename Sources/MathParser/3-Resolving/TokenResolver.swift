@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct TokenResolver {
+internal struct TokenResolver {
     
     private let tokenizer: Tokenizer
     private var configuration: Configuration { return tokenizer.configuration }
@@ -26,18 +26,18 @@ public struct TokenResolver {
         return [decimal]
     }
     
-    public init(tokenizer: Tokenizer) {
+    internal init(tokenizer: Tokenizer) {
         self.tokenizer = tokenizer
         let locale = tokenizer.configuration.locale
         self.numberFormatters = TokenResolver.formattersForLocale(locale)
     }
     
-    public init(string: String, configuration: Configuration = .default) {
+    internal init(string: String, configuration: Configuration = .default) {
         let t = Tokenizer(string: string, configuration: configuration)
         self.init(tokenizer: t)
     }
     
-    public func resolve() throws -> Array<ResolvedToken> {
+    internal func resolve() throws -> Array<ResolvedToken> {
         let rawTokens = try tokenizer.tokenize()
         
         var resolvedTokens = Array<ResolvedToken>()

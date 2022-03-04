@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MathParser
+@testable import MathParser
 
 class ExpressionTests: XCTestCase {
     

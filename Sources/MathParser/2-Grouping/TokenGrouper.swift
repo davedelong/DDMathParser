@@ -23,20 +23,20 @@ private extension GroupedToken {
     
 }
 
-public struct TokenGrouper {
+internal struct TokenGrouper {
     private let resolver: TokenResolver
     internal var source: String { resolver.source }
     internal var operatorSet: OperatorSet { resolver.operatorSet }
     
-    public init(resolver: TokenResolver) {
+    internal init(resolver: TokenResolver) {
         self.resolver = resolver
     }
     
-    public init(string: String) {
+    internal init(string: String) {
         self.resolver = TokenResolver(string: string)
     }
     
-    public func group() throws -> GroupedToken {
+    internal func group() throws -> GroupedToken {
         let tokens = try resolver.resolve()
         let p = PeekingIterator(generator: tokens.makeIterator())
         let g = try rootTokenFromGenerator(p)

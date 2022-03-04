@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MathParser
+@testable import MathParser
 
 private func TestToken(_ raw: ResolvedToken, kind: ResolvedToken.Kind, string: String, file: StaticString = #file, line: UInt = #line) {
     

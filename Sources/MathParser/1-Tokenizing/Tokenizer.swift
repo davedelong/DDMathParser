@@ -8,14 +8,14 @@
 
 import Foundation
 
-public struct Tokenizer {
+internal struct Tokenizer {
     internal let source: String
     internal let configuration: Configuration
     
     private let buffer: TokenCharacterBuffer
     private let extractors: Array<TokenExtractor>
     
-    public init(string: String, configuration: Configuration = .default) {
+    internal init(string: String, configuration: Configuration = .default) {
         self.source = string
         self.configuration = configuration
         
