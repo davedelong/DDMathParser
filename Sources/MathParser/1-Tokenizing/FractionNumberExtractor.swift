@@ -34,15 +34,15 @@ internal struct FractionNumberExtractor: TokenExtractor {
         return true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         // consume the character
         buffer.consume()
         
-        let range: Range<Int> = start ..< buffer.currentIndex
+        let range = start ..< buffer.currentIndex
         let raw = buffer[range]
-        return .value(FractionNumberToken(string: raw, range: range))
+        return .success(FractionNumberToken(string: raw, range: range))
     }
     
 }

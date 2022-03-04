@@ -33,7 +33,7 @@ internal struct ExponentExtractor: TokenExtractor {
         return true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         var exponent = ""
@@ -42,14 +42,14 @@ internal struct ExponentExtractor: TokenExtractor {
             exponent.append(regular)
         }
         
-        let length = buffer.currentIndex - start
-        let range: Range<Int> = start ..< buffer.currentIndex
+        let length = buffer.currentDistance(from: start)
+        let range = start ..< buffer.currentIndex
         
         if length > 0 {
-            return .value(ExponentToken(string: exponent, range: range))
+            return .success(ExponentToken(string: exponent, range: range))
         } else {
             let error = MathParserError(kind: .cannotParseExponent, range: range)
-            return .error(error)
+            return .failure(error)
         }
     }
     

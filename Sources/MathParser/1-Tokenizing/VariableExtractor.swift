@@ -19,7 +19,7 @@ internal struct VariableExtractor: TokenExtractor {
         return buffer.peekNext() == "$"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         buffer.consume() // consume the opening $
@@ -29,35 +29,35 @@ internal struct VariableExtractor: TokenExtractor {
         if identifierMatches == false {
             if configuration.allowZeroLengthVariables {
                 let token = VariableToken(string: "", range: start ..< buffer.currentIndex)
-                return Tokenizer.Result.value(token)
+                return .success(token)
             } else {
                 // the stuff that follow "$" must be a valid identifier
-                let range: Range<Int> = start ..< start
+                let range = start ..< start
                 let error = MathParserError(kind: .cannotParseVariable, range: range)
-                return Tokenizer.Result.error(error)
+                return .failure(error)
             }
         }
     
         let identifierStart = buffer.currentIndex
         let identifierResult = identifierExtractor.extract(buffer, configuration: configuration)
     
-        let result: Tokenizer.Result
+        let result: Result<RawToken, MathParserError>
         
         switch identifierResult {
-            case .error(let e):
+            case .failure(let e):
                 if e.kind == .cannotParseIdentifier && configuration.allowZeroLengthVariables {
                     buffer.resetTo(identifierStart)
                     let token = VariableToken(string: "", range: start ..< identifierStart)
-                    result = .value(token)
+                    result = .success(token)
                 } else {
-                    let range: Range<Int> = start ..< e.range.upperBound
+                    let range = start ..< e.range.upperBound
                     let error = MathParserError(kind: .cannotParseVariable, range: range)
-                    result = .error(error)
+                    result = .failure(error)
                 }
-            case .value(let t):
-                let range: Range<Int> = start ..< t.range.upperBound
+            case .success(let t):
+                let range = start ..< t.range.upperBound
                 let token = VariableToken(string: t.string, range: range)
-                result = .value(token)
+                result = .success(token)
         }
         
         return result

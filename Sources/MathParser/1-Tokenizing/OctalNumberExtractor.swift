@@ -14,12 +14,12 @@ internal struct OctalNumberExtractor: TokenExtractor {
         return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o" else {
             let error = MathParserError(kind: .cannotParseHexNumber, range: start ..< start)
-            return .error(error)
+            return .failure(error)
         }
         
         
@@ -35,16 +35,16 @@ internal struct OctalNumberExtractor: TokenExtractor {
             buffer.resetTo(start)
         }
         
-        let result: Tokenizer.Result
+        let result: Result<RawToken, MathParserError>
         
-        if buffer.currentIndex - start > 0 {
-            let range: Range<Int> = indexBeforeOctalNumbers ..< buffer.currentIndex
+        if buffer.currentDistance(from: start) > 0 {
+            let range = indexBeforeOctalNumbers ..< buffer.currentIndex
             let raw = buffer[range]
-            result = .value(OctalNumberToken(string: raw, range: range))
+            result = .success(OctalNumberToken(string: raw, range: range))
         } else {
-            let range: Range<Int> = start ..< buffer.currentIndex
+            let range = start ..< buffer.currentIndex
             let error = MathParserError(kind: .cannotParseOctalNumber, range: range)
-            result = .error(error)
+            result = .failure(error)
         }
         
         return result

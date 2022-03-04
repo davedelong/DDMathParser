@@ -14,12 +14,12 @@ internal struct HexNumberExtractor: TokenExtractor {
         return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x" else {
             let error = MathParserError(kind: .cannotParseHexNumber, range: start ..< start)
-            return .error(error)
+            return .failure(error)
         }
         
         
@@ -35,16 +35,16 @@ internal struct HexNumberExtractor: TokenExtractor {
             buffer.resetTo(start)
         }
         
-        let result: Tokenizer.Result
+        let result: Result<RawToken, MathParserError>
         
-        if buffer.currentIndex - start > 0 {
-            let range: Range<Int> = indexBeforeHexNumbers ..< buffer.currentIndex
+        if buffer.currentDistance(from: start) > 0 {
+            let range = indexBeforeHexNumbers ..< buffer.currentIndex
             let raw = buffer[range]
-            result = .value(HexNumberToken(string: raw, range: range))
+            result = .success(HexNumberToken(string: raw, range: range))
         } else {
-            let range: Range<Int> = start ..< buffer.currentIndex
+            let range = start ..< buffer.currentIndex
             let error = MathParserError(kind: .cannotParseHexNumber, range: range)
-            result = .error(error)
+            result = .failure(error)
         }
         
         return result

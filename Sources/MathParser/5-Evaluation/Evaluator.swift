@@ -51,7 +51,7 @@ public struct Evaluator {
         try functionSet.addAlias(alias, forFunctionName: name)
     }
     
-    private func evaluateVariable(_ name: String, substitutions: Substitutions, range: Range<Int>) throws -> Double {
+    private func evaluateVariable(_ name: String, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
         if let value = try substitutions[name]?.substitutionValue(using: self, substitutions: substitutions) {
             return value
         }
@@ -66,7 +66,7 @@ public struct Evaluator {
         throw MathParserError(kind: .unknownVariable(name), range: range)
     }
     
-    private func evaluateFunction(_ name: String, arguments: Array<Expression>, substitutions: Substitutions, range: Range<Int>) throws -> Double {
+    private func evaluateFunction(_ name: String, arguments: Array<Expression>, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
         let state = EvaluationState(expressionRange: range, arguments: arguments, substitutions: substitutions, evaluator: self)
         
         // check for function overrides

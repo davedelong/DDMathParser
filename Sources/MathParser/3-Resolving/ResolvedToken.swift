@@ -18,7 +18,7 @@ public struct ResolvedToken: Hashable {
     
     public let kind: Kind
     public let string: String
-    public let range: Range<Int>
+    public let range: Range<String.Index>
 }
 
 extension ResolvedToken.Kind {

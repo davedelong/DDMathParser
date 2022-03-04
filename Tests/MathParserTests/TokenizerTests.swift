@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import MathParser
+@testable import MathParser
 
 private func TestToken<T: RawToken>(_ raw: RawToken, kind: T.Type, string: String, file: StaticString = #file, line: UInt = #line) {
     XCTAssertTrue(raw is T, "Unexpected token kind", file: file, line: line)

@@ -14,7 +14,7 @@ internal struct DecimalNumberExtractor: TokenExtractor {
         return buffer.peekNext()?.isDigit == true || buffer.peekNext() == "."
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         while buffer.peekNext()?.isDigit == true {
@@ -52,15 +52,15 @@ internal struct DecimalNumberExtractor: TokenExtractor {
             }
         }
         
-        let length = buffer.currentIndex - start
-        let range: Range<Int> = start ..< buffer.currentIndex
+        let length = buffer.currentDistance(from: start)
+        let range = start ..< buffer.currentIndex
         let error = MathParserError(kind: .cannotParseNumber, range: range)
         
-        var result = Tokenizer.Result.error(error)
+        var result = Result<RawToken, MathParserError>.failure(error)
         if length > 0 {
             if length != 1 || buffer[start] != "." {
                 let raw = buffer[range]
-                result = .value(DecimalNumberToken(string: raw, range: range))
+                result = .success(DecimalNumberToken(string: raw, range: range))
             }
         }
         return result

@@ -49,9 +49,9 @@ public struct MathParserError: Error {
     public let kind: Kind
     
     // the location within the original source string where the error was found
-    public let range: Range<Int>
+    public let range: Range<String.Index>
 
-    public init(kind: Kind, range: Range<Int>) {
+    public init(kind: Kind, range: Range<String.Index>) {
         self.kind = kind
         self.range = range
     }

@@ -8,34 +8,52 @@
 
 import Foundation
 
-public class RawToken: Hashable {
-    
-    public static func == (lhs: RawToken, rhs: RawToken) -> Bool {
-        return type(of: lhs) === type(of: rhs) &&
-            lhs.string == rhs.string &&
-            lhs.range == rhs.range
-    }
-    
-    public let string: String
-    public let range: Range<Int>
-    
-    public init(string: String, range: Range<Int>) {
-        self.string = string
-        self.range = range
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        string.hash(into: &hasher)
-        range.hash(into: &hasher)
-    }
+internal protocol RawToken {
+    var string: String { get }
+    var range: Range<String.Index> { get }
 }
 
-public class HexNumberToken: RawToken { }
-public class OctalNumberToken: RawToken { }
-public class DecimalNumberToken: RawToken { }
-public class FractionNumberToken: RawToken { }
-public class LocalizedNumberToken: RawToken { }
-public class ExponentToken: RawToken { }
-public class VariableToken: RawToken { }
-public class OperatorToken: RawToken { }
-public class IdentifierToken: RawToken { }
+internal struct HexNumberToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct OctalNumberToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct DecimalNumberToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct FractionNumberToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct LocalizedNumberToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct ExponentToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct VariableToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct OperatorToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}
+
+internal struct IdentifierToken: RawToken {
+    let string: String
+    let range: Range<String.Index>
+}

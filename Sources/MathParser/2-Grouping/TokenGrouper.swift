@@ -10,7 +10,7 @@ import Foundation
 
 private extension GroupedToken {
     
-    private var endIndex: Int {
+    private var endIndex: String.Index {
         switch self.kind {
             case let .function(_, parameters):
                 return parameters.last?.range.upperBound ?? range.upperBound
@@ -25,7 +25,8 @@ private extension GroupedToken {
 
 public struct TokenGrouper {
     private let resolver: TokenResolver
-    internal var operatorSet: OperatorSet { return resolver.operatorSet }
+    internal var source: String { resolver.source }
+    internal var operatorSet: OperatorSet { resolver.operatorSet }
     
     public init(resolver: TokenResolver) {
         self.resolver = resolver
@@ -66,9 +67,9 @@ public struct TokenGrouper {
         }
         
         guard let first = rootTokens.first, let last = rootTokens.last else {
-            throw MathParserError(kind: .emptyGroup, range: 0 ..< 0) //EmptyGroup
+            throw MathParserError(kind: .emptyGroup, range: source.startIndex ..< source.startIndex) //EmptyGroup
         }
-        let range: Range<Int> = first.range.lowerBound ..< last.range.upperBound
+        let range = first.range.lowerBound ..< last.range.upperBound
         
         return GroupedToken(kind: .group(rootTokens), range: range)
     }
@@ -124,11 +125,11 @@ public struct TokenGrouper {
             throw MathParserError(kind: .missingCloseParenthesis, range: indexForMissingParen ..< indexForMissingParen)
         }
         
-        let range: Range<Int> = function.range.lowerBound ..< close.range.upperBound
+        let range = function.range.lowerBound ..< close.range.upperBound
         return GroupedToken(kind: .function(function.string, parameters), range: range)
     }
     
-    private func parameterGroupFromGenerator<P: PeekingIteratorType>(_ generator: P, parameterIndex: Int) throws -> GroupedToken where P.Element == ResolvedToken {
+    private func parameterGroupFromGenerator<P: PeekingIteratorType>(_ generator: P, parameterIndex: String.Index) throws -> GroupedToken where P.Element == ResolvedToken {
         var g = generator
         
         var parameterTokens = Array<GroupedToken>()
@@ -151,7 +152,7 @@ public struct TokenGrouper {
             throw MathParserError(kind: .emptyFunctionArgument, range: parameterIndex ..< parameterIndex) // EmptyFunctionArgument
         }
         
-        let range: Range<Int> = first.range.lowerBound ..< last.range.upperBound
+        let range = first.range.lowerBound ..< last.range.upperBound
         return GroupedToken(kind: .group(parameterTokens), range: range)
     }
     
@@ -173,7 +174,7 @@ public struct TokenGrouper {
             throw MathParserError(kind: .missingCloseParenthesis, range: open.range.lowerBound ..< indexForMissingParen)
         }
         
-        let range: Range<Int> = open.range.lowerBound ..< close.range.upperBound
+        let range = open.range.lowerBound ..< close.range.upperBound
         
         guard tokens.isEmpty == false else {
             throw MathParserError(kind: .emptyGroup, range: range) // Empty Group

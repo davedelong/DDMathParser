@@ -20,7 +20,7 @@ internal struct OperatorExtractor: TokenExtractor {
         return operatorTokens.hasOperatorWithPrefix(String(peek))
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         var lastGoodIndex = start
@@ -41,8 +41,8 @@ internal struct OperatorExtractor: TokenExtractor {
         
         buffer.resetTo(lastGoodIndex)
         
-        let range: Range<Int> = start ..< buffer.currentIndex
-        let result: Tokenizer.Result
+        let range = start ..< buffer.currentIndex
+        let result: Result<RawToken, MathParserError>
         
         if buffer[start].isAlphabetic && buffer.peekNext()?.isAlphabetic == true {
             // This operator starts with an alphabetic character and
@@ -52,12 +52,12 @@ internal struct OperatorExtractor: TokenExtractor {
             buffer.resetTo(start)
         }
         
-        if buffer.currentIndex - start > 0 {
+        if buffer.currentDistance(from: start) > 0 {
             let raw = buffer[range]
-            result = .value(OperatorToken(string: raw, range: range))
+            result = .success(OperatorToken(string: raw, range: range))
         } else {
             let error = MathParserError(kind: .cannotParseOperator, range: range)
-            result = .error(error)
+            result = .failure(error)
         }
         
         return result

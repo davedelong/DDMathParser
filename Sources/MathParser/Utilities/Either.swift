@@ -8,7 +8,4 @@
 
 import Foundation
 
-internal enum Either<T, E: Error> {
-    case value(T)
-    case error(E)
-}
+internal typealias Either = Result

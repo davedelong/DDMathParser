@@ -45,7 +45,7 @@ struct GroupedTokens: View {
 }
 
 extension GroupedToken: Identifiable {
-    public var id: Range<Int> { self.range }
+    public var id: Range<String.Index> { self.range }
     var children: Array<GroupedToken>? {
         switch self.kind {
             case .number(_): return nil

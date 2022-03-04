@@ -13,6 +13,7 @@ public struct TokenResolver {
     private let tokenizer: Tokenizer
     private var configuration: Configuration { return tokenizer.configuration }
     fileprivate let numberFormatters: Array<NumberFormatter>
+    internal var source: String { tokenizer.source }
     internal var operatorSet: OperatorSet { return configuration.operatorSet }
     
     private static func formattersForLocale(_ locale: Locale?) -> Array<NumberFormatter> {
@@ -176,10 +177,9 @@ extension TokenResolver {
         
         var distanceSoFar = 0
         for exponentToken in exponentTokens {
-            let tokenStart = raw.range.lowerBound + distanceSoFar
-            
-            let tokenLength = exponentToken.range.upperBound - exponentToken.range.lowerBound
-            let tokenEnd = tokenStart + tokenLength
+            let tokenStart = source.index(raw.range.lowerBound, offsetBy: distanceSoFar)
+            let tokenLength = source.distance(from: exponentToken.range.lowerBound, to: exponentToken.range.upperBound)
+            let tokenEnd = source.index(tokenStart, offsetBy: tokenLength)
             distanceSoFar += tokenLength
             
             resolved.append(ResolvedToken(kind: exponentToken.kind, string: exponentToken.string, range: tokenStart ..< tokenEnd))
@@ -279,7 +279,7 @@ extension TokenResolver {
         
         let nextOperator = next?.kind.resolvedOperator
         if nextOperator == nil || nextOperator?.builtInOperator != .parenthesisOpen {
-            let range: Range<Int> = previous.range.upperBound ..< previous.range.upperBound
+            let range = previous.range.upperBound ..< previous.range.upperBound
             
             let openParenOp = Operator(builtInOperator: .parenthesisOpen)
             let openParen = ResolvedToken(kind: .operator(openParenOp), string: "(", range: range)

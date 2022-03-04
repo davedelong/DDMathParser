@@ -11,6 +11,6 @@ import Foundation
 internal protocol TokenExtractor {
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError>
     
 }

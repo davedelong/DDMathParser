@@ -18,5 +18,5 @@ public struct GroupedToken: Hashable {
     }
     
     public let kind: Kind
-    public let range: Range<Int>
+    public let range: Range<String.Index>
 }

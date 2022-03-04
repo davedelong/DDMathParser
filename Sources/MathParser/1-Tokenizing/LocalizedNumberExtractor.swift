@@ -21,9 +21,9 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         return buffer.peekNext() != nil
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
-        var indexBeforeDecimal: Int?
+        var indexBeforeDecimal: String.Index?
         
         var soFar = ""
         while let peek = buffer.peekNext(), peek.isWhitespace == false {
@@ -33,7 +33,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
                 indexBeforeDecimal = buffer.currentIndex
             }
             
-            if canParseString(test) || (start == 0 && isValidPrefix(test)) {
+            if canParseString(test) || (start == buffer.startIndex && isValidPrefix(test)) {
                 soFar = test
                 buffer.consume()
             } else {
@@ -47,15 +47,15 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         }
         
         let indexAfterNumber = buffer.currentIndex
-        let range: Range<Int> = start ..< indexAfterNumber
+        let range = start ..< indexAfterNumber
         
         if range.isEmpty {
             let error = MathParserError(kind: .cannotParseNumber, range: range)
-            return .error(error)
+            return .failure(error)
         }
         
         let token = LocalizedNumberToken(string: soFar, range: range)
-        return .value(token)
+        return .success(token)
     }
     
     /// - Returns: True if the string is a valid prefix of a localized number.

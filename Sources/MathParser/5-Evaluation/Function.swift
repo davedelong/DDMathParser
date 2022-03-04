@@ -9,7 +9,7 @@
 import Foundation
 
 public struct EvaluationState {
-    public let expressionRange: Range<Int>
+    public let expressionRange: Range<String.Index>
     public let arguments: Array<Expression>
     public let substitutions: Substitutions
     public let evaluator: Evaluator

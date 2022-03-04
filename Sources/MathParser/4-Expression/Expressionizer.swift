@@ -31,7 +31,7 @@ private enum TokenOrExpression {
     
     var isToken: Bool { return token != nil }
     
-    var range: Range<Int> {
+    var range: Range<String.Index> {
         switch self {
             case .token(let t): return t.range
             case .expression(let e): return e.range
@@ -41,6 +41,7 @@ private enum TokenOrExpression {
 
 public struct Expressionizer {
     private let grouper: TokenGrouper
+    private var source: String { grouper.source }
     
     public init(grouper: TokenGrouper) {
         self.grouper = grouper
@@ -84,7 +85,7 @@ public struct Expressionizer {
         while wrappers.count > 1 || wrappers.first?.isToken == true {
             let (indices, maybeOp) = operatorWithHighestPrecedence(wrappers)
             guard let first = indices.first, let last = indices.last else {
-                let range: Range<Int> = wrappers.first?.range ?? 0 ..< 0
+                let range = wrappers.first?.range ?? source.startIndex ..< source.startIndex
                 throw MathParserError(kind: .invalidFormat, range: range)
             }
             guard let op = maybeOp else { fatalError("Indices but no operator??") }
@@ -188,7 +189,7 @@ public struct Expressionizer {
         guard let leftOperand = leftWrapper.expression else { fatalError("Never resolved left operand") }
         guard let rightOperand = rightWrapper.expression else { fatalError("Never resolved right operand") }
         
-        let range: Range<Int> = leftOperand.range.lowerBound ..< rightOperand.range.upperBound
+        let range = leftOperand.range.lowerBound ..< rightOperand.range.upperBound
         let expression = Expression(kind: .function(op.function, [leftOperand, rightOperand]), range: range)
         
         let replacementRange = leftIndex ... rightIndex
@@ -233,7 +234,7 @@ public struct Expressionizer {
             fatalError("Implementation flaw")
         }
         
-        let range: Range<Int> = operandWrapper.range.lowerBound ..< operatorWrapper.range.upperBound
+        let range = operandWrapper.range.lowerBound ..< operatorWrapper.range.upperBound
         let expression = Expression(kind: .function(op.function, [operand]), range: range)
         
         let replacementRange = operandIndex ... operatorIndex
@@ -276,7 +277,7 @@ public struct Expressionizer {
             fatalError("Implementation flaw")
         }
         
-        let range: Range<Int> = operatorWrapper.range.lowerBound ..< operand.range.upperBound
+        let range = operatorWrapper.range.lowerBound ..< operand.range.upperBound
         let expression: Expression
         
         if op.builtInOperator == .unaryPlus {

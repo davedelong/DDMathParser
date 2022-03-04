@@ -14,7 +14,7 @@ internal struct QuotedVariableExtractor: TokenExtractor {
         return buffer.peekNext() == "\"" || buffer.peekNext() == "'"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Tokenizer.Result {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         // consume the opening quote
@@ -54,22 +54,22 @@ internal struct QuotedVariableExtractor: TokenExtractor {
             
         }
         
-        let result: Tokenizer.Result
+        let result: Result<RawToken, MathParserError>
         
         if buffer.peekNext() != quoteCharacter {
-            let errorRange: Range<Int> = start ..< buffer.currentIndex
+            let errorRange = start ..< buffer.currentIndex
             let error = MathParserError(kind: .cannotParseQuotedVariable, range: errorRange)
-            result = .error(error)
+            result = .failure(error)
         } else {
             buffer.consume()
-            let range: Range<Int> = start ..< buffer.currentIndex
+            let range = start ..< buffer.currentIndex
             // check to make sure we don't have an empty string
             if cleaned.isEmpty && configuration.allowZeroLengthVariables == false {
                 let error = MathParserError(kind: .zeroLengthVariable, range: range)
-                result = .error(error)
+                result = .failure(error)
             } else {
                 let token = VariableToken(string: cleaned, range: range)
-                result = .value(token)
+                result = .success(token)
             }
         }
         

@@ -9,22 +9,21 @@
 import Foundation
 
 internal final class TokenCharacterBuffer {
-    private let characters: Array<Character>
-    private let lowercaseCharacters: Array<Character>
-    private(set) var currentIndex: Int
+    private let string: String
+    
+    var startIndex: String.Index { string.startIndex }
+    private(set) var currentIndex: String.Index
     
     init(string: String) {
-        characters = Array(string)
-        lowercaseCharacters = Array(string.lowercased())
-        
-        currentIndex = 0
+        self.string = string
+        self.currentIndex = string.startIndex
     }
     
     var isAtEnd: Bool {
-        return currentIndex >= characters.count
+        return currentIndex >= string.endIndex
     }
     
-    func resetTo(_ index: Int) {
+    func resetTo(_ index: String.Index) {
         currentIndex = index
     }
     
@@ -32,25 +31,32 @@ internal final class TokenCharacterBuffer {
         guard delta >= 0 else {
             fatalError("Cannot peek into the past")
         }
-        let chars = lowercase ? lowercaseCharacters : characters
         
-        let index = currentIndex + delta
-        guard index < chars.count else { return nil }
-        return chars[index]
+        let index = string.index(currentIndex, offsetBy: delta)
+        guard index < string.endIndex else { return nil }
+        var character = string[index]
+        if lowercase == true {
+            character = character.lowercased().first ?? character
+        }
+        return character
     }
     
     func consume(_ delta: Int = 1) {
         guard delta > 0 else {
             fatalError("Cannot consume less than one character")
         }
-        currentIndex = currentIndex + delta
+        currentIndex = string.index(currentIndex, offsetBy: delta)
     }
     
-    subscript (i: Int) -> Character {
-        return characters[i]
+    func currentDistance(from index: String.Index) -> Int {
+        return string.distance(from: index, to: currentIndex)
     }
     
-    subscript (r: Range<Int>) -> String {
-        return String(characters[r])
+    subscript (i: String.Index) -> Character {
+        return string[i]
+    }
+    
+    subscript (r: Range<String.Index>) -> String {
+        return String(string[r])
     }
 }

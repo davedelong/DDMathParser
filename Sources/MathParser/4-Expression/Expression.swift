@@ -40,11 +40,11 @@ public final class Expression {
     }
     
     public let kind: Kind
-    public let range: Range<Int>
+    public let range: Range<String.Index>
     
     internal weak var parent: Expression?
     
-    public init(kind: Kind, range: Range<Int>) {
+    public init(kind: Kind, range: Range<String.Index>) {
         self.kind = kind
         self.range = range
         
