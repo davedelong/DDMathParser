@@ -1,53 +1,55 @@
 //
-//  OctalNumberExtractor.swift
+//  HexNumberExtractor.swift
 //  DDMathParser
 //
-//  Created by Dave DeLong on 3/3/16.
+//  Created by Dave DeLong on 8/6/15.
 //
 //
 
 import Foundation
 
-internal struct OctalNumberExtractor: TokenExtractor {
+internal struct HexNumberExtractor: TokenExtractor {
+    
+    let specialCharacters: Set<Character> = []
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
-        return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o"
+        return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x"
     }
     
     func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
-        guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o" else {
+        guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "x" else {
             let error = MathParserError(kind: .cannotParseHexNumber, range: start ..< start)
             return .failure(error)
         }
         
         
-        buffer.consume(2) // 0o
+        buffer.consume(2) // 0x
         
-        let indexBeforeOctalNumbers = buffer.currentIndex
-        while buffer.peekNext()?.isOctalDigit == true {
+        let indexBeforeHexNumbers = buffer.currentIndex
+        while buffer.peekNext()?.isHexDigit == true {
             buffer.consume()
         }
         
-        if buffer.currentIndex == indexBeforeOctalNumbers {
-            // there wasn't anything after 0[oO]
+        if buffer.currentIndex == indexBeforeHexNumbers {
+            // there wasn't anything after 0[xX]
             buffer.resetTo(start)
         }
         
         let result: Result<RawToken, MathParserError>
         
         if buffer.currentDistance(from: start) > 0 {
-            let range = indexBeforeOctalNumbers ..< buffer.currentIndex
+            let range = indexBeforeHexNumbers ..< buffer.currentIndex
             let raw = buffer[range]
-            result = .success(OctalNumberToken(string: raw, range: range))
+            result = .success(HexNumberToken(string: raw, range: range))
         } else {
             let range = start ..< buffer.currentIndex
-            let error = MathParserError(kind: .cannotParseOctalNumber, range: range)
+            let error = MathParserError(kind: .cannotParseHexNumber, range: range)
             result = .failure(error)
         }
         
         return result
     }
-    
+
 }

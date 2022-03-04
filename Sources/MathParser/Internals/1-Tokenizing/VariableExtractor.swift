@@ -9,6 +9,9 @@
 import Foundation
 
 internal struct VariableExtractor: TokenExtractor {
+    
+    let specialCharacters: Set<Character> = ["$"]
+    
     private let identifierExtractor: IdentifierExtractor
     
     init(operatorTokens: OperatorTokenSet) {

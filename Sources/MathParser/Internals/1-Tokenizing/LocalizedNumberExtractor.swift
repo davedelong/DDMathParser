@@ -10,6 +10,8 @@ import Foundation
 
 internal struct LocalizedNumberExtractor: TokenExtractor {
     
+    let specialCharacters: Set<Character> = []
+    
     private let decimalNumberFormatter = NumberFormatter()
     
     internal init(locale: Locale) {

@@ -11,6 +11,8 @@ import Foundation
 internal struct OperatorExtractor: TokenExtractor {
     let operatorTokens: OperatorTokenSet
     
+    let specialCharacters: Set<Character> = []
+    
     init(operatorTokens: OperatorTokenSet) {
         self.operatorTokens = operatorTokens
     }

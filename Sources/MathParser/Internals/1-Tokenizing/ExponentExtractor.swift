@@ -26,6 +26,7 @@ internal struct ExponentExtractor: TokenExtractor {
         "⁽": "(",
         "⁾": ")"
     ]
+    let specialCharacters: Set<Character> = Set(Self.exponentCharacters.keys)
     
     func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         guard let peek = buffer.peekNext() else { return false }

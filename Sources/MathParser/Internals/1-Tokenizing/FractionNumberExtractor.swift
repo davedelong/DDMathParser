@@ -28,6 +28,8 @@ internal struct FractionNumberExtractor: TokenExtractor {
         "⅞": 0.875
     ]
     
+    let specialCharacters: Set<Character> = Set(Self.fractions.keys)
+    
     func matchesPreconditions(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Bool {
         guard let peek = buffer.peekNext() else { return false }
         guard let _ = FractionNumberExtractor.fractions[peek] else { return false }
