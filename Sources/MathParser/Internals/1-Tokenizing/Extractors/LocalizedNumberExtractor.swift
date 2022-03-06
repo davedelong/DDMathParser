@@ -23,7 +23,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         return buffer.peekNext() != nil
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration, specialCharacters: Set<Character>) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         var indexBeforeDecimal: String.Index?
         

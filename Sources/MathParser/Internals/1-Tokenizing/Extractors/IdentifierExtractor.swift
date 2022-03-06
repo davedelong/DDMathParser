@@ -23,10 +23,10 @@ internal struct IdentifierExtractor: TokenExtractor {
         return next != "$" && next?.isDigit == false && next != "\"" && next != "'"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration, specialCharacters: Set<Character>) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
-        while let next = buffer.peekNext(), next.isWhitespace == false && operatorTokens.isOperatorCharacter(next) == false {
+        while let next = buffer.peekNext(), next.isWhitespace == false && operatorTokens.isOperatorCharacter(next) == false && specialCharacters.contains(next) == false {
             buffer.consume()
         }
         

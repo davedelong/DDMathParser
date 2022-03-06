@@ -21,83 +21,87 @@ public final class OperatorSet {
         var ops = Array<Operator>()
         var precedence = 1
         
+        @discardableResult
+        func add(_ op: Operator, precedence: Int) -> Operator {
+            var copy = op
+            copy.precedence = precedence
+            ops.append(copy)
+            return copy
+        }
+        
         // LogicalDisjunction
-        ops.append(Operator(builtInOperator: .logicalOr, precedence: precedence))
+        add(.logicalOr, precedence: precedence)
         precedence += 1
         
         // LogicalConjunction
-        ops.append(Operator(builtInOperator: .logicalAnd, precedence: precedence))
+        add(.logicalAnd, precedence: precedence)
         precedence += 1
         
         // == and != have the same precedence
         
         // ComparisonPrecedence
-        ops.append(Operator(builtInOperator: .logicalEqual, precedence: precedence))
-        ops.append(Operator(builtInOperator: .logicalNotEqual, precedence: precedence))
-        ops.append(Operator(builtInOperator: .logicalLessThan, precedence: precedence))
-        ops.append(Operator(builtInOperator: .logicalGreaterThan, precedence: precedence))
-        ops.append(Operator(builtInOperator: .logicalLessThanOrEqual, precedence: precedence))
-        ops.append(Operator(builtInOperator: .logicalGreaterThanOrEqual, precedence: precedence))
+        add(.logicalEqual, precedence: precedence)
+        add(.logicalNotEqual, precedence: precedence)
+        add(.logicalLessThan, precedence: precedence)
+        add(.logicalGreaterThan, precedence: precedence)
+        add(.logicalLessThanOrEqual, precedence: precedence)
+        add(.logicalGreaterThanOrEqual, precedence: precedence)
         precedence += 1
         
         precedence += 1
         
         // AdditionPrecedence
         precedence += 1
-        ops.append(Operator(builtInOperator: .add, precedence: precedence))
-        ops.append(Operator(builtInOperator: .minus, precedence: precedence))
-        ops.append(Operator(builtInOperator: .bitwiseOr, precedence: precedence))
-        ops.append(Operator(builtInOperator: .bitwiseXor, precedence: precedence))
+        add(.add, precedence: precedence)
+        add(.minus, precedence: precedence)
+        add(.bitwiseOr, precedence: precedence)
+        add(.bitwiseXor, precedence: precedence)
         precedence += 1
         
         // MultiplicationPrecedence
-        multiplyOperator = Operator(builtInOperator: .multiply, precedence: precedence)
-        ops.append(multiplyOperator)
-        ops.append(Operator(builtInOperator: .divide, precedence: precedence))
-        ops.append(Operator(builtInOperator: .bitwiseAnd, precedence: precedence))
+        multiplyOperator = add(.multiply, precedence: precedence)
+        add(.divide, precedence: precedence)
+        add(.bitwiseAnd, precedence: precedence)
         precedence += 1
         
-        implicitMultiplyOperator = Operator(builtInOperator: .implicitMultiply, precedence: precedence)
-        ops.append(implicitMultiplyOperator)
+        implicitMultiplyOperator = add(.implicitMultiply, precedence: precedence)
         precedence += 1
         
         // NOTE: percent-as-modulo precedence goes here (after ImplicitMultiply)
         
         // BitwiseShiftPrecedence
-        ops.append(Operator(builtInOperator: .leftShift, precedence: precedence))
-        ops.append(Operator(builtInOperator: .rightShift, precedence: precedence))
+        add(.leftShift, precedence: precedence)
+        add(.rightShift, precedence: precedence)
         precedence += 1
         
         // all right associative unary operators have the same precedence
-        ops.append(Operator(builtInOperator: .bitwiseNot, precedence: precedence))
-        ops.append(Operator(builtInOperator: .unaryMinus, precedence: precedence))
-        ops.append(Operator(builtInOperator: .unaryPlus, precedence: precedence))
-        ops.append(Operator(builtInOperator: .squareRoot, precedence: precedence))
-        ops.append(Operator(builtInOperator: .cubeRoot, precedence: precedence))
-        ops.append(Operator(builtInOperator: .logicalNot, precedence: precedence))
+        add(.bitwiseNot, precedence: precedence)
+        add(.unaryMinus, precedence: precedence)
+        add(.unaryPlus, precedence: precedence)
+        add(.squareRoot, precedence: precedence)
+        add(.cubeRoot, precedence: precedence)
+        add(.logicalNot, precedence: precedence)
         precedence += 1
         
         // all left associative unary operators have the same precedence
-        ops.append(Operator(builtInOperator: .doubleFactorial, precedence: precedence))
-        ops.append(Operator(builtInOperator: .factorial, precedence: precedence))
+        add(.doubleFactorial, precedence: precedence)
+        add(.factorial, precedence: precedence)
         // NOTE: percent-as-percent precedence goes here (same as Factorial)
-        ops.append(Operator(builtInOperator: .degree, precedence: precedence))
+        add(.degree, precedence: precedence)
         precedence += 1
         
-        powerOperator = Operator(builtInOperator: .power, precedence: precedence)
+        powerOperator = add(.power, precedence: precedence)
         precedence += 1
-        ops.append(powerOperator)
         
-        addFractionOperator = Operator(builtInOperator: .add, precedence: precedence)
+        addFractionOperator = add(.add, precedence: precedence)
         precedence += 1
-        ops.append(addFractionOperator)
         
         // these are defined as unary right/left associative for convenience
-        ops.append(Operator(builtInOperator: .parenthesisOpen, precedence: precedence))
-        ops.append(Operator(builtInOperator: .parenthesisClose, precedence: precedence))
+        add(.parenthesisOpen, precedence: precedence)
+        add(.parenthesisClose, precedence: precedence)
         precedence += 1
         
-        ops.append(Operator(builtInOperator: .comma, precedence: precedence))
+        add(.comma, precedence: precedence)
         precedence += 1
         
         self.operators = ops
@@ -115,16 +119,16 @@ public final class OperatorSet {
         }
     }
     private func interpretPercentSignAsModulo(_ interpretAsModulo: Bool) {
-        let percent = Operator(builtInOperator: .percent)
-        let modulo = Operator(builtInOperator: .modulo)
+        let percent = Operator.percent
+        let modulo = Operator.modulo
         
         // remove the old one and add the new one
         if interpretAsModulo {
             removeOperator(percent)
-            addOperator(modulo, relatedBy: .greaterThan, toOperator: Operator(builtInOperator: .implicitMultiply))
+            addOperator(modulo, relatedBy: .greaterThan, toOperator: .implicitMultiply)
         } else {
             removeOperator(modulo)
-            addOperator(percent, relatedBy: .equalTo, toOperator: Operator(builtInOperator: .factorial))
+            addOperator(percent, relatedBy: .equalTo, toOperator: .factorial)
         }
     }
     
@@ -139,13 +143,9 @@ public final class OperatorSet {
     
     public private(set) var operators: Array<Operator> {
         didSet {
-            operatorsDidChange()
+            knownTokens = Set(operators.flatMap { $0.tokens })
+            _operatorTokenSet = nil
         }
-    }
-    
-    private func operatorsDidChange() {
-        knownTokens = Set(operators.flatMap { $0.tokens })
-        _operatorTokenSet = nil
     }
     
     internal let addFractionOperator: Operator
@@ -158,7 +158,6 @@ public final class OperatorSet {
     private func removeOperator(_ op: Operator) {
         guard let index = operators.firstIndex(of: op) else { return }
         operators.remove(at: index)
-        operatorsDidChange()
     }
     
     public func addTokens(_ tokens: Array<String>, forOperator op: Operator) {
@@ -166,16 +165,16 @@ public final class OperatorSet {
             self.operatorForToken($0).isEmpty
         }
         
-        guard let existing = existingOperator(op) else { return }
-        existing.tokens.formUnion(allowed)
-        operatorsDidChange()
+        modifyOperator(op) {
+            $0.tokens.formUnion(allowed)
+        }
     }
     
     public func addOperator(_ op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
         guard let existing = existingOperator(existingOp) else { return }
         guard let existingP = existing.precedence else { fatalError("Existing operator missing precedence \(existing)") }
         
-        let newOperator = op
+        var newOperator = op
         newOperator.precedence = existing.precedence
         
         let sorter: (Operator) -> Bool
@@ -204,11 +203,20 @@ public final class OperatorSet {
         return matches.first
     }
     
-    private func processOperator(_ op: Operator, sorter: (Operator) -> Bool) {
-        if let existing = existingOperator(op) {
-            existing.tokens.formUnion(op.tokens)
-            operatorsDidChange()
+    @discardableResult
+    private func modifyOperator(_ op: Operator, modifier: (inout Operator) -> Void) -> Bool {
+        if let index = operators.firstIndex(of: op) {
+            var copy = operators[index]
+            modifier(&copy)
+            operators[index] = copy
+            return true
         } else {
+            return false
+        }
+    }
+    
+    private func processOperator(_ op: Operator, sorter: (Operator) -> Bool) {
+        if modifyOperator(op, modifier: { $0.tokens.formUnion(op.tokens) }) == false {
             let overlap = knownTokens.intersection(op.tokens)
             guard overlap.isEmpty == true else {
                 NSLog("cannot add operator with conflicting tokens: \(overlap)")
@@ -216,7 +224,7 @@ public final class OperatorSet {
             }
             
             let newOperators = operators.map { orig -> Operator in
-                let new = Operator(function: orig.function, arity: orig.arity, associativity: orig.associativity)
+                var new = Operator(function: orig.function, arity: orig.arity, associativity: orig.associativity)
                 new.tokens = orig.tokens
                 
                 var precedence = orig.precedence ?? 0
@@ -226,7 +234,6 @@ public final class OperatorSet {
             }
             operators = newOperators
             operators.append(op)
-            operatorsDidChange()
         }
     }
     

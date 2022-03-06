@@ -172,9 +172,6 @@ class EvaluatorTests: XCTestCase {
         TestString("asin(0.42)", value: asin(0.42))
         TestString("acos(0.42)", value: acos(0.42))
         TestString("atan(0.42)", value: atan(0.42))
-        TestString("sin⁻¹(0.42)", value: asin(0.42))
-        TestString("cos⁻¹(0.42)", value: acos(0.42))
-        TestString("tan⁻¹(0.42)", value: atan(0.42))
         
         TestString("csc(π/4)", value: sqrt(2))
         TestString("sec(π/4)", value: sqrt(2))
@@ -182,9 +179,6 @@ class EvaluatorTests: XCTestCase {
         TestString("acsc(sqrt(2))", value: Double.pi / 4)
         TestString("asec(sqrt(2))", value: Double.pi / 4)
         TestString("acotan(1)", value: Double.pi / 4)
-        TestString("csc⁻¹(sqrt(2))", value: Double.pi / 4)
-        TestString("sec⁻¹(sqrt(2))", value: Double.pi / 4)
-        TestString("cotan⁻¹(1)", value: Double.pi / 4)
     }
     
     func testHyperbolicTrigonometricFunctions() {
@@ -194,9 +188,6 @@ class EvaluatorTests: XCTestCase {
         TestString("asinh(0.42)", value: asinh(0.42))
         TestString("acosh(1.42)", value: acosh(1.42))
         TestString("atanh(0.42)", value: atanh(0.42))
-        TestString("sinh⁻¹(0.42)", value: asinh(0.42))
-        TestString("cosh⁻¹(1.42)", value: acosh(1.42))
-        TestString("tanh⁻¹(0.42)", value: atanh(0.42))
         
         TestString("csch(1)", value: 0.850918128239321545133842763287175284181724660910339616990421)
         TestString("sech(1)", value: 0.648054273663885399574977353226150323108489312071942023037865)
@@ -296,10 +287,10 @@ class EvaluatorTests: XCTestCase {
     
     func testLogic() {
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .logicalAnd))
-        operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .logicalOr))
-        operatorSet.addTokens(["is"], forOperator: Operator(builtInOperator: .logicalEqual))
-        operatorSet.addTokens(["is not"], forOperator: Operator(builtInOperator: .logicalNotEqual))
+        operatorSet.addTokens(["and"], forOperator: Operator.logicalAnd)
+        operatorSet.addTokens(["or"], forOperator: Operator.logicalOr)
+        operatorSet.addTokens(["is"], forOperator: Operator.logicalEqual)
+        operatorSet.addTokens(["is not"], forOperator: Operator.logicalNotEqual)
         
         
         let tests: Dictionary<String, Double> = [
@@ -328,7 +319,7 @@ class EvaluatorTests: XCTestCase {
         // fractional digits are added
         struct Overrider: FunctionOverrider {
             func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
-                guard function.lowercased() == BuiltInOperator.implicitMultiply.rawValue.lowercased() else { return nil }
+                guard function.lowercased() == Operator.implicitMultiply.function.lowercased() else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 
                 let firstArg = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)

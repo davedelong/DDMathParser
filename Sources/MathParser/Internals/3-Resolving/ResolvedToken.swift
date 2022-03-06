@@ -42,10 +42,6 @@ extension ResolvedToken.Kind {
         guard case .operator(let o) = self else { return nil }
         return o
     }
-    
-    internal var builtInOperator: BuiltInOperator? {
-        return resolvedOperator?.builtInOperator
-    }
 
     internal var isNumber: Bool { return number != nil }
     internal var isVariable: Bool { return variable != nil }

@@ -216,7 +216,7 @@ class GithubIssues: XCTestCase {
     func testIssue75() {
         var c = Configuration.default
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["and"], forOperator: Operator(builtInOperator: .logicalAnd))
+        operatorSet.addTokens(["and"], forOperator: Operator.logicalAnd)
         c.operatorSet = operatorSet
         
         guard let e = XCTAssertNoThrows(try Expression(string: "1 and 2", configuration: c)) else { return }
@@ -252,7 +252,7 @@ class GithubIssues: XCTestCase {
         
         struct Overrider: FunctionOverrider {
             func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
-                guard function == BuiltInOperator.logicalNotEqual.rawValue else { return nil }
+                guard function == Operator.logicalNotEqual.function else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 guard case let .variable(left) = state.arguments[0].kind else { return nil }
                 guard case let .variable(right) = state.arguments[1].kind else { return nil }
@@ -281,7 +281,7 @@ class GithubIssues: XCTestCase {
     func testIssue105() {
         var c = Configuration.default
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["or"], forOperator: Operator(builtInOperator: .logicalOr))
+        operatorSet.addTokens(["or"], forOperator: .logicalOr)
         c.operatorSet = operatorSet
         
         guard let e = XCTAssertNoThrows(try Expression(string: "cos(pi)", configuration: c)) else { return }
@@ -308,7 +308,7 @@ class GithubIssues: XCTestCase {
     func testIssue109() {
         var c = Configuration.default
         let operatorSet = OperatorSet()
-        operatorSet.addTokens(["as"], forOperator: Operator(builtInOperator: .logicalEqual))
+        operatorSet.addTokens(["as"], forOperator: Operator.logicalEqual)
         c.operatorSet = operatorSet
         
         guard let e = XCTAssertNoThrows(try Expression(string: "asin(0.5)", configuration: c)) else { return }

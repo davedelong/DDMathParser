@@ -280,7 +280,7 @@ internal struct Expressionizer {
         let range = operatorWrapper.range.lowerBound ..< operand.range.upperBound
         let expression: Expression
         
-        if op.builtInOperator == .unaryPlus {
+        if op == .unaryPlus {
             // the Unary Plus operator does nothing and should be ignored
             expression = operand
         } else {

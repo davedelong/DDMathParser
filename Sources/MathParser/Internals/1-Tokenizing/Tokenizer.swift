@@ -14,6 +14,7 @@ internal struct Tokenizer {
     
     private let buffer: TokenCharacterBuffer
     private let extractors: Array<TokenExtractor>
+    private let special: Set<Character>
     
     internal init(string: String, configuration: Configuration = .default) {
         self.source = string
@@ -44,6 +45,7 @@ internal struct Tokenizer {
             IdentifierExtractor(operatorTokens: operatorTokens)
         ]
         
+        special = Set(extractors.flatMap { $0.specialCharacters })
     }
     
     internal func tokenize() throws -> Array<RawToken> {
@@ -73,7 +75,7 @@ internal struct Tokenizer {
             guard extractor.matchesPreconditions(buffer, configuration: configuration) else { continue }
             
             buffer.resetTo(start)
-            let result = extractor.extract(buffer, configuration: configuration)
+            let result = extractor.extract(buffer, configuration: configuration, specialCharacters: special)
             
             switch result {
                 case .success: return result

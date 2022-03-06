@@ -247,7 +247,7 @@ extension Function {
         guard case let .function(f, contextArgs) = contextKind else { return percent }
         
         // must be XXXX + n% or XXXX - n%
-        guard let builtIn = BuiltInOperator(rawValue: f), builtIn == .add || builtIn == .minus else { return percent }
+        guard let builtIn = Operator.builtinOperator(f), builtIn == .add || builtIn == .minus else { return percent }
         
         // cannot be n% + XXXX or n% - XXXX
         guard contextArgs[1] === percentExpression else { return percent }

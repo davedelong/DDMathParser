@@ -337,8 +337,7 @@ class ExpressionTests: XCTestCase {
     func testInvalidFormat() {
         var c = Configuration.default
         c.allowImplicitMultiplication = false
-        guard let e = XCTAssertNoThrows(try Expression(string: "3$x", configuration: c)) else { return }
-        print("\(e)")
+        XCTAssertThrows(try Expression(string: "3$x", configuration: c))
     }
     
 }

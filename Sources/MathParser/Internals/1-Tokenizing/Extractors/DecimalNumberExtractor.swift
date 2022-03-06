@@ -16,7 +16,7 @@ internal struct DecimalNumberExtractor: TokenExtractor {
         return buffer.peekNext()?.isDigit == true || buffer.peekNext() == "."
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration, specialCharacters: Set<Character>) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         while buffer.peekNext()?.isDigit == true {

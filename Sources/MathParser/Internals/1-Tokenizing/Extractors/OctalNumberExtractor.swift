@@ -16,7 +16,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
         return buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration, specialCharacters: Set<Character>) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o" else {

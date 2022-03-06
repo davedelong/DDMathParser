@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class Operator: Equatable, Hashable {
+public struct Operator: Equatable, Hashable {
     
     public enum Arity: Hashable {
         case unary
@@ -27,6 +27,7 @@ public final class Operator: Equatable, Hashable {
         case right
     }
     
+    internal let isBuiltIn: Bool
     public let function: String
     public let arity: Arity
     public let associativity: Associativity
@@ -35,7 +36,16 @@ public final class Operator: Equatable, Hashable {
     public internal(set) var precedence: Int?
     
     public init(function: String, arity: Arity, associativity: Associativity, tokens: Set<String> = []) {
+        self.isBuiltIn = false
         self.function = function
+        self.arity = arity
+        self.associativity = associativity
+        self.tokens = tokens
+    }
+    
+    internal init(builtinFunction: String, arity: Arity, associativity: Associativity, tokens: Set<String>) {
+        self.isBuiltIn = true
+        self.function = builtinFunction
         self.arity = arity
         self.associativity = associativity
         self.tokens = tokens
@@ -45,8 +55,6 @@ public final class Operator: Equatable, Hashable {
         function.hash(into: &hasher)
         arity.hash(into: &hasher)
         associativity.hash(into: &hasher)
-        tokens.hash(into: &hasher)
-        precedence.hash(into: &hasher)
     }
 }
 

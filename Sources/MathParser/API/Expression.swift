@@ -115,8 +115,7 @@ extension Expression: CustomStringConvertible {
                 return "$\(v)"
             case .function(let f, let args):
                 let params = args.map { $0.description }
-                if let builtIn = BuiltInOperator(rawValue: f) {
-                    let op = Operator(builtInOperator: builtIn)
+                if let op = Operator.builtinOperator(f) {
                     guard let token = op.tokens.first else {
                         fatalError("Built-in operator doesn't have any tokens")
                     }

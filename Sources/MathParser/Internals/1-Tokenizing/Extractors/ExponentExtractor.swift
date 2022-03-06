@@ -34,7 +34,7 @@ internal struct ExponentExtractor: TokenExtractor {
         return true
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration, specialCharacters: Set<Character>) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         var exponent = ""

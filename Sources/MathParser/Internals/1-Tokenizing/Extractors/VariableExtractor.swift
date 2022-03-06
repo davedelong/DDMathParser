@@ -22,7 +22,7 @@ internal struct VariableExtractor: TokenExtractor {
         return buffer.peekNext() == "$"
     }
     
-    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration) -> Result<RawToken, MathParserError> {
+    func extract(_ buffer: TokenCharacterBuffer, configuration: Configuration, specialCharacters: Set<Character>) -> Result<RawToken, MathParserError> {
         let start = buffer.currentIndex
         
         buffer.consume() // consume the opening $
@@ -42,7 +42,7 @@ internal struct VariableExtractor: TokenExtractor {
         }
     
         let identifierStart = buffer.currentIndex
-        let identifierResult = identifierExtractor.extract(buffer, configuration: configuration)
+        let identifierResult = identifierExtractor.extract(buffer, configuration: configuration, specialCharacters: specialCharacters)
     
         let result: Result<RawToken, MathParserError>
         

@@ -166,7 +166,7 @@ extension TokenResolver {
         var resolved = Array<ResolvedToken>()
         let powerOperator = operatorSet.powerOperator
         let power = ResolvedToken(kind: .operator(powerOperator), string: "**", range: raw.range.lowerBound ..< raw.range.lowerBound)
-        let openParen = ResolvedToken(kind: .operator(Operator(builtInOperator: .parenthesisOpen)), string: "(", range: raw.range.lowerBound ..< raw.range.lowerBound)
+        let openParen = ResolvedToken(kind: .operator(Operator.parenthesisOpen), string: "(", range: raw.range.lowerBound ..< raw.range.lowerBound)
         
         resolved += [power, openParen]
         
@@ -185,7 +185,7 @@ extension TokenResolver {
             resolved.append(ResolvedToken(kind: exponentToken.kind, string: exponentToken.string, range: tokenStart ..< tokenEnd))
         }
         
-        let closeParen = ResolvedToken(kind: .operator(Operator(builtInOperator: .parenthesisClose)), string: ")", range: raw.range.upperBound ..< raw.range.upperBound)
+        let closeParen = ResolvedToken(kind: .operator(Operator.parenthesisClose), string: ")", range: raw.range.upperBound ..< raw.range.upperBound)
         resolved.append(closeParen)
         
         return resolved
@@ -278,13 +278,13 @@ extension TokenResolver {
         
         
         let nextOperator = next?.kind.resolvedOperator
-        if nextOperator == nil || nextOperator?.builtInOperator != .parenthesisOpen {
+        if nextOperator == nil || nextOperator != .parenthesisOpen {
             let range = previous.range.upperBound ..< previous.range.upperBound
             
-            let openParenOp = Operator(builtInOperator: .parenthesisOpen)
+            let openParenOp = Operator.parenthesisOpen
             let openParen = ResolvedToken(kind: .operator(openParenOp), string: "(", range: range)
             
-            let closeParenOp = Operator(builtInOperator: .parenthesisClose)
+            let closeParenOp = Operator.parenthesisClose
             let closeParen = ResolvedToken(kind: .operator(closeParenOp), string: ")", range: range)
             
             return [openParen, closeParen]

@@ -216,7 +216,7 @@ class TokenizerTests: XCTestCase {
     func testCustomOperatorTokens() {
         let ops = OperatorSet()
         
-        let tests: Dictionary<String, BuiltInOperator> = [
+        let tests: Dictionary<String, Operator> = [
             "is": .logicalEqual,
             "equals": .logicalEqual,
             "is not": .logicalNotEqual,
@@ -233,8 +233,8 @@ class TokenizerTests: XCTestCase {
         
         var c = Configuration.default
         
-        for (token, builtInOperator) in tests {
-            ops.addTokens([token], forOperator: Operator(builtInOperator: builtInOperator))
+        for (token, op) in tests {
+            ops.addTokens([token], forOperator: op)
             
             c.operatorSet = ops
             let string = "1 \(token) 2"

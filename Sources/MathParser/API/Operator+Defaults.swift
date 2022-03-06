@@ -8,43 +8,49 @@
 
 import Foundation
 
-public enum BuiltInOperator: String {
-    case logicalOr = "l_or"
-    case logicalAnd = "l_and"
-    case logicalNot = "l_not"
-    case logicalEqual = "l_eq"
-    case logicalNotEqual = "l_neq"
-    case logicalLessThan = "l_lt"
-    case logicalGreaterThan = "l_gt"
-    case logicalLessThanOrEqual = "l_ltoe"
-    case logicalGreaterThanOrEqual = "l_gtoe"
-    case bitwiseOr = "or"
-    case bitwiseXor = "xor"
-    case bitwiseAnd = "and"
-    case leftShift = "lshift"
-    case rightShift = "rshift"
-    case minus = "subtract"
-    case add = "add"
-    case divide = "divide"
-    case multiply = "multiply"
-    case implicitMultiply = "implicitMultiply"
-    case modulo = "mod"
-    case bitwiseNot = "not"
-    case factorial = "factorial"
-    case doubleFactorial = "factorial2"
-    case degree = "dtor"
-    case percent = "percent"
-    case power = "pow"
-    case parenthesisOpen = "open_paren"
-    case parenthesisClose = "close_paren"
-    case comma = "comma"
-    case unaryMinus = "negate"
-    case unaryPlus = "positive"
-    case squareRoot = "sqrt"
-    case cubeRoot = "cuberoot"
-}
-
 extension Operator {
+    
+    private static let builtinOperators = [
+        logicalOr, logicalAnd, logicalNot, logicalEqual, logicalNotEqual, logicalLessThan, logicalGreaterThan, logicalLessThanOrEqual, logicalGreaterThanOrEqual, bitwiseOr, bitwiseXor, bitwiseAnd, leftShift, rightShift, minus, add, divide, multiply, implicitMultiply, modulo, bitwiseNot, factorial, doubleFactorial, degree, percent, power, unaryMinus, unaryPlus, squareRoot, cubeRoot, parenthesisOpen, parenthesisClose, comma
+    ]
+    
+    internal static func builtinOperator(_ function: String) -> Operator? {
+        return builtinOperators.first(where: { $0.function == function })
+    }
+    
+    public static let logicalOr = Operator(builtinFunction: "l_or", arity: .binary, associativity: .left, tokens: ["||", "∨"])
+    public static let logicalAnd = Operator(builtinFunction: "l_and", arity: .binary, associativity: .left, tokens: ["&&", "∧"])
+    public static let logicalNot = Operator(builtinFunction: "l_not", arity: .unary, associativity: .right, tokens: ["!", "¬"])
+    public static let logicalEqual = Operator(builtinFunction: "l_eq", arity: .binary, associativity: .left, tokens: ["==", "="])
+    public static let logicalNotEqual = Operator(builtinFunction: "l_neq", arity: .binary, associativity: .left, tokens: ["!=", "≠"])
+    public static let logicalLessThan = Operator(builtinFunction: "l_lt", arity: .binary, associativity: .left, tokens: ["<"])
+    public static let logicalGreaterThan = Operator(builtinFunction: "l_gt", arity: .binary, associativity: .left, tokens: [">"])
+    public static let logicalLessThanOrEqual = Operator(builtinFunction: "l_ltoe", arity: .binary, associativity: .left, tokens: ["<=", "=<", "≤", "≯"])
+    public static let logicalGreaterThanOrEqual = Operator(builtinFunction: "l_gtoe", arity: .binary, associativity: .left, tokens: [">=", "=>", "≥", "≮"])
+    public static let bitwiseOr = Operator(builtinFunction: "or", arity: .binary, associativity: .left, tokens: ["|"])
+    public static let bitwiseXor = Operator(builtinFunction: "xor", arity: .binary, associativity: .left, tokens: ["^"])
+    public static let bitwiseAnd = Operator(builtinFunction: "and", arity: .binary, associativity: .left, tokens: ["&"])
+    public static let leftShift = Operator(builtinFunction: "lshift", arity: .binary, associativity: .left, tokens: ["<<"])
+    public static let rightShift = Operator(builtinFunction: "rshift", arity: .binary, associativity: .left, tokens: [">>"])
+    public static let minus = Operator(builtinFunction: "subtract", arity: .binary, associativity: .left, tokens: ["-", "−"])
+    public static let add = Operator(builtinFunction: "add", arity: .binary, associativity: .left, tokens: ["+"])
+    public static let divide = Operator(builtinFunction: "divide", arity: .binary, associativity: .left, tokens: ["/", "÷"])
+    public static let multiply = Operator(builtinFunction: "multiply", arity: .binary, associativity: .left, tokens: ["*", "×"])
+    public static let implicitMultiply = Operator(builtinFunction: "implicitMultiply", arity: .binary, associativity: .left, tokens: ["*", "×"])
+    public static let modulo = Operator(builtinFunction: "mod", arity: .binary, associativity: .left, tokens: ["%"])
+    public static let bitwiseNot = Operator(builtinFunction: "not", arity: .unary, associativity: .right, tokens: ["~"])
+    public static let factorial = Operator(builtinFunction: "factorial", arity: .unary, associativity: .left, tokens: ["!"])
+    public static let doubleFactorial = Operator(builtinFunction: "factorial2", arity: .unary, associativity: .left, tokens: ["!!"])
+    public static let degree = Operator(builtinFunction: "dtor", arity: .unary, associativity: .left, tokens: ["º", "°", "∘"])
+    public static let percent = Operator(builtinFunction: "percent", arity: .unary, associativity: .left, tokens: ["%"])
+    public static let power = Operator(builtinFunction: "pow", arity: .binary, associativity: Operator.defaultPowerAssociativity, tokens: ["**"])
+    public static let unaryMinus = Operator(builtinFunction: "negate", arity: .unary, associativity: .right, tokens: ["-", "−"])
+    public static let unaryPlus = Operator(builtinFunction: "positive", arity: .unary, associativity: .right, tokens: ["+"])
+    public static let squareRoot = Operator(builtinFunction: "sqrt", arity: .unary, associativity: .right, tokens: ["√"])
+    public static let cubeRoot = Operator(builtinFunction: "cuberoot", arity: .unary, associativity: .right, tokens: ["∛"])
+    public static let parenthesisOpen = Operator(builtinFunction: "open_paren", arity: .unary, associativity: .right, tokens: ["("])
+    public static let parenthesisClose = Operator(builtinFunction: "close_paren", arity: .unary, associativity: .left, tokens: [")"])
+    public static let comma = Operator(builtinFunction: "comma", arity: .binary, associativity: .left, tokens: [","])
     
     public static let defaultPowerAssociativity: Associativity = {
         
@@ -61,171 +67,4 @@ extension Operator {
             return .left
         }
     }()
-    
-    internal var builtInOperator: BuiltInOperator? { return BuiltInOperator(rawValue: self.function) }
-    
-    public convenience init(builtInOperator: BuiltInOperator) {
-        let arity: Arity
-        let associativity: Associativity
-        let tokens: Set<String>
-
-        switch builtInOperator {
-            case .logicalOr:
-                arity = .binary
-                associativity = .left
-                tokens = ["||", "∨"]
-            case .logicalAnd:
-                arity = .binary
-                associativity = .left
-                tokens = ["&&", "∧"]
-            case .logicalNot:
-                arity = .unary
-                associativity = .right
-                tokens = ["!", "¬"]
-            case .logicalEqual:
-                arity = .binary
-                associativity = .left
-                tokens = ["==", "="]
-            case .logicalNotEqual:
-                arity = .binary
-                associativity = .left
-                tokens = ["!=", "≠"]
-                
-            case .logicalLessThan:
-                arity = .binary
-                associativity = .left
-                tokens = ["<"]
-            case .logicalGreaterThan:
-                arity = .binary
-                associativity = .left
-                tokens = [">"]
-            case .logicalLessThanOrEqual:
-                arity = .binary
-                associativity = .left
-                tokens = ["<=", "=<", "≤", "≯"]
-            case .logicalGreaterThanOrEqual:
-                arity = .binary
-                associativity = .left
-                tokens = [">=", "=>", "≥", "≮"]
-            
-            case .bitwiseOr:
-                arity = .binary
-                associativity = .left
-                tokens = ["|"]
-            case .bitwiseXor:
-                arity = .binary
-                associativity = .left
-                tokens = ["^"]
-            case .bitwiseAnd:
-                arity = .binary
-                associativity = .left
-                tokens = ["&"]
-            case .leftShift:
-                arity = .binary
-                associativity = .left
-                tokens = ["<<"]
-            case .rightShift:
-                arity = .binary
-                associativity = .left
-                tokens = [">>"]
-            
-            case .minus:
-                arity = .binary
-                associativity = .left
-                tokens = ["-", "−"]
-            case .add:
-                arity = .binary
-                associativity = .left
-                tokens = ["+"]
-            
-            case .divide:
-                arity = .binary
-                associativity = .left
-                tokens = ["/", "÷"]
-            case .multiply:
-                arity = .binary
-                associativity = .left
-                tokens = ["*", "×"]
-            case .implicitMultiply:
-                arity = .binary
-                associativity = .left
-                tokens = ["*", "×"]
-            
-            case .modulo:
-                arity = .binary
-                associativity = .left
-                tokens = ["%"]
-            
-            case .bitwiseNot:
-                arity = .unary
-                associativity = .right
-                tokens = ["~"]
-            
-            // Unary Left operators
-            case .factorial:
-                arity = .unary
-                associativity = .left
-                tokens = ["!"]
-            case .doubleFactorial:
-                arity = .unary
-                associativity = .left
-                tokens = ["!!"]
-            case .degree:
-                arity = .unary
-                associativity = .left
-                tokens = ["º", "°", "∘"]
-            case .percent:
-                arity = .unary
-                associativity = .left
-                tokens = ["%"]
-            
-            case .power:
-                arity = .binary
-                associativity = Operator.defaultPowerAssociativity
-                tokens = ["**"]
-            
-            // Unary Right operators
-            case .unaryMinus:
-                arity = .unary
-                associativity = .right
-                tokens = ["-", "−"]
-            case .unaryPlus:
-                arity = .unary
-                associativity = .right
-                tokens = ["+"]
-            case .squareRoot:
-                arity = .unary
-                associativity = .right
-                tokens = ["√"]
-            case .cubeRoot:
-                arity = .unary
-                associativity = .right
-                tokens = ["∛"]
-                
-            // these are defined as .Unary .Right/.Left associative for convenience
-            case .parenthesisOpen:
-                arity = .unary
-                associativity = .right
-                tokens = ["("]
-            case .parenthesisClose:
-                arity = .unary
-                associativity = .left
-                tokens = [")"]
-                
-            case .comma:
-                arity = .binary
-                associativity = .left
-                tokens = [","]
-        }
-        
-        self.init(function: builtInOperator.rawValue, arity: arity, associativity: associativity)
-        self.tokens = tokens
-        self.precedence = nil
-    }
-    
-    internal convenience init(builtInOperator: BuiltInOperator, precedence: Int) {
-        self.init(builtInOperator: builtInOperator)
-        self.precedence = precedence
-    }
-
 }
