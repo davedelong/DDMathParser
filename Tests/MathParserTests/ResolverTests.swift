@@ -152,8 +152,6 @@ class TokenResolverTests: XCTestCase {
     }
     
     func testCustomOperatorTokens() {
-        let ops = OperatorSet()
-        
         let tests: Dictionary<String, Operator> = [
             "is": .logicalEqual,
             "equals": .logicalEqual,
@@ -170,10 +168,9 @@ class TokenResolverTests: XCTestCase {
         ]
         
         var c = Configuration.default
-        c.operatorSet = ops
         
         for (token, op) in tests {
-            ops.addTokens([token], forOperator: op)
+            c.operatorSet.addTokens([token], forOperator: op)
             
             let string = "1 \(token) 2"
             guard let tokens = XCTAssertNoThrows(try TokenResolver(string: string, configuration: c).resolve()) else { return }

@@ -214,7 +214,7 @@ class TokenizerTests: XCTestCase {
     }
     
     func testCustomOperatorTokens() {
-        let ops = OperatorSet()
+        var ops = OperatorSet()
         
         let tests: Dictionary<String, Operator> = [
             "is": .logicalEqual,

@@ -215,9 +215,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue75() {
         var c = Configuration.default
-        let operatorSet = OperatorSet()
-        operatorSet.addTokens(["and"], forOperator: Operator.logicalAnd)
-        c.operatorSet = operatorSet
+        c.operatorSet.addTokens(["and"], forOperator: Operator.logicalAnd)
         
         guard let e = XCTAssertNoThrows(try Expression(string: "1 and 2", configuration: c)) else { return }
         
@@ -280,9 +278,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue105() {
         var c = Configuration.default
-        let operatorSet = OperatorSet()
-        operatorSet.addTokens(["or"], forOperator: .logicalOr)
-        c.operatorSet = operatorSet
+        c.operatorSet.addTokens(["or"], forOperator: .logicalOr)
         
         guard let e = XCTAssertNoThrows(try Expression(string: "cos(pi)", configuration: c)) else { return }
         
@@ -307,9 +303,7 @@ class GithubIssues: XCTestCase {
     
     func testIssue109() {
         var c = Configuration.default
-        let operatorSet = OperatorSet()
-        operatorSet.addTokens(["as"], forOperator: Operator.logicalEqual)
-        c.operatorSet = operatorSet
+        c.operatorSet.addTokens(["as"], forOperator: Operator.logicalEqual)
         
         guard let e = XCTAssertNoThrows(try Expression(string: "asin(0.5)", configuration: c)) else { return }
         

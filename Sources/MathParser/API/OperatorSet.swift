@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class OperatorSet {
+public struct OperatorSet {
     public static let `default` = OperatorSet()
     
     public enum Relation {
@@ -112,13 +112,13 @@ public final class OperatorSet {
     }
     
     public var interpretsPercentSignAsModulo: Bool {
-        didSet(oldValue) {
+        didSet {
             if oldValue != interpretsPercentSignAsModulo {
                 interpretPercentSignAsModulo(interpretsPercentSignAsModulo)
             }
         }
     }
-    private func interpretPercentSignAsModulo(_ interpretAsModulo: Bool) {
+    private mutating func interpretPercentSignAsModulo(_ interpretAsModulo: Bool) {
         let percent = Operator.percent
         let modulo = Operator.modulo
         
@@ -132,19 +132,13 @@ public final class OperatorSet {
         }
     }
     
-    private var _operatorTokenSet: OperatorTokenSet? = nil
     internal var operatorTokenSet: OperatorTokenSet {
-        if _operatorTokenSet == nil {
-            _operatorTokenSet = OperatorTokenSet(tokens: knownTokens)
-        }
-        guard let set = _operatorTokenSet else { fatalError("Missing operator token set") }
-        return set
+        OperatorTokenSet(tokens: knownTokens)
     }
     
     public private(set) var operators: Array<Operator> {
         didSet {
             knownTokens = Set(operators.flatMap { $0.tokens })
-            _operatorTokenSet = nil
         }
     }
     
@@ -155,12 +149,12 @@ public final class OperatorSet {
     
     private var knownTokens: Set<String>
     
-    private func removeOperator(_ op: Operator) {
+    private mutating func removeOperator(_ op: Operator) {
         guard let index = operators.firstIndex(of: op) else { return }
         operators.remove(at: index)
     }
     
-    public func addTokens(_ tokens: Array<String>, forOperator op: Operator) {
+    public mutating func addTokens(_ tokens: Array<String>, forOperator op: Operator) {
         let allowed = tokens.map { $0.lowercased() }.filter {
             self.operatorForToken($0).isEmpty
         }
@@ -170,7 +164,7 @@ public final class OperatorSet {
         }
     }
     
-    public func addOperator(_ op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
+    public mutating func addOperator(_ op: Operator, relatedBy: Relation, toOperator existingOp: Operator) {
         guard let existing = existingOperator(existingOp) else { return }
         guard let existingP = existing.precedence else { fatalError("Existing operator missing precedence \(existing)") }
         
@@ -204,7 +198,7 @@ public final class OperatorSet {
     }
     
     @discardableResult
-    private func modifyOperator(_ op: Operator, modifier: (inout Operator) -> Void) -> Bool {
+    private mutating func modifyOperator(_ op: Operator, modifier: (inout Operator) -> Void) -> Bool {
         if let index = operators.firstIndex(of: op) {
             var copy = operators[index]
             modifier(&copy)
@@ -215,7 +209,7 @@ public final class OperatorSet {
         }
     }
     
-    private func processOperator(_ op: Operator, sorter: (Operator) -> Bool) {
+    private mutating func processOperator(_ op: Operator, sorter: (Operator) -> Bool) {
         if modifyOperator(op, modifier: { $0.tokens.formUnion(op.tokens) }) == false {
             let overlap = knownTokens.intersection(op.tokens)
             guard overlap.isEmpty == true else {
@@ -237,7 +231,7 @@ public final class OperatorSet {
         }
     }
     
-    public func operatorForToken(_ token: String, arity: Operator.Arity? = nil, associativity: Operator.Associativity? = nil) -> Array<Operator> {
+    internal func operatorForToken(_ token: String, arity: Operator.Arity? = nil, associativity: Operator.Associativity? = nil) -> Array<Operator> {
         
         return operators.filter {
             guard $0.tokens.contains(token) else { return false }

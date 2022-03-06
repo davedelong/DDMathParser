@@ -286,11 +286,11 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testLogic() {
-        let operatorSet = OperatorSet()
-        operatorSet.addTokens(["and"], forOperator: Operator.logicalAnd)
-        operatorSet.addTokens(["or"], forOperator: Operator.logicalOr)
-        operatorSet.addTokens(["is"], forOperator: Operator.logicalEqual)
-        operatorSet.addTokens(["is not"], forOperator: Operator.logicalNotEqual)
+        var c = Configuration.default
+        c.operatorSet.addTokens(["and"], forOperator: Operator.logicalAnd)
+        c.operatorSet.addTokens(["or"], forOperator: Operator.logicalOr)
+        c.operatorSet.addTokens(["is"], forOperator: Operator.logicalEqual)
+        c.operatorSet.addTokens(["is not"], forOperator: Operator.logicalNotEqual)
         
         
         let tests: Dictionary<String, Double> = [
@@ -299,9 +299,6 @@ class EvaluatorTests: XCTestCase {
             "true and false is true": 0,
             "true or false is true": 1
         ]
-        
-        var c = Configuration.default
-        c.operatorSet = operatorSet
         
         for (test, value) in tests {
             guard let e = XCTAssertNoThrows(try Expression(string: test, configuration: c)) else { return }
