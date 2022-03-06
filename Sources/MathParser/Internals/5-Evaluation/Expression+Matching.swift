@@ -7,11 +7,11 @@
 
 import Foundation
 
-public extension Expression {
+extension Expression {
     
-    typealias Matches = Dictionary<String, Expression>
+    internal typealias Matches = Dictionary<String, Expression>
     
-    func match(for target: Expression, matchedSoFar: Matches? = nil) -> Matches? {
+    internal func match(for target: Expression, matchedSoFar: Matches? = nil) -> Matches? {
         var replacements = matchedSoFar ?? [:]
         
         switch target.kind {
@@ -84,7 +84,7 @@ public extension Expression {
         }
     }
     
-    func matches(_ expression: Expression) -> Bool {
+    internal func matches(_ expression: Expression) -> Bool {
         return match(for: expression) != nil
     }
     

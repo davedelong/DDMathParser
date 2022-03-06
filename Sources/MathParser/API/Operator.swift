@@ -51,6 +51,10 @@ public struct Operator: Equatable, Hashable {
         self.tokens = tokens
     }
     
+    public static func ==(lhs: Operator, rhs: Operator) -> Bool {
+        return lhs.arity == rhs.arity && lhs.associativity == rhs.associativity && lhs.function == rhs.function
+    }
+    
     public func hash(into hasher: inout Hasher) {
         function.hash(into: &hasher)
         arity.hash(into: &hasher)
@@ -67,8 +71,5 @@ extension Operator: CustomStringConvertible {
         let precedenceInfo = precedence?.description ?? "UNKNOWN"
         return "{[\(tokenInfo)] -> \(function)(), \(arityInfo) \(assocInfo), precedence: \(precedenceInfo)}"
     }
-}
-
-public func ==(lhs: Operator, rhs: Operator) -> Bool {
-    return lhs.arity == rhs.arity && lhs.associativity == rhs.associativity && lhs.function == rhs.function
+    
 }

@@ -138,13 +138,15 @@ extension Expression: CustomStringConvertible {
     
 }
 
-extension Expression: Equatable { }
+extension Expression: Equatable {
 
-public func ==(lhs: Expression, rhs: Expression) -> Bool {
-    switch (lhs.kind, rhs.kind) {
-        case (.number(let l), .number(let r)): return l == r
-        case (.variable(let l), .variable(let r)): return l == r
-        case (.function(let lf, let lArg), .function(let rf, let rArg)): return lf == rf && lArg == rArg
-        default: return false
+    public static func ==(lhs: Expression, rhs: Expression) -> Bool {
+        switch (lhs.kind, rhs.kind) {
+            case (.number(let l), .number(let r)): return l == r
+            case (.variable(let l), .variable(let r)): return l == r
+            case (.function(let lf, let lArg), .function(let rf, let rArg)): return lf == rf && lArg == rArg
+            default: return false
+        }
     }
+
 }
