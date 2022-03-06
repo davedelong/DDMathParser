@@ -8,9 +8,20 @@
 
 import Foundation
 
-public enum FunctionRegistrationError: Error {
-    case functionAlreadyExists(String)
-    case functionDoesNotExist(String)
+public struct FunctionRegistrationError: Error {
+    
+    public enum Kind {
+        case functionExists
+        case functionDoesNotExist
+    }
+    
+    public let functionName: String
+    public let kind: Kind
+    
+    internal init(functionName: String, kind: Kind) {
+        self.functionName = functionName
+        self.kind = kind
+    }
 }
 
 public struct Evaluator {

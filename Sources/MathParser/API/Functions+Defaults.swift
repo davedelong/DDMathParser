@@ -12,12 +12,12 @@ extension Function {
     
     // MARK: - Angle mode helpers
     
-    internal static func _dtor(_ d: Double, evaluator: Evaluator) -> Double {
+    internal static func _dtor(_ d: Double, evaluator: MathParser.Evaluator) -> Double {
         guard evaluator.angleMeasurementMode == .degrees else { return d }
         return d / 180 * Double.pi
     }
     
-    internal static func _rtod(_ d: Double, evaluator: Evaluator) -> Double {
+    internal static func _rtod(_ d: Double, evaluator: MathParser.Evaluator) -> Double {
         guard evaluator.angleMeasurementMode == .degrees else { return d }
         return d / Double.pi * 180
     }

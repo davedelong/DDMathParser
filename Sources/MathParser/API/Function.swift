@@ -15,19 +15,18 @@ public struct EvaluationState {
     public let evaluator: Evaluator
 }
 
-public typealias FunctionEvaluator = (EvaluationState) throws -> Double
-
 public struct Function {
     
-    public let names: Set<String>
-    public let evaluator: FunctionEvaluator
+    public typealias Evaluator = (EvaluationState) throws -> Double
     
-    public init(name: String, evaluator: @escaping FunctionEvaluator) {
-        self.names = [name]
-        self.evaluator = evaluator
+    public let names: Set<String>
+    public let evaluator: Evaluator
+    
+    public init(name: String, evaluator: @escaping Evaluator) {
+        self.init(names: [name], evaluator: evaluator)
     }
     
-    public init(names: Set<String>, evaluator: @escaping FunctionEvaluator) {
+    public init(names: Set<String>, evaluator: @escaping Evaluator) {
         self.names = names
         self.evaluator = evaluator
     }

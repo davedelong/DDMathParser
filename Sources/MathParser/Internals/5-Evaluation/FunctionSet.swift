@@ -32,16 +32,16 @@ internal final class FunctionSet {
         return functionsByName[casedName]
     }
     
-    internal func evaluatorForName(_ name: String) -> FunctionEvaluator? {
+    internal func evaluatorForName(_ name: String) -> Function.Evaluator? {
         return registeredFunctionForName(name)?.function
     }
     
     internal func addAlias(_ alias: String, forFunctionName name: String) throws {
         guard registeredFunctionForName(alias) == nil else {
-            throw FunctionRegistrationError.functionAlreadyExists(alias)
+            throw FunctionRegistrationError(functionName: alias, kind: .functionExists)
         }
         guard let registration = registeredFunctionForName(name) else {
-            throw FunctionRegistrationError.functionDoesNotExist(name)
+            throw FunctionRegistrationError(functionName: name, kind: .functionDoesNotExist)
         }
         
         let casedAlias = normalize(alias)
@@ -55,7 +55,7 @@ internal final class FunctionSet {
         // we need to make sure that every name is accounted for
         for name in registration.names {
             guard registeredFunctionForName(name) == nil else {
-                throw FunctionRegistrationError.functionAlreadyExists(name)
+                throw FunctionRegistrationError(functionName: name, kind: .functionExists)
             }
         }
         
@@ -67,7 +67,7 @@ internal final class FunctionSet {
 
 private final class FunctionRegistration {
     var names: Set<String>
-    let function: FunctionEvaluator
+    let function: Function.Evaluator
     
     init(function: Function, caseSensitive: Bool) {
         self.function = function.evaluator
