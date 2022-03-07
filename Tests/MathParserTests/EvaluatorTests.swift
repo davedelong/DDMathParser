@@ -35,13 +35,13 @@ class EvaluatorTests: XCTestCase {
     func testVariableResolution() {
         var eval = Evaluator()
         
-        struct Resolver: VariableResolver {
-            func resolveVariable(_ variable: String) -> Double? {
+        struct Resolver: EvaluationResolver {
+            func evaluateVariable(_ variable: String) -> Double? {
                 return 42
             }
         }
         
-        eval.variableResolver = Resolver()
+        eval.resolver = Resolver()
         
         guard let e = XCTAssertNoThrows(try Expression(string: "$foo")) else { return }
         
@@ -52,13 +52,13 @@ class EvaluatorTests: XCTestCase {
     func testFunctionResolution() {
         var eval = Evaluator()
         
-        struct Resolver: FunctionResolver {
-            func resolveFunction(_ function: String, state: EvaluationState) throws -> Double? {
+        struct Resolver: EvaluationResolver {
+            func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
         
-        eval.functionResolver = Resolver()
+        eval.resolver = Resolver()
         
         guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
         
@@ -69,13 +69,13 @@ class EvaluatorTests: XCTestCase {
     func testFunctionOverride() {
         var eval = Evaluator()
         
-        struct Overrider: FunctionOverrider {
-            func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
+        struct Resolver: EvaluationResolver {
+            func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 return 42
             }
         }
         
-        eval.functionOverrider = Overrider()
+        eval.resolver = Resolver()
         
         guard let e = XCTAssertNoThrows(try Expression(string: "(foo()*foo()+foo()-foo())!")) else { return }
         
@@ -314,8 +314,8 @@ class EvaluatorTests: XCTestCase {
         
         // integral digits are concatenated
         // fractional digits are added
-        struct Overrider: FunctionOverrider {
-            func overrideFunction(_ function: String, state: EvaluationState) throws -> Double? {
+        struct Resolver: EvaluationResolver {
+            func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double? {
                 guard function.lowercased() == Operator.implicitMultiply.function.lowercased() else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 
@@ -332,7 +332,7 @@ class EvaluatorTests: XCTestCase {
             }
         }
         
-        eval.functionOverrider = Overrider()
+        eval.resolver = Resolver()
         
         let tests: Dictionary<String, Double> = [
             "(2+3)2": 52,

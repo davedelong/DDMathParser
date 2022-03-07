@@ -35,9 +35,7 @@ public struct Evaluator {
     private let functionSet: FunctionSet
     
     public var angleMeasurementMode = AngleMode.radians
-    public var functionOverrider: FunctionOverrider?
-    public var functionResolver: FunctionResolver?
-    public var variableResolver: VariableResolver?
+    public var resolver: EvaluationResolver?
     
     public init(caseSensitive: Bool = false) {
         functionSet = FunctionSet(caseSensitive: caseSensitive)
@@ -63,15 +61,13 @@ public struct Evaluator {
     }
     
     private func evaluateVariable(_ name: String, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
-        if let value = try substitutions[name]?.substitutionValue(using: self, substitutions: substitutions) {
-            return value
+        // the resolver always gets the first opportunity to interpose its own value
+        if let resolved = resolver?.evaluateVariable(name) {
+            return resolved
         }
         
-        // substitutions were insufficient
-        // use the variable resolver
-        
-        if let resolved = variableResolver?.resolveVariable(name) {
-            return resolved
+        if let value = try substitutions[name]?.substitutionValue(using: self, substitutions: substitutions) {
+            return value
         }
         
         throw MathParserError(kind: .unknownVariable(name), range: range)
@@ -80,20 +76,13 @@ public struct Evaluator {
     private func evaluateFunction(_ name: String, arguments: Array<Expression>, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
         let state = EvaluationState(expressionRange: range, arguments: arguments, substitutions: substitutions, evaluator: self)
         
-        // check for function overrides
-        if let value = try functionOverrider?.overrideFunction(name, state: state) {
+        // the resolver always gets the first opportunity to interpose its own value
+        if let value = try resolver?.evaluateFunction(name, state: state) {
             return value
         }
         
         if let function = functionSet.evaluatorForName(name) {
             return try function(state)
-        }
-        
-        // a function with this name does not exist
-        // use the function resolver
-        let normalized = functionSet.normalize(name)
-        if let value = try functionResolver?.resolveFunction(normalized, state: state) {
-            return value
         }
         
         throw MathParserError(kind: .unknownFunction(name), range: range)
