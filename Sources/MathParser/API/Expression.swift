@@ -9,38 +9,39 @@
 import Foundation
 
 public final class Expression {
+    
     public enum Kind {
         case number(Double)
         case variable(String)
         case function(String, Array<Expression>)
-        
-        public var isNumber: Bool { return number != nil }
-        public var isVariable: Bool { return variable != nil }
-        public var isFunction: Bool { return functionName != nil }
-        
-        public var number: Double? {
-            guard case .number(let d) = self else { return nil }
-            return d
-        }
-        
-        public var variable: String? {
-            guard case .variable(let v) = self else { return nil }
-            return v
-        }
-        
-        public var functionName: String? {
-            guard case .function(let name, _) = self else { return nil }
-            return name
-        }
-        
-        public var functionArguments: Array<Expression>? {
-            guard case .function(_, let args) = self else { return nil }
-            return args
-        }
     }
     
     public let kind: Kind
     public let range: Range<String.Index>
+    
+    public var isNumber: Bool { return number != nil }
+    public var isVariable: Bool { return variable != nil }
+    public var isFunction: Bool { return functionName != nil }
+    
+    public var number: Double? {
+        guard case .number(let d) = kind else { return nil }
+        return d
+    }
+    
+    public var variable: String? {
+        guard case .variable(let v) = kind else { return nil }
+        return v
+    }
+    
+    public var functionName: String? {
+        guard case .function(let name, _) = kind else { return nil }
+        return name
+    }
+    
+    public var functionArguments: Array<Expression>? {
+        guard case .function(_, let args) = kind else { return nil }
+        return args
+    }
     
     internal weak var parent: Expression?
     
@@ -65,7 +66,8 @@ public final class Expression {
     
     public func simplify(_ substitutions: Substitutions = [:], evaluator: Evaluator) -> Expression {
         switch kind {
-            case .number(_): return Expression(kind: kind, range: range)
+            case .number:
+                return Expression(kind: kind, range: range)
             case .variable(let varName):
                 if let resolved = try? evaluator.evaluate(self, substitutions: substitutions) {
                     return Expression(kind: .number(resolved), range: range)
@@ -76,7 +78,7 @@ public final class Expression {
                 return Expression(kind: kind, range: range)
             case let .function(f, args):
                 let newArgs = args.map { $0.simplify(substitutions, evaluator: evaluator) }
-                let areAllArgsNumbers = newArgs.reduce(true) { $0 && $1.kind.isNumber }
+                let areAllArgsNumbers = newArgs.allSatisfy(\.isNumber)
             
                 guard areAllArgsNumbers else {
                     return Expression(kind: .function(f, newArgs), range: range)
@@ -95,21 +97,12 @@ public final class Expression {
     }
 }
 
-extension Expression: Substitution {
-    public func substitutionValue(using evaluator: Evaluator, substitutions: Substitutions) throws -> Double {
-        return try evaluator.evaluate(self, substitutions: substitutions)
-    }
-    
-    public func simplified(using evaluator: Evaluator, substitutions: Substitutions) -> Substitution {
-        return simplify(substitutions, evaluator: evaluator)
-    }
-}
-
 extension Expression: CustomStringConvertible {
     
     public var description: String {
         switch kind {
-            case .number(let d): return d.description
+            case .number(let d):
+                return d.description
             case .variable(let v):
                 if v.contains(" ") { return "\"\(v)\"" }
                 return "$\(v)"
@@ -142,10 +135,14 @@ extension Expression: Equatable {
 
     public static func ==(lhs: Expression, rhs: Expression) -> Bool {
         switch (lhs.kind, rhs.kind) {
-            case (.number(let l), .number(let r)): return l == r
-            case (.variable(let l), .variable(let r)): return l == r
-            case (.function(let lf, let lArg), .function(let rf, let rArg)): return lf == rf && lArg == rArg
-            default: return false
+            case (.number(let l), .number(let r)):
+                return l == r
+            case (.variable(let l), .variable(let r)):
+                return l == r
+            case (.function(let lf, let lArg), .function(let rf, let rArg)):
+                return lf == rf && lArg == rArg
+            default:
+                return false
         }
     }
 

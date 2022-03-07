@@ -8,6 +8,16 @@
 
 import Foundation
 
+extension Expression: Substitution {
+    public func substitutionValue(using evaluator: Evaluator, substitutions: Substitutions) throws -> Double {
+        return try evaluator.evaluate(self, substitutions: substitutions)
+    }
+    
+    public func simplified(using evaluator: Evaluator, substitutions: Substitutions) -> Substitution {
+        return simplify(substitutions, evaluator: evaluator)
+    }
+}
+
 extension Double: Substitution {
     public func substitutionValue(using evaluator: Evaluator, substitutions: Substitutions) throws -> Double {
         return self

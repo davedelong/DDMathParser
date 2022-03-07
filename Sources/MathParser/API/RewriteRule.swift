@@ -100,7 +100,7 @@ public struct RewriteRule {
                 }
                 
                 // we're looking for any number
-                if f.hasPrefix(RuleTemplate.anyNumber) && expression.kind.isNumber {
+                if f.hasPrefix(RuleTemplate.anyNumber) && expression.isNumber {
                     if let seenBefore = replacements[f] {
                         return seenBefore == expression ? replacements : nil
                     }
@@ -109,7 +109,7 @@ public struct RewriteRule {
                 }
                 
                 // we're looking for any variable
-                if f.hasPrefix(RuleTemplate.anyVariable) && expression.kind.isVariable {
+                if f.hasPrefix(RuleTemplate.anyVariable) && expression.isVariable {
                     if let seenBefore = replacements[f] {
                         return seenBefore == expression ? replacements : nil
                     }
@@ -118,7 +118,7 @@ public struct RewriteRule {
                 }
                 
                 // we're looking for any function
-                if f.hasPrefix(RuleTemplate.anyFunction) && expression.kind.isFunction {
+                if f.hasPrefix(RuleTemplate.anyFunction) && expression.isFunction {
                     if let seenBefore = replacements[f] {
                         return seenBefore == expression ? replacements : nil
                     }

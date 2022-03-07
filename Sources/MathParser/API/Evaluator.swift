@@ -41,6 +41,14 @@ public struct Evaluator {
         functionSet = FunctionSet(caseSensitive: caseSensitive)
     }
     
+    public func registerFunction(_ function: Function) throws {
+        try functionSet.registerFunction(function)
+    }
+    
+    public func registerAlias(_ alias: String, forFunctionName name: String) throws {
+        try functionSet.addAlias(alias, forFunctionName: name)
+    }
+    
     public func evaluate(_ expression: Expression, substitutions: Substitutions = [:]) throws -> Double {
         switch expression.kind {
             case .number(let d):
@@ -50,14 +58,6 @@ public struct Evaluator {
             case .function(let f, let args):
                 return try evaluateFunction(f, arguments: args, substitutions: substitutions, range: expression.range)
         }
-    }
-    
-    public func registerFunction(_ function: Function) throws {
-        try functionSet.registerFunction(function)
-    }
-    
-    public func registerAlias(_ alias: String, forFunctionName name: String) throws {
-        try functionSet.addAlias(alias, forFunctionName: name)
     }
     
     private func evaluateVariable(_ name: String, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
