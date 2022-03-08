@@ -85,6 +85,14 @@ public struct Evaluator {
             return try function(state)
         }
         
+        // if we get here, then let's fall back to trying it as a variable,
+        // but only if it has no arguments. and we'll ignore the error if evaluation fails
+        if arguments.isEmpty {
+            if let value = try? evaluateVariable(name, substitutions: substitutions, range: range) {
+                return value
+            }
+        }
+        
         throw MathParserError(kind: .unknownFunction(name), range: range)
     }
     

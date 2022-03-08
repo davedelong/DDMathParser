@@ -119,6 +119,23 @@ class EvaluatorTests: XCTestCase {
         }
     }
     
+    func testUnknownFunctionResolvesAsVariable() {
+        var eval = Evaluator()
+        
+        struct Resolver: EvaluationResolver {
+            func evaluateVariable(_ variable: String) -> Double? {
+                return 42
+            }
+        }
+        
+        eval.resolver = Resolver()
+        
+        guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
+        
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
+        XCTAssertEqual(d, 42)
+    }
+    
     func testBasicFunctions() {
         TestString("1+2", value: 3)
         TestString("1-2", value: -1)
