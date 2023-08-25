@@ -272,6 +272,9 @@ class EvaluatorTests: XCTestCase {
         guard let e = XCTAssertNoThrows(try Expression(string: "foo(1, 2)")) else { return }
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
         XCTAssertEqual(d, 3)
+        
+        // adding a redundant alias is fine
+        XCTAssertNoThrows(try eval.registerAlias("foo", forFunctionName: "add"))
     }
     
     func testBadAliases() {

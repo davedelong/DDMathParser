@@ -10,6 +10,7 @@ import Foundation
 import XCTest
 import MathParser
 
+@discardableResult
 func XCTAssertNoThrows(_ expression: @autoclosure () throws -> Void, _ message: String = "", file: StaticString = #file, line: UInt = #line) -> Bool {
     var ok = false
     do {

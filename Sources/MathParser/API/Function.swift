@@ -62,7 +62,7 @@ public struct Function {
     
     public typealias Evaluator = (EvaluationState) throws -> Double
     
-    public let names: Set<String>
+    public var names: Set<String>
     public let evaluator: Evaluator
     
     public init(name: String, evaluator: @escaping Evaluator) {

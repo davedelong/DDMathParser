@@ -9,7 +9,7 @@
 import Foundation
 
 internal struct FunctionSet {
-    private var functionsByName = Dictionary<String, FunctionRegistration>()
+    private var functionsByName = Dictionary<String, Function>()
     private let caseSensitive: Bool
     
     internal init(caseSensitive: Bool) {
@@ -27,68 +27,64 @@ internal struct FunctionSet {
         return caseSensitive ? name : name.lowercased()
     }
     
-    private func registeredFunctionForName(_ name: String) -> FunctionRegistration? {
+    private func functionForName(_ name: String) -> Function? {
         let casedName = normalize(name)
         return functionsByName[casedName]
     }
     
     internal func evaluatorForName(_ name: String) -> Function.Evaluator? {
-        return registeredFunctionForName(name)?.evaluator
+        return functionForName(name)?.evaluator
     }
     
     internal mutating func addAlias(_ alias: String, forFunctionName name: String) throws {
-        guard registeredFunctionForName(alias) == nil else {
-            throw FunctionRegistrationError(functionName: alias, kind: .functionExists)
+        let existingFunctionForAlias = functionForName(alias)
+        if let existingFunctionForAlias {
+            let normalizedFunctionName = normalize(name)
+            if existingFunctionForAlias.names.contains(normalizedFunctionName) {
+                // this is fine; we're adding an existing alias to the same function
+                // since this is redunant, it's not an error
+                return
+            } else {
+                // a function exists for this name/alias already, but it's the wrong function
+                throw FunctionRegistrationError(functionName: alias, kind: .functionExists)
+            }
         }
-        guard var registration = registeredFunctionForName(name) else {
+        
+        // retrieve the function that will gain the alias
+        guard var existingFunctionForName = functionForName(name) else {
             throw FunctionRegistrationError(functionName: name, kind: .functionDoesNotExist)
         }
         
         let casedAlias = normalize(alias)
-        registration.addAlias(casedAlias)
-        functionsByName[casedAlias] = registration
+        existingFunctionForName.names.insert(casedAlias)
+        // update all instances of this function
+        for name in existingFunctionForName.names {
+            functionsByName[name] = existingFunctionForName
+        }
     }
     
     internal mutating func registerFunction(_ function: Function) throws {
-        let registration = FunctionRegistration(function: function, caseSensitive: caseSensitive)
-        
         // we need to make sure that every name is accounted for
-        for name in registration.names {
-            guard registeredFunctionForName(name) == nil else {
+        for name in function.names {
+            guard functionForName(name) == nil else {
                 throw FunctionRegistrationError(functionName: name, kind: .functionExists)
             }
         }
         
-        registration.names.forEach {
-            self.functionsByName[$0] = registration
+        function.names.forEach {
+            self.functionsByName[$0] = function
         }
     }
     
     @discardableResult
     internal mutating func unregisterFunction(_ name: String) -> Function? {
-        guard let registration = registeredFunctionForName(name) else {
+        guard let function = functionForName(name) else {
             return nil
         }
         
-        registration.names.forEach {
+        function.names.forEach {
             self.functionsByName.removeValue(forKey: $0)
         }
-        return registration.function
+        return function
     }
 }
-
-private struct FunctionRegistration {
-    var names: Set<String>
-    let function: Function
-    var evaluator: Function.Evaluator { function.evaluator }
-    
-    init(function: Function, caseSensitive: Bool) {
-        self.function = function
-        self.names = Set(function.names.map { caseSensitive ? $0 : $0.lowercased() })
-    }
-    
-    mutating func addAlias(_ name: String) {
-        names.insert(name)
-    }
-}
-
