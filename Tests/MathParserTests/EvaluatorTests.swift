@@ -285,7 +285,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testCustomFunction() {
-        let function = Function(name: "foo", evaluator: { state throws -> Double in
+        let function = Function(name: "foo", body: { state throws -> Double in
             return 42
         })
         
@@ -297,7 +297,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testBadCustomFunction() {
-        let function = Function(name: "add", evaluator: { state throws -> Double in
+        let function = Function(name: "add", body: { state throws -> Double in
             return 42
         })
         

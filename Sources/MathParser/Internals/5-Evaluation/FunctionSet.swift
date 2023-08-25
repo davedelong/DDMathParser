@@ -32,8 +32,8 @@ internal struct FunctionSet {
         return functionsByName[casedName]
     }
     
-    internal func evaluatorForName(_ name: String) -> Function.Evaluator? {
-        return functionForName(name)?.evaluator
+    internal func evaluatorForName(_ name: String) -> Function.Body? {
+        return functionForName(name)?.body
     }
     
     internal mutating func addAlias(_ alias: String, forFunctionName name: String) throws {

@@ -55,19 +55,19 @@ public struct Evaluator {
         try functionSet.registerFunction(function)
     }
     
-    public mutating func registerFunction(_ name: String, evaluator: @escaping Function.Evaluator) throws {
-        let function = Function(name: name, evaluator: evaluator)
+    public mutating func registerFunction(_ name: String, body: @escaping Function.Body) throws {
+        let function = Function(name: name, body: body)
         try functionSet.registerFunction(function)
     }
     
-    public subscript(name: String) -> Function.Evaluator? {
+    public subscript(name: String) -> Function.Body? {
         get {
             functionSet.evaluatorForName(name)
         }
         set {
             if let newValue {
                 do {
-                    let function = Function(name: name, evaluator: newValue)
+                    let function = Function(name: name, body: newValue)
                     try functionSet.registerFunction(function)
                 } catch {
                     

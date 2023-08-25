@@ -10,17 +10,17 @@ import Foundation
 
 public struct Function {
     
-    public typealias Evaluator = (EvaluationState) throws -> Double
+    public typealias Body = (EvaluationState) throws -> Double
     
     public var names: Set<String>
-    public let evaluator: Evaluator
+    public let body: Body
     
-    public init(name: String, evaluator: @escaping Evaluator) {
-        self.init(names: [name], evaluator: evaluator)
+    public init(name: String, body: @escaping Body) {
+        self.init(names: [name], body: body)
     }
     
-    public init(names: Set<String>, evaluator: @escaping Evaluator) {
+    public init(names: Set<String>, body: @escaping Body) {
         self.names = names
-        self.evaluator = evaluator
+        self.body = body
     }
 }
