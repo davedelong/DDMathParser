@@ -8,8 +8,27 @@
 
 import Foundation
 
+/// Customize ``Expression`` evaluation.
+///
+/// Set the ``Evaluator/resolver`` property on your ``Evaluator`` instance to customize the evaluation of ``Expression``s by that evaluator.
 public protocol EvaluationResolver {
+    
+    /// Provide a custom value for a function expression during evaluation.
+    ///
+    /// The default implementation returns `nil`.
+    /// - Parameter function: The name of the function. This may be a typical function (`sin`, as in `sin(42)`),
+    /// or it may be the name of the function used to implement an operator (`add`, as in `1 + 2`).
+    /// - Parameter state: The current ``EvaluationState``. This includes any parameters to the function,
+    /// substitution values, and the ``Evaluator`` itself.
+    /// - Throws: An `Error` if your custom evaluation encountered an error.
+    /// - Returns: The numeric value of the function, or `nil` if evaluation should proceed normally.
     func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double?
+    
+    /// Provide a custom value for a variable expression during evaluation.
+    ///
+    /// The default implementation returns `nil`.
+    /// - Parameter variable: The name of the variable, as parsed from the original text.
+    /// - Returns: The numeric value of the variable, or `nil` if evaluation should proceed normally.
     func evaluateVariable(_ variable: String) -> Double?
 }
 

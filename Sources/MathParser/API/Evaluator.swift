@@ -8,14 +8,24 @@
 
 import Foundation
 
+/// An error that may be thrown during attempts to register custom functions or aliases with an ``Evaluator``
 public struct FunctionRegistrationError: Error {
     
+    /// The kind of the error being thrown
     public enum Kind {
+        /// Indicates that a function with the same name or alias already exists,
+        /// and the new function (or alias) being registered would cause a naming conflict.
         case functionExists
+        
+        /// Indicates that the alias name being registered cannot be tied to any particular function,
+        /// because a function with the specified name cannot be found.
         case functionDoesNotExist
     }
     
+    /// The function or alias name that produced this error.
     public let functionName: String
+    
+    /// The kind of registration error.
     public let kind: Kind
     
     internal init(functionName: String, kind: Kind) {
@@ -32,7 +42,7 @@ public struct Evaluator {
     }
     
     public static let `default` = Evaluator()
-    private let functionSet: FunctionSet
+    private var functionSet: FunctionSet
     
     public var angleMeasurementMode = AngleMode.radians
     public var resolver: EvaluationResolver?
@@ -41,22 +51,74 @@ public struct Evaluator {
         functionSet = FunctionSet(caseSensitive: caseSensitive)
     }
     
-    public func registerFunction(_ function: Function) throws {
+    public mutating func registerFunction(_ function: Function) throws {
         try functionSet.registerFunction(function)
     }
     
-    public func registerAlias(_ alias: String, forFunctionName name: String) throws {
+    public mutating func registerFunction(_ name: String, evaluator: @escaping Function.Evaluator) throws {
+        let function = Function(name: name, evaluator: evaluator)
+        try functionSet.registerFunction(function)
+    }
+    
+    public subscript(name: String) -> Function.Evaluator? {
+        get {
+            functionSet.evaluatorForName(name)
+        }
+        set {
+            if let newValue {
+                do {
+                    let function = Function(name: name, evaluator: newValue)
+                    try functionSet.registerFunction(function)
+                } catch {
+                    
+                }
+            } else {
+                functionSet.unregisterFunction(name)
+            }
+        }
+    }
+    
+    public mutating func registerAlias(_ alias: String, forFunctionName name: String) throws {
         try functionSet.addAlias(alias, forFunctionName: name)
     }
     
     public func evaluate(_ expression: Expression, substitutions: Substitutions = [:]) throws -> Double {
+        return try evaluate(expression, substitutions: substitutions, state: nil)
+    }
+    
+    internal func evaluate(_ expression: Expression, substitutions: Substitutions, state: EvaluationState?) throws -> Double {
         switch expression.kind {
             case .number(let d):
                 return d
             case .variable(let s):
                 return try evaluateVariable(s, substitutions: substitutions, range: expression.range)
             case .function(let f, let args):
-                return try evaluateFunction(f, arguments: args, substitutions: substitutions, range: expression.range)
+                let functionState: EvaluationState
+                if var parent = state {
+                    parent.push(expression)
+                    functionState = parent
+                } else {
+                    functionState = EvaluationState(expression: expression, substitutions: substitutions, evaluator: self)
+                }
+                
+                // the resolver always gets the first opportunity to interpose its own value
+                if let value = try resolver?.evaluateFunction(f, state: functionState) {
+                    return value
+                }
+                
+                if let function = functionSet.evaluatorForName(f) {
+                    return try function(functionState)
+                }
+                
+                // if we get here, then let's fall back to trying it as a variable,
+                // but only if it has no arguments. and we'll ignore the error if evaluation fails
+                if args.isEmpty {
+                    if let value = try? evaluateVariable(f, substitutions: substitutions, range: expression.range) {
+                        return value
+                    }
+                }
+                
+                throw MathParserError(kind: .unknownFunction(f), range: expression.range)
         }
     }
     
@@ -71,29 +133,6 @@ public struct Evaluator {
         }
         
         throw MathParserError(kind: .unknownVariable(name), range: range)
-    }
-    
-    private func evaluateFunction(_ name: String, arguments: Array<Expression>, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
-        let state = EvaluationState(expressionRange: range, arguments: arguments, substitutions: substitutions, evaluator: self)
-        
-        // the resolver always gets the first opportunity to interpose its own value
-        if let value = try resolver?.evaluateFunction(name, state: state) {
-            return value
-        }
-        
-        if let function = functionSet.evaluatorForName(name) {
-            return try function(state)
-        }
-        
-        // if we get here, then let's fall back to trying it as a variable,
-        // but only if it has no arguments. and we'll ignore the error if evaluation fails
-        if arguments.isEmpty {
-            if let value = try? evaluateVariable(name, substitutions: substitutions, range: range) {
-                return value
-            }
-        }
-        
-        throw MathParserError(kind: .unknownFunction(name), range: range)
     }
     
 }

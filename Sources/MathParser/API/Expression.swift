@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class Expression {
+public struct Expression {
     
     public enum Kind {
         case number(Double)
@@ -43,18 +43,12 @@ public final class Expression {
         return args
     }
     
-    internal weak var parent: Expression?
-    
     public init(kind: Kind, range: Range<String.Index>) {
         self.kind = kind
         self.range = range
-        
-        if case let .function(_, args) = kind {
-            args.forEach { $0.parent = self }
-        }
     }
     
-    public convenience init(string: String, configuration: Configuration = .default) throws {
+    public init(string: String, configuration: Configuration = .default) throws {
         let tokenizer = Tokenizer(string: string, configuration: configuration)
         let resolver = TokenResolver(tokenizer: tokenizer)
         let grouper = TokenGrouper(resolver: resolver)

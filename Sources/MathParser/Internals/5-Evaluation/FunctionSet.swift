@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal final class FunctionSet {
+internal struct FunctionSet {
     private var functionsByName = Dictionary<String, FunctionRegistration>()
     private let caseSensitive: Bool
     
@@ -33,14 +33,14 @@ internal final class FunctionSet {
     }
     
     internal func evaluatorForName(_ name: String) -> Function.Evaluator? {
-        return registeredFunctionForName(name)?.function
+        return registeredFunctionForName(name)?.evaluator
     }
     
-    internal func addAlias(_ alias: String, forFunctionName name: String) throws {
+    internal mutating func addAlias(_ alias: String, forFunctionName name: String) throws {
         guard registeredFunctionForName(alias) == nil else {
             throw FunctionRegistrationError(functionName: alias, kind: .functionExists)
         }
-        guard let registration = registeredFunctionForName(name) else {
+        guard var registration = registeredFunctionForName(name) else {
             throw FunctionRegistrationError(functionName: name, kind: .functionDoesNotExist)
         }
         
@@ -49,7 +49,7 @@ internal final class FunctionSet {
         functionsByName[casedAlias] = registration
     }
     
-    internal func registerFunction(_ function: Function) throws {
+    internal mutating func registerFunction(_ function: Function) throws {
         let registration = FunctionRegistration(function: function, caseSensitive: caseSensitive)
         
         // we need to make sure that every name is accounted for
@@ -63,18 +63,31 @@ internal final class FunctionSet {
             self.functionsByName[$0] = registration
         }
     }
+    
+    @discardableResult
+    internal mutating func unregisterFunction(_ name: String) -> Function? {
+        guard let registration = registeredFunctionForName(name) else {
+            return nil
+        }
+        
+        registration.names.forEach {
+            self.functionsByName.removeValue(forKey: $0)
+        }
+        return registration.function
+    }
 }
 
-private final class FunctionRegistration {
+private struct FunctionRegistration {
     var names: Set<String>
-    let function: Function.Evaluator
+    let function: Function
+    var evaluator: Function.Evaluator { function.evaluator }
     
     init(function: Function, caseSensitive: Bool) {
-        self.function = function.evaluator
+        self.function = function
         self.names = Set(function.names.map { caseSensitive ? $0 : $0.lowercased() })
     }
     
-    func addAlias(_ name: String) {
+    mutating func addAlias(_ name: String) {
         names.insert(name)
     }
 }

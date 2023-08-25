@@ -266,7 +266,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testAliases() {
-        let eval = Evaluator()
+        var eval = Evaluator()
         
         guard XCTAssertNoThrows(try eval.registerAlias("foo", forFunctionName: "add")) else { return }
         guard let e = XCTAssertNoThrows(try Expression(string: "foo(1, 2)")) else { return }
@@ -275,7 +275,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testBadAliases() {
-        let eval = Evaluator()
+        var eval = Evaluator()
         
         XCTAssertThrows(try eval.registerAlias("add", forFunctionName: "subtract"))
         XCTAssertThrows(try eval.registerAlias("bar", forFunctionName: "foo"))
@@ -286,7 +286,7 @@ class EvaluatorTests: XCTestCase {
             return 42
         })
         
-        let eval = Evaluator()
+        var eval = Evaluator()
         guard XCTAssertNoThrows(try eval.registerFunction(function)) else { return }
         guard let e = XCTAssertNoThrows(try Expression(string: "foo()")) else { return }
         guard let d = XCTAssertNoThrows(try eval.evaluate(e)) else { return }
@@ -298,7 +298,7 @@ class EvaluatorTests: XCTestCase {
             return 42
         })
         
-        let eval = Evaluator()
+        var eval = Evaluator()
         XCTAssertThrows(try eval.registerFunction(function))
     }
     
@@ -336,8 +336,8 @@ class EvaluatorTests: XCTestCase {
                 guard function.lowercased() == Operator.implicitMultiply.function.lowercased() else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 
-                let firstArg = try state.evaluator.evaluate(state.arguments[0], substitutions: state.substitutions)
-                let secondArg = try state.evaluator.evaluate(state.arguments[1], substitutions: state.substitutions)
+                let firstArg = try state.evaluate(argument: 0)
+                let secondArg = try state.evaluate(argument: 1)
                 
                 let integralPartOfFirstArgument = floor(firstArg)
                 let fractionalPartOfFirstArgument = firstArg - integralPartOfFirstArgument
