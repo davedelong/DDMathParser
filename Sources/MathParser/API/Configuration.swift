@@ -54,7 +54,7 @@ public struct Configuration {
     /// accept arguments, such as various mathematical consants: `π` is implemented as a function that takes no arguments.
     ///
     /// This property controls whether the parser should automatically *insert* parentheses into the parsed expression, so that function names
-    /// get interpreted as function calls. When this value is `true`, expression like `e * π` get automatically transformed into `e() * π()`.
+    /// get interpreted as function calls. When this value is `true`, expressions like `e * π` get automatically transformed into `e() * π()`.
     ///
     /// The default value is `true`. It would be very unusual to change this value to `false`.
     public var allowArgumentlessFunctions: Bool
@@ -86,7 +86,7 @@ public struct Configuration {
     public var useHighPrecedenceImplicitMultiplication: Bool
     
     
-    /// Instatiate a new ``Configuration`` with all of the default values set.
+    /// Instantiate a new ``Configuration`` with all of the default values set.
     public init() {
         operatorSet = OperatorSet.default
         locale = nil

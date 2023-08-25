@@ -90,8 +90,10 @@ public struct Evaluator {
         switch expression.kind {
             case .number(let d):
                 return d
+                
             case .variable(let s):
                 return try evaluateVariable(s, substitutions: substitutions, range: expression.range)
+                
             case .function(let f, let args):
                 let functionState: EvaluationState
                 if var parent = state {
