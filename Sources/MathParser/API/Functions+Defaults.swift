@@ -10,6 +10,18 @@ import Foundation
 
 extension Function {
     
+    // MARK: - Angle mode helpers
+    
+    public static func dtor(_ d: Double, mode: MathParser.Evaluator.AngleMode) -> Double {
+        guard mode == .degrees else { return d }
+        return d / 180 * Double.pi
+    }
+    
+    public static func rtod(_ d: Double, mode: MathParser.Evaluator.AngleMode) -> Double {
+        guard mode == .degrees else { return d }
+        return d / Double.pi * 180
+    }
+    
     public static let standardFunctions: Array<Function> = [
         add, subtract, multiply, divide,
         mod, negate, factorial, factorial2,
@@ -406,42 +418,42 @@ extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return Darwin.sin(state.dtor(arg1))
+        return Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
     public static let cos = Function(name: "cos", evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return Darwin.cos(state.dtor(arg1))
+        return Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
     public static let tan = Function(name: "tan", evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return Darwin.tan(state.dtor(arg1))
+        return Darwin.tan(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
     public static let asin = Function(names: ["asin", "sin⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return state.rtod(Darwin.asin(arg1))
+        return Function.rtod(Darwin.asin(arg1), mode: state.angleMeasurementMode)
     })
     
     public static let acos = Function(names: ["acos", "cos⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return state.rtod(Darwin.acos(arg1))
+        return Function.rtod(Darwin.acos(arg1), mode: state.angleMeasurementMode)
     })
     
     public static let atan = Function(names: ["atan", "tan⁻¹"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return state.rtod(Darwin.atan(arg1))
+        return Function.rtod(Darwin.atan(arg1), mode: state.angleMeasurementMode)
     })
     
     public static let atan2 = Function(name: "atan2", evaluator: { state throws -> Double in
@@ -449,14 +461,14 @@ extension Function {
         
         let arg1 = try state.evaluate(argument: 0)
         let arg2 = try state.evaluate(argument: 1)
-        return state.rtod(Darwin.atan2(arg1, arg2))
+        return Function.rtod(Darwin.atan2(arg1, arg2), mode: state.angleMeasurementMode)
     })
     
     public static let csc = Function(name: "csc", evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        let sinArg = Darwin.sin(state.dtor(arg1))
+        let sinArg = Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
         guard sinArg != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
         return 1.0 / sinArg
     })
@@ -465,7 +477,7 @@ extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        let sinArg = Darwin.cos(state.dtor(arg1))
+        let sinArg = Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
         guard sinArg != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
         return 1.0 / sinArg
     })
@@ -474,7 +486,7 @@ extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        let sinArg = Darwin.tan(state.dtor(arg1))
+        let sinArg = Darwin.tan(Function.dtor(arg1, mode: state.angleMeasurementMode))
         guard sinArg != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
         return 1.0 / sinArg
     })
@@ -484,7 +496,7 @@ extension Function {
         
         let arg1 = try state.evaluate(argument: 0)
         guard arg1 != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
-        return state.rtod(Darwin.asin(1.0 / arg1))
+        return Function.rtod(Darwin.asin(1.0 / arg1), mode: state.angleMeasurementMode)
     })
     
     public static let asec = Function(names: ["asec", "sec⁻¹"], evaluator: { state throws -> Double in
@@ -492,7 +504,7 @@ extension Function {
         
         let arg1 = try state.evaluate(argument: 0)
         guard arg1 != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
-        return state.rtod(Darwin.acos(1.0 / arg1))
+        return Function.rtod(Darwin.acos(1.0 / arg1), mode: state.angleMeasurementMode)
     })
     
     public static let acotan = Function(names: ["acotan", "cotan⁻¹"], evaluator: { state throws -> Double in
@@ -500,7 +512,7 @@ extension Function {
         
         let arg1 = try state.evaluate(argument: 0)
         guard arg1 != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
-        return state.rtod(Darwin.atan(1.0 / arg1))
+        return Function.rtod(Darwin.atan(1.0 / arg1), mode: state.angleMeasurementMode)
     })
     
     // MARK: - Hyperbolic trigonometric functions
@@ -604,28 +616,28 @@ extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return 1.0 - Darwin.cos(state.dtor(arg1))
+        return 1.0 - Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
     public static let vercosin = Function(names: ["vercosin", "vercos"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return 1.0 + Darwin.cos(state.dtor(arg1))
+        return 1.0 + Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
     public static let coversin = Function(names: ["coversin", "cvs"], evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return 1.0 - Darwin.sin(state.dtor(arg1))
+        return 1.0 - Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
     public static let covercosin = Function(name: "covercosin", evaluator: { state throws -> Double in
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        return 1.0 + Darwin.sin(state.dtor(arg1))
+        return 1.0 + Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
     public static let haversin = Function(name: "haversin", evaluator: { state throws -> Double in
@@ -648,7 +660,7 @@ extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        let cosArg1 = Darwin.cos(state.dtor(arg1))
+        let cosArg1 = Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
         guard cosArg1 != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
         return (1.0/cosArg1) - 1.0
     })
@@ -657,7 +669,7 @@ extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        let sinArg1 = Darwin.sin(state.dtor(arg1))
+        let sinArg1 = Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
         guard sinArg1 != 0 else { throw MathParserError(kind: .divideByZero, range: state.expressionRange) }
         return (1.0/sinArg1) - 1.0
     })
@@ -666,7 +678,7 @@ extension Function {
         guard state.arguments.count == 1 else { throw MathParserError(kind: .invalidArguments, range: state.expressionRange) }
         
         let arg1 = try state.evaluate(argument: 0)
-        let sinArg1 = Darwin.sin(state.dtor(arg1) / 2.0)
+        let sinArg1 = Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode) / 2.0)
         return 2 * sinArg1
     })
     
