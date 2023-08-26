@@ -10,7 +10,7 @@ import Foundation
 
 public struct MathParserError: Error {
     
-    public enum Kind {
+    public enum Code {
         // Tokenization Errors
         case cannotParseNumber
         case cannotParseHexNumber // can also occur during Resolution
@@ -46,20 +46,20 @@ public struct MathParserError: Error {
         case invalidArguments
     }
     
-    public let kind: Kind
+    public let code: Code
     
     // the location within the original source string where the error was found
     public let range: Range<String.Index>
 
-    public init(kind: Kind, range: Range<String.Index>) {
-        self.kind = kind
+    public init(code: Code, range: Range<String.Index>) {
+        self.code = code
         self.range = range
     }
 }
 
-extension MathParserError.Kind: Equatable {
+extension MathParserError.Code: Equatable {
 
-    public static func ==(lhs: MathParserError.Kind, rhs: MathParserError.Kind) -> Bool {
+    public static func ==(lhs: MathParserError.Code, rhs: MathParserError.Code) -> Bool {
         switch (lhs, rhs) {
             case (.cannotParseNumber, .cannotParseNumber): return true
             case (.cannotParseHexNumber, .cannotParseHexNumber): return true

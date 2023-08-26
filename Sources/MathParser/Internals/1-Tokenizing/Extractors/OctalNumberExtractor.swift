@@ -20,7 +20,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
         let start = buffer.currentIndex
         
         guard buffer.peekNext() == "0" && buffer.peekNext(1, lowercase: true) == "o" else {
-            let error = MathParserError(kind: .cannotParseHexNumber, range: start ..< start)
+            let error = MathParserError(code: .cannotParseHexNumber, range: start ..< start)
             return .failure(error)
         }
         
@@ -45,7 +45,7 @@ internal struct OctalNumberExtractor: TokenExtractor {
             result = .success(OctalNumberToken(string: raw, range: range))
         } else {
             let range = start ..< buffer.currentIndex
-            let error = MathParserError(kind: .cannotParseOctalNumber, range: range)
+            let error = MathParserError(code: .cannotParseOctalNumber, range: range)
             result = .failure(error)
         }
         

@@ -92,7 +92,7 @@ class EvaluatorTests: XCTestCase {
                 return
             }
             
-            guard case let .unknownVariable(v) = error.kind else {
+            guard case let .unknownVariable(v) = error.code else {
                 XCTFail("Unexpected error: \(error)")
                 return
             }
@@ -110,7 +110,7 @@ class EvaluatorTests: XCTestCase {
                 return
             }
             
-            guard case let .unknownFunction(f) = error.kind else {
+            guard case let .unknownFunction(f) = error.code else {
                 XCTFail("Unexpected error: \(error)")
                 return
             }

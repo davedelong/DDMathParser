@@ -37,7 +37,7 @@ internal struct IdentifierExtractor: TokenExtractor {
             let raw = buffer[range]
             result = .success(IdentifierToken(string: raw, range: range))
         } else {
-            let error = MathParserError(kind: .cannotParseIdentifier, range: range)
+            let error = MathParserError(code: .cannotParseIdentifier, range: range)
             result = .failure(error)
         }
         

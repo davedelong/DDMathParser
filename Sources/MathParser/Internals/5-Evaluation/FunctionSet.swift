@@ -46,13 +46,13 @@ internal struct FunctionSet {
                 return
             } else {
                 // a function exists for this name/alias already, but it's the wrong function
-                throw FunctionRegistrationError(functionName: alias, kind: .functionExists)
+                throw FunctionRegistrationError(code: .functionExists, functionName: alias)
             }
         }
         
         // retrieve the function that will gain the alias
         guard var existingFunctionForName = functionForName(name) else {
-            throw FunctionRegistrationError(functionName: name, kind: .functionDoesNotExist)
+            throw FunctionRegistrationError(code: .functionDoesNotExist, functionName: name)
         }
         
         let casedAlias = normalize(alias)
@@ -67,7 +67,7 @@ internal struct FunctionSet {
         // we need to make sure that every name is accounted for
         for name in function.names {
             guard functionForName(name) == nil else {
-                throw FunctionRegistrationError(functionName: name, kind: .functionExists)
+                throw FunctionRegistrationError(code: .functionExists, functionName: name)
             }
         }
         

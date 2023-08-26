@@ -49,7 +49,7 @@ internal struct ExponentExtractor: TokenExtractor {
         if length > 0 {
             return .success(ExponentToken(string: exponent, range: range))
         } else {
-            let error = MathParserError(kind: .cannotParseExponent, range: range)
+            let error = MathParserError(code: .cannotParseExponent, range: range)
             return .failure(error)
         }
     }

@@ -36,7 +36,7 @@ internal struct VariableExtractor: TokenExtractor {
             } else {
                 // the stuff that follow "$" must be a valid identifier
                 let range = start ..< start
-                let error = MathParserError(kind: .cannotParseVariable, range: range)
+                let error = MathParserError(code: .cannotParseVariable, range: range)
                 return .failure(error)
             }
         }
@@ -48,13 +48,13 @@ internal struct VariableExtractor: TokenExtractor {
         
         switch identifierResult {
             case .failure(let e):
-                if e.kind == .cannotParseIdentifier && configuration.allowZeroLengthVariables {
+                if e.code == .cannotParseIdentifier && configuration.allowZeroLengthVariables {
                     buffer.resetTo(identifierStart)
                     let token = VariableToken(string: "", range: start ..< identifierStart)
                     result = .success(token)
                 } else {
                     let range = start ..< e.range.upperBound
-                    let error = MathParserError(kind: .cannotParseVariable, range: range)
+                    let error = MathParserError(code: .cannotParseVariable, range: range)
                     result = .failure(error)
                 }
             case .success(let t):

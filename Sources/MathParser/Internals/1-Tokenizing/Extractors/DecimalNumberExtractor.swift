@@ -56,7 +56,7 @@ internal struct DecimalNumberExtractor: TokenExtractor {
         
         let length = buffer.currentDistance(from: start)
         let range = start ..< buffer.currentIndex
-        let error = MathParserError(kind: .cannotParseNumber, range: range)
+        let error = MathParserError(code: .cannotParseNumber, range: range)
         
         var result = Result<RawToken, MathParserError>.failure(error)
         if length > 0 {

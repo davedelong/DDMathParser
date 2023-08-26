@@ -11,8 +11,8 @@ import Foundation
 /// An error that may be thrown during attempts to register custom functions or aliases with an ``Evaluator``
 public struct FunctionRegistrationError: Error {
     
-    /// The kind of the error being thrown
-    public enum Kind {
+    /// The code of the error being thrown
+    public enum Code {
         /// Indicates that a function with the same name or alias already exists,
         /// and the new function (or alias) being registered would cause a naming conflict.
         case functionExists
@@ -25,12 +25,12 @@ public struct FunctionRegistrationError: Error {
     /// The function or alias name that produced this error.
     public let functionName: String
     
-    /// The kind of registration error.
-    public let kind: Kind
+    /// The registration error code.
+    public let code: Code
     
-    internal init(functionName: String, kind: Kind) {
+    internal init(code: Code, functionName: String) {
         self.functionName = functionName
-        self.kind = kind
+        self.code = code
     }
 }
 
@@ -120,7 +120,7 @@ public struct Evaluator {
                     }
                 }
                 
-                throw MathParserError(kind: .unknownFunction(f), range: expression.range)
+                throw MathParserError(code: .unknownFunction(f), range: expression.range)
         }
     }
     
@@ -134,7 +134,7 @@ public struct Evaluator {
             return value
         }
         
-        throw MathParserError(kind: .unknownVariable(name), range: range)
+        throw MathParserError(code: .unknownVariable(name), range: range)
     }
     
 }

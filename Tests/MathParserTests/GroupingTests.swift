@@ -78,7 +78,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .emptyFunctionArgument)
+            XCTAssert(error.code == .emptyFunctionArgument)
         }
     }
     
@@ -94,7 +94,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .missingOpenParenthesis)
+            XCTAssert(error.code == .missingOpenParenthesis)
         }
     }
     
@@ -110,7 +110,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .missingCloseParenthesis)
+            XCTAssert(error.code == .missingCloseParenthesis)
         }
     }
     
@@ -125,7 +125,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .missingCloseParenthesis)
+            XCTAssert(error.code == .missingCloseParenthesis)
         }
     }
     
@@ -140,7 +140,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .missingOpenParenthesis)
+            XCTAssert(error.code == .missingOpenParenthesis)
         }
     }
     
@@ -196,7 +196,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .emptyGroup)
+            XCTAssert(error.code == .emptyGroup)
         }
     }
     
@@ -211,7 +211,7 @@ class GroupingTests: XCTestCase {
                 XCTFail("Unexpected error \(other)")
                 return
             }
-            XCTAssert(error.kind == .emptyGroup)
+            XCTAssert(error.code == .emptyGroup)
         }
     }
     

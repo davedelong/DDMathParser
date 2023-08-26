@@ -102,14 +102,14 @@ extension TokenResolver {
                 if let number = UInt(rawToken.string, radix: 16) {
                     resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
-                    throw MathParserError(kind: .cannotParseHexNumber, range: rawToken.range)
+                    throw MathParserError(code: .cannotParseHexNumber, range: rawToken.range)
                 }
             
             case is OctalNumberToken:
                 if let number = UInt(rawToken.string, radix: 8) {
                     resolvedTokens.append(ResolvedToken(kind: .number(Double(number)), string: rawToken.string, range: rawToken.range))
                 } else {
-                    throw MathParserError(kind: .cannotParseOctalNumber, range: rawToken.range)
+                    throw MathParserError(code: .cannotParseOctalNumber, range: rawToken.range)
                 }
             
             case is FractionNumberToken:
@@ -123,7 +123,7 @@ extension TokenResolver {
                 if let character = rawToken.string.first, let value = FractionNumberExtractor.fractions[character] {
                     resolvedTokens.append(ResolvedToken(kind: .number(value), string: rawToken.string, range: rawToken.range))
                 } else {
-                    throw MathParserError(kind: .cannotParseFractionalNumber, range: rawToken.range)
+                    throw MathParserError(code: .cannotParseFractionalNumber, range: rawToken.range)
                 }
             
             case is DecimalNumberToken:
@@ -159,7 +159,7 @@ extension TokenResolver {
             }
         }
         
-        throw MathParserError(kind: .cannotParseLocalizedNumber, range: raw.range)
+        throw MathParserError(code: .cannotParseLocalizedNumber, range: raw.range)
     }
     
     private func resolveExponent(_ raw: RawToken) throws -> Array<ResolvedToken> {
@@ -195,7 +195,7 @@ extension TokenResolver {
         let matches = operatorSet.operatorForToken(raw.string)
         
         if matches.isEmpty {
-            throw MathParserError(kind: .unknownOperator, range: raw.range)
+            throw MathParserError(code: .unknownOperator, range: raw.range)
         }
         
         if matches.count == 1 {
@@ -239,7 +239,7 @@ extension TokenResolver {
         if let resolved = resolvedOperator {
             return ResolvedToken(kind: .operator(resolved), string: raw.string, range: raw.range)
         } else {
-            throw MathParserError(kind: .ambiguousOperator, range: raw.range)
+            throw MathParserError(code: .ambiguousOperator, range: raw.range)
         }
     }
     

@@ -52,7 +52,7 @@ internal struct LocalizedNumberExtractor: TokenExtractor {
         let range = start ..< indexAfterNumber
         
         if range.isEmpty {
-            let error = MathParserError(kind: .cannotParseNumber, range: range)
+            let error = MathParserError(code: .cannotParseNumber, range: range)
             return .failure(error)
         }
         

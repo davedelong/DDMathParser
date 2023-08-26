@@ -157,8 +157,8 @@ class ExpressionTests: XCTestCase {
                 return
             }
             
-            guard case .missingLeftOperand(_) = error.kind else {
-                XCTFail("Unexpected error kind: \(error.kind)")
+            guard case .missingLeftOperand(_) = error.code else {
+                XCTFail("Unexpected error code: \(error.code)")
                 return
             }
         }
@@ -174,8 +174,8 @@ class ExpressionTests: XCTestCase {
                 return
             }
             
-            guard case .missingRightOperand(_) = error.kind else {
-                XCTFail("Unexpected error kind: \(error.kind)")
+            guard case .missingRightOperand(_) = error.code else {
+                XCTFail("Unexpected error code: \(error.code)")
                 return
             }
         }
@@ -251,8 +251,8 @@ class ExpressionTests: XCTestCase {
                 return
             }
             
-            guard case .missingLeftOperand(_) = error.kind else {
-                XCTFail("Unexpected error kind: \(error.kind)")
+            guard case .missingLeftOperand(_) = error.code else {
+                XCTFail("Unexpected error code: \(error.code)")
                 return
             }
         }
@@ -268,8 +268,8 @@ class ExpressionTests: XCTestCase {
                 return
             }
             
-            guard case .missingRightOperand(_) = error.kind else {
-                XCTFail("Unexpected error kind: \(error.kind)")
+            guard case .missingRightOperand(_) = error.code else {
+                XCTFail("Unexpected error code: \(error.code)")
                 return
             }
         }
@@ -309,8 +309,8 @@ class ExpressionTests: XCTestCase {
                 return
             }
             
-            guard case .invalidFormat = error.kind else {
-                XCTFail("Unexpected error kind: \(error.kind)")
+            guard case .invalidFormat = error.code else {
+                XCTFail("Unexpected error code: \(error.code)")
                 return
             }
         }

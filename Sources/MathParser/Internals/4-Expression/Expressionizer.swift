@@ -86,7 +86,7 @@ internal struct Expressionizer {
             let (indices, maybeOp) = operatorWithHighestPrecedence(wrappers)
             guard let first = indices.first, let last = indices.last else {
                 let range = wrappers.first?.range ?? source.startIndex ..< source.startIndex
-                throw MathParserError(kind: .invalidFormat, range: range)
+                throw MathParserError(code: .invalidFormat, range: range)
             }
             guard let op = maybeOp else { fatalError("Indices but no operator??") }
             
@@ -150,10 +150,10 @@ internal struct Expressionizer {
         let operatorWrapper = wrappers[index]
         
         guard index > 0 else {
-            throw MathParserError(kind: .missingLeftOperand(op), range: operatorWrapper.range)
+            throw MathParserError(code: .missingLeftOperand(op), range: operatorWrapper.range)
         }
         guard index < wrappers.count - 1 else {
-            throw MathParserError(kind: .missingRightOperand(op), range: operatorWrapper.range)
+            throw MathParserError(code: .missingRightOperand(op), range: operatorWrapper.range)
         }
         
         var operatorIndex = index
@@ -203,7 +203,7 @@ internal struct Expressionizer {
         let operatorWrapper = wrappers[operatorIndex]
         
         guard operatorIndex > 0 else {
-            throw MathParserError(kind: .missingLeftOperand(op), range: operatorWrapper.range) // Missing operand
+            throw MathParserError(code: .missingLeftOperand(op), range: operatorWrapper.range) // Missing operand
         }
         
         var operandIndex = operatorIndex - 1
@@ -251,7 +251,7 @@ internal struct Expressionizer {
         let operandIndex = index + 1
         
         guard operandIndex < wrappers.count else {
-            throw MathParserError(kind: .missingRightOperand(op), range: operatorWrapper.range) // Missing operand
+            throw MathParserError(code: .missingRightOperand(op), range: operatorWrapper.range) // Missing operand
         }
         
         
