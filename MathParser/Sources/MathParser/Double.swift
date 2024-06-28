@@ -35,7 +35,7 @@ internal extension Double {
             } else if self < Double(Int.max) {
                 // it's a factorial of an integer NOT representable as an Int
                 var result = 1.0
-                for i in 2 ..< Int(self) {
+                for i in 2 ... Int(self) {
                     result *= Double(i)
                 }
                 return result
