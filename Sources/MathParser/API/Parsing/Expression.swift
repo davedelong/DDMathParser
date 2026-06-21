@@ -58,34 +58,6 @@ public struct Expression {
         self.init(kind: e.kind, range: e.range)
     }
     
-    public func simplify(_ substitutions: Substitutions = [:], evaluator: Evaluator) -> Expression {
-        switch kind {
-            case .number:
-                return Expression(kind: kind, range: range)
-            case .variable(let varName):
-                if let resolved = try? evaluator.evaluate(self, substitutions: substitutions) {
-                    return Expression(kind: .number(resolved), range: range)
-                }
-                if let exp = substitutions[varName]?.simplified(using: evaluator, substitutions: substitutions) as? Expression {
-                    return Expression(kind: exp.kind, range: range)
-                }
-                return Expression(kind: kind, range: range)
-            case let .function(f, args):
-                let newArgs = args.map { $0.simplify(substitutions, evaluator: evaluator) }
-                let areAllArgsNumbers = newArgs.allSatisfy(\.isNumber)
-            
-                guard areAllArgsNumbers else {
-                    return Expression(kind: .function(f, newArgs), range: range)
-                }
-            
-                guard let value = try? evaluator.evaluate(self) else {
-                    return Expression(kind: .function(f, newArgs), range: range)
-                }
-            
-                return Expression(kind: .number(value), range: range)
-        }
-    }
-    
     public func rewrite(_ substitutions: Substitutions = [:], rewriter: ExpressionRewriter = .default, evaluator: Evaluator = .default) -> Expression {
         return rewriter.rewriteExpression(self, substitutions: substitutions, evaluator: evaluator)
     }

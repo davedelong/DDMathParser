@@ -14,7 +14,7 @@ extension Expression: Substitution {
     }
     
     public func simplified(using evaluator: Evaluator, substitutions: Substitutions) -> Substitution {
-        return simplify(substitutions, evaluator: evaluator)
+        return evaluator.simplify(self)
     }
 }
 

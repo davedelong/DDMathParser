@@ -9,7 +9,9 @@
 import Foundation
 
 extension String {
+    
     public func evaluate(using evaluator: Evaluator = .default, _ substitutions: Substitutions = [:]) throws -> Double {
         return try evaluator.evaluate(Expression(string: self), substitutions: substitutions)
     }
+    
 }

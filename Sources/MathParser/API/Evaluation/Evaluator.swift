@@ -46,9 +46,19 @@ public struct Evaluator {
     
     public var angleMeasurementMode = AngleMode.radians
     public var resolver: EvaluationResolver?
+    public var configuration: Configuration
+    public var substitutions: Substitutions
     
-    public init(caseSensitive: Bool = false) {
-        functionSet = FunctionSet(caseSensitive: caseSensitive)
+    public init() {
+        self.init(caseSensitive: false,
+                  configuration: .default,
+                  substitutions: [:])
+    }
+    
+    public init(caseSensitive: Bool, configuration: Configuration, substitutions: Substitutions) {
+        self.functionSet = FunctionSet(caseSensitive: caseSensitive)
+        self.configuration = configuration
+        self.substitutions = substitutions
     }
     
     public mutating func registerFunction(_ function: Function) throws {
@@ -84,6 +94,34 @@ public struct Evaluator {
     
     public func evaluate(_ expression: Expression, substitutions: Substitutions = [:]) throws -> Double {
         return try evaluate(expression, substitutions: substitutions, state: nil)
+    }
+    
+    public func simplify(_ expression: Expression) -> Expression {
+        switch expression.kind {
+            case .number:
+                return expression
+                
+            case .variable(let variableName):
+                if let value = try? self.evaluateVariable(variableName, substitutions: self.substitutions, range: expression.range) {
+                    return Expression(kind: .number(value), range: expression.range)
+                }
+                
+                return expression
+                
+            case .function(let name, let arguments):
+                let simplifiedArguments = arguments.map { self.simplify($0) }
+                let areAllArgumentsNumbers = simplifiedArguments.allSatisfy(\.isNumber)
+                
+                guard areAllArgumentsNumbers else {
+                    return Expression(kind: .function(name, simplifiedArguments), range: expression.range)
+                }
+                
+                guard let value = try? self.evaluate(expression) else {
+                    return Expression(kind: .function(name, simplifiedArguments), range: expression.range)
+                }
+                
+                return Expression(kind: .number(value), range: expression.range)
+        }
     }
     
     internal func evaluate(_ expression: Expression, substitutions: Substitutions, state: EvaluationState?) throws -> Double {
@@ -128,6 +166,7 @@ public struct Evaluator {
             return resolved
         }
         
+        // TODO: follow the case insensitivity parameter
         if let value = try substitutions[name]?.substitutionValue(using: self, substitutions: substitutions) {
             return value
         }

@@ -46,6 +46,8 @@ extension RewriteRule {
         try! RewriteRule(predicate: "nthroot(__exp1, 1)", template: "__exp1"),
         try! RewriteRule(predicate: "nthroot(pow(__exp1, __exp2), __exp2)", condition: "__exp2 % 2 == 0", template: "abs(__exp1)"),
         try! RewriteRule(predicate: "nthroot(pow(__exp1, __exp2), __exp2)", condition: "__exp2 % 2 == 1", template: "__exp1"),
-        try! RewriteRule(predicate: "abs(__exp1)", condition: "__exp1 >= 0", template: "__exp1")
+        try! RewriteRule(predicate: "abs(__exp1)", condition: "__exp1 >= 0", template: "__exp1"),
+        
+        try! RewriteRule(predicate: "__exp1! / __exp2", condition: "__exp1 == __exp2 + 1 && __exp2 > 0", template: "__exp2!")
     ]
 }
