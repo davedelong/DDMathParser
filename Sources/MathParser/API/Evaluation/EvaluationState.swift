@@ -52,4 +52,19 @@ public struct EvaluationState {
         // TODO: should this behave differently if the expression is not an argument?
         return try evaluator.evaluate(expression, substitutions: substitutions, state: self)
     }
+    
+    internal func requireArgumentCount(_ count: Int) throws {
+        if arguments.count == count { return }
+        throw MathParserError(code: .invalidArguments, range: expressionRange)
+    }
+    
+    internal func requireMinArgumentCount(_ count: Int) throws {
+        if arguments.count >= count { return }
+        throw MathParserError(code: .invalidArguments, range: expressionRange)
+    }
+    
+    internal func requireMaxArgumentCount(_ count: Int) throws {
+        if arguments.count <= count { return }
+        throw MathParserError(code: .invalidArguments, range: expressionRange)
+    }
 }

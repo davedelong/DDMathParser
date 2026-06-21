@@ -114,10 +114,8 @@ public struct Evaluator {
                 
                 // if we get here, then let's fall back to trying it as a variable,
                 // but only if it has no arguments. and we'll ignore the error if evaluation fails
-                if args.isEmpty {
-                    if let value = try? evaluateVariable(f, substitutions: substitutions, range: expression.range) {
-                        return value
-                    }
+                if args.isEmpty, let value = try? evaluateVariable(f, substitutions: substitutions, range: expression.range) {
+                    return value
                 }
                 
                 throw MathParserError(code: .unknownFunction(f), range: expression.range)
