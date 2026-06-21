@@ -48,17 +48,25 @@ public struct Evaluator {
     public var resolver: EvaluationResolver?
     public var configuration: Configuration
     
+    /// Whether variables should be treated with case sensitivity or not.
+    ///
+    /// When this value is `true`, then variables that are spelled the same but differ only by their case are treated as distinct. For example,
+    /// `$FOO` would be a *different* variable than `$foo`.
+    ///
+    /// When this value is `false`, then variables are treated as *case insensitive*, and `$FOO` would be considered the same variable as `$foo`.
+    ///
+    /// The default value is `true`, meaning variables that by differ by their case are considered distinct.
+    public var caseSensitiveVariables: Bool = true
+    
     public init() {
         self.init(caseSensitiveFunctions: false,
                   configuration: .default)
     }
     
     public init(caseSensitive: Bool) {
-        var configuration = Configuration()
-        configuration.caseSensitiveVariables = caseSensitive
-        
         self.functionSet = FunctionSet(caseSensitive: caseSensitive)
-        self.configuration = configuration
+        self.configuration = Configuration()
+        self.caseSensitiveVariables = caseSensitive
     }
     
     public init(caseSensitiveFunctions: Bool, configuration: Configuration) {
@@ -103,7 +111,8 @@ public struct Evaluator {
                 return expression
                 
             case .variable(let variableName):
-                if let value = try? self.evaluateVariable(variableName, variables: variables, range: expression.range) {
+                let state = EvaluationState(expression: expression, variables: variables, evaluator: self)
+                if let value = try? self.evaluateVariable(variableName, state: state) {
                     return Expression(kind: .number(value), range: expression.range)
                 }
                 
@@ -126,34 +135,34 @@ public struct Evaluator {
     }
     
     internal func evaluate(_ expression: Expression, variables: Variables, state: EvaluationState?) throws -> Double {
+        let evaluationState: EvaluationState
+        if var parent = state {
+            parent.push(expression)
+            evaluationState = parent
+        } else {
+            evaluationState = EvaluationState(expression: expression, variables: variables, evaluator: self)
+        }
+        
         switch expression.kind {
             case .number(let d):
                 return d
                 
             case .variable(let s):
-                return try evaluateVariable(s, variables: variables, range: expression.range)
+                return try evaluateVariable(s, state: evaluationState)
                 
             case .function(let f, let args):
-                let functionState: EvaluationState
-                if var parent = state {
-                    parent.push(expression)
-                    functionState = parent
-                } else {
-                    functionState = EvaluationState(expression: expression, variables: variables, evaluator: self)
-                }
-                
                 // the resolver always gets the first opportunity to interpose its own value
-                if let value = try resolver?.evaluateFunction(f, state: functionState) {
+                if let value = try resolver?.evaluateFunction(f, state: evaluationState) {
                     return value
                 }
                 
                 if let function = functionSet.evaluatorForName(f) {
-                    return try function(functionState)
+                    return try function(evaluationState)
                 }
                 
                 // if we get here, then let's fall back to trying it as a variable,
                 // but only if it has no arguments. and we'll ignore the error if evaluation fails
-                if args.isEmpty, let value = try? evaluateVariable(f, variables: variables, range: expression.range) {
+                if args.isEmpty, let value = try? evaluateVariable(f, state: evaluationState) {
                     return value
                 }
                 
@@ -161,26 +170,26 @@ public struct Evaluator {
         }
     }
     
-    private func evaluateVariable(_ name: String, variables: Variables, range: Range<String.Index>) throws -> Double {
-        
-        // first look in our known variables:
-        if configuration.caseSensitiveVariables {
-            if let value = variables[name] {
-                return value
-            }
-        } else {
-            let lowercasedName = name.lowercased()
-            if let value = variables.first(where: { $0.key.lowercased() == lowercasedName })?.value {
-                return value
-            }
-        }
+    private func evaluateVariable(_ name: String, state: EvaluationState) throws -> Double {
         
         // dynamically resolve the variable
         if let resolved = resolver?.evaluateVariable(name) {
             return resolved
         }
         
-        throw MathParserError(code: .unknownVariable(name), range: range)
+        // look in our known variables:
+        if self.caseSensitiveVariables {
+            if let value = state.variables[name] {
+                return value
+            }
+        } else {
+            let lowercasedName = name.lowercased()
+            if let value = state.variables.first(where: { $0.key.lowercased() == lowercasedName })?.value {
+                return value
+            }
+        }
+        
+        throw MathParserError(code: .unknownVariable(name), range: state.expressionRange)
     }
     
 }

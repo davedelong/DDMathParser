@@ -85,16 +85,6 @@ public struct Configuration {
     /// may lead to some surprising and unexpected evaluations.
     public var useHighPrecedenceImplicitMultiplication: Bool
     
-    /// Whether variables should be treated with case sensitivity or not.
-    ///
-    /// When this value is `true`, then variables that are spelled the same but differ only by their case are treated as distinct. For example,
-    /// `$FOO` would be a *different* variable than `$foo`.
-    ///
-    /// When this value is `false`, then variables are treated as *case insensitive*, and `$FOO` would be considered the same variable as `$foo`.
-    ///
-    /// The default value is `true`, meaning variables that by differ by their case are considered distinct.
-    public var caseSensitiveVariables: Bool
-    
     /// Instantiate a new ``Configuration`` with all of the default values set.
     public init() {
         operatorSet = OperatorSet.default
@@ -106,8 +96,6 @@ public struct Configuration {
         allowArgumentlessFunctions = true
         allowImplicitMultiplication = true
         useHighPrecedenceImplicitMultiplication = true
-        
-        caseSensitiveVariables = true
     }
     
 }
