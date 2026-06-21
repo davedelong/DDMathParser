@@ -41,7 +41,7 @@ public struct RewriteRule {
         }
     }
     
-    public func rewrite(_ expression: Expression, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
+    public func rewrite(_ expression: Expression, variables: Variables, evaluator: Evaluator) -> Expression {
         
         guard let replacements = match(expression: expression, against: predicate) else {
             // the expression doesn't match the predicate
@@ -54,7 +54,7 @@ public struct RewriteRule {
             let matchingCondition = applyReplacements(replacements, toExpression: condition)
             
             // if there's an error evaluating the condition, then we don't match
-            guard let result = try? evaluator.evaluate(matchingCondition, substitutions: substitutions) else {
+            guard let result = try? evaluator.evaluate(matchingCondition, variables: variables) else {
                 return expression
             }
             

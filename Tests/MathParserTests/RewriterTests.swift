@@ -9,18 +9,18 @@
 import XCTest
 import MathParser
 
-func TestRewrite(_ original: String, expected: String, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.default, rewriter: ExpressionRewriter = ExpressionRewriter.default, file: StaticString = #file, line: UInt = #line) {
+func TestRewrite(_ original: String, expected: String, variables: Variables = [:], evaluator: Evaluator = Evaluator.default, rewriter: ExpressionRewriter = ExpressionRewriter.default, file: StaticString = #file, line: UInt = #line) {
     
     guard let originalE = XCTAssertNoThrows(try Expression(string: original), file: file, line: line) else { return }
     
     guard let expectedE = XCTAssertNoThrows(try Expression(string: expected), file: file, line: line) else { return }
     
-    let rewritten = rewriter.rewriteExpression(originalE, substitutions: substitutions, evaluator: evaluator)
+    let rewritten = rewriter.rewriteExpression(originalE, variables: variables, evaluator: evaluator)
     
     XCTAssertEqual(rewritten, expectedE, file: file, line: line)
     
     // Also test that the convenience functions produces the same result.
-    let convenienceRewritten = originalE.rewrite(substitutions, rewriter: rewriter, evaluator: evaluator)
+    let convenienceRewritten = originalE.rewrite(variables, rewriter: rewriter, evaluator: evaluator)
     XCTAssertEqual(convenienceRewritten, rewritten)
 }
 
@@ -49,32 +49,32 @@ class RewriterTests: XCTestCase {
         
         
         //division
-        TestRewrite("$foo / $foo", expected: "1", substitutions: ["foo": 1])
+        TestRewrite("$foo / $foo", expected: "1", variables: ["foo": 1])
         TestRewrite("$foo / $foo", expected: "$foo / $foo")
         
-        TestRewrite("($foo * $bar) / $bar", expected: "$foo", substitutions: ["bar": 1])
+        TestRewrite("($foo * $bar) / $bar", expected: "$foo", variables: ["bar": 1])
         TestRewrite("($foo * $bar) / $bar", expected: "($foo * $bar) / $bar")
         
         
-        TestRewrite("($bar * $foo) / $bar", expected: "$foo", substitutions: ["bar": 1])
+        TestRewrite("($bar * $foo) / $bar", expected: "$foo", variables: ["bar": 1])
         TestRewrite("($bar * $foo) / $bar", expected: "($bar * $foo) / $bar")
         
-        TestRewrite("$bar / ($bar * $foo)", expected: "1/$foo", substitutions: ["bar": 1])
+        TestRewrite("$bar / ($bar * $foo)", expected: "1/$foo", variables: ["bar": 1])
         TestRewrite("$bar / ($bar * $foo)", expected: "$bar / ($bar * $foo)")
         
-        TestRewrite("$bar / ($foo * $bar)", expected: "1/$foo", substitutions: ["bar": 1])
+        TestRewrite("$bar / ($foo * $bar)", expected: "1/$foo", variables: ["bar": 1])
         TestRewrite("$bar / ($foo * $bar)", expected: "$bar / ($foo * $bar)")
         
         
         //exponents and roots
-        TestRewrite("nthroot(pow($foo, $bar), $bar)", expected: "abs($foo)", substitutions: ["bar": 2])
+        TestRewrite("nthroot(pow($foo, $bar), $bar)", expected: "abs($foo)", variables: ["bar": 2])
         TestRewrite("nthroot(pow($foo, $bar), $bar)", expected: "nthroot(pow($foo, $bar), $bar)")
         
         
-        TestRewrite("nthroot(pow($foo, $bar), $bar)", expected: "$foo", substitutions: ["bar": 1])
+        TestRewrite("nthroot(pow($foo, $bar), $bar)", expected: "$foo", variables: ["bar": 1])
         TestRewrite("nthroot(pow($foo, $bar), $bar)", expected: "nthroot(pow($foo, $bar), $bar)")
         
-        TestRewrite("abs($foo)", expected: "1", substitutions: ["foo": 1])
+        TestRewrite("abs($foo)", expected: "1", variables: ["foo": 1])
         TestRewrite("abs($foo)", expected: "abs($foo)")
     }
     

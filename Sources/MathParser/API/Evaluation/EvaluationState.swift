@@ -16,7 +16,7 @@ public struct EvaluationState {
     
     public var parentState: EvaluationState? {
         guard let parent = parentExpression else { return nil }
-        return EvaluationState(expression: parent, substitutions: substitutions, evaluator: evaluator)
+        return EvaluationState(expression: parent, variables: variables, evaluator: evaluator)
     }
     
     public var parentExpression: Expression? {
@@ -29,14 +29,14 @@ public struct EvaluationState {
     public var arguments: Array<Expression> { currentExpression.functionArguments ?? [] }
     public var argumentCount: Int { arguments.count }
     
-    public let substitutions: Substitutions
+    public let variables: Variables
     private let evaluator: Evaluator
     
     public var angleMeasurementMode: Evaluator.AngleMode { evaluator.angleMeasurementMode }
     
-    internal init(expression: Expression, substitutions: Substitutions, evaluator: Evaluator) {
+    internal init(expression: Expression, variables: Variables, evaluator: Evaluator) {
         self.expressions = [expression]
-        self.substitutions = substitutions
+        self.variables = variables
         self.evaluator = evaluator
     }
     
@@ -45,12 +45,12 @@ public struct EvaluationState {
     }
     
     public func evaluate(argument index: Int) throws -> Double {
-        return try evaluator.evaluate(arguments[index], substitutions: substitutions, state: self)
+        return try evaluator.evaluate(arguments[index], variables: variables, state: self)
     }
     
     public func evaluate(_ expression: Expression) throws -> Double {
         // TODO: should this behave differently if the expression is not an argument?
-        return try evaluator.evaluate(expression, substitutions: substitutions, state: self)
+        return try evaluator.evaluate(expression, variables: variables, state: self)
     }
     
     internal func requireArgumentCount(_ count: Int) throws {

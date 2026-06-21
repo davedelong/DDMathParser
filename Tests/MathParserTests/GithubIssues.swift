@@ -115,7 +115,6 @@ class GithubIssues: XCTestCase {
     func testIssue38() {
         guard let d = XCTAssertNoThrows(try "69!÷69−68!".evaluate()) else { return }
         XCTAssertEqual(d, 0)
-        
     }
     
     func testIssue39() {
@@ -262,8 +261,8 @@ class GithubIssues: XCTestCase {
         eval.resolver = Resolver()
         
         guard let e = XCTAssertNoThrows(try Expression(string: "('B' != 'A') && ('k' != 'K')")) else { return }
-        let subs = ["B": 1.0, "A": 1.0, "k": 1.0, "K": 1.0]
-        guard let d = XCTAssertNoThrows(try eval.evaluate(e, substitutions: subs)) else { return }
+        let vars = ["B": 1.0, "A": 1.0, "k": 1.0, "K": 1.0]
+        guard let d = XCTAssertNoThrows(try eval.evaluate(e, variables: vars)) else { return }
         XCTAssertEqual(d, 1.0)
     }
     

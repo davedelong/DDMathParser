@@ -47,18 +47,23 @@ public struct Evaluator {
     public var angleMeasurementMode = AngleMode.radians
     public var resolver: EvaluationResolver?
     public var configuration: Configuration
-    public var substitutions: Substitutions
     
     public init() {
-        self.init(caseSensitive: false,
-                  configuration: .default,
-                  substitutions: [:])
+        self.init(caseSensitiveFunctions: false,
+                  configuration: .default)
     }
     
-    public init(caseSensitive: Bool, configuration: Configuration, substitutions: Substitutions) {
+    public init(caseSensitive: Bool) {
+        var configuration = Configuration()
+        configuration.caseSensitiveVariables = caseSensitive
+        
         self.functionSet = FunctionSet(caseSensitive: caseSensitive)
         self.configuration = configuration
-        self.substitutions = substitutions
+    }
+    
+    public init(caseSensitiveFunctions: Bool, configuration: Configuration) {
+        self.functionSet = FunctionSet(caseSensitive: caseSensitiveFunctions)
+        self.configuration = configuration
     }
     
     public mutating func registerFunction(_ function: Function) throws {
@@ -76,12 +81,8 @@ public struct Evaluator {
         }
         set {
             if let newValue {
-                do {
-                    let function = Function(name: name, body: newValue)
-                    try functionSet.registerFunction(function)
-                } catch {
-                    
-                }
+                let function = Function(name: name, body: newValue)
+                try? functionSet.registerFunction(function)
             } else {
                 functionSet.unregisterFunction(name)
             }
@@ -92,24 +93,24 @@ public struct Evaluator {
         try functionSet.addAlias(alias, forFunctionName: name)
     }
     
-    public func evaluate(_ expression: Expression, substitutions: Substitutions = [:]) throws -> Double {
-        return try evaluate(expression, substitutions: substitutions, state: nil)
+    public func evaluate(_ expression: Expression, variables: Variables = [:]) throws -> Double {
+        return try evaluate(expression, variables: variables, state: nil)
     }
     
-    public func simplify(_ expression: Expression) -> Expression {
+    public func simplify(_ expression: Expression, variables: Variables = [:]) -> Expression {
         switch expression.kind {
             case .number:
                 return expression
                 
             case .variable(let variableName):
-                if let value = try? self.evaluateVariable(variableName, substitutions: self.substitutions, range: expression.range) {
+                if let value = try? self.evaluateVariable(variableName, variables: variables, range: expression.range) {
                     return Expression(kind: .number(value), range: expression.range)
                 }
                 
                 return expression
                 
             case .function(let name, let arguments):
-                let simplifiedArguments = arguments.map { self.simplify($0) }
+                let simplifiedArguments = arguments.map { self.simplify($0, variables: variables) }
                 let areAllArgumentsNumbers = simplifiedArguments.allSatisfy(\.isNumber)
                 
                 guard areAllArgumentsNumbers else {
@@ -124,13 +125,13 @@ public struct Evaluator {
         }
     }
     
-    internal func evaluate(_ expression: Expression, substitutions: Substitutions, state: EvaluationState?) throws -> Double {
+    internal func evaluate(_ expression: Expression, variables: Variables, state: EvaluationState?) throws -> Double {
         switch expression.kind {
             case .number(let d):
                 return d
                 
             case .variable(let s):
-                return try evaluateVariable(s, substitutions: substitutions, range: expression.range)
+                return try evaluateVariable(s, variables: variables, range: expression.range)
                 
             case .function(let f, let args):
                 let functionState: EvaluationState
@@ -138,7 +139,7 @@ public struct Evaluator {
                     parent.push(expression)
                     functionState = parent
                 } else {
-                    functionState = EvaluationState(expression: expression, substitutions: substitutions, evaluator: self)
+                    functionState = EvaluationState(expression: expression, variables: variables, evaluator: self)
                 }
                 
                 // the resolver always gets the first opportunity to interpose its own value
@@ -152,7 +153,7 @@ public struct Evaluator {
                 
                 // if we get here, then let's fall back to trying it as a variable,
                 // but only if it has no arguments. and we'll ignore the error if evaluation fails
-                if args.isEmpty, let value = try? evaluateVariable(f, substitutions: substitutions, range: expression.range) {
+                if args.isEmpty, let value = try? evaluateVariable(f, variables: variables, range: expression.range) {
                     return value
                 }
                 
@@ -160,15 +161,23 @@ public struct Evaluator {
         }
     }
     
-    private func evaluateVariable(_ name: String, substitutions: Substitutions, range: Range<String.Index>) throws -> Double {
-        // the resolver always gets the first opportunity to interpose its own value
-        if let resolved = resolver?.evaluateVariable(name) {
-            return resolved
+    private func evaluateVariable(_ name: String, variables: Variables, range: Range<String.Index>) throws -> Double {
+        
+        // first look in our known variables:
+        if configuration.caseSensitiveVariables {
+            if let value = variables[name] {
+                return value
+            }
+        } else {
+            let lowercasedName = name.lowercased()
+            if let value = variables.first(where: { $0.key.lowercased() == lowercasedName })?.value {
+                return value
+            }
         }
         
-        // TODO: follow the case insensitivity parameter
-        if let value = try substitutions[name]?.substitutionValue(using: self, substitutions: substitutions) {
-            return value
+        // dynamically resolve the variable
+        if let resolved = resolver?.evaluateVariable(name) {
+            return resolved
         }
         
         throw MathParserError(code: .unknownVariable(name), range: range)

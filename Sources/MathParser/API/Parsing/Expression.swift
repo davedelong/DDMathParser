@@ -58,8 +58,8 @@ public struct Expression {
         self.init(kind: e.kind, range: e.range)
     }
     
-    public func rewrite(_ substitutions: Substitutions = [:], rewriter: ExpressionRewriter = .default, evaluator: Evaluator = .default) -> Expression {
-        return rewriter.rewriteExpression(self, substitutions: substitutions, evaluator: evaluator)
+    public func rewrite(_ variables: Variables = [:], rewriter: ExpressionRewriter = .default, evaluator: Evaluator = .default) -> Expression {
+        return rewriter.rewriteExpression(self, variables: variables, evaluator: evaluator)
     }
 }
 

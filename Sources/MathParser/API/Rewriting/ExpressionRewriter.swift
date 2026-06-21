@@ -23,7 +23,7 @@ public struct ExpressionRewriter {
         rules.append(rule)
     }
     
-    public func rewriteExpression(_ expression: Expression, substitutions: Substitutions = [:], evaluator: Evaluator = Evaluator.default) -> Expression {
+    public func rewriteExpression(_ expression: Expression, variables: Variables = [:], evaluator: Evaluator = Evaluator.default) -> Expression {
         
         var tmp = expression
         var iterationCount: UInt = 0
@@ -32,7 +32,7 @@ public struct ExpressionRewriter {
             var changed = false
             
             for rule in rules {
-                let rewritten = rewrite(tmp, usingRule: rule, substitutions: substitutions, evaluator: evaluator)
+                let rewritten = rewrite(tmp, usingRule: rule, variables: variables, evaluator: evaluator)
                 if rewritten != tmp {
                     changed = true
                     tmp = rewritten
@@ -51,16 +51,15 @@ public struct ExpressionRewriter {
         return tmp
     }
     
-    private func rewrite(_ expression: Expression, usingRule rule: RewriteRule, substitutions: Substitutions, evaluator: Evaluator) -> Expression {
+    private func rewrite(_ expression: Expression, usingRule rule: RewriteRule, variables: Variables, evaluator: Evaluator) -> Expression {
+        let simplified = evaluator.simplify(expression, variables: variables)
         
-        let simplified = expression.simplify(substitutions, evaluator: evaluator)
-        
-        let rewritten = rule.rewrite(simplified, substitutions: substitutions, evaluator: evaluator)
+        let rewritten = rule.rewrite(simplified, variables: variables, evaluator: evaluator)
         if rewritten != expression { return rewritten }
         
         guard case let .function(f, args) = rewritten.kind else { return rewritten }
         
-        let newArgs = args.map { rewrite($0, usingRule: rule, substitutions: substitutions, evaluator: evaluator) }
+        let newArgs = args.map { rewrite($0, usingRule: rule, variables: variables, evaluator: evaluator) }
         
         // if nothing changed, reture
         guard args != newArgs else { return rewritten }
