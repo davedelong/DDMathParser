@@ -59,8 +59,7 @@ public struct Evaluator {
     public var caseSensitiveVariables: Bool = true
     
     public init() {
-        self.init(caseSensitiveFunctions: false,
-                  configuration: .default)
+        self.init(caseSensitiveFunctions: false, configuration: .default)
     }
     
     public init(caseSensitive: Bool) {
@@ -74,13 +73,18 @@ public struct Evaluator {
         self.configuration = configuration
     }
     
-    public mutating func registerFunction(_ function: Function) throws {
+    public mutating func registerFunction(_ function: Function) throws(FunctionRegistrationError) {
         try functionSet.registerFunction(function)
     }
     
-    public mutating func registerFunction(_ name: String, body: @escaping Function.Body) throws {
+    public mutating func registerFunction(_ name: String, body: @escaping Function.Body) throws(FunctionRegistrationError) {
         let function = Function(name: name, body: body)
         try functionSet.registerFunction(function)
+    }
+    
+    @discardableResult
+    public mutating func unregisterFunction(_ name: String) -> Function? {
+        return functionSet.unregisterFunction(name)
     }
     
     public subscript(name: String) -> Function.Body? {
@@ -89,15 +93,14 @@ public struct Evaluator {
         }
         set {
             if let newValue {
-                let function = Function(name: name, body: newValue)
-                try? functionSet.registerFunction(function)
+                try? self.registerFunction(name, body: newValue)
             } else {
-                functionSet.unregisterFunction(name)
+                self.unregisterFunction(name)
             }
         }
     }
     
-    public mutating func registerAlias(_ alias: String, forFunctionName name: String) throws {
+    public mutating func registerAlias(_ alias: String, forFunctionName name: String) throws(FunctionRegistrationError) {
         try functionSet.addAlias(alias, forFunctionName: name)
     }
     

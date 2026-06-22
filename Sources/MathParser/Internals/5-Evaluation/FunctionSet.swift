@@ -36,7 +36,7 @@ internal struct FunctionSet {
         return functionForName(name)?.body
     }
     
-    internal mutating func addAlias(_ alias: String, forFunctionName name: String) throws {
+    internal mutating func addAlias(_ alias: String, forFunctionName name: String) throws(FunctionRegistrationError) {
         let existingFunctionForAlias = functionForName(alias)
         if let existingFunctionForAlias {
             let normalizedFunctionName = normalize(name)
@@ -63,7 +63,7 @@ internal struct FunctionSet {
         }
     }
     
-    internal mutating func registerFunction(_ function: Function) throws {
+    internal mutating func registerFunction(_ function: Function) throws(FunctionRegistrationError) {
         // we need to make sure that every name is accounted for
         for name in function.names {
             guard functionForName(name) == nil else {
