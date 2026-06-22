@@ -104,7 +104,7 @@ public struct Evaluator {
         try functionSet.addAlias(alias, forFunctionName: name)
     }
     
-    public func evaluate(_ expression: Expression, variables: Variables = [:]) throws -> Double {
+    public func evaluate(_ expression: Expression, variables: Variables = [:]) throws(MathParserError) -> Double {
         return try evaluate(expression, variables: variables, state: nil)
     }
     
@@ -137,7 +137,7 @@ public struct Evaluator {
         }
     }
     
-    internal func evaluate(_ expression: Expression, variables: Variables, state: EvaluationState?) throws -> Double {
+    internal func evaluate(_ expression: Expression, variables: Variables, state: EvaluationState?) throws(MathParserError) -> Double {
         let evaluationState: EvaluationState
         if var parent = state {
             parent.push(expression)
@@ -173,7 +173,7 @@ public struct Evaluator {
         }
     }
     
-    private func evaluateVariable(_ name: String, state: EvaluationState) throws -> Double {
+    private func evaluateVariable(_ name: String, state: EvaluationState) throws(MathParserError) -> Double {
         
         // dynamically resolve the variable
         if let resolved = resolver?.evaluateVariable(name) {

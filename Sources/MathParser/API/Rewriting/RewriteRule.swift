@@ -30,7 +30,7 @@ public struct RewriteRule {
         self.template = template
     }
     
-    public init(predicate: String, condition: String? = nil, template: String) throws {
+    public init(predicate: String, condition: String? = nil, template: String) throws(MathParserError) {
         self.predicate = try Expression(string: predicate)
         self.template = try Expression(string: template)
         

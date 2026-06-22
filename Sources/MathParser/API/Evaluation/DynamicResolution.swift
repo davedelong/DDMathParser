@@ -23,7 +23,7 @@ public protocol EvaluationResolver {
     /// - Throws: An `Error` if your custom evaluation encountered an error.
     /// - Returns: The numeric value of the function, or `nil` to indicate that the ``EvaluationResolver`` does not want
     /// to provide a value for this function. If you return `nil`, the underlying ``Evaluator`` will attempt to evaluate the function itself.
-    func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double?
+    func evaluateFunction(_ function: String, state: EvaluationState) throws(MathParserError) -> Double?
     
     /// Provide a custom value for a variable expression during evaluation.
     ///
@@ -39,7 +39,7 @@ public protocol EvaluationResolver {
 
 extension EvaluationResolver {
     
-    public func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double? {
+    public func evaluateFunction(_ function: String, state: EvaluationState) throws(MathParserError) -> Double? {
         return nil
     }
     

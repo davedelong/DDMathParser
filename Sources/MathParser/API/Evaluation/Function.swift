@@ -10,7 +10,7 @@ import Foundation
 
 public struct Function {
     
-    public typealias Body = (EvaluationState) throws -> Double
+    public typealias Body = (EvaluationState) throws(MathParserError) -> Double
     
     public var names: Set<String>
     public let body: Body

@@ -37,7 +37,7 @@ internal struct TokenResolver {
         self.init(tokenizer: t)
     }
     
-    internal func resolve() throws -> Array<ResolvedToken> {
+    internal func resolve() throws(MathParserError) -> Array<ResolvedToken> {
         let rawTokens = try tokenizer.tokenize()
         
         var resolvedTokens = Array<ResolvedToken>()
@@ -56,7 +56,7 @@ internal struct TokenResolver {
 }
 
 extension TokenResolver {
-    fileprivate func resolveToken(_ raw: RawToken?, previous: ResolvedToken?) throws -> Array<ResolvedToken> {
+    fileprivate func resolveToken(_ raw: RawToken?, previous: ResolvedToken?) throws(MathParserError) -> Array<ResolvedToken> {
         
         guard let raw = raw else {
             // this is the case where the we check for argumentless stuff
@@ -93,7 +93,7 @@ extension TokenResolver {
         return final
     }
     
-    private func resolveRawToken(_ rawToken: RawToken, previous: ResolvedToken?) throws -> Array<ResolvedToken> {
+    private func resolveRawToken(_ rawToken: RawToken, previous: ResolvedToken?) throws(MathParserError) -> Array<ResolvedToken> {
         
         var resolvedTokens = Array<ResolvedToken>()
         
@@ -152,7 +152,7 @@ extension TokenResolver {
         return resolvedTokens
     }
     
-    private func resolveLocalizedNumber(_ raw: RawToken) throws -> ResolvedToken {
+    private func resolveLocalizedNumber(_ raw: RawToken) throws(MathParserError) -> ResolvedToken {
         for formatter in numberFormatters {
             if let number = formatter.number(from: raw.string) {
                 return ResolvedToken(kind: .number(number.doubleValue), string: raw.string, range: raw.range)
@@ -162,7 +162,7 @@ extension TokenResolver {
         throw MathParserError(code: .cannotParseLocalizedNumber, range: raw.range)
     }
     
-    private func resolveExponent(_ raw: RawToken) throws -> Array<ResolvedToken> {
+    private func resolveExponent(_ raw: RawToken) throws(MathParserError) -> Array<ResolvedToken> {
         var resolved = Array<ResolvedToken>()
         let powerOperator = operatorSet.powerOperator
         let power = ResolvedToken(kind: .operator(powerOperator), string: "**", range: raw.range.lowerBound ..< raw.range.lowerBound)
@@ -191,7 +191,7 @@ extension TokenResolver {
         return resolved
     }
     
-    private func resolveOperator(_ raw: RawToken, previous: ResolvedToken?) throws -> ResolvedToken {
+    private func resolveOperator(_ raw: RawToken, previous: ResolvedToken?) throws(MathParserError) -> ResolvedToken {
         let matches = operatorSet.operatorForToken(raw.string)
         
         if matches.isEmpty {

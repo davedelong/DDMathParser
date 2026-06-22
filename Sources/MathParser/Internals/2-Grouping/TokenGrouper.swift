@@ -36,7 +36,7 @@ internal struct TokenGrouper {
         self.resolver = TokenResolver(string: string)
     }
     
-    internal func group() throws -> GroupedToken {
+    internal func group() throws(MathParserError) -> GroupedToken {
         let tokens = try resolver.resolve()
         let p = PeekingIterator(generator: tokens.makeIterator())
         let g = try rootTokenFromGenerator(p)
@@ -57,7 +57,7 @@ internal struct TokenGrouper {
         }
     }
     
-    private func rootTokenFromGenerator<P: PeekingIteratorType>(_ g: P) throws -> GroupedToken where P.Element == ResolvedToken {
+    private func rootTokenFromGenerator<P: PeekingIteratorType>(_ g: P) throws(MathParserError) -> GroupedToken where P.Element == ResolvedToken {
         
         var rootTokens = Array<GroupedToken>()
         
@@ -74,7 +74,7 @@ internal struct TokenGrouper {
         return GroupedToken(kind: .group(rootTokens), range: range)
     }
     
-    private func tokenFromGenerator<P: PeekingIteratorType>(_ generator: P) throws -> GroupedToken where P.Element == ResolvedToken {
+    private func tokenFromGenerator<P: PeekingIteratorType>(_ generator: P) throws(MathParserError) -> GroupedToken where P.Element == ResolvedToken {
         var g = generator
         
         guard let peek = g.peek() else {
@@ -102,7 +102,7 @@ internal struct TokenGrouper {
         }
     }
     
-    private func functionTokenFromGenerator<P: PeekingIteratorType>(_ generator: P) throws -> GroupedToken where P.Element == ResolvedToken {
+    private func functionTokenFromGenerator<P: PeekingIteratorType>(_ generator: P) throws(MathParserError) -> GroupedToken where P.Element == ResolvedToken {
         var g = generator
         guard let function = g.next() else {
             fatalError("Implementation flaw")
@@ -129,7 +129,7 @@ internal struct TokenGrouper {
         return GroupedToken(kind: .function(function.string, parameters), range: range)
     }
     
-    private func parameterGroupFromGenerator<P: PeekingIteratorType>(_ generator: P, parameterIndex: String.Index) throws -> GroupedToken where P.Element == ResolvedToken {
+    private func parameterGroupFromGenerator<P: PeekingIteratorType>(_ generator: P, parameterIndex: String.Index) throws(MathParserError) -> GroupedToken where P.Element == ResolvedToken {
         var g = generator
         
         var parameterTokens = Array<GroupedToken>()
@@ -156,7 +156,7 @@ internal struct TokenGrouper {
         return GroupedToken(kind: .group(parameterTokens), range: range)
     }
     
-    private func groupTokenFromGenerator<P: PeekingIteratorType>(_ generator: P) throws -> GroupedToken where P.Element == ResolvedToken {
+    private func groupTokenFromGenerator<P: PeekingIteratorType>(_ generator: P) throws(MathParserError) -> GroupedToken where P.Element == ResolvedToken {
         var g = generator
         guard let open = g.next(), open.kind.resolvedOperator == .parenthesisOpen else {
             fatalError("Implementation flaw")

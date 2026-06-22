@@ -47,13 +47,13 @@ internal struct Expressionizer {
         self.grouper = grouper
     }
     
-    internal func expression() throws -> Expression {
+    internal func expression() throws(MathParserError) -> Expression {
         let rootToken = try grouper.group()
         
         return try expressionizeToken(rootToken)
     }
     
-    internal func expressionizeToken(_ token: GroupedToken) throws -> Expression {
+    internal func expressionizeToken(_ token: GroupedToken) throws(MathParserError) -> Expression {
         switch token.kind {
             case .number(let d):
                 return Expression(kind: .number(d), range: token.range)
@@ -79,7 +79,7 @@ internal struct Expressionizer {
         }
     }
     
-    private func expressionizeGroup(_ tokens: Array<GroupedToken>) throws -> Expression {
+    private func expressionizeGroup(_ tokens: Array<GroupedToken>) throws(MathParserError) -> Expression {
         var wrappers = tokens.map { TokenOrExpression.token($0) }
         
         while wrappers.count > 1 || wrappers.first?.isToken == true {
@@ -132,7 +132,7 @@ internal struct Expressionizer {
         return (indices, op)
     }
     
-    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundOperatorAtIndex index: Int) throws -> Array<TokenOrExpression> {
+    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundOperatorAtIndex index: Int) throws(MathParserError) -> Array<TokenOrExpression> {
         guard let op = wrappers[index].token?.groupedOperator else { fatalError("Implementation flaw") }
         switch (op.arity, op.associativity) {
             case (.binary, _):
@@ -146,7 +146,7 @@ internal struct Expressionizer {
         }
     }
     
-    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundBinaryOperator op: Operator, atIndex index: Int) throws -> Array<TokenOrExpression> {
+    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundBinaryOperator op: Operator, atIndex index: Int) throws(MathParserError) -> Array<TokenOrExpression> {
         let operatorWrapper = wrappers[index]
         
         guard index > 0 else {
@@ -198,7 +198,7 @@ internal struct Expressionizer {
         return collapsedWrappers
     }
     
-    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundLeftUnaryOperator op: Operator, atIndex index: inout Int) throws -> Array<TokenOrExpression> {
+    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundLeftUnaryOperator op: Operator, atIndex index: inout Int) throws(MathParserError) -> Array<TokenOrExpression> {
         var operatorIndex = index
         let operatorWrapper = wrappers[operatorIndex]
         
@@ -244,7 +244,7 @@ internal struct Expressionizer {
         return collapsedWrappers
     }
     
-    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundRightUnaryOperator op: Operator, atIndex index: Int) throws -> Array<TokenOrExpression> {
+    private func collapseWrappers(_ wrappers: Array<TokenOrExpression>, aroundRightUnaryOperator op: Operator, atIndex index: Int) throws(MathParserError) -> Array<TokenOrExpression> {
         var collapsedWrappers = wrappers
         
         let operatorWrapper = collapsedWrappers[index]

@@ -44,26 +44,26 @@ public struct EvaluationState {
         expressions.append(expression)
     }
     
-    public func evaluate(argument index: Int) throws -> Double {
+    public func evaluate(argument index: Int) throws(MathParserError) -> Double {
         return try evaluator.evaluate(arguments[index], variables: variables, state: self)
     }
     
-    public func evaluate(_ expression: Expression) throws -> Double {
+    public func evaluate(_ expression: Expression) throws(MathParserError) -> Double {
         // TODO: should this behave differently if the expression is not an argument?
         return try evaluator.evaluate(expression, variables: variables, state: self)
     }
     
-    internal func requireArgumentCount(_ count: Int) throws {
+    internal func requireArgumentCount(_ count: Int) throws(MathParserError) {
         if arguments.count == count { return }
         throw MathParserError(code: .invalidArguments, range: expressionRange)
     }
     
-    internal func requireMinArgumentCount(_ count: Int) throws {
+    internal func requireMinArgumentCount(_ count: Int) throws(MathParserError) {
         if arguments.count >= count { return }
         throw MathParserError(code: .invalidArguments, range: expressionRange)
     }
     
-    internal func requireMaxArgumentCount(_ count: Int) throws {
+    internal func requireMaxArgumentCount(_ count: Int) throws(MathParserError) {
         if arguments.count <= count { return }
         throw MathParserError(code: .invalidArguments, range: expressionRange)
     }

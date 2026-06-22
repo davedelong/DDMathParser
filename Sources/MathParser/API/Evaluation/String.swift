@@ -10,7 +10,7 @@ import Foundation
 
 extension String {
     
-    public func evaluate(using evaluator: Evaluator = .default, _ variables: Variables = [:]) throws -> Double {
+    public func evaluate(using evaluator: Evaluator = .default, _ variables: Variables = [:]) throws(MathParserError) -> Double {
         return try evaluator.evaluate(Expression(string: self), variables: variables)
     }
     

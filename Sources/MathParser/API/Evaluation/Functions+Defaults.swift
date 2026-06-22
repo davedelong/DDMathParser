@@ -45,7 +45,7 @@ extension Function {
     
     // MARK: - Basic functions
     
-    public static let add = Function(name: "add", body: { state throws -> Double in
+    public static let add = Function(name: "add", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -53,7 +53,7 @@ extension Function {
         return arg1 + arg2
     })
     
-    public static let subtract = Function(name: "subtract", body: { state throws -> Double in
+    public static let subtract = Function(name: "subtract", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -61,7 +61,7 @@ extension Function {
         return arg1 - arg2
     })
     
-    public static let multiply = Function(names: ["multiply", "implicitmultiply"], body: { state throws -> Double in
+    public static let multiply = Function(names: ["multiply", "implicitmultiply"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -69,7 +69,7 @@ extension Function {
         return arg1 * arg2
     })
     
-    public static let divide = Function(name: "divide", body: { state throws -> Double in
+    public static let divide = Function(name: "divide", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -79,7 +79,7 @@ extension Function {
         return arg1 / arg2
     })
     
-    public static let mod = Function(names: ["mod", "modulo"], body: { state throws -> Double in
+    public static let mod = Function(names: ["mod", "modulo"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -88,7 +88,7 @@ extension Function {
         return fmod(arg1, arg2)
     })
     
-    public static let negate = Function(name: "negate", body: { state throws -> Double in
+    public static let negate = Function(name: "negate", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -96,14 +96,14 @@ extension Function {
         return -arg1
     })
     
-    public static let factorial = Function(name: "factorial", body: { state throws -> Double in
+    public static let factorial = Function(name: "factorial", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return arg1.factorial()
     })
     
-    public static let factorial2 = Function(name: "factorial2", body: { state throws -> Double in
+    public static let factorial2 = Function(name: "factorial2", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -124,7 +124,7 @@ extension Function {
         }
     })
     
-    public static let pow = Function(name: "pow", body: { state throws -> Double in
+    public static let pow = Function(name: "pow", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -133,7 +133,7 @@ extension Function {
         return Darwin.pow(arg1, arg2)
     })
     
-    public static let sqrt = Function(name: "sqrt", body: { state throws -> Double in
+    public static let sqrt = Function(name: "sqrt", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let value = try state.evaluate(argument: 0)
@@ -141,7 +141,7 @@ extension Function {
         return Darwin.sqrt(value)
     })
     
-    public static let cuberoot = Function(name: "cuberoot", body: { state throws -> Double in
+    public static let cuberoot = Function(name: "cuberoot", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -154,7 +154,7 @@ extension Function {
         }
     })
     
-    public static let nthroot = Function(name: "nthroot", body: { state throws -> Double in
+    public static let nthroot = Function(name: "nthroot", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -171,11 +171,11 @@ extension Function {
         }
     })
     
-    public static let random = Function(name: "random", body: { state throws -> Double in
+    public static let random = Function(name: "random", body: { state throws(MathParserError) -> Double in
         try state.requireMaxArgumentCount(2)
         
-        var argValues = try (0 ..< state.argumentCount).map {
-            try state.evaluate(argument: $0)
+        var argValues = try (0 ..< state.argumentCount).map { argumentIndex throws(MathParserError) -> Double in
+            try state.evaluate(argument: argumentIndex)
         }
         var lowerBound = 0.0
         var upperBound = 1.0
@@ -196,42 +196,42 @@ extension Function {
         return drand48() * range + lowerBound
     })
     
-    public static let log = Function(name: "log", body: { state throws -> Double in
+    public static let log = Function(name: "log", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.log10(arg1)
     })
     
-    public static let ln = Function(name: "ln", body: { state throws -> Double in
+    public static let ln = Function(name: "ln", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.log(arg1)
     })
     
-    public static let log2 = Function(name: "log2", body: { state throws -> Double in
+    public static let log2 = Function(name: "log2", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.log2(arg1)
     })
     
-    public static let exp = Function(name: "exp", body: { state throws -> Double in
+    public static let exp = Function(name: "exp", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.exp(arg1)
     })
     
-    public static let abs = Function(name: "abs", body: { state throws -> Double in
+    public static let abs = Function(name: "abs", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Swift.abs(arg1)
     })
     
-    public static let percent = Function(name: "percent", body: { state throws -> Double in
+    public static let percent = Function(name: "percent", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let percentArgument = state.arguments[0]
@@ -257,7 +257,7 @@ extension Function {
     
     // MARK: - Bitwise functions
     
-    public static let and = Function(name: "and", body: { state throws -> Double in
+    public static let and = Function(name: "and", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -266,7 +266,7 @@ extension Function {
         return Double(Int(arg1) & Int(arg2))
     })
     
-    public static let or = Function(name: "or", body: { state throws -> Double in
+    public static let or = Function(name: "or", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -275,7 +275,7 @@ extension Function {
         return Double(Int(arg1) | Int(arg2))
     })
     
-    public static let not = Function(name: "not", body: { state throws -> Double in
+    public static let not = Function(name: "not", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -283,7 +283,7 @@ extension Function {
         return Double(~Int(arg1))
     })
     
-    public static let xor = Function(name: "xor", body: { state throws -> Double in
+    public static let xor = Function(name: "xor", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -292,7 +292,7 @@ extension Function {
         return Double(Int(arg1) ^ Int(arg2))
     })
     
-    public static let rshift = Function(name: "rshift", body: { state throws -> Double in
+    public static let rshift = Function(name: "rshift", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -301,7 +301,7 @@ extension Function {
         return Double(Int(arg1) >> Int(arg2))
     })
     
-    public static let lshift = Function(name: "lshift", body: { state throws -> Double in
+    public static let lshift = Function(name: "lshift", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -312,7 +312,7 @@ extension Function {
     
     // MARK: - Aggregate functions
     
-    public static let average = Function(names: ["average", "avg", "mean"], body: { state throws -> Double in
+    public static let average = Function(names: ["average", "avg", "mean"], body: { state throws(MathParserError) -> Double in
         try state.requireMinArgumentCount(1)
         
         let value = try sum.body(state)
@@ -320,7 +320,7 @@ extension Function {
         return value / Double(state.arguments.count)
     })
     
-    public static let sum = Function(names: ["sum", "∑"], body: { state throws -> Double in
+    public static let sum = Function(names: ["sum", "∑"], body: { state throws(MathParserError) -> Double in
         try state.requireMinArgumentCount(1)
         
         var value = 0.0
@@ -330,7 +330,7 @@ extension Function {
         return value
     })
     
-    public static let product = Function(names: ["product", "∏"], body: { state throws -> Double in
+    public static let product = Function(names: ["product", "∏"], body: { state throws(MathParserError) -> Double in
         try state.requireMinArgumentCount(1)
         
         var value = 1.0
@@ -340,11 +340,11 @@ extension Function {
         return value
     })
     
-    public static let count = Function(name: "count", body: { state throws -> Double in
+    public static let count = Function(name: "count", body: { state throws(MathParserError) -> Double in
         return Double(state.arguments.count)
     })
     
-    public static let min = Function(name: "min", body: { state throws -> Double in
+    public static let min = Function(name: "min", body: { state throws(MathParserError) -> Double in
         try state.requireMinArgumentCount(1)
         
         var value = Double.greatestFiniteMagnitude
@@ -355,7 +355,7 @@ extension Function {
         return value
     })
     
-    public static let max = Function(name: "max", body: { state throws -> Double in
+    public static let max = Function(name: "max", body: { state throws(MathParserError) -> Double in
         try state.requireMinArgumentCount(1)
         
         var value = Double.leastNormalMagnitude
@@ -366,11 +366,11 @@ extension Function {
         return value
     })
     
-    public static let median = Function(name: "median", body: { state throws -> Double in
+    public static let median = Function(name: "median", body: { state throws(MathParserError) -> Double in
         try state.requireMinArgumentCount(2)
         
-        let evaluated = try (0 ..< state.argumentCount).map {
-            try state.evaluate(argument: $0)
+        let evaluated = try (0 ..< state.argumentCount).map { argumentIndex throws(MathParserError) -> Double in
+            try state.evaluate(argument: argumentIndex)
         }
         if evaluated.count % 2 == 1 {
             let index = evaluated.count / 2
@@ -383,7 +383,7 @@ extension Function {
         }
     })
     
-    public static let stddev = Function(name: "stddev", body: { state throws -> Double in
+    public static let stddev = Function(name: "stddev", body: { state throws(MathParserError) -> Double in
         try state.requireMinArgumentCount(2)
         
         let avg = try average.body(state)
@@ -398,14 +398,14 @@ extension Function {
         return Darwin.sqrt(stddev / Double(state.arguments.count))
     })
     
-    public static let ceil = Function(name: "ceil", body: { state throws -> Double in
+    public static let ceil = Function(name: "ceil", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.ceil(arg1)
     })
     
-    public static let floor = Function(names: ["floor", "trunc"], body: { state throws -> Double in
+    public static let floor = Function(names: ["floor", "trunc"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -414,49 +414,49 @@ extension Function {
     
     // MARK: - Trigonometric functions
     
-    public static let sin = Function(name: "sin", body: { state throws -> Double in
+    public static let sin = Function(name: "sin", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
-    public static let cos = Function(name: "cos", body: { state throws -> Double in
+    public static let cos = Function(name: "cos", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
-    public static let tan = Function(name: "tan", body: { state throws -> Double in
+    public static let tan = Function(name: "tan", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.tan(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
-    public static let asin = Function(names: ["asin", "sin⁻¹"], body: { state throws -> Double in
+    public static let asin = Function(names: ["asin", "sin⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Function.rtod(Darwin.asin(arg1), mode: state.angleMeasurementMode)
     })
     
-    public static let acos = Function(names: ["acos", "cos⁻¹"], body: { state throws -> Double in
+    public static let acos = Function(names: ["acos", "cos⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Function.rtod(Darwin.acos(arg1), mode: state.angleMeasurementMode)
     })
     
-    public static let atan = Function(names: ["atan", "tan⁻¹"], body: { state throws -> Double in
+    public static let atan = Function(names: ["atan", "tan⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Function.rtod(Darwin.atan(arg1), mode: state.angleMeasurementMode)
     })
     
-    public static let atan2 = Function(name: "atan2", body: { state throws -> Double in
+    public static let atan2 = Function(name: "atan2", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -464,7 +464,7 @@ extension Function {
         return Function.rtod(Darwin.atan2(arg1, arg2), mode: state.angleMeasurementMode)
     })
     
-    public static let csc = Function(name: "csc", body: { state throws -> Double in
+    public static let csc = Function(name: "csc", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -473,7 +473,7 @@ extension Function {
         return 1.0 / sinArg
     })
     
-    public static let sec = Function(name: "sec", body: { state throws -> Double in
+    public static let sec = Function(name: "sec", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -482,7 +482,7 @@ extension Function {
         return 1.0 / sinArg
     })
     
-    public static let cotan = Function(name: "cotan", body: { state throws -> Double in
+    public static let cotan = Function(name: "cotan", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -491,7 +491,7 @@ extension Function {
         return 1.0 / sinArg
     })
     
-    public static let acsc = Function(names: ["acsc", "csc⁻¹"], body: { state throws -> Double in
+    public static let acsc = Function(names: ["acsc", "csc⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -499,7 +499,7 @@ extension Function {
         return Function.rtod(Darwin.asin(1.0 / arg1), mode: state.angleMeasurementMode)
     })
     
-    public static let asec = Function(names: ["asec", "sec⁻¹"], body: { state throws -> Double in
+    public static let asec = Function(names: ["asec", "sec⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -507,7 +507,7 @@ extension Function {
         return Function.rtod(Darwin.acos(1.0 / arg1), mode: state.angleMeasurementMode)
     })
     
-    public static let acotan = Function(names: ["acotan", "cotan⁻¹"], body: { state throws -> Double in
+    public static let acotan = Function(names: ["acotan", "cotan⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -517,49 +517,49 @@ extension Function {
     
     // MARK: - Hyperbolic trigonometric functions
     
-    public static let sinh = Function(name: "sinh", body: { state throws -> Double in
+    public static let sinh = Function(name: "sinh", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.sinh(arg1)
     })
     
-    public static let cosh = Function(name: "cosh", body: { state throws -> Double in
+    public static let cosh = Function(name: "cosh", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.cosh(arg1)
     })
     
-    public static let tanh = Function(name: "tanh", body: { state throws -> Double in
+    public static let tanh = Function(name: "tanh", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.tanh(arg1)
     })
     
-    public static let asinh = Function(names: ["asinh", "sinh⁻¹"], body: { state throws -> Double in
+    public static let asinh = Function(names: ["asinh", "sinh⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.asinh(arg1)
     })
     
-    public static let acosh = Function(names: ["acosh", "cosh⁻¹"], body: { state throws -> Double in
+    public static let acosh = Function(names: ["acosh", "cosh⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.acosh(arg1)
     })
     
-    public static let atanh = Function(names: ["atanh", "tanh⁻¹"], body: { state throws -> Double in
+    public static let atanh = Function(names: ["atanh", "tanh⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return Darwin.atanh(arg1)
     })
     
-    public static let csch = Function(name: "csch", body: { state throws -> Double in
+    public static let csch = Function(name: "csch", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -568,7 +568,7 @@ extension Function {
         return 1.0 / sinArg
     })
     
-    public static let sech = Function(name: "sech", body: { state throws -> Double in
+    public static let sech = Function(name: "sech", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -577,7 +577,7 @@ extension Function {
         return 1.0 / sinArg
     })
     
-    public static let cotanh = Function(name: "cotanh", body: { state throws -> Double in
+    public static let cotanh = Function(name: "cotanh", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -586,7 +586,7 @@ extension Function {
         return 1.0 / sinArg
     })
     
-    public static let acsch = Function(names: ["acsch", "csch⁻¹"], body: { state throws -> Double in
+    public static let acsch = Function(names: ["acsch", "csch⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -594,7 +594,7 @@ extension Function {
         return Darwin.asinh(1.0 / arg1)
     })
     
-    public static let asech = Function(names: ["asech", "sech⁻¹"], body: { state throws -> Double in
+    public static let asech = Function(names: ["asech", "sech⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -602,7 +602,7 @@ extension Function {
         return Darwin.acosh(1.0 / arg1)
     })
     
-    public static let acotanh = Function(names: ["acotanh", "cotanh⁻¹"], body: { state throws -> Double in
+    public static let acotanh = Function(names: ["acotanh", "cotanh⁻¹"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -612,51 +612,51 @@ extension Function {
     
     // MARK: - Geometric functions
     
-    public static let versin = Function(names: ["versin", "vers", "ver"], body: { state throws -> Double in
+    public static let versin = Function(names: ["versin", "vers", "ver"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return 1.0 - Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
-    public static let vercosin = Function(names: ["vercosin", "vercos"], body: { state throws -> Double in
+    public static let vercosin = Function(names: ["vercosin", "vercos"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return 1.0 + Darwin.cos(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
-    public static let coversin = Function(names: ["coversin", "cvs"], body: { state throws -> Double in
+    public static let coversin = Function(names: ["coversin", "cvs"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return 1.0 - Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
-    public static let covercosin = Function(name: "covercosin", body: { state throws -> Double in
+    public static let covercosin = Function(name: "covercosin", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return 1.0 + Darwin.sin(Function.dtor(arg1, mode: state.angleMeasurementMode))
     })
     
-    public static let haversin = Function(name: "haversin", body: { state throws -> Double in
+    public static let haversin = Function(name: "haversin", body: { state throws(MathParserError) -> Double in
         return try versin.body(state) / 2.0
     })
     
-    public static let havercosin = Function(name: "havercosin", body: { state throws -> Double in
+    public static let havercosin = Function(name: "havercosin", body: { state throws(MathParserError) -> Double in
         return try vercosin.body(state) / 2.0
     })
     
-    public static let hacoversin = Function(name: "hacoversin", body: { state throws -> Double in
+    public static let hacoversin = Function(name: "hacoversin", body: { state throws(MathParserError) -> Double in
         return try coversin.body(state) / 2.0
     })
     
-    public static let hacovercosin = Function(name: "hacovercosin", body: { state throws -> Double in
+    public static let hacovercosin = Function(name: "hacovercosin", body: { state throws(MathParserError) -> Double in
         return try covercosin.body(state) / 2.0
     })
     
-    public static let exsec = Function(name: "exsec", body: { state throws -> Double in
+    public static let exsec = Function(name: "exsec", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -665,7 +665,7 @@ extension Function {
         return (1.0/cosArg1) - 1.0
     })
     
-    public static let excsc = Function(name: "excsc", body: { state throws -> Double in
+    public static let excsc = Function(name: "excsc", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -674,7 +674,7 @@ extension Function {
         return (1.0/sinArg1) - 1.0
     })
     
-    public static let crd = Function(names: ["crd", "chord"], body: { state throws -> Double in
+    public static let crd = Function(names: ["crd", "chord"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -682,14 +682,14 @@ extension Function {
         return 2 * sinArg1
     })
     
-    public static let dtor = Function(name: "dtor", body: { state throws -> Double in
+    public static let dtor = Function(name: "dtor", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return arg1 / 180.0 * Double.pi
     })
     
-    public static let rtod = Function(name: "rtod", body: { state throws -> Double in
+    public static let rtod = Function(name: "rtod", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -698,74 +698,74 @@ extension Function {
     
     // MARK: - Constant functions
     
-    public static let `true` = Function(names: ["true", "yes"], body: { state throws -> Double in
+    public static let `true` = Function(names: ["true", "yes"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return 1.0
     })
     
-    public static let `false` = Function(names: ["false", "no"], body: { state throws -> Double in
+    public static let `false` = Function(names: ["false", "no"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return 0.0
     })
     
-    public static let phi = Function(names: ["phi", "ϕ"], body: { state throws -> Double in
+    public static let phi = Function(names: ["phi", "ϕ"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return 1.6180339887498948
     })
     
-    public static let pi = Function(names: ["pi", "π", "tau_2"], body: { state throws -> Double in
+    public static let pi = Function(names: ["pi", "π", "tau_2"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return Double.pi
     })
     
-    public static let pi_2 = Function(names: ["pi_2", "tau_4"], body: { state throws -> Double in
+    public static let pi_2 = Function(names: ["pi_2", "tau_4"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return Double.pi / 2
     })
     
-    public static let pi_4 = Function(names: ["pi_4", "tau_8"], body: { state throws -> Double in
+    public static let pi_4 = Function(names: ["pi_4", "tau_8"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return Double.pi / 4
     })
     
-    public static let tau = Function(names: ["tau", "τ"], body: { state throws -> Double in
+    public static let tau = Function(names: ["tau", "τ"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return 2 * Double.pi
     })
     
-    public static let sqrt2 = Function(name: "sqrt2", body: { state throws -> Double in
+    public static let sqrt2 = Function(name: "sqrt2", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return 2.squareRoot()
     })
     
-    public static let e = Function(name: "e", body: { state throws -> Double in
+    public static let e = Function(name: "e", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return M_E
     })
     
-    public static let log2e = Function(name: "log2e", body: { state throws -> Double in
+    public static let log2e = Function(name: "log2e", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return M_LOG2E
     })
     
-    public static let log10e = Function(name: "log10e", body: { state throws -> Double in
+    public static let log10e = Function(name: "log10e", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return M_LOG10E
     })
     
-    public static let ln2 = Function(name: "ln2", body: { state throws -> Double in
+    public static let ln2 = Function(name: "ln2", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return M_LN2
     })
     
-    public static let ln10 = Function(name: "ln10", body: { state throws -> Double in
+    public static let ln10 = Function(name: "ln10", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(0)
         return M_LN10
     })
     
     // MARK: - Logical Functions
     
-    public static let l_and = Function(name: "l_and", body: { state throws -> Double in
+    public static let l_and = Function(name: "l_and", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -773,7 +773,7 @@ extension Function {
         return (arg1 != 0 && arg2 != 0) ? 1.0 : 0.0
     })
     
-    public static let l_or = Function(name: "l_or", body: { state throws -> Double in
+    public static let l_or = Function(name: "l_or", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -781,14 +781,14 @@ extension Function {
         return (arg1 != 0 || arg2 != 0) ? 1.0 : 0.0
     })
     
-    public static let l_not = Function(name: "l_not", body: { state throws -> Double in
+    public static let l_not = Function(name: "l_not", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(1)
         
         let arg1 = try state.evaluate(argument: 0)
         return (arg1 == 0) ? 1.0 : 0.0
     })
     
-    public static let l_eq = Function(name: "l_eq", body: { state throws -> Double in
+    public static let l_eq = Function(name: "l_eq", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -796,7 +796,7 @@ extension Function {
         return (arg1 == arg2) ? 1.0 : 0.0
     })
     
-    public static let l_neq = Function(name: "l_neq", body: { state throws -> Double in
+    public static let l_neq = Function(name: "l_neq", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -804,7 +804,7 @@ extension Function {
         return (arg1 != arg2) ? 1.0 : 0.0
     })
     
-    public static let l_lt = Function(name: "l_lt", body: { state throws -> Double in
+    public static let l_lt = Function(name: "l_lt", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -812,7 +812,7 @@ extension Function {
         return (arg1 < arg2) ? 1.0 : 0.0
     })
     
-    public static let l_gt = Function(name: "l_gt", body: { state throws -> Double in
+    public static let l_gt = Function(name: "l_gt", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -820,7 +820,7 @@ extension Function {
         return (arg1 > arg2) ? 1.0 : 0.0
     })
     
-    public static let l_ltoe = Function(name: "l_ltoe", body: { state throws -> Double in
+    public static let l_ltoe = Function(name: "l_ltoe", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -828,7 +828,7 @@ extension Function {
         return (arg1 <= arg2) ? 1.0 : 0.0
     })
     
-    public static let l_gtoe = Function(name: "l_gtoe", body: { state throws -> Double in
+    public static let l_gtoe = Function(name: "l_gtoe", body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(2)
         
         let arg1 = try state.evaluate(argument: 0)
@@ -836,7 +836,7 @@ extension Function {
         return (arg1 >= arg2) ? 1.0 : 0.0
     })
     
-    public static let l_if = Function(names: ["l_if", "if"], body: { state throws -> Double in
+    public static let l_if = Function(names: ["l_if", "if"], body: { state throws(MathParserError) -> Double in
         try state.requireArgumentCount(3)
         
         let arg1 = try state.evaluate(argument: 0)

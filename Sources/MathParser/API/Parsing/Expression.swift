@@ -48,7 +48,7 @@ public struct Expression {
         self.range = range
     }
     
-    public init(string: String, configuration: Configuration = .default) throws {
+    public init(string: String, configuration: Configuration = .default) throws(MathParserError) {
         let tokenizer = Tokenizer(string: string, configuration: configuration)
         let resolver = TokenResolver(tokenizer: tokenizer)
         let grouper = TokenGrouper(resolver: resolver)

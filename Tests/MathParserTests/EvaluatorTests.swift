@@ -53,7 +53,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: EvaluationResolver {
-            func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func evaluateFunction(_ function: String, state: EvaluationState) throws(MathParserError) -> Double? {
                 return 42
             }
         }
@@ -70,7 +70,7 @@ class EvaluatorTests: XCTestCase {
         var eval = Evaluator()
         
         struct Resolver: EvaluationResolver {
-            func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func evaluateFunction(_ function: String, state: EvaluationState) throws(MathParserError) -> Double? {
                 return 42
             }
         }
@@ -285,7 +285,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testCustomFunction() {
-        let function = Function(name: "foo", body: { state throws -> Double in
+        let function = Function(name: "foo", body: { state throws(MathParserError) -> Double in
             return 42
         })
         
@@ -297,7 +297,7 @@ class EvaluatorTests: XCTestCase {
     }
     
     func testBadCustomFunction() {
-        let function = Function(name: "add", body: { state throws -> Double in
+        let function = Function(name: "add", body: { state throws(MathParserError) -> Double in
             return 42
         })
         
@@ -335,7 +335,7 @@ class EvaluatorTests: XCTestCase {
         // integral digits are concatenated
         // fractional digits are added
         struct Resolver: EvaluationResolver {
-            func evaluateFunction(_ function: String, state: EvaluationState) throws -> Double? {
+            func evaluateFunction(_ function: String, state: EvaluationState) throws(MathParserError) -> Double? {
                 guard function.lowercased() == Operator.implicitMultiply.function.lowercased() else { return nil }
                 guard state.arguments.count == 2 else { return nil }
                 

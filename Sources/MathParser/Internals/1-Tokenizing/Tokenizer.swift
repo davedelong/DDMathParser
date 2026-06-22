@@ -48,7 +48,7 @@ internal struct Tokenizer {
         special = Set(extractors.flatMap { $0.specialCharacters })
     }
     
-    internal func tokenize() throws -> Array<RawToken> {
+    internal func tokenize() throws(MathParserError) -> Array<RawToken> {
         var tokens = Array<RawToken>()
         
         while let next = next() {
