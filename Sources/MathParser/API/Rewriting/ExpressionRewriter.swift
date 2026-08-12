@@ -12,7 +12,9 @@ public struct ExpressionRewriter {
     private let maxIterationCount: UInt
     private var rules: Array<RewriteRule>
     
-    public static let `default` = ExpressionRewriter(rules: RewriteRule.defaultRules)
+    public static var `default`: ExpressionRewriter {
+        ExpressionRewriter(rules: RewriteRule.defaultRules)
+    }
     
     public init(rules: Array<RewriteRule>, maxIterationCount: UInt = 256) {
         self.maxIterationCount = maxIterationCount

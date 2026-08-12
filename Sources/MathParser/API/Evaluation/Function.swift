@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct Function {
+public struct Function: Sendable {
     
-    public typealias Body = (EvaluationState) throws(MathParserError) -> Double
+    public typealias Body = @Sendable (EvaluationState) throws(MathParserError) -> Double
     
     public var names: Set<String>
     public let body: Body

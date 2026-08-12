@@ -10,7 +10,7 @@ import Foundation
 
 public struct MathParserError: Error {
     
-    public enum Code {
+    public enum Code: Sendable {
         // Tokenization Errors
         case cannotParseNumber
         case cannotParseHexNumber // can also occur during Resolution

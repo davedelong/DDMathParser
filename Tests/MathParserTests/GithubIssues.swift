@@ -142,13 +142,11 @@ class GithubIssues: XCTestCase {
         do {
             let _ = try "hl=en&client=safari".evaluate()
             XCTFail("Expected thrown error")
-        } catch let error as MathParserError {
+        } catch let error {
             guard case .unknownFunction(_) = error.code else {
                 XCTFail("Unexpected error \(error)")
                 return
             }
-        } catch let e {
-            XCTFail("Unexpected error \(e)")
         }
     }
     
@@ -176,7 +174,7 @@ class GithubIssues: XCTestCase {
     func testIssue56() {
         guard let d = XCTAssertNoThrows(try "2**3**2".evaluate()) else { return }
         
-        if Operator.defaultPowerAssociativity == .left {
+        if Operator.Associativity.defaultPowerAssociativity == .left {
             XCTAssertEqual(d, 64)
         } else {
             XCTAssertEqual(d, 512)

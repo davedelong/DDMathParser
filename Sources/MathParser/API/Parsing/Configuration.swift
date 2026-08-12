@@ -13,10 +13,12 @@ import Foundation
 /// such as how implicit multiplication should work, what ``Foundation/Locale`` to use for localized numbers, and so on.
 ///
 /// For details on how parsing works, see <doc:/internals/Tokenizing>.
-public struct Configuration {
+public struct Configuration: Sendable {
     
     /// The default ``Configuration`` value.
-    public static let `default` = Configuration()
+    public static var `default`: Configuration {
+        return Configuration()
+    }
     
     /// The ``OperatorSet`` that will be used when parsing expressions.
     ///

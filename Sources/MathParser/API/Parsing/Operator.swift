@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct Operator: Equatable, Hashable {
+public struct Operator: Equatable, Hashable, Sendable {
     
-    public enum Arity: Hashable {
+    public enum Arity: Hashable, Sendable {
         case unary
         case binary
         
@@ -22,7 +22,7 @@ public struct Operator: Equatable, Hashable {
         }
     }
     
-    public enum Associativity: Hashable {
+    public enum Associativity: Hashable, Sendable {
         case left
         case right
     }

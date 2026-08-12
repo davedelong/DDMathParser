@@ -8,14 +8,14 @@
 
 import Foundation
 
-public enum RuleTemplate {
+public enum RuleTemplate: Sendable {
     public static let anyExpression = "__exp"
     public static let anyNumber = "__num"
     public static let anyVariable = "__var"
     public static let anyFunction = "__func"
 }
 
-public struct RewriteRule {
+public struct RewriteRule: Sendable {
     
     internal typealias Matches = Dictionary<String, Expression>
     

@@ -43,7 +43,7 @@ extension Operator {
     public static let doubleFactorial = Operator(builtinFunction: "factorial2", arity: .unary, associativity: .left, tokens: ["!!"])
     public static let degree = Operator(builtinFunction: "dtor", arity: .unary, associativity: .left, tokens: ["º", "°", "∘"])
     public static let percent = Operator(builtinFunction: "percent", arity: .unary, associativity: .left, tokens: ["%"])
-    public static let power = Operator(builtinFunction: "pow", arity: .binary, associativity: Operator.defaultPowerAssociativity, tokens: ["**"])
+    public static let power = Operator(builtinFunction: "pow", arity: .binary, associativity: .defaultPowerAssociativity, tokens: ["**"])
     public static let unaryMinus = Operator(builtinFunction: "negate", arity: .unary, associativity: .right, tokens: ["-", "−"])
     public static let unaryPlus = Operator(builtinFunction: "positive", arity: .unary, associativity: .right, tokens: ["+"])
     public static let squareRoot = Operator(builtinFunction: "sqrt", arity: .unary, associativity: .right, tokens: ["√"])
@@ -51,12 +51,14 @@ extension Operator {
     public static let parenthesisOpen = Operator(builtinFunction: "open_paren", arity: .unary, associativity: .right, tokens: ["("])
     public static let parenthesisClose = Operator(builtinFunction: "close_paren", arity: .unary, associativity: .left, tokens: [")"])
     public static let comma = Operator(builtinFunction: "comma", arity: .binary, associativity: .left, tokens: [","])
+}
+
+extension Operator.Associativity {
     
-    public static let defaultPowerAssociativity: Associativity = {
-        
-        //determine what associativity NSPredicate/NSExpression is using
-        //mathematically, it should be Right associative, but it's usually parsed as Left associative
-        //rdar://problem/8692313
+    public static let defaultPowerAssociativity: Self = {
+        // determine what associativity NSExpression is using
+        // mathematically, it should be right associative, but it's usually parsed as left associative
+        // rdar://problem/8692313
         
         let expression = NSExpression(format: "2 ** 3 ** 2")
         let result = expression.expressionValue(with: nil, context: nil) as? NSNumber
@@ -67,4 +69,5 @@ extension Operator {
             return .left
         }
     }()
+    
 }

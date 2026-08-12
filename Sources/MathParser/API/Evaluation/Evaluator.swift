@@ -12,7 +12,7 @@ import Foundation
 public struct FunctionRegistrationError: Error {
     
     /// The code of the error being thrown
-    public enum Code {
+    public enum Code: Sendable {
         /// Indicates that a function with the same name or alias already exists,
         /// and the new function (or alias) being registered would cause a naming conflict.
         case functionExists
@@ -41,7 +41,10 @@ public struct Evaluator {
         case degrees
     }
     
-    public static let `default` = Evaluator()
+    public static var `default`: Evaluator {
+        return Evaluator()
+    }
+    
     private var functionSet: FunctionSet
     
     public var angleMeasurementMode = AngleMode.radians

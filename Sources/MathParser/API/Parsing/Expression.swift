@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct Expression {
+public struct Expression: Hashable, Sendable {
     
-    public enum Kind {
+    public enum Kind: Hashable, Sendable {
         case number(Double)
         case variable(String)
         case function(String, Array<Expression>)
@@ -54,12 +54,16 @@ public struct Expression {
         let grouper = TokenGrouper(resolver: resolver)
         let expressionizer = Expressionizer(grouper: grouper)
         
-        let e = try expressionizer.expression()
-        self.init(kind: e.kind, range: e.range)
+        self = try expressionizer.expression()
     }
     
     public func rewrite(_ variables: Variables = [:], rewriter: ExpressionRewriter = .default, evaluator: Evaluator = .default) -> Expression {
         return rewriter.rewriteExpression(self, variables: variables, evaluator: evaluator)
+    }
+    
+    public var builtinOperator: Operator? {
+        guard let functionName else { return nil }
+        return Operator.builtinOperator(functionName)
     }
 }
 

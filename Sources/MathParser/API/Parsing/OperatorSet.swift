@@ -8,8 +8,10 @@
 
 import Foundation
 
-public struct OperatorSet {
-    public static let `default` = OperatorSet()
+public struct OperatorSet: Sendable {
+    public static var `default`: OperatorSet {
+        return OperatorSet()
+    }
     
     public enum Relation {
         case lessThan
@@ -118,6 +120,7 @@ public struct OperatorSet {
             }
         }
     }
+    
     private mutating func interpretPercentSignAsModulo(_ interpretAsModulo: Bool) {
         let percent = Operator.percent
         let modulo = Operator.modulo

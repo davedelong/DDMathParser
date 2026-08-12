@@ -20,7 +20,7 @@ public protocol EvaluationResolver {
     /// or it may be the name of the function used to implement an operator (`add`, as in `1 + 2`).
     /// - Parameter state: The current ``EvaluationState``. This includes any parameters to the function,
     /// substitution values, and the methods to recursively perform other evaluations.
-    /// - Throws: An `Error` if your custom evaluation encountered an error.
+    /// - Throws: A ``MathParserError`` if your custom evaluation encountered an error.
     /// - Returns: The numeric value of the function, or `nil` to indicate that the ``EvaluationResolver`` does not want
     /// to provide a value for this function. If you return `nil`, the underlying ``Evaluator`` will attempt to evaluate the function itself.
     func evaluateFunction(_ function: String, state: EvaluationState) throws(MathParserError) -> Double?
